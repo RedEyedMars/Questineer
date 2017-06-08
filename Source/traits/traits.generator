@@ -1,0 +1,145 @@
+import "../events/events.generator"
+traits
+	elements from "traits.elements"
+	
+	var directory
+	var traitMap
+		new HashMap<String, Set<String>>
+	var packageName
+	aux setup takes data as ParseContext
+		set packageName
+			general getPackageName
+		set directory
+			new File
+				general getDirectory
+				"traits"
+		directory mkdirs
+	aux generate takes data as ParseContext
+		var eventMethodHeaders as ListEntry
+			events getMethodHeaders
+		var eventMethodParameters as ListEntry
+			events getMethodParameters
+		var eventMethodBodies as ListEntry
+			events getMethodBodies
+				{\"equip"}
+				{{}}
+		var objectClass as vtype
+			general getType
+				"Object"
+		var sourceClass as vtype
+			general getType
+				"Source"
+		entry variables "" = {variable:"name" "String";variable:"description" "String";}
+		traits addFile
+			directory
+			"Trait.java"
+			general createType:"traits" {} "Trait" null {objectClass sourceClass} variables eventMethodHeaders eventMethodParameters eventMethodBodies; as ElementEntry
+		token rooT
+			data getRoot
+		entry traitDeclarations "" = {}
+		entry createTraitList "" = {}
+		entry imports "" = {(0 importPackage{\packageName \"events"})}
+		rooT IMPORT_TRAIT to element
+			element trait_declaration to atom
+				traitDeclarations+=generate traitDeclaration:imports;
+				createTraitList+=generate createTraitList:;
+		rooT trait_declaration to element
+			traitDeclarations+=generate traitDeclaration:imports;
+			createTraitList+=generate createTraitList:;
+		traits addFile
+			directory
+			"Traits.java"
+			declareTraits { \packageName imports traitDeclarations createTraitsMethod{createTraitList}}
+	
+	generate createTraitList
+		return
+			(2 createListIf { ``'createTraitList->traitName`` \^createTraitList->traitName})
+	
+	generate traitDeclaration takes imports as ListEntry
+		var traitName
+			^traitDeclaration->traitName
+		var traitDescription
+			'traitDeclaration->description
+		entry eventDefs "" = {}
+		var className
+			traits buildString
+				"Traits."
+				traitName
+		var traitEventSet
+			new HashSet<String>
+		traitMap put
+			traitName
+			traitEventSet
+		var parentClass as vtype
+			general getType
+				"Trait"
+		var sourceClass as vtype
+			general getType
+				"Source"
+		general createType
+			"traits"
+			{}
+			className
+			"Traits"
+			{parentClass sourceClass}
+			{variable:"name" "String"; variable:"description" "String";}
+			{}
+			{}
+			{}
+		var traitClass as vtype
+			general getType
+				className
+		traitDeclaration event to element
+			var eventContext as context
+				events getEventContext
+					'element->event_names
+					traitClass
+			entry eventBody "" = {}
+			element body_element to atom
+				eventBody+=generate general bodyElement:eventContext;
+			eventDefs+=
+				events getEventMethod
+					'element->event_names
+					traitClass
+					eventBody
+			traitEventSet+=
+				traits buildString
+					"on"
+					^element->event_names
+		return
+			(1 declareTraitMember { \traitName \traitName ``traitName`` ``traitDescription`` eventDefs })
+	
+	generate acquisition takes context as context
+		var sourceName
+		var source as variable
+		if acquisition->source_name is not null
+			set sourceName = 'acquisition->source_name
+			set source
+				context getVariable
+					sourceName
+			if source is null
+				error acquisition
+					"Could not find "
+					sourceName
+					" in context!"			
+		else
+			set sourceName = "this"
+			set source = variable:"this" "Trait";
+		var subject
+			general generateVariableCall
+				acquisition->variable_call
+				context
+		if acquisition->trait_names is not null
+			if acquisition->operator->GAINS is not null
+				return
+					general methodCall{subject \"gain" {newTrait{\^acquisition->trait_names} source}}
+			else 
+				return
+					general methodCall{subject \"lose" {asTraitClass{\^acquisition->trait_names} source}}
+		else
+			if acquisition->operator->GAINS is not null
+				return
+					general methodCall{subject \"gain" {general clone{\"this"} source}}
+			else 
+				return
+					general methodCall{subject \"lose" {general asClass{\"this"} source}}

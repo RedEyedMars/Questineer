@@ -1,0 +1,44 @@
+
+newTrait
+	"new Traits." Trait Name "()"
+asTraitClass
+	"Traits." Trait Name ".class"
+declareTraitClass
+	"package " Game Package ".traits;
+import " Game Package ".events.*;
+public class Trait implements Source {
+	private String name;
+	private String description;
+	public Trait(String initialName, String initialDescription){
+		name = initialName;
+		description = initialDescription;
+	}
+	public String getName(){
+		return name;
+	}
+	public String getDescription(){
+		return description;
+	}
+	public void onEquip(Events.Equip event){}
+}"
+importPackage
+	"import " Game Package "." Import Name ".*;"
+declareTraitMember
+	"public static class " Class Name " extends Trait {
+		public " Class Name "(){
+			super(" Name ", " Description ");
+		}" Methods "
+	}"
+declareTraits
+	"package " Game Package ".traits;
+" Imports "
+public class Traits {" Trait Classes "\n" Trait Create Method "
+}"
+createTraitsMethod
+	"	public Trait create(String traitName){" Ifs "
+		return null;
+	}"
+createListIf
+	"if(" Trait Name ".equals(traitName)){
+			return new Traits." Trait Class Name"();
+		}"

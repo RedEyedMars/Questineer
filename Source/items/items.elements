@@ -1,0 +1,58 @@
+
+outline
+	"package " Package name ".items;\n"+
+	"import java.util.*;\n"+
+	"import " Game Package ".misc.*;\n"+
+	"import " Game Package ".entities.*;\n"+
+	"import " Game Package ".traits.*;\n"+
+	"import " Game Package ".events.*;\n"+
+	"public class Items {" classes "\n\t" createMethod "\n}"
+item
+	"public static class " Name " extends Item {\n\t\tpublic " Name "(){" Init "\n\t\t}" Particulars "\n\t}"
+create
+	"public static Item create(String itemName){" Body "\n\t\treturn null;\n\t}"
+createElement
+	"if(\"" Query "\".equals(itemName)){\n\t\t\treturn new " Item Name "();\n\t\t}"
+body
+	"{" Contents "\n}"
+on
+	"@Override\n\t\t\tpublic void on" EventName "(" EventName "Event event){" Contents "\t\t\t\t\n}"
+getTrait
+	"new Traits." Trait Name "()"
+addTraitIf
+	"if(" Bool " &&!(event.getItem().hasTrait(Traits." Trait Name ".class))){
+				event.getItem().gain(new Traits." Trait Name "(),this);
+			}
+			else if(" Bool "&&event.getItem().hasTrait(Traits." Trait Name ".class)){
+				event.getItem().lose(Traits." Trait Name ".class,this);
+			}"
+
+hasTraitMethod
+	"
+		for(Trait trait:traits){
+			if(trait.getClass() == traitClass){
+				return true;
+			}
+		}
+		return false;"
+
+gainMethod
+	"
+		traits.add(element);
+		history.add(source,element);"
+loseMethod
+	"
+		Trait toRemove = null;
+		for(Trait trait:history.getAll(source)){
+			if(trait.getClass()==removeClass){
+				toRemove = trait;
+				break;
+			}
+		}
+		if(toRemove==null){
+			throw new RuntimeException(\"Trait:\"+removeClass+\" Not found!\");
+		}
+		else {
+			traits.remove(toRemove);
+			history.remove(source,toRemove);
+		}"	

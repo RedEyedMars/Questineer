@@ -1,0 +1,186 @@
+uses StringEntry Arrays
+entry namelessContext uses context
+	constructor takes initialParent as context
+		this setup
+			initialParent
+entry variable
+	constant SIMPLE
+		0
+	constant WITH_TYPE
+		1
+	constant SHOW_TYPE
+		1
+	constant GET_METHOD
+		2
+	constant SHOW_AS_GET
+		3
+	constant SHOW_AS_END
+		4
+	
+	constant DEFAULT
+		0
+	constant PRIVATE
+		1
+	constant PUBLIC
+		2
+	constant FINAL
+		1
+	constant STATIC
+		2
+	
+	var name
+	entry type = null
+	var mode = SIMPLE
+	var access = DEFAULT
+	var state = DEFAULT
+	var ifEnd as Entry = null
+	constructor takes initialName, initialType
+		set name = initialName
+		set type as vtype
+			general getType
+				initialType
+	constructor takes variable as variable
+		set name
+			variable getName
+		set type
+			variable getType
+		set ifEnd
+			variable getIfEnd
+	setName takes newName
+		set name = newName
+	setAccess takes newAccess
+		set access = newAccess
+	setState takes newState
+		set state = newState
+	setMode takes newMode
+		set mode = newMode
+	setIfEnd takes newIfEnd as Entry
+		set ifEnd = newIfEnd
+	hasEnder
+		return
+			ifEnd is not null
+	output
+			\"public " if access is PUBLIC
+			\"protected " if access is PRIVATE 
+			+
+			\"static " if state is STATIC or state is 3
+			\"final " if state is FINAL or state is 3 
+			+
+			\name if mode is SIMPLE
+			general typeAndName{type \name} if mode is WITH_TYPE
+			general declareGetMethod{type \^name \name} if mode is GET_METHOD
+			general getCall{\^name} if mode is SHOW_AS_GET
+			general exact {ifEnd} if mode is SHOW_AS_END
+
+entry vtype uses context
+	var name
+	entry importPackage = null
+	constructor takes initialName
+		set name = initialName
+		set importPackage = import:"java.lang" name;
+	constructor takes initialName, parent as context
+		set importPackage = import:"java.lang" name; 
+		set name = initialName
+		this setup
+			parent
+	setPackage takes newPackage as vtype
+		importPackage setSuperPackage
+			newPackage getImportPackage
+	setPackageName takes newPackageName
+		importPackage setPackage
+			newPackageName
+	getLayer
+		var split as List<String>
+			static Arrays asList
+				name split
+					"\\Q.\\E"
+		return as Integer
+			split size
+	getPackageAsEntry as Entry
+		return
+			importPackage
+	output
+			\name
+entry import
+	var packageName
+	var name
+	var gamePackage
+	entry superPackage = null
+	constructor takes initialPackage, initialName
+		set packageName = initialPackage
+		set name = initialName
+		set gamePackage
+			general getPackageName
+	setPackage takes newPackage
+		set packageName = newPackage
+	setSuperPackage takes newSuperPackage as import
+		set superPackage = newSuperPackage
+	output
+			superPackage if superPackage is not null
+			(0 general importPackage{ \packageName \name}) otherwise
+
+property context
+	var variables
+		new HashMap<String,variable>
+	var methods
+		new HashMap<String,variable>
+	var parent as context
+	var tab = 0	
+	getVariable as variable takes variableName
+		if variables does containsKey variableName
+			return
+				variables->variableName
+		else
+			if parent is not null
+				return
+					parent getVariable
+						variableName
+			else
+				return
+					null
+	addVariable takes variable as variable
+		variables put
+			variable getName
+			variable
+	getMethod as variable takes methodName
+		if methods does containsKey methodName
+			return
+				methods->methodName
+		else
+			if parent is not null
+				return
+					parent getMethod
+						methodName
+			else
+				return
+					null
+	addMethod takes method as variable
+		var methodMode
+			method getMode
+		if methodMode is 3
+			methods put
+				general buildString
+					"get"
+					general camelize
+						method getName
+				method
+		else
+			methods put
+				method getName
+				method
+	setup takes initialParent as context
+		set parent = initialParent
+		if parent is not null
+			set tab
+				parent getTab
+			set tab = tab + 1
+	setParent takes newParent as context
+		set parent = newParent
+		if parent is not null
+			set tab
+				parent getTab
+			set tab = tab + 1
+	incrementTab takes amount as Integer
+		set tab = tab + amount
+	decrementTab takes amount as Integer
+		set tab = tab - amount

@@ -1,0 +1,18 @@
+image
+	elements
+		idByName
+			"RemImages." imageName ""
+	
+	generate id
+		entry ret "" = {}
+		ret+=\'id->image_names
+		if id->left is not null
+			ret+=\'id->left
+		if id->right is not null
+			ret+=\'id->left
+		return
+			idByName {ret}
+	
+	generate animation
+		return
+			null

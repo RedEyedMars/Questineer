@@ -1,0 +1,171 @@
+uses Listnames Rules GeneralTokens RegexParser  ExactParser HeroStats EventNames NameParser
+import "../general/general.generator"
+import "../images/image.generator"
+import "../traits/traits.generator"
+meta std
+	var rootParser as IParser
+		static Rules base
+	var rules as List<IParser>
+		static Rules parser
+	var listnames as List<IParser>
+		static Listnames parser
+	var lazyNameParser as RegexParser
+		static GeneralTokens NAME
+	assignListElementNames takes
+			context as ParseContext
+			root as IToken
+		context retainList
+			new HeroStats
+		context retainList
+			new EventNames
+items
+	elements from "items.elements"
+	
+	var packageName
+	var directory
+	var miscDirectory
+	var statNames
+		new HashSet<String>
+	aux setup takes data as ParseContext
+		set packageName
+			general getPackageName
+		set directory
+			new File
+				general getDirectory
+				"items"
+		directory mkdirs
+	
+	aux generate takes data as ParseContext 
+		entry itms "" = {}
+		entry itmlst "" = {}
+		items addPage
+		items addFile
+			directory
+			"Items.java"
+			{ \packageName \packageName \packageName \packageName \packageName itms create{itmlst}}
+		token root
+			data getRoot
+		entry itemImports "" = {}
+		general createList
+			"traits"
+			"Trait"
+		var objectClass as vtype
+			general getType
+				"Object"
+		var sourceClass as vtype
+			general getType
+				"Source"
+		items addFile
+			directory
+			"Item.java"
+			general createType:"items" itemImports "Item" null {objectClass sourceClass} {
+				variable:"name" "String";
+				variable:"history" "List.Map.Source._Trait";
+				variable:"traits" "List.Trait";
+				variable:"hp" "Entity.Modifier";
+				variable:"maxHp" "Entity.Modifier";
+				variable:"dmg" "Entity.Modifier";
+				variable:"def" "Entity.Modifier";
+				variable:"value" "Entity.Modifier";
+				variable:"weight" "Entity.Modifier"; } {
+				variable:"gain" "void";
+				variable:"lose" "void";
+				variable:"hasTrait" "Boolean";} {
+				{variable:"element" "Trait";variable:"source" "Source";}
+				{variable:"removeClass" "Class"; variable:"source" "Source";}
+				{variable:"traitClass" "Class";}} {
+				gainMethod{}
+				loseMethod{}
+				hasTraitMethod{} }; as ElementEntry
+		var iClass as vtype
+			general getType
+				"Item"
+		root item to element
+			itms +=
+				(1 generate item:iClass itmlst; )
+	generate item takes itemParentClass as vtype, itemList as ListEntry
+		var className
+			^item->itemName
+		var realClassName
+			items buildString
+				"Items."
+				className
+		general createType:"items" {} className "Items" {itemParentClass} {}{}{}{};
+		var itemClass as vtype
+			general getType
+				realClassName
+		entry init "" = {}
+		entry particulars "" = {}
+		init+=(3 general setVar {\"name" ``'item->itemName``})
+		itemList+=(2 createElement{\'item->itemName \className})
+		
+		var eventBodies
+			new HashMap<String,ListEntry>
+		item to element		
+			animation
+				init+=(3 general setVar {\"image" generate image animation:;})
+			hp
+				init+=(3 general setVar {\"hp" generate entities range:; })
+				init+=(3 general setVar {\"maxHp" \"hp"})
+			attack
+				init+=(3 general setVar {\"dmg" generate entities range:;})
+			defense
+				init+=(3 general setVar {\"def" generate entities range:;})
+			value
+				init+=(3 general setVar {\"value" generate entities range:;})
+			weight
+				init+=(3 general setVar {\"weight" generate entities range:;})
+			trait
+				if element->boolean_statement is null
+					element trait_names to atom
+						var traitName = ^atom
+						init+=(3 general semicoloned{general methodCall{\"traits" \"add" { getTrait{\traitName}}}})
+				else
+					var eventContext as context
+						events getEventContext
+							"change_item"
+							itemClass
+					entry traitName = \^element->trait_names
+					element boolean_statement to atom
+						entry bool = generate general booleanStatement:eventContext;
+						var itemChangeBody as ListEntry
+							eventBodies->change_item
+						if itemChangeBody is null
+							set itemChangeBody = {}
+							itemChangeBody setDelimiter
+								""
+							eventBodies put
+								"change_item"
+								itemChangeBody
+						itemChangeBody+=(3 addTraitIf {bool traitName traitName bool traitName traitName})
+			event
+				var eventBody as ListEntry
+					eventBodies get
+						'element
+				if eventBody is null
+					set eventBody = {}
+					eventBody setDelimiter
+						""
+					eventBodies put
+						'element
+						eventBody
+				var eventContext as context
+					events getEventContext
+						'element->event_names
+						itemClass
+				eventContext decrementTab
+					1
+				element body_element to atom
+					eventBody+=generate general bodyElement:eventContext;
+		var eventKeys as Set<String>
+			eventBodies keySet
+		each key in eventKeys
+			particulars+=
+				events getEventMethod
+					key
+					itemClass
+					eventBodies->key
+		return
+			(1 item { \className \className init particulars })
+
+import "../entities/entity.generator"

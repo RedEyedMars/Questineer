@@ -1,0 +1,37 @@
+>std.skls
+>std.conds
+>blade.imgs
+>physical.trts
+dagger:
+	sharp if hp > 6
+	dull  if hp < 3
+	hp 10-15
+	dmg 25-35%STR,25-30%DEX
+	def 20-30%DEX
+	value 50-100
+	equip {
+	  if event->hero has skill HandyWithAKnife {
+	    event->hero learn attack DaggerThrow
+	  }
+	}
+	unequip {
+		if event->item == this {
+			event->hero forget attack DaggerThrow
+		}
+	}
+	post_basic_attack {
+		if event->hit & 10% chance{
+			if event->attacker->dex > event->defender->dex {
+				if 50% chance{
+					event->defender gains bleeding
+				}
+			}
+			else {
+				if event->defender->dex - event->attacker->dex < 10 {
+					if 20% chance{
+						event->defender gains bleeding
+					}
+				}
+			}
+		}
+	}

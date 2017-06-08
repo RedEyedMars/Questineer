@@ -1,0 +1,112 @@
+entities
+	elements from "entity.elements"
+	
+	var packageName
+	var directory
+	var miscDirectory
+	var statNames
+		new HashSet<String>
+	aux setup takes data as ParseContext
+		set packageName
+			general getPackageName
+		set directory
+			new File
+				general getDirectory
+				"entities"
+		set miscDirectory
+			new File
+				general getDirectory
+				"entities/misc"
+		directory mkdirs
+		miscDirectory mkdirs
+		
+		entry variables "" = {}
+		entry methods "" = {(1 declareGainMethod{}) (1 declareLoseMethod{})}
+		entry classes "" = {}
+		entities addFile
+			directory
+			"Entity.java"
+			declareEntityClass { \packageName \packageName \packageName \packageName variables methods classes}
+		general createType:"entities" {} "Entity" null null {} {} {} {};
+		general createType:"entities" {} "Modifier" "Entity" null {} {variable:"use" "void";} {{variable:"inputHero" "Hero";}} {{}};
+		general createListMap:"misc" "Source" "traits" "Trait";
+		general createListMap:"misc" "Source" "misc" "Int";
+		variables+=(1 declareVariable{\"List.Map.Source._Trait" \"history" \"List.Map.Source._Trait"})
+		variables+=(1 declareVariable{\"List.Trait" \"traits" \"List.Trait"})
+		var entityStats as ParseList
+			data getList
+				"hero_stats"
+		var entityStatNameParser as NameParser
+			entityStats getNamesParser
+		var entityStatElements as Set<String>
+			entityStatNameParser getElements
+		each stat in entityStatElements
+			statNames+=stat
+		var entityType as vtype
+			general getType
+				"Entity"
+		each stat in statNames
+			var vName
+				stat toLowerCase
+			variables +=
+				(1 statVariable {\stat \vName \stat} )
+			methods +=
+				(1 declareStatGetMethod{\stat \^vName \vName})
+			classes +=
+				(1 declareStatClass{\stat \stat \vName declareStatModifierClass{\vName} } )
+			var statClassName
+				entities buildString
+					"Entity."
+					stat
+			
+			var value = variable:"value" "Integer";
+			general createType:"entities" {} stat "Entity" null {value} {
+				variable:"setValue" "Integer";
+				variable:"impose" "void";
+				variable:"release" "void";} {{}{}{}} {{}{}{}};
+			var statVariable
+				variable:vName statClassName;
+			entityType addVariable
+				statVariable
+			value setMode
+				static variable SHOW_AS_GET
+			statVariable setIfEnd
+				value
+		classes +=
+			(1 declareModifierClass{} )
+		classes +=
+			(1 declareMultiModClass{} )
+	generate range
+		if range->hero_stats is not null
+			statNames += 'range->hero_stats
+			if range->percent is not null
+				var leftPercent as Double
+					general percentify:'range->left;
+				var rightPercent as Double
+					general percentify:'range->right;
+				return
+					entityStatModifier { \'range->hero_stats \'leftPercent \'rightPercent}
+			else
+				return
+					entityStatModifier { \'range->hero_stats \'range->left \'range->right } 
+		else
+			return
+				getModifier { generate general range :;} 
+	
+	generate imposition takes context as context
+		var subject
+			general generateVariableCall
+				imposition->variable_call
+				context
+		var stat
+			'imposition->hero_stats toLowerCase
+		if imposition->operator->IMPOSE is not null
+			return
+				general methodCall{general methodCall{subject general getMethod{\^stat} {}} \"impose" {\'imposition->amount \"this"}}
+		else
+			if imposition->operator->RELEASE is not null
+				return
+					general methodCall{general methodCall{subject general getMethod{\^stat} {}} \"release" {\"this"}}
+		
+		return
+			null

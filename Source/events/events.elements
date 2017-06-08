@@ -1,0 +1,8 @@
+
+declareEventsClass
+	"package " Game Package ".events;" Imports "
+public class Events {" Classes "
+}"
+
+eventMethod
+	"public void on" Event Name "(Events." Event Name " event){" Event Body ""
