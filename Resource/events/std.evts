@@ -1,0 +1,38 @@
+gain
+	Entity host
+	Aspect aspect
+loss
+	Entity host
+	Aspect aspect
+equip
+	Entity host
+	Item item
+unequip
+	Entity host
+	Item item
+change_item
+	Entity host
+	Item item
+
+pre_attack
+	Entity attacker
+	Entity defender
+	Attack.Damage damage
+post_attack
+	Entity attacker
+	Entity defender
+	Attack.Damage damage
+hit
+	Entity attacker
+	Entity defender
+	Attack.Damage damage
+miss
+	Entity attacker
+	Entity defender
+	Attack.Damage damage
+die
+	Source source
+	Entity victim
+
+tick
+	Entity host

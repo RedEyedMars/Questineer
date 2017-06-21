@@ -1,0 +1,54 @@
+affinities
+	elements from "affinity.elements"
+	
+	var packageName
+	var directory
+	var superAffinityClass as class
+	var superAffinitiesClass as class
+	var createAffinityBody = {}
+	aux setup takes data as ParseContext
+		set packageName
+			general getPackageName
+		set directory
+			new File
+				general getDirectory
+				"entities/mods/affinities"
+		directory mkdirs
+		createAffinityBody setDelimiter:"";
+	aux generate takes data as ParseContext 
+		entry createAffinityMethod = method:"createAffinity" "Affinity" {variable:"affinityName" "String";} {createAffinityBody general returnCall{\"null"}};
+		var idClass as class
+			general init:class:"entities.mods.affinities" "Id" null null {}{}{};;
+		set superAffinitiesClass
+			general init:class:"entities.mods.affinities" "Affinities" null null {}{createAffinityMethod->STATIC_COMPLETE}{idClass};;
+		set superAffinityClass
+			general init:class:"entities.mods.affinities" "Affinity" null null {}{
+				method:"getId" "Affinities.Id" {} {general returnCall{\"null"}};
+				method:"getName" "String" {} {general returnCall{\"null"}};
+				method:"modify" "Double" {variable:"defender" "Entity"; variable:"damage" "Double";}{general returnCall{\"0.0"}};}{};;
+		affinities addFile
+			directory
+			"Affinities.java"
+			superAffinitiesClass->COMPLETE
+		affinities addFile
+			directory
+			"Affinity.java"
+			superAffinityClass->COMPLETE
+	
+	generate affinity
+		var affinityName
+			'affinity->affinityName
+		entry weaknesses "||" = {}
+		entry strengths "||" = {}
+		affinity to quark
+			strength_name
+				strengths+= hasAffinity{\^quark}
+			weakness_name
+				weaknesses+= hasAffinity{\^quark}
+		superAffinitiesClass addSubClass
+			class:"entities.mods.affinities" affinityName superAffinityClass null {}{
+			method:"getName" "String" {} {general returnCall{``affinityName``}};
+			method:"modify" "Double" {variable:"defender" "Entity"; variable:"damage" "Double";}{
+				modifyBody{strengths weaknesses}};}{};
+		return
+			null

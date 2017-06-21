@@ -1,0 +1,26 @@
+
+declareAffinities
+	"package " Game Package ".entities.mods.affinities;
+import " Game Package ".entities.*;
+public class Affinities {" Contents "
+	public static class Id {
+	}
+}"
+declareAffinity
+	"package " Game Package ".entities.mods.affinities;
+import " Game Package ".entities.*;
+public abstract class Affinity {
+	public abstract Affinities.Id getId();
+	public abstract String getName();
+	public abstract Double modify(Entity defender, Double damage);
+}"
+modifyBody
+	"if(" Strengths "){
+				damage*=2.0;
+			}
+			if(" Weaknesses "){
+				damage/=2.0;
+			}
+			return damage;"
+hasAffinity
+	"defender.hasAffinity(Affinities." Affinity Name ".id)"

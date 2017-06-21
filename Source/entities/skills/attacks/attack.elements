@@ -1,0 +1,146 @@
+
+attackId
+	"Attacks." Attack Name ".id"
+declareAttacks
+	"package " Game Package ".entities.attacks;
+import " Game Package ".entities.*;
+import " Game Package ".misc.*;
+public class Attacks {" Contents "
+	public static class Id {
+	}
+}"
+attackGetCostBody
+	"return (int)(float)cost.use(entity)"
+attackGetRangeBody
+	"return range.use(entity)"
+attackIsOffCDBody
+	"return cooldown==0"
+attackSetFocusBody
+	"hasEntityFocus = onThis"
+attackOnTickBody
+	"if(cooldown>0){
+			--cooldown;
+		}"
+attackAttackBody
+	"cooldown = getCost(attacker);
+		Damage damage = getDamage(attacker,defender);
+		attacker.onPreAttack(new Events.PreAttack(attacker,defender,damage));
+		if(damage.getHit()){
+			defender.onHit(new Events.Hit(attacker,defender,damage));
+			experience+=3;
+		}
+		else {
+			defender.onMiss(new Events.Miss(attacker,defender,damage));
+			++experience;
+		}
+		attacker.onPostAttack(new Events.PostAttack(attacker,defender,damage));"
+declareAttack
+	"package " Game Package ".entities.attacks;
+import " Game Package ".entities.*;
+import " Game Package ".events.*;
+public abstract class Attack {
+	protected Integer experience = 0;
+	protected Entity.Modifier range;
+	protected Entity.Modifier cost;
+	protected Integer cooldown = 0;
+	protected Boolean hasEntityFocus = false;
+	public Float getRange(Entity entity){
+		return range.use(entity);
+	}
+	public Integer getCost(Entity entity){
+		return (int)(float)cost.use(entity);
+	}
+	public Integer getCooldown(){
+		return cooldown;
+	}	
+	public Boolean isOffCooldown(){
+		return cooldown==0;
+	}
+	public void onTick(Events.Tick event){
+		if(cooldown>0){
+			--cooldown;
+		}
+	}
+	public abstract Attacks.Id getId();
+	public abstract String getName();
+	public abstract String getDescription();
+	public abstract Attack.Damage getDamage(Entity attacker, Entity defender);
+	public void attack(Entity attacker, Entity defender){
+		cooldown = getCost(attacker);
+		Damage damage = getDamage(attacker,defender);
+		attacker.onPreAttack(new Events.PreAttack(attacker,defender,damage));
+		if(damage.getHit()){
+			defender.onHit(new Events.Hit(attacker,defender,damage));
+			experience+=3;
+		}
+		else {
+			defender.onMiss(new Events.Miss(attacker,defender,damage));
+			++experience;
+		}
+		attacker.onPostAttack(new Events.PostAttack(attacker,defender,damage));
+	}
+	public void setFocus(Boolean onThis){
+		hasEntityFocus = onThis;
+	}
+	public int compareTo(Attack otherAttack){
+		if(cooldown==otherAttack.cooldown){
+			if(hasEntityFocus){
+				return otherAttack.experience-experience;
+			}
+			else {
+				return experience-otherAttack.experience;
+			}
+		}
+		else {
+			return otherAttack.cooldown-cooldown;
+		} 
+	}
+	public static class Damage {
+		private Float value = 0f;
+		private Float modifier = 1f;
+		private Boolean hit = true;
+		public Float getValue(){
+			return value;
+		}
+		public Float getModifier(){
+			return modifier;
+		}
+		public void setValue(Float newValue){
+			value = newValue;
+		}
+		public void setValue(Integer newValue){
+			value = (float)newValue;
+		}
+		public void setModifier(Float newModifier){
+			modifier = newModifier;
+		}
+		public void setHit(Boolean newHit){
+			hit = newHit;
+		}
+		public Float getTotal(){
+			return value*modifier;
+		}
+		public Boolean getHit(){
+			return hit;
+		}
+	}
+}"
+subAttack
+	"public static class " Attack " extends Attack {
+		public static Attacks.Id id = new Attacks.Id();
+		public " Attack "(){" Setup "
+		}
+		" Contents "
+		public Attacks.Id getId(){
+			return id;
+		}
+	}"
+declareDamageMethod
+	"public Attack.Damage getDamage(Entity attacker, Entity defender){" Body "
+		}"
+declareGetMethod
+	"public " Type " get" Name "(){
+			return " Name ";
+		}"
+setVariable
+	"" Left " = " Right ";"

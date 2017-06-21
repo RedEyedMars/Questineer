@@ -1,0 +1,236 @@
+uses Listnames Rules GeneralTokens RegexParser  ExactParser HeroStats EventNames NameParser
+
+import "aspects/aspect.generator"
+items
+	elements from "items.elements"
+	
+	var packageName
+	var directory
+	var miscDirectory
+	var superItemClass as class
+	var superItemModifierClass as class
+	var superItemsClass as class
+	var createItemBody = {}
+	aux setup takes data as ParseContext
+		set packageName
+			general getPackageName
+		set directory
+			new File
+				general getDirectory
+				"entities/items"
+		directory mkdirs
+		createItemBody setDelimiter:"";
+	
+	aux generate takes data as ParseContext
+		
+		general createList
+			general->Aspect
+		entry createItemMethod = method:"createItem" "Item" {variable:"itemName" "String";}{createItemBody general returnCall{\"null"}};
+		set superItemsClass
+			general init:class:"entities.items" "Items" null null {}{createItemMethod->STATIC}{};;
+		var entityModifierClassName
+			"Entity.Modifier"
+		set superItemModifierClass
+			class:"entities.items" "Modifier" null { general->entityModifierClassName } {
+				variable:"range" "Entity.Modifier";
+				variable:"host" "Item";}{
+				method:"use" "Float" {variable:"inputEntity" "Entity";} {
+					body_return:body_met_cal:body_exact:\"range"; \"use" {body_exact:\"inputEntity";};;};
+				method:"decrease" "void" {variable:"inputEntity" "Entity"; variable:"amount" "Float";} {
+					body_line:body_met_cal:body_exact:\"range"; \"decrease" {body_exact:\"inputEntity";body_exact:\"amount";};;};
+				method:"getValue" "Float" {} {
+					body_return:body_met_cal:body_exact:\"range"; \"use" {
+						body_met_cal:body_exact:\"host"; \"getEquipper" {};};;};}{};
+		superItemModifierClass setDefaultEnder
+			body_exact:\"getValue";
+		superItemsClass addImport
+			"misc"
+			"Range"
+		superItemsClass addImport
+			"entities.mods.conditions"
+			"Conditions"
+		superItemsClass addImport
+			"entities.mods.traits"
+			"Traits"
+		superItemsClass addImport
+			"entities.attacks"
+			"Attacks"
+		set superItemClass
+			general init:class:"entities.items" "Item" null {general->Source} {
+				variable:"name" "String";
+				variable:"equipper" "Entity" "null";
+				variable:"hp" superItemModifierClass;
+				variable:"maxHp" superItemModifierClass;
+				variable:"dmg" superItemModifierClass;
+				variable:"def" superItemModifierClass;
+				variable:"value" superItemModifierClass;
+				variable:"weight" superItemModifierClass; }{
+				method:"onEquip"  "void" {variable:"event" "Events.Equip";} {
+					body_operator:body_exact:\"equipper"; "=" body_met_cal:body_exact:\"event"; \"getHost" {};;};
+				method:"onUnequip" "void" {variable:"event" "Events.Unequip";} {
+					body_operator:body_exact:\"equipper"; "=" body_exact:\"null";;};
+				method:"onChangeItem" "void" {variable:"event" "Events.ChangeItem";} {};}{};;
+		superItemClass addSubClass
+			superItemModifierClass
+		entities addGainLoss:"aspect" "aspects" "Aspect" "Aspects.Id" superItemClass;
+		items addFile
+			directory
+			"Items.java"
+			superItemsClass->COMPLETE
+		items addFile
+			directory
+			"Item.java"
+			superItemClass->COMPLETE
+	generate item
+		var className
+			^item->itemName
+		var itemClass as class
+			class:"entities.items" className superItemClass null {}{}{};
+		superItemsClass addSubClass
+			itemClass
+		itemClass addToConstructor
+			body_operator:body_exact:\"name"; "=" body_exact:``'item->itemName``;;
+		createItemBody += (2 createElement{\'item->itemName \className})
+		var eventBodies
+			new HashMap<String,ListEntry>
+		item to element
+			animation
+				itemClass addToConstructor
+					body_operator:body_exact:\"image"; "=" body_exact:generate image animation:;;;
+			hp
+				itemClass addToConstructor
+					body_operator:body_exact:\"hp"; "=" body_new_obj:superItemModifierClass {
+						generate entities range:;
+						body_exact:\"this";};;
+				itemClass addToConstructor
+					body_operator:body_exact:\"maxHp"; "=" body_new_obj:superItemModifierClass {
+						generate entities range:;
+						body_exact:\"this";};;
+			attack
+				itemClass addToConstructor
+					body_operator:body_exact:\"dmg"; "=" body_new_obj:superItemModifierClass {
+						generate entities range:;
+						body_exact:\"this";};;
+			defense
+				itemClass addToConstructor
+					body_operator:body_exact:\"def"; "=" body_new_obj:superItemModifierClass {
+						generate entities range:;
+						body_exact:\"this";};;
+			value
+				itemClass addToConstructor
+					body_operator:body_exact:\"value"; "=" body_new_obj:superItemModifierClass {
+						generate entities range:;
+						body_exact:\"this";};;
+			weight
+				itemClass addToConstructor
+					body_operator:body_exact:\"weight"; "=" body_new_obj:superItemModifierClass {
+						generate entities range:;
+						body_exact:\"this";};;
+			gain_aspect
+				var gainClassName
+				var staticId as body_statement
+				element aspect_names to atom
+					set gainClassName
+						items buildString
+							"Aspects."
+							^atom
+					set staticId as body_statement
+						aspects id:^atom;
+				entry in = generate gain:"change_item" "change_item" staticId "getItem" "aspect" "aspects" "Aspects" gainClassName itemClass eventBodies;
+			gain_trait
+				var gainClassName
+				var staticId as body_statement
+				element trait_names to atom
+					set gainClassName
+						items buildString
+							"Traits."
+							^atom
+					set staticId as body_statement
+						traits id:^atom;
+				entry in = generate gain:"equip" "unequip" staticId "getHost" "trait" "traits" "Traits" gainClassName itemClass eventBodies;
+			gain_attack
+				var gainClassName
+				var staticId as body_statement
+				element attack_names to atom
+					set gainClassName
+						items buildString
+							"Attacks."
+							^atom
+					set staticId as body_statement
+						attacks id:^atom;
+				entry in = generate gain:"equip" "unequip" staticId "getHost" "attack" "attacks" "Attacks" gainClassName itemClass eventBodies;
+			event
+				var eventBody as ListEntry
+					eventBodies get
+						'element
+				if eventBody is null
+					set eventBody = {}
+					eventBody setDelimiter:"";
+					eventBodies put
+						'element
+						eventBody
+				var eventContext as context
+					events getEventContext
+						'element->event_names
+						itemClass
+				eventContext decrementTab
+					1
+				element body_element to atom
+					eventBody+=generate general bodyElement:eventContext;
+		
+		var eventKeys as Set<String>
+			eventBodies keySet
+		each key in eventKeys
+			events addEventMethod
+				key
+				itemClass
+				eventBodies->key
+		return
+			null
+	
+	generate gain takes gainEventName,loseEventName,staticId as body_statement, subject, name, list, type, className, itemClass as class, eventBodies as HashMap<String,ListEntry>
+		if gain->boolean_statement is null
+			itemClass addToConstructor
+				body_met_cal:body_exact:\list; \"add" {
+					body_exact:\"this";
+					body_new_obj:general->className {};};
+		else
+			var eventContext as context
+				events getEventContext
+					gainEventName
+					itemClass
+			gain boolean_statement to atom
+				var bool as body_statement = generate general booleanStatement:eventContext;
+				var itemGainBody as ListEntry
+					eventBodies->gainEventName
+				if itemGainBody is null
+					set itemGainBody = {}
+					itemGainBody setDelimiter:"";
+					eventBodies put
+						gainEventName
+						itemGainBody
+				var itemLoseBody as ListEntry
+					eventBodies->loseEventName
+				if itemLoseBody is null
+					set itemLoseBody = {}
+					itemLoseBody setDelimiter:"";
+					eventBodies put
+						loseEventName
+						itemLoseBody
+				var getSubject = body_met_cal:body_exact:\"event"; \subject {};
+				var hasType = body_met_cal: getSubject \"has" {staticId};
+				var gainHeader = body_operator:bool "&&" body_negate: hasType;;
+				var gainCall = body_met_cal: getSubject \"gain" {
+					body_new_obj:general->className {};
+					body_exact:\"this";};
+				var loseHeader = body_operator:bool "&&" hasType;
+				var loseCall = body_met_cal: getSubject \"lose" {
+					staticId
+					body_exact:\"this";};
+				itemGainBody+=body_conditional:"if" gainHeader body_lines:{gainCall} eventContext; eventContext;
+				if gainEventName is loseEventName
+					itemLoseBody+=body_conditional:"else if" loseHeader body_lines:{loseCall} eventContext; eventContext;
+				else
+					itemLoseBody+=body_conditional:"if" loseHeader body_lines:{loseCall} eventContext; eventContext;
+		return
+			null

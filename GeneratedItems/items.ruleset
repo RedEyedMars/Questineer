@@ -1,6 +1,7 @@
 base is silent
-	( NEWLINE | IMPORT_IMAGE | IMPORT_TRAIT | item as item in items )*
-
+	( NEWLINE | COMMENTS | IMPORT_IMAGE | IMPORT_ASPECT | IMPORT_AFFINITY | IMPORT_ATTACK | item as item in items )*
+comment-s as Braced
+	[#,#] as COMMENTS with WILD as comment
 #ITEMS
 itemToken-s
 	[[a-zA-Z_][a-zA-Z0-9_]*] as NAME
@@ -16,11 +17,14 @@ event_name-s
 	[equip] as equip
 	[unequip] as unequip
 	[change_item] as change_item
+	[hit] as hit
+	[miss] as miss
 	[pre_attack] as pre_attack
 	[post_attack] as post_attack
 	[tick] as tick
-	[gained] as gained
-	[lost] as lost
+	[gain] as gain
+	[loss] as loss
+	[die] as die
 item is silent
 	NAME as itemName ITEM_PARAMETERS
 item_parameter is silent
@@ -31,9 +35,47 @@ item_parameter is silent
 	VAL statRange as value
 	WEI statRange as weight
 	( event_name animation? BODY ) as event
-	( trait_name ( IF boolean_statement )? ) as trait
+	( aspect_name ( IF boolean_statement )? ) as aspect
 
-#TRAITS
+#AFFINITY
+affinity_name-s are empty
+affinityToken-s
+	[[a-zA-Z_][a-zA-Z0-9_]*] as NAME
+	[.*] as WILD
+	"\n" as NEWLINE
+	"\n\t" as NEWTAB
+	"afts" as AFTS
+	"+" as PLUS
+	"-" as MINUS
+	"affinity" as AFFINITY
+affinityBrace-s are Braced
+	[,.] as AFFINITY_FILE with WILD as affinity_file_name 
+	[\n\t,.] as AFFINITY_DESCRIPTION with WILD as description
+affinityImport-s are Import
+	[><<\"entities/mods/affinities/\",affinity_file_name,\".afts\">>\n] as IMPORT_AFFINITY from (NEWLINE|COMMENTS|affinity_declaration)*; with AFFINITY_FILE AFTS
+affinity_declaration
+	NAME as affinityName in affinity_names AFFINITY_DESCRIPTION? (NEWLINE|COMMENTS|PLUS affinity_name as strength_name|MINUS affinity_name as weakness_name )*
+
+#ATTACK
+attack_name-s are empty
+attackToken-s
+	[[a-zA-Z_][a-zA-Z0-9_]*] as NAME
+	[.*] as WILD
+	"\n" as NEWLINE
+	"\n\t" as NEWTAB
+	"atks" as ATKS
+	"attack" as ATTACK
+	"range" as RANGE
+	"cd" as COOLDOWN
+	"damage" as DAMAGE
+attackBrace-s are Braced
+	[,.] as ATTACK_FILE with WILD as attack_file_name 
+	[\n\t,.] as ATTACK_DESCRIPTION with WILD as description
+attack-s are Import
+	[><<\"entities/skills/attacks/\",attack_file_name,\".atks\">>\n] as IMPORT_ATTACK from (NEWLINE|COMMENTS|attack_declaration)*; with ATTACK_FILE ATKS
+attack_declaration
+	NAME as attackName in attack_names ATTACK_DESCRIPTION (NEWLINE|(RANGE statRange)as range|(COOLDOWN statRange)as cooldown|(DAMAGE BODY) as damage)*
+#TRAIT
 trait_name-s are empty
 traitToken-s
 	[[a-zA-Z_][a-zA-Z0-9_]*] as NAME
@@ -41,14 +83,34 @@ traitToken-s
 	"\n" as NEWLINE
 	"\n\t" as NEWTAB
 	"trts" as TRTS
-	"-ness" as TRAIT_NESS
+	[[<>][=]?] as ORDINAL
+	"<" as REQUIRE
+	"EXP" as EXP
+	"+" as PLUS
+	"-" as MINUS
 traitBrace-s are Braced
-	[,.] as TRAIT_FILE with WILD as trait_file_name 
+	[,.] as TRAITS_FILE with WILD as trait_file_name 
 	[\n\t,.] as TRAIT_DESCRIPTION with WILD as description
-traitImport-s are Import
-	[><<\"../traits/\",trait_file_name,\".trts\">>\n] as IMPORT_TRAIT from blank:(NEWLINE|trait_declaration)*; with TRAIT_FILE TRTS
+trait-s are Import
+	[><<\"entities/mods/traits/\",trait_file_name,\".trts\">>\n] as IMPORT_TRAIT from (NEWLINE|COMMENTS|trait_declaration)*; with TRAITS_FILE TRTS
 trait_declaration
-	NAME as traitName in trait_names TRAIT_DESCRIPTION (NEWLINE|(event_name animation? BODY)as event )*
+	NAME as traitName in trait_names ( NEWLINE* REQUIRE trait_name as require_trait | (attack_name EXP ORDINAL INTEGER) as require_exp )*  TRAIT_DESCRIPTION (NEWLINE|(PLUS INTEGER hero_stat) as plus|(MINUS INTEGER hero_stat) as minus)*
+#ASPECTS
+aspect_name-s are empty
+aspectToken-s
+	[[a-zA-Z_][a-zA-Z0-9_]*] as NAME
+	[.*] as WILD
+	"\n" as NEWLINE
+	"\n\t" as NEWTAB
+	"asps" as ASPS
+	"-ness" as ASPECT_NESS
+aspectBrace-s are Braced
+	[,.] as ASPECT_FILE with WILD as aspect_file_name 
+	[\n\t,.] as ASPECT_DESCRIPTION with WILD as description
+aspectImport-s are Import
+	[><<\"items/aspects/\",trait_file_name,\".asps\">>\n] as IMPORT_ASPECT from blank:(NEWLINE|COMMENTS|trait_declaration)*; with ASPECT_FILE ASPS
+trait_declaration
+	NAME as traitName in trait_names ASPECT_DESCRIPTION (NEWLINE|(event_name animation? BODY)as event )*
 
 #HEROES
 hero_stat-s
@@ -59,7 +121,7 @@ hero_stat-s
 	"MND" as MND
 	"CRM" as CRM
 statRange is silent
-	range hero_stat?
+	range hero_stat? ( COMMA range hero_stat? ) as extra*
 
 #GENERAL
 generalToken-s
@@ -101,9 +163,11 @@ generalToken-s
 	"impose" as IMPOSE
 	"release" as RELEASE
 	"has" as HAS
+	"return" as RETURN
+	"new" as NEW
 generalBrace-s are Braced
 	[\",\"] as QUOTE with WILD as quote
-	[{,}] as BODY with (NEWLINE | body_element)*
+	[{,}] as BODY with (NEWLINE | COMMENTS | body_element)*
 	[(,)] as METHOD_PARAMETERS with statement? ( COMMA NEWLINE* statement)*
 	[(,)] as BRACED_STATEMENT with statement
 
@@ -119,6 +183,7 @@ operator
 	PLUS | MINUS | DIVIDE | MULTIPLY | EQUALS | NOTEQUALS | ORDINAL
 
 body_element
+	return_statement
 	if_statement
 	stat_imposition
 	trait_acquisition
@@ -141,14 +206,17 @@ boolean_element is silent
 	statement
 
 has_statement
-	NOT? variable_call HAS (trait_name TRAIT_NESS)
+	NOT? variable_call HAS (trait_name ASPECT_NESS)
+
+return_statement
+	RETURN statement
 
 statement
 	NOT? BRACED_STATEMENT as braced ( operator NEWLINE* statement )*
 	NOT? variable_call ( operator NEWLINE* statement )*
 
 variable_declaration
-	NAME as type NAME as variableName EQUALSIGN statement
+	type_name NAME as variableName EQUALSIGN statement
 
 variable_call
 	range as range ( ACCESS NAME as variableName | DOT method )*
@@ -156,7 +224,11 @@ variable_call
 	( method | NAME as variableName | QUOTE )  ( ACCESS NAME as variableName | DOT method )*
 
 method
+	NEW type_name METHOD_PARAMETERS
 	NAME as methodName METHOD_PARAMETERS
+
+type_name
+	NAME as typeName ( DOT NAME as typeName )*
 
 #IMAGES
 image_name-s are empty
@@ -172,7 +244,7 @@ imageToken-s
 imageBrace-s are Braced
 	[,.] as IMAGE_FILE with WILD as image_file_name
 imageImport-s are Import
-	[><<image_file_name,\".imgs\">>\n] as IMPORT_IMAGE from blank:(NEWLINE|image_declaration)+; with (IMAGE_FILE IMGS)
+	[><<image_file_name,\".imgs\">>\n] as IMPORT_IMAGE from blank:(NEWLINE|COMMENTS|image_declaration)+; with (IMAGE_FILE IMGS)
 image_declaration
 	NAME as imageName in image_names ( INTEGER as left CROSS INTEGER as right? ) EQUALSIGN IMAGE_FILE
 image_id

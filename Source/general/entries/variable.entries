@@ -1,0 +1,233 @@
+
+entry variable
+	constant SIMPLE
+		0
+	constant WITH_TYPE
+		1
+	constant SHOW_TYPE
+		1
+	constant SHOW_COMPLETE_TYPE
+		6
+	constant GET_METHOD
+		2
+	constant SHOW_AS_GET
+		3
+	constant SHOW_AS_END
+		4
+	constant DECLARATION
+		5
+	
+	constant DEFAULT
+		0
+	constant PRIVATE
+		1
+	constant PUBLIC
+		2
+	constant PROTECTED
+		3
+	constant FINAL
+		1
+	constant STATIC
+		2
+	
+	var name
+	entry type = null
+	var assignment as body_statement = null
+	var mode = SIMPLE
+	var access = DEFAULT
+	var state = DEFAULT
+	var isParameter = false
+	var ifEnd as body_entry = null
+	var isHidden = false
+	constructor takes initialName, initialType
+		set name = initialName
+		set type as class
+			general getType
+				initialType
+		set assignment
+			type getDefaultAssignment
+		set ifEnd
+			type getDefaultEnder
+	constructor takes initialName, initialType, initialAssignment as body_statement
+		set name = initialName
+		set type as class
+			general getType
+				initialType
+		set assignment
+			initialAssignment
+		set ifEnd
+			type getDefaultEnder
+	constructor takes initialName, initialType, initialAssignment
+		set name = initialName
+		set type as class
+			general getType
+				initialType
+		set assignment
+			body_exact:\initialAssignment;
+		set ifEnd
+			type getDefaultEnder
+	constructor takes initialName, initialType as class
+		set name = initialName
+		set type
+			initialType
+		set assignment
+			type getDefaultAssignment
+		set ifEnd
+			type getDefaultEnder
+	constructor takes variable as variable
+		set name
+			variable getName
+		set type
+			variable getType
+		set assignment
+			variable getAssignment
+		set ifEnd
+			variable getIfEnd
+		set isParameter
+			variable getIsParameter
+		set mode
+			variable getMode
+		set access
+			variable getAccess
+		set state
+			variable getState
+	setName takes newName
+		set name = newName
+	setAccess takes newAccess
+		set access = newAccess
+	setAccessIfNot takes excludeAccess as Integer,newAccess
+		if access is not excludeAccess
+			set access = newAccess
+	setState takes newState
+		set state = newState
+	setMode takes newMode
+		set mode = newMode
+	setIfEnd takes newIfEnd as body_entry
+		set ifEnd = newIfEnd
+	setIsHidden takes newIsHidden as Boolean
+		set isHidden = newIsHidden
+	isFinal as Boolean
+		return
+			state is FINAL or state is 3
+	isStatic as Boolean
+		return
+			state is STATIC or state is 3 
+	hasEnder
+		if ifEnd is not null
+			return
+				ifEnd hasEnd
+		else
+			return
+				false
+	getAsGetMethod as variable
+		var typeName
+			type getName
+		var methodName
+			general buildString
+				"get"
+				^name
+		return
+			variable:methodName typeName;
+	getTypeName as String
+		return
+			type getName
+	getImport as Entry
+		return
+			type getImportPackage
+	get takes newMode
+		var self as variable
+			this getSelf
+		var ret = variable:self;
+		ret setMode
+			mode
+		ret setAccess
+			access
+		ret setState
+			state
+		if newMode is "PUBLIC"
+			ret setAccess:PUBLIC;
+			return
+				ret
+		if newMode is "PRIVATE"
+			ret setAccess:PRIVATE;
+			return
+				ret
+		if newMode is "PROTECTED"
+			ret setAccess:PROTECTED;
+			return
+				ret
+		if newMode is "STATIC"
+			ret setState:STATIC;
+			return
+				ret
+		if newMode is "FINAL"
+			ret setState:FINAL;
+			return
+				ret
+		if newMode is "STATIC_FINAL"
+			ret setState:3;
+			return
+				ret
+		if newMode is "HIDDEN"
+			ret setIsHidden
+				true
+			return
+				ret
+		if newMode is "SIMPLE"
+			ret setMode:SIMPLE;
+			ret setAccess:DEFAULT;
+			ret setState:DEFAULT;
+			return
+				ret
+		if newMode is "DECLARATION"
+			ret setMode:DECLARATION;
+			return
+				ret
+		if newMode is "SHOW_TYPE"
+			ret setMode:SHOW_TYPE;
+			return
+				ret
+		if newMode is "SHOW_COMPLETE_TYPE"
+			ret setMode:SHOW_COMPLETE_TYPE;
+			return
+				ret
+		if newMode is "GET_METHOD"
+			ret setMode:GET_METHOD;
+			return
+				ret
+		if newMode is "SHOW_AS_GET"
+			ret setMode:SHOW_AS_GET;
+			return
+				ret
+		if newMode is "AS_PARAMETER"
+			ret setIsParameter
+				true
+			return
+				ret
+		if newMode is "SHOW_AS_END"
+			ret setMode: SHOW_AS_END;
+			return
+				ret
+		return
+				ret
+	setIsParameter takes newIsParameter
+		set isParameter = newIsParameter
+	output
+			\"public " if access is PUBLIC and isParameter is false
+			\"private " if access is PRIVATE and isParameter is false
+			\"protected " if access is PROTECTED and isParameter is false
+			+
+			\"static " if state is STATIC or state is 3 and isParameter is false
+			+
+			\"final " if state is FINAL or state is 3 and isParameter is false
+			+
+			\name if mode is SIMPLE and isParameter is false
+			general variableAsParameter{\^name} if mode is SIMPLE and isParameter is true
+			general typeAndName{type \name} if mode is WITH_TYPE  and isParameter is false
+			general typeAndName{type general variableAsParameter{\^name}} if mode is WITH_TYPE  and isParameter is true
+			general typeAndName{type->COMPLETE_NAME \name} if mode is SHOW_COMPLETE_TYPE  and isParameter is false
+			general typeAndName{type->COMPLETE_NAME general variableAsParameter{\^name}} if mode is SHOW_COMPLETE_TYPE  and isParameter is true
+			general declareMember{type->COMPLETE_NAME \name assignment} if mode is DECLARATION
+			general declareGetMethod{type \^name \name} if mode is GET_METHOD
+			general getCall{\^name} if mode is SHOW_AS_GET
+			general exact {ifEnd} if mode is SHOW_AS_END

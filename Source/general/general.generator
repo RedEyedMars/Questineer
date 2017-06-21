@@ -1,10 +1,10 @@
-uses ElementEntry Float Double Math
-import "general.entries"
+uses ElementEntry Float Double Math StringEntry
+import "entries/general.entries"
 general
 	elements from "general.elements"
 	
 	var types
-		new HashMap<String,vtype>
+		new HashMap<String,class>
 	var packageName
 	var directory
 	var miscDirectory
@@ -14,6 +14,8 @@ general
 	var declaredListMapClasses = {}
 	var declaredListSet
 		new HashSet<String>
+	var superListClass as class
+	var superListMapClass as class
 	aux setup takes data as ParseContext
 		set packageName
 			"com.rem.qstnr"
@@ -27,57 +29,111 @@ general
 				"misc"
 		directory mkdirs
 		miscDirectory mkdirs
+		var sourceClass as class
+			general init:class:"misc" "Source" null null {}{}{};;
 		general addFile
 			miscDirectory
 			"Source.java"
-			declareSourceClass{\packageName}
-		general createType:"misc" {} "Source" null null {} {}{}{};
+			sourceClass->INTERFACE
+		general->Integer setDefaultAssignment
+			body_exact:\"0";
+		general->Float setDefaultAssignment
+			body_exact:\"0f";
+		general->String setDefaultAssignment
+			body_exact:\"\"\"";
+		general->Boolean setDefaultAssignment
+			body_exact:\"false";
 	aux generate takes data as ParseContext
 		var setValueBody
-			"\n\t\tvalue = newValue;"
+			"value = newValue;"
+		var intClass as class
+			general init:class:"misc" "Int" null null {variable:"value" "Integer";} {
+				method:"setValue" "void" {variable:"newValue" "Integer";}{\setValueBody};}{};;
+		var rangeClass as class
+			general init:class:"misc" "Range" null null {variable:"left" "Float"; variable:"right" "Float";} {
+				method:"Range" ""{variable:"initialLeft" "Integer"; variable:"initialRight" "Integer";} {rangeIIbody{}};
+				method:"Range" ""{variable:"initialLeft" "Float"; variable:"initialRight" "Integer";} {rangeFIbody{}};
+				method:"Range" ""{variable:"initialLeft" "Integer"; variable:"initialRight" "Float";} {rangeIFbody{}};
+				method:"getModifier" "Entity.Modifier" {} {rangeGetModifierBody{}};
+				method:"getRandom" "Float" {} {rangeGetRandomBody{}};}{};;
+		set superListMapClass
+			class:"misc" "Map" null null {}{}{};
+		set superListClass
+			general init:class:"misc" "List" null null {}{}{superListMapClass};;
+		var listImportList as ListEntry
+			superListClass getImportList
+		listImportList += (0 importStdPackage{\"java.util" \"Arrays"})
 		general addFile
 			miscDirectory
 			"Int.java"
-			general createType:"misc" {} "Int" null null {variable:"value" "Integer";} {variable:"setValue" "void";}{{variable:"newValue" "Integer";}}{\setValueBody}; as ElementEntry
+			intClass->COMPLETE
 		general addFile
 			miscDirectory
 			"Range.java"
-			declareRangeClass { \packageName \packageName }
-		general createType:"misc" {} "Range" null null {variable:"modifier" "Entity.Modifier";} {variable:"getModifier" "Entity.Modifier";}{{}}{{}};
-		declaredListClasses setDelimiter
-			""
-		declaredListMapClasses setDelimiter
-			""
+			rangeClass->COMPLETE
 		general addFile
 			miscDirectory
 			"List.java"
-			declareListClass { \packageName declaredListClasses declaredListMapClasses }
-		general createType:"misc" {} "List" null null {} {} {} {};
-	
+			superListClass->COMPLETE
+	generate typeName
+		var nameBuilder
+			new StringBuilder
+		entry name "." = {}
+		typeName typeName to element
+			name+=\^element
+		name get
+			nameBuilder
+		return
+			\'nameBuilder
 	generate bodyElement takes context as context
 		var tabs as Integer
 			context getTab
 		bodyElement to element
 			statement
 				return
-					(tabs semicoloned{generate statement:context;})
-			trait_acquisition
+					body_line:generate statement:context; context;
+			return_statement
 				return
-					(tabs semicoloned{generate traits acquisition:context;})
-			stat_imposition
-				return
-					(tabs semicoloned{generate entities imposition:context;})
+					body_return:generate statement:context; context;
+			acquisition
+				var subject as body_statement
+					general generateVariableCall
+						element->variable_call
+						context
+				element acquisition to atom
+					return
+						body_line:generate acquisition:true subject context; context;
+			imposition
+				var subject as body_statement
+					general generateVariableCall
+						element->variable_call
+						context
+				element imposition to atom
+					if atom->IMPOSE is not null or atom->PLUS is not null
+						return
+							body_line:generate entities imposition: true subject; context;
+					else
+						return
+							body_line:generate entities imposition: false subject; context;
 			variable_declaration
 				return
-					(tabs semicoloned{generate variableDeclaration:context;})
+					body_line:generate variableDeclaration:context; context;
 			if_statement
 				return
 					generate ifStatement:context;
 		return
 			null
 	generate variableDeclaration takes context
+		var typeName as StringEntry
+			general generateTypeName
+				variableDeclaration->type_name
+		if types does not containsKey 'typeName
+			error variableDeclaration
+				"Could not find type:"
+				'typeName
+				"!"
 		var newVariable
-			variable:'variableDeclaration->variableName 'variableDeclaration->type;
+			variable:'variableDeclaration->variableName 'typeName;
 		context addVariable
 			variable:newVariable;
 		newVariable setMode
@@ -86,86 +142,148 @@ general
 		variableDeclaration statement to element
 			set assignment = generate statement:context;
 		return
-			declareVariable{newVariable assignment}
+			body_dec_var:newVariable assignment;
 	
 	generate ifStatement takes ifContext as context
-		return
-			generate realIfStatement:ifContext true;
-	generate realIfStatement takes ifContext as context, addNewline as Boolean
-		entry header = null
-		entry body "" = {}
-		entry elseBody "" = {}
-		var elseAsBody = true
+		var header as body_statement = null
+		entry elseStatements "" = {}
 		var tabs as Integer
 			ifContext getTab
 		var subContext
 			namelessContext:ifContext;
-		realIfStatement to element
+		entry ret = body_lines:ifContext;
+		entry body = body_lines:subContext;
+		ifStatement to element
 			boolean_statement
-				set header = generate booleanStatement:ifContext;
+				set header as body_statement = generate booleanStatement:ifContext;
+				ret addLine
+					body_conditional:"if" header body ifContext;
 			body_element
-				body+=generate bodyElement:subContext;
+				body addLine
+					generate bodyElement:subContext; as body_element
 			else_statement
 				var elseContext
 					namelessContext:ifContext;
-				set elseAsBody = true	
+				var elseHeader as body_statement = null
+				entry elseBody = body_lines:elseContext;
+				var elseName = "else"
 				element to atom
-					if_statement
-						elseBody+=generate realIfStatement:ifContext false;
-						set elseAsBody = false
 					body_element					
-						elseBody+=(tabs+1 generate bodyElement:elseContext;)
-		entry ret "" = {}
-		if addNewline is true
-			ret += (tabs ifStatement {header body})
-		else
-			ret += ifStatement {header body}
-		ret += (tabs \"}")
-		if elseBody is not empty
-			if elseAsBody is true
-				ret+=(tabs elseWithBody{ elseBody})
-				ret+=(tabs \"}")
-			else
-				ret+=(tabs elseWithIf{ elseBody})
+						elseBody addLine
+							generate bodyElement:elseContext; as body_element
+					boolean_statement
+						set elseHeader as body_statement = generate boolean_statement:ifContext;
+						set elseName = "else if"
+				ret addLine
+					body_conditional:elseName elseHeader elseBody ifContext;
 		return
 			ret
 	
 	generate booleanStatement takes context
-		entry ret "" = {}
+		var ret as body_operator
 		booleanStatement to element
-			chance
-				var chance as Double
-					static Double parseDouble
-						'element
-				set chance = chance/100
-				ret+=isChance {\'chance}
-			has_statement
-				entry variableCall = null
-				var groupName
-				entry argument = null
-				element to atom
-					variable_call
-						set variableCall = generate variableCall:context;
-					trait_names
-						 set groupName = "Trait"
-						 set argument = traits asTraitClass{\^atom}
-				if element->NOT is not null
-					ret+=negate{ hasCall{ variableCall \groupName argument } }
+			has_chance
+				if ret is null
+					set ret as body_operator = generate chance:;
 				else
-					ret+=hasCall { variableCall \groupName argument }
+					ret setRight
+						generate chance:;
+			has_statement
+				var variableCall as body_statement = null
+				var hasCall as body_statement = null
+				element variable_call to atom
+					set variableCall  as body_statement = generate variableCall:context;
+				element requirement to atom
+					set hasCall as body_statement
+						generate requirement:variableCall true;
+				if element->NOT is not null
+					set hasCall = body_negate:hasCall;
+				if ret is null
+					set ret = body_operator:hasCall;
+				else
+					ret setRight
+						hasCall
 			statement
-				ret+=generate statement:context;
+				if ret is null
+					set ret = body_operator:generate statement:context;;
+				else
+					ret setRight
+						generate statement:context;
 			operator
 				if 'element is "&"
-					ret+=\"&&"
+					set ret = body_operator:ret "&&";
 				else
 					if 'element is "|"
-						ret+=\"||"
+						set ret = body_operator:ret "||";
 		return
 			ret
-	
+	generate requirement takes candidate as body_statement, showAsTrue as Boolean
+		var requireHeader as body_operator = null
+		var delimiter = "&&"
+		if showAsTrue is true
+			set delimiter = "||" 
+		requirement require_stat to quanta
+			var methodName
+				entities statGetMethod
+					^quanta->hero_stats
+			var innerHead as body_statement
+				this helpNegate
+					quanta->NOT
+					showAsTrue
+					body_operator:body_met_cal:body_met_cal:candidate \methodName {}; \"getValue" {}; 'quanta->ORDINAL body_exact:\'quanta->INTEGER;;
+			if requireHeader is null
+				set requireHeader
+					body_operator:innerHead;
+			else
+				set requireHeader
+					body_operator:requireHeader delimiter innerHead;
+		requirement require_trait to quanta
+			var id as body_statement
+				traits id:^quanta->trait_names;
+			var innerHead as body_statement
+				this helpNegate
+					quanta->NOT
+					showAsTrue
+					body_met_cal:candidate \"has" {id};
+			if requireHeader is null
+				set requireHeader
+					body_operator:innerHead;
+			else
+				set requireHeader
+					body_operator:requireHeader delimiter innerHead;
+		requirement require_attack to quanta
+			var id as body_statement
+				attacks id:^quanta->attack_names;
+			var innerHead as body_statement
+				this helpNegate
+					quanta->NOT
+					showAsTrue
+					body_met_cal:candidate \"has" {id};
+			if requireHeader is null
+				set requireHeader
+					body_operator:innerHead;
+			else
+				set requireHeader
+					body_operator:requireHeader delimiter innerHead;
+		return
+			requireHeader
+	aux helpNegate takes notToken as IToken, showAsTrue as Boolean, statement as body_statement
+		if notToken is null
+			if showAsTrue is true
+				return as body_statement
+					statement
+			else
+				return as body_statement
+					body_negate:statement;
+		else
+			if showAsTrue is true
+				return as body_statement
+					body_negate:statement;
+			else
+				return as body_statement
+					statement
 	generate statement takes context
-		var ret as ElementEntry = null
+		var ret as body_operator = null
 		var negate = false
 		statement to element
 			NOT
@@ -173,54 +291,55 @@ general
 			variable_call
 				if ret is null
 					if negate is true
-						set ret as ElementEntry = negate {generate variableCall:context;}
+						set ret = body_operator:body_negate:generate variableCall:context;;;
 					else
-						set ret as ElementEntry = generate variableCall:context;
+						set ret = body_operator:generate variableCall:context;;
 				else
-					var entries as ListEntry
-						ret getEntries
 					if negate is true
-						entries+= negate { generate variableCall:context; }
+						ret setRight
+							body_negate:generate variableCall:context;;
 					else
-						entries+= generate variableCall:context;
+						ret setRight
+							generate variableCall:context;
 				set negate = false
 			statement
 				if ret is null
-					set ret as ElementEntry = generate statement:context;
+					set ret as body_operator = generate statement:context;
 				else
-					var entries as ListEntry
-						ret getEntries
-					entries+= generate statement:context;
+					ret setRight
+						generate statement:context;
 			operator
-				set ret = operator{ret \'element}
+				set ret = body_operator:ret 'element;
 			braced
 				if ret is null
 					if negate is true
-						set ret = negate{ generate statement:context; }
+						set ret = body_operator:body_negate:generate statement:context;;;
 					else
-						set ret = braced { generate statement:context; }
+						set ret = body_operator:body_braced:generate statement:context;;;
 				else
-					var entries as ListEntry
-						ret getEntries
 					if negate is true
-						entries+= negate { generate statement:context; }
+						ret setRight
+							body_negate:body_negate:generate statement:context;;;
 					else
-						entries+= braced { generate statement:context; }
+						ret setRight
+							body_negate:body_braced:generate statement:context;;;
 				set negate = false
 		return
 			ret
 	
 	generate variableCall takes context as context
-		entry ret = null
 		var currentContext = context
+		var ret as body_statement = null
 		var lastVariable as variable = null
 		variableCall to element
 			range
-				set ret as Entry = newRange {\'element->left \'element->right}
+				set ret = body_new_obj:general->Range {
+					body_exact:\'element->left;
+					body_exact:\'element->right;};
 			exact
-				set ret as Entry = exact {\'element}
+				set ret = body_exact:\'element;
 			quote
-				set ret as Entry = ``'element``
+				set ret = body_exact:``'element``;
 			variableName
 				var contextVariable as variable
 					currentContext getVariable
@@ -230,282 +349,245 @@ general
 						contextVariable getType
 				else
 					error variableCall
-						"Could not find"
+						"Could not find "
 						'element
 						" variable in context"
 				
 				set lastVariable = variable:contextVariable;
 				if ret is null
-					set ret as Entry = exact {lastVariable}
+					set ret = body_exact:lastVariable->SIMPLE;
 				else
-					lastVariable setMode
-						static variable SHOW_AS_GET
-					set ret as Entry = methodCall {ret lastVariable {}}
+					set ret = body_met_cal:ret lastVariable->SHOW_AS_GET {};
 					
 			method
 				var methodName
 				entry parameters = {}
 				element to atom
 					methodName
-						set methodName = 'atom
+						set methodName='atom
+					type_name
+						var typeName as StringEntry
+							generate typeName
+						set methodName = 'typeName
 					statement
 						parameters += generate statement:context;
-				var contextMethod as variable
-					currentContext getMethod
-						methodName
-				if contextMethod is not null
-					set currentContext
-						contextMethod getType
-					set lastVariable = variable:contextMethod;
+				if element->NEW is not null
+					if types does containsKey 'methodName 
+						set currentContext
+							general getType
+								'methodName
+						set lastVariable = null
+					else
+						error variableCall
+							"Could not find "
+							'methodName
+							" constructor"
+					set ret = body_new_obj:general->methodName parameters;
 				else
-					error variableCall
-						"Could not find"
-						methodName
-						" method in context"
-				if ret is null
-					set ret as Entry = subjectlessMethodCall {lastVariable parameters}
-				else
-					set ret as Entry = methodCall {ret lastVariable parameters}
+					var contextMethod as variable
+						currentContext getMethodHeader
+							'methodName
+					if contextMethod is not null
+						set currentContext
+							contextMethod getType
+						set lastVariable = variable:contextMethod;
+					else
+						error variableCall
+							"Could not find "
+							'methodName
+							" method in context"
+					if ret is null
+						set ret = body_met_cal:lastVariable->SIMPLE parameters;
+					else
+						set ret = body_met_cal:ret lastVariable->SIMPLE parameters;
 		if lastVariable is not null
 			if lastVariable does hasEnder
-				set lastVariable = variable:lastVariable;
-				lastVariable setMode
-					static variable SHOW_AS_END
-				set ret as Entry = methodCall {ret lastVariable {}}
-		return as ElementEntry
+				set ret = body_met_cal:ret lastVariable->SHOW_AS_END {};
+		return
 			ret
 	
-	generate range
-		if range->percent is not null
-			return
-				newRange { percentify{\'range->left} percentify{\'range->right}}
+	generate acquisition takes forGainBody as Boolean, subject as body_statement, context as context
+		var source as variable
+		if acquisition->source_name is not null
+			set source
+				context getVariable
+					'acquisition->source_name
+			if source is null
+				error acquisition
+					"Could not find "
+					'acquisition->source_name
+					" in context!"			
 		else
-			return
-				newRange { \'range->left \'range->right}
+			set source = variable:"this" "Trait";
+		var gainObj as Entry
+		var id as Entry
+		if acquisition->THIS is not null
+			set gainObj = body_met_cal:body_exact:\"this"; \"clone" {};
+			set id = body_met_cal:body_exact:\"this"; \"getId" {};
+		if acquisition->aspect_names is not null
+			var className
+				general buildString
+					"Aspects."
+					^acquisition->aspect_names
+			set gainObj = body_new_obj:general->className{};
+			set id
+				aspects id: ^acquisition->aspect_names;
+		if acquisition->trait_names is not null
+			var className
+				general buildString
+					"Traits."
+					^acquisition->trait_names
+			set gainObj = body_new_obj:general->className{};
+			set id
+				traits id: ^acquisition->trait_names;
+		if acquisition->attack_names is not null
+			var className
+				general buildString
+					"Attacks."
+					^acquisition->attack_names
+			set gainObj = body_new_obj:general->className{};
+			set id
+				attacks id: ^acquisition->attack_names;
+		if acquisition->condition_names is not null
+			var className
+				general buildString
+					"Conditions."
+					^acquisition->condition_names
+			set gainObj = body_new_obj:general->className{};
+			set id
+				attacks id: ^acquisition->condition_names;
+		if acquisition->operator->GAINS is not null
+			if forGainBody is true
+				return
+					body_met_cal:subject \"gain" {gainObj body_exact:source;};
+			else
+				return
+					body_met_cal:subject \"lose" {
+						id
+						body_exact:source;};
+		else
+			if forGainBody is true
+				return
+					body_met_cal:subject \"lose" {id body_exact:source;};
+			else
+				return
+					body_met_cal:subject \"gain" {gainObj body_exact:source;};
+	generate range
+		var left as String
+		var right as String 
+		if range->percent is not null
+			set left
+				general percentify:'range->left;
+			set right
+				general percentify:'range->right;
+		else			
+			set left = 'range->left
+			set right = 'range->right
+		var leftPercent
+			general buildString
+				left
+				"f"
+		var rightPercent
+			general buildString
+				right
+				"f"
+		return
+			body_new_obj:general->Range {
+				body_exact:\leftPercent;
+				body_exact:\rightPercent;};
 	
 	aux getType takes type
 		if types does containsKey type
-			return as vtype
+			return as class
 				types->type
 		else
 			types put
 				type
-				vtype:type;
+				class:type;
 			types->type addVariable
 				variable:"this" type;
-			return as vtype
+			return as class
 				types->type
+	generate chance
+		var value as Double
+			static Double parseDouble
+				'chance
+		set value = value/100
+		return
+			body_operator:body_exact:\"Math.random()"; "<=" body_exact:\'value;;
+	aux get takes type
+		return as class
+			general getType
+				type
 	
 	aux createList takes
-			typePackage
-			listName
-		if declaredListSet does add listName
-			declaredListClasses+=(1 declareList{\listName \packageName \typePackage \listName \listName \packageName \typePackage \listName })
-			general createType:"misc" {} listName "List" null {} {} {} {};
-	
-	aux createListMap takes
-			leftPackage
-			leftName
-			rightPackage
-			rightName
+			list as class
 		var listName
+			list getName
+		if declaredListSet does add listName
+			var fullName as class
+				list->NAME_WITH_IMPORTS
+			var listClass as class
+				class:"java.util" "ArrayList" {fullName};
+			superListClass addSubClass
+				class:"misc" list listClass null {} {method:listName ""{variable:"...initialElements" fullName;} {listConstructorBody{}};} {};
+	aux createListMap takes
+			left as class
+			right as class
+		var rightName
+			general buildString
+				"_"
+				right getName
+		var fullName
 			general buildString
 				"Map."
-				leftName
-				"._"
-				rightName
-		var leftFullName
-			general buildString
-				packageName
-				"."
-				leftPackage
-				"."
-				leftName
-		var rightFullName
-			general buildString
-				packageName
-				"."
-				rightPackage
+				left getName
 				"."
 				rightName
-		if declaredListSet does add listName
-			var listOfInnerClasses as ListEntry
-				mapOfListMapClasses get
-					leftName
-			if listOfInnerClasses is null
-				set listOfInnerClasses
-					{}
-				listOfInnerClasses setDelimiter
-					""
-				mapOfListMapClasses put
-					leftName
-					listOfInnerClasses
-				declaredListMapClasses+=
-					(2 declareMapSuperClass{\leftName listOfInnerClasses})
-			listOfInnerClasses+=(3 declareMapClass{\rightName \leftFullName \rightFullName \rightFullName \leftFullName \leftFullName \rightFullName \rightFullName \leftFullName \leftFullName \leftFullName \rightFullName })
-			general createType:"misc" {} listName "List" null {} {} {} {};
-	
-	aux createType takes
-			typePackage
-			imports as ListEntry
-			className
-			surroundClassName
-			parentClasses as ListEntry
-			variables as ListEntry
-			methodHeaders as ListEntry
-			methodParameters as ListEntry
-			methodBodies as ListEntry
-		imports setDelimiter
-			""
-		var packageEntry as Entry
-		set typePackage
-			general buildString 
-				packageName
-				"."
-				typePackage
-		var importSet
-			new HashSet<vtype>
-		entry methods "" = {}
-		var newType = null
-		var realClassName = className
-		if surroundClassName is not null
-			set realClassName
-				general buildString
-					surroundClassName
-					"."
-					className
-		set newType as vtype
+		if declaredListSet does add fullName
+			var fullLeft as class = left->NAME_WITH_IMPORTS
+			var fullRight as class = right->NAME_WITH_IMPORTS
+			
+			var listClass as class 
+				class:"java.util" "LinkedList" {fullRight};
+			var hashMapClass as class 
+				class:"java.util" "HashMap" {fullLeft listClass};
+			
+			superListMapClass addSubClass
+				class:"misc" left null null {}{}{};
+			var mapSubClasses as HashMap<String,class>
+				superListMapClass getSubClasses
+			var leftClass as class
+				mapSubClasses get
+					left getName
+			leftClass addSubClass
+				class:"misc" rightName hashMapClass {} {variable:"complete" listClass;} {
+				method:"getFrom" listClass {variable:"key" fullLeft;}{returnCall{\"super.get(key)"}};
+				method:"add" "void" {variable:"key" fullLeft; variable:"element" fullRight;} {mapClassAddBody{listClass}};
+				method:"removeLast" "void" {variable:"key" fullLeft;} {mapClassRemoveLastBody{}};
+				method:"removeAll" "void" {variable:"key" fullLeft;} {mapClassRemoveAllBody{listClass}};
+				method:"remove" "void" {variable:"key" fullLeft; variable:"element" fullRight;} {mapClassRemoveBody{}};
+				method:"getAll" listClass {} {returnCall{\"complete"}};} {};
+		return as class
 			general getType
-				realClassName
-		if parentClasses is null or parentClasses is empty
-			newType setParent
-				null
-		else
-			newType setParent
-				parentClasses get:0; as vtype
-		if surroundClassName is null
-			newType setPackageName
-				typePackage
-		else
-			var surroundClass as vtype
-				general getType
-					surroundClassName
-			newType setPackage
-				surroundClass
-			newType incrementTab
-				surroundClass getLayer
-			
-		entry members "" = {}
-		entry constructorParameters = {}
-		entry constructorAssignments "" = {}
-		var numberOfMethods
-			methodHeaders size
-		each i in 0..numberOfMethods
-			var method as variable
-				methodHeaders->i
-			method setMode
-				static variable SHOW_TYPE
-			newType addMethod
-				method
-			importSet+=
-				method getType
-			var parameters as ListEntry
-				methodParameters->i
-			var body as Entry
-				methodBodies->i
-			each parameter as Entry in parameters
-				var p as variable = parameter
-				p setMode
-					static variable SHOW_TYPE
-				importSet+=
-					p getType
-			
-			methods+=(1 declareMethod{method parameters body})
-		each v as Entry in variables
-			var vv as variable = v
-			var conpv
-				variable:vv;
-			var vName
-				vv getName
-			importSet+=
-				vv getType
-			var conpvName
 				general buildString
-					"initial"
-					^vName
-			conpv setName
-				conpvName
-			conpv setMode
-				static variable WITH_TYPE
-			constructorParameters+=conpv
-			constructorAssignments+=
-				(2 setVar{ \vName \conpvName })
-			var memV
-				variable:vv;
-			memV setMode
-				static variable WITH_TYPE
-			memV setAccess
-				static variable PRIVATE
-			members+=
-				(1 semicoloned{memV})
-			var getMethod
-				variable:vv;
-			getMethod setMode
-				static variable GET_METHOD
-			methods+=getMethod
-			newType addVariable
-				vv
-			var vAsGet
-				variable:vv;
-			vAsGet setMode
-				static variable SHOW_AS_GET
-			newType addMethod
-				vAsGet
-		
-		entry extendsClass "" = {}
-		if parentClasses is not null
-			entry implementsClasses = {} 
-			each type as Entry in parentClasses
-				var t as vtype
-					type
-				var parentClassName
-					t getName
-				importSet+=t
-				if extendsClass is empty
-					extendsClass+=extends{\parentClassName}
-				else
-					implementsClasses+=\parentClassName
-			if implementsClasses is not empty
-				extendsClass+=implements{implementsClasses}
-		
-		each type as vtype in importSet
-			var typeName
-				type getName
-			if typeName is not className and typeName is not "void"
-				imports+=
-					type getPackageAsEntry
-		entry staticEntry = \""
-		if surroundClassName is not null
-			set imports = {}
-			set staticEntry = \"static"
-			set packageEntry = {}
-		else
-			set packageEntry = packageStatement{\typePackage}
-		
-		var defaultConstruct as Entry = {}
-		if variables is not empty
-			set defaultConstruct = defaultConstructor{\className}
+					"List."
+					fullName
+	
+	aux init takes iClass as class
+		var knownClass as class
+			general getType
+				iClass getJustCompleteName
+		knownClass copy
+			iClass
 		return
-			declareClass { 
-				packageEntry
-				imports
-				staticEntry \className extendsClass
-				members
-				defaultConstruct \className constructorParameters constructorAssignments
-				methods }
+			knownClass
+	
 	aux percentify takes input
 		var d as Double
 			static Double parseDouble
 				input
-		return as Double
+		var result as Double
 			d/100
+		return as String
+			'result

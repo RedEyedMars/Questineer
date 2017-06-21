@@ -5,8 +5,12 @@ events
 	var packageName
 	var variableDefs
 		new HashMap<String,ListEntry>
+	var eventNameSet
+		new HashSet<String>
 	var methodHeaders = {}
 	var methodParameters = {}
+	var superEventsClass as class
+	var superEventClass as class
 	aux setup takes data as ParseContext
 		set packageName
 			general getPackageName
@@ -15,83 +19,53 @@ events
 				general getDirectory
 				"events"
 		directory mkdirs
-	aux generate takes data as ParseContext
-		entry imports "" = {}
-		entry eventClasses "" = {}
+		set superEventsClass
+			general init:class:"events" "Events" null null {} {} {};;
+		set superEventClass
+			general init:class:"events" "Event" null null {} {} {};;
 		events addFile
 			directory
 			"Event.java"
-			general createType:"events" {} "Event" null null {} {} {} {}; as ElementEntry		
+			superEventClass->COMPLETE
 		events addFile
 			directory
 			"Events.java"
-			declareEventsClass { \packageName imports eventClasses }
-		general createType:"events" {} "Events" null null {} {} {} {};
-		var eventClass as vtype
-			general getType
-				"Event"
-		var pList as ParseList
-			data getList
-				"event_names"
-		var nParser as NameParser
-			pList getNamesParser
-		var sElements as Set<String>
-			nParser getElements
-		
-		variableDefs put
-			"gained"
-			{variable:"host" "Entity"; variable:"trait" "Trait";}
-		variableDefs put
-			"lost"
-			{variable:"host" "Entity"; variable:"trait" "Trait";}
-		variableDefs put
-			"equip"
-			{variable:"host" "Entity"; variable:"item" "Item";}
-		variableDefs put
-			"unequip"
-			{variable:"host" "Entity"; variable:"item" "Item";}
-		variableDefs put
-			"change_item"
-			{variable:"host" "Entity"; variable:"item" "Item";}
-		variableDefs put
-			"pre_attack"
-			{variable:"attacker" "Entity"; variable:"defender" "Entity";}
-		variableDefs put
-			"post_attack"
-			{variable:"attacker" "Entity"; variable:"defender" "Entity";}
-		variableDefs put
-			"tick"
-			{variable:"host" "Entity";}
-		each eventName in sElements
-			var variables as ListEntry
-				variableDefs get
-					eventName
-			eventClasses add
-				events generateEvent:null eventName variables eventClass imports; as ElementEntry
-			var methodHeaderName
-				events buildString
-					"on"
-					^eventName
-			var parameterType
-				events buildString
-					"Events."
-					^eventName
-			entry header = variable:methodHeaderName "void";
-			header setMode
-				static variable WITH_TYPE
-			methodHeaders+=header
-			entry parameter = variable:"event" parameterType;
-			parameter setMode
-				static variable WITH_TYPE
-			methodParameters+=
-				{parameter}
+			superEventsClass->COMPLETE
 	
-	generate event takes eventName, variables as ListEntry, eventClass, imports as ListEntry
+	generate eventDeclaration
+		var eventName
+			'eventDeclaration->eventName
+		eventNameSet+=eventName
+		entry variables = {}
+		eventDeclaration parameter to element
+			element type_name to atom
+				entry typeName = generate general typeName:;
+				variables+=variable:'element->name 'typeName;
+		var eventClass
+			class:"events" ^eventName superEventClass null variables {} {} ;
+		superEventsClass addSubClass
+			eventClass
+		general init
+			eventClass
+		var methodHeaderName
+				events buildString
+				"on"
+				^eventName
+		var parameterType
+			events buildString
+				"Events."
+				^eventName
+		entry header = variable:methodHeaderName "void";
+		header setMode
+			static variable WITH_TYPE
+		methodHeaders+=header
+		entry parameter = variable:"event" parameterType;
+		methodParameters+=
+			{parameter->SHOW_TYPE}
 		return
-			general createType:null imports ^eventName "Events" {eventClass} variables {} {} {} ;
+			null
 	
-	
-	aux getEventContext takes eName, inputClass as vtype
+	aux getEventContext takes eName, inputClass as class
 		var eventContext
 			namelessContext:inputClass;
 		var eventClassName
@@ -102,34 +76,43 @@ events
 			variable:"event" eventClassName;
 		return
 			eventContext
-	aux getEventMethod takes eName, inputClass as vtype, body as ListEntry
+	aux addEventMethod takes eName, inputClass as class, body as ListEntry
 		var eventName
-			traits buildString
+			events buildString
 				"on"
 				^eName
-		inputClass addMethod
-			variable:eName "void";
-		var tabs as Integer
-			inputClass getTab
-		entry ret "" = {(tabs-1 eventMethod {\^eName \^eName body})}
-		ret+=(tabs-1 \"}")
-		return
-			ret
+		var eventParameter
+			events buildString
+				"Events."
+				^eName
+		var inputParentClass as class
+			inputClass getParentClass
+		if inputParentClass is null
+			inputClass addMethod
+				method:eventName "void" {variable:"event" eventParameter;} body;
+		else
+			var inputSuperMethods as HashMap<String,variable>
+				inputParentClass getMethodHeaders
+			if inputSuperMethods does containsKey eventName
+				inputClass addMethod
+					method:eventName "void" {variable:"event" eventParameter;} {
+						body_met_cal:body_exact:\"super"; \eventName {body_exact:\"event";};
+						body};
+			else
+				inputClass addMethod
+					method:eventName "void" {variable:"event" eventParameter;} body;
 	
-	aux getMethodBodies takes nameDefs as ListEntry, bodyDefs as ListEntry
+	aux addEventMethods takes inputClass as class, nameDefs as ListEntry, bodyDefs as ListEntry
 		var numberOfNames
 			nameDefs size
-		entry bodies "" = {}
-		each header as Entry in methodHeaders
-			var h as variable = header
-			var headerName
-				h getName
+		each eventName in eventNameSet
 			var setBody = false
 			each i in 0..numberOfNames
-				if 'nameDefs->i is headerName
-					bodies+=bodyDefs->i
+				if 'nameDefs->i is eventName
+					events addEventMethod
+						eventName
+						inputClass
+						bodyDefs get:i; as ListEntry
 					set setBody = true
 			if setBody is false
-				bodies+={}
-		return
-			bodies
+				events addEventMethod:eventName inputClass {};

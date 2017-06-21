@@ -1,0 +1,6 @@
+fire  +ice	 +wild	 -earth	 -water
+ice	  +wild	 +earth	 -water	 -fire
+water +fire	 +ice	 -wild	 -earth
+wild  +earth +water  -fire	 -ice
+earth +water +fire	 -ice    -wild
+	

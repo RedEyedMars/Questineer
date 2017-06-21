@@ -1,0 +1,94 @@
+aspects
+	elements from "aspect.elements"
+	
+	var directory
+	var aspectMap
+		new HashMap<String, Set<String>>
+	var packageName
+	var superAspectClass as class
+	var superAspectsClass as class
+	var idClass as class
+	var createAspectBody = {}
+	aux setup takes data as ParseContext
+		set packageName
+			general getPackageName
+		set directory
+			new File
+				general getDirectory
+				"entities/items/aspects"
+		directory mkdirs
+		createAspectBody setDelimiter
+			""
+	aux generate takes data as ParseContext
+		var createAspectMethod
+			method:"createAspect" "Aspect" {variable:"aspectName" "String";} {createAspectBody general returnCall{\"null"}};
+		set idClass as class
+			class:"entities.items.aspects" "Id" null null {}{}{};
+		set superAspectsClass
+			general init:class:"entities.items.aspects" "Aspects" null null {}{createAspectMethod->STATIC_COMPLETE}{idClass};;
+		set superAspectClass
+			general init:class:"entities.items.aspects" "Aspect" null {general->Source} {
+				variable:"name" "String";variable:"description" "String";}{}{};;
+		superAspectClass addImport
+			"entities.mods.conditions"
+			"Conditions"
+		events addEventMethods
+			superAspectClass
+			{}
+			{}
+		superAspectClass addMethod
+			method:"getId" idClass {} {general returnCall{\"null"}};
+		aspects addFile
+			directory
+			"Aspect.java"
+			superAspectClass->COMPLETE
+		
+		aspects addFile
+			directory
+			"Aspects.java"
+			superAspectsClass->COMPLETE
+	
+	generate aspect
+		var aspectName
+			^aspect->aspectName
+		var aspectDescription
+			'aspect->description
+		var idVariable
+			variable:"id" "Aspects.Id";
+		var aspectClass
+			class:"entities.items.aspects" aspectName superAspectClass	{general->Source} {
+				idVariable->PUBLIC->STATIC_FINAL
+				variable:"name" "String"; variable:"description" "String";}
+				{}
+				{};
+		superAspectsClass addSubClass
+			aspectClass
+		aspect event to element
+			var eventContext as context
+				events getEventContext
+					'element->event_names
+					aspectClass
+			entry eventBody "" = {}
+			element body_element to atom
+				eventBody+=generate general bodyElement:eventContext;
+			var eventMethodName
+				aspects buildString
+					"on"
+					^element->event_names
+			var eventParameter
+				aspects buildString
+					"Events."
+					^element->event_names
+			aspectClass addMethod
+				method:eventMethodName "void" {variable:"event" eventParameter;} eventBody;
+		createAspectBody += createListIf { ``'aspect->aspectName`` \aspectName}
+		return
+			null
+	
+	aux id takes aspectName
+		set aspectName
+			aspects buildString
+				"Aspects."
+				aspectName
+		return
+			body_static:general->aspectName \"id";

@@ -1,0 +1,260 @@
+
+poisoning
+	Chance to cause @Poisoned to enemies struck.
+	equip {
+		if event->hero->dex < 8 & 25% chance {
+			event->hero gains poisoned from event->item
+		}
+	}
+	post_attack {
+		if event->hit {
+			if event->attacker->dex > event->defender->con + 5 {
+				if 50% chance {
+					event->defender gains poisoned from event->attacker
+				}
+			}
+			else if event->attacker->dex > event->defender->con {
+				if 40% chance {
+					event->defender gains poisoned from event->attacker
+				}
+			}
+			if event->attacker->dex > event->defender->con - 5 {
+				if 30% chance {
+					event->defender gains poisoned from event->attacker
+				}
+			}
+			else {
+				if 10% chance {
+					event->defender gains poisoned from event->attacker
+				}
+			}
+		}
+		if 25% chance {
+			event->attacker->equippedItem loses poisoning from "Poisoning has worn out"
+		}
+	}
+poisoned
+	tick {
+		event->host.damage(self,1)
+		if event->host has affinity for ground
+			if 50% chance {
+				event->host loses self from "Poison has worn out"
+			}
+		else {
+			if 20% chance {
+				event->host loses self from "Poison has worn out"
+			}
+		}
+	}
+
+flaming
+	Has a chance to cause @Aflame to enemies struck.
+	equip {
+		if event->hero->con < 8 {
+			if 20% chance {
+				event->hero gains aflame from event->item
+			}
+		}
+		else if event->hero has no affinity for ice {
+			event->hero gains affinity for fire from self
+		}
+	}
+	pre_attack {
+		if event->defender is frozen {
+			if event->attacker->str > event->defender->con + 5 {
+				event->damage->modifier.add(self,0.75)
+			}
+			else if 25% chance{
+				event->damage->modifier.add(self,0.5)
+			}
+		}
+		if event->attacker has affinity for fire {
+			if event->defender has affinity for fire {
+				event->damage->modifier.halve(self)
+			}
+			if event->defender has affinity for ice {
+				event->damage->modifier.double(self)
+			}
+		}
+	}
+	post_attack {
+		if event->hit & 55% chance {
+			if event->attacker->str > event->defender->con + 10 {
+				if 90% chance {
+					event->defender gains aflame from event->attacker
+				}
+			}
+			else if event->attacker->str > event->defender->con {
+				if 70% chance {
+					event->defender gains aflame from event->attacker
+				}
+			}
+			else if event->attacker->str > event->defender->con - 10{
+				if 50% chance {
+					event->defender gains aflame from event->attacker
+				}
+			}
+			else {
+				if 20% chance {
+					event->defender gains aflame from event->attacker
+				}
+			}
+		}
+	}
+aflame
+	Causes damage for each @Aflame that the host has.
+	gained {
+		if event->host->con > 14 | event->host has affinity for ground {
+			if 15% chance {
+				event->host gains aflame from self
+			}
+		}
+		else if 20% chance {
+			event->host gains aflame from self
+		}
+	}
+	tick {
+		if event->host->con < 10 {
+			if 50% chance {
+				event->host->damage(self,event->host.applied(self))
+			}
+		}
+		else {
+			if 33% chance {
+				event->host->damage(self,event->host.numberOfAfflicted(self))
+			}
+		}
+		if event->host has affinity for ground {
+			if event->host.numberOfAfflicted(self) > 2 {
+				if 75% chance {
+					event->host loses self from "Fire went out"
+				}
+			}
+			else if 50% chance {
+				event->host loses self from "Fire went out"
+			}
+		}
+		else {
+			if event->host.numberOfAfflicted(self) > 2 {
+				if 65% chance {
+					event->host loses self from "Fire went out"
+				}
+				else event->host->mnd < 13 & 10% chance {
+					event->host gains panicked
+				}
+			}
+			else if 40% chance {
+				event->host loses self from "Fire went out"
+			}
+			else event->host->mnd < 10 & 2% chance {
+				event->host gains panicked
+			}
+		}
+	}
+disintegerate
+	Destroys the target by overpowering it with fire.
+molten
+	Has a chance to @Disintegerate either enemy struck, or itself.
+	equip {
+		if event->hero->con < 8 {
+			if 30% chance { 
+				event->hero gains aflame from event->item
+			}
+		}
+		else if event->hero has no affinity for ice {
+			event->hero gains affinity for fire from self
+		}
+	}
+	unequip
+		event->hero lose affinity for fire from self
+	post_attack
+		if event->hit & 33% chance {
+			if event->attacker->str > event->defender->con + 10 {
+				if 70% chance {
+					event->defender.destroy(event->attack,self)
+				}
+			}
+			else if event->attacker->str > event->defender->con {
+				if 40% chance {
+					event->defender.destroy(event->attack,self)
+				}
+			}
+			else if event->attacker->str > event->defender->con - 10{
+				if 20% chance {
+					event->defender.destroy(event->attack,self)
+				}
+			}
+			else {
+				if 5% chance {
+					event->defender.destroy(event->attack,self)
+				}
+			}
+		}
+		if host->hero!=null & host->hero->con > 14 | host->hero!=null & host->hero has affinity for ground{
+			if 10% chance {
+				host.destroy(event->attack,self)
+			}
+		}
+		else if 15% chance{
+			host.destroy(event->attack,self)
+		}
+cold
+	Has a chance give @Frozen to enemies struck.
+	pre_attack {
+		if event->defender is healing {
+			if event->attacker->str > event->defender->con + 5 {
+				event->damage->modifier.add(self,0.75)
+			}
+			else if 25% chance{
+				event->damage->modifier.add(self,0.5)
+			}
+		}
+		if event->defender has affinity for ice {
+			event->damage->modifier.halve(self)
+		}
+		if event->defender has affinity for fire {
+			event->damage->modifier.double(self)
+		}
+	}
+	post_attack {
+		if event->hit & 55% chance {
+			if event->attacker->str > event->defender->con + 10 {
+				if 90% chance {
+					event->defender gains frozen from event->attacker
+				}
+			}
+			else if event->attacker->str > event->defender->con {
+				if 70% chance {
+					event->defender gains frozen from event->attacker
+				}
+			}
+			else if event->attacker->str > event->defender->con - 10{
+				if 50% chance {
+					event->defender gains frozen from event->attacker
+				}
+			}
+			else {
+				if 20% chance {
+					event->defender gains frozen from event->attacker
+				}
+			}
+		}
+	}
+
+frozen
+	Every tick has a chance to stun the host.
+	gained {
+		event->host gains stun from self
+	}
+	tick {
+		if event->host has affinity for fire {
+			if 66% chance {
+				event->host loses stun from "Thawed"
+				event->host loses self from "Thawed"
+			}
+		}
+		else if 33% chance {
+			event->host loses stun from "Thawed"
+			event->host loses self from "Thawed"
+		}
+	}

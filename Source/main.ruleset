@@ -1,0 +1,350 @@
+base is silent
+	( NEWLINE | COMMENTS | import_any )*
+import_any
+	IMPORT_EVENT | IMPORT_ITEM | IMPORT_IMAGE | IMPORT_TRAIT | IMPORT_ASPECT | IMPORT_AFFINITY | IMPORT_CONDITION | IMPORT_ATTACK
+comment-s are Braced
+	[#,#] as COMMENTS with WILD as comment
+
+#EVENTS
+event_name-s are empty
+eventToken-s
+	[[a-zA-Z_][a-zA-Z0-9_]*] as NAME
+	[.*] as WILD
+	"\n" as NEWLINE
+	"\n\t" as NEWTAB
+	"evts" as EVTS
+	"event" as EVENT
+eventBrace-s are Braced
+	[,.] as EVENT_FILE with WILD as event_file_name 
+eventImport-s are Import
+	[><<\"events/\",event_file_name,\".evts\">>\n] as IMPORT_EVENT from (NEWLINE|COMMENTS|event_declaration)*; with EVENT_FILE EVTS
+event_declaration
+	NAME as eventName in event_names (COMMENTS|(NEWTAB type_name NAME as name) as parameter|NEWLINE)*
+
+#ASPECTS
+aspect_name-s are empty
+aspectToken-s
+	[[a-zA-Z_][a-zA-Z0-9_]*] as NAME
+	[.*] as WILD
+	"\n" as NEWLINE
+	"\n\t" as NEWTAB
+	"asps" as ASPS
+	"-ness" as ASPECT_NESS
+aspectBrace-s are Braced
+	[,.] as ASPECT_FILE with WILD as aspect_file_name 
+	[\n\t,.] as ASPECT_DESCRIPTION with WILD as description
+aspectImport-s are Import
+	[><<\"entities/items/aspects/\",aspect_file_name,\".asps\">>\n] as IMPORT_ASPECT from blank:(NEWLINE|COMMENTS|aspect_declaration)*; with ASPECT_FILE ASPS
+aspect_declaration
+	NAME as aspectName in aspect_names ASPECT_DESCRIPTION (NEWLINE|(event_name animation? BODY)as event )*
+
+#ITEMS
+itemToken-s
+	[[a-zA-Z_][a-zA-Z0-9_]*] as NAME
+	[.*] as WILD
+	"itms" as ITMS
+	"hp" as HP
+	"def" as DEF
+	"dmg" as DMG
+	"value" as VAL
+	"weight" as WEI
+	"\n\t" as NEWTAB
+itemBrace-s are Braced 
+	[,.] as ITEM_FILE with WILD as item_file_name 
+	[\n\t,.] as ITEM_DESCRIPTION with WILD as description
+itemImport-s are Import
+	[><<\"entities/items/\",item_file_name,\".itms\">>\n] as IMPORT_ITEM from (NEWLINE|COMMENTS|import_any|item_declaration)*; with ITEM_FILE ITMS
+item_declaration
+	NAME as itemName item_parameter* ( NEWTAB item_parameter* )*
+item_parameter is silent
+	HP statRange as hp
+	DMG statRange as attack
+	DEF statRange as defense
+	VAL statRange as value
+	WEI statRange as weight
+	( event_name animation? BODY ) as event
+	( aspect_name ( IF boolean_statement )? ) as gain_aspect
+	( trait_name ( IF boolean_statement )? ) as gain_trait
+	( attack_name ( IF boolean_statement )? ) as gain_attack
+
+#ATTACK
+attack_name-s are empty
+attackToken-s
+	[[a-zA-Z_][a-zA-Z0-9_]*] as NAME
+	[.*] as WILD
+	"\n" as NEWLINE
+	"\n\t" as NEWTAB
+	"atks" as ATKS
+	"attack" as ATTACK
+	"range" as RANGE
+	"cd" as COOLDOWN
+	"damage" as DAMAGE
+	"miss" as MISS
+	"body" as BODY_DMG
+	"mind" as MIND_DMG
+attackBrace-s are Braced
+	[,.] as ATTACK_FILE with WILD as attack_file_name 
+	[\n\t,.] as ATTACK_DESCRIPTION with WILD as description
+attack-s are Import
+	[><<\"entities/skills/attacks/\",attack_file_name,\".atks\">>\n] as IMPORT_ATTACK from (NEWLINE|COMMENTS|attack_declaration)*; with ATTACK_FILE ATKS
+attack_declaration
+	NAME as attackName in attack_names ATTACK_DESCRIPTION attack_element*
+attack_element is silent
+	NEWLINE
+	COMMENTS
+	(RANGE statRange) as range
+	(COOLDOWN statRange)as cooldown
+	((BODY_DMG|MIND_DMG)? as dmg_type DAMAGE ( statRange as by_stat | BODY)) as damage
+	(MISS (NEWLINE* has_chance ( IF boolean_statement)?) as option* ) as miss
+#SKILL
+skill_name-s are empty
+skillToken-s
+	[[a-zA-Z_][a-zA-Z0-9_]*] as NAME
+	[.*] as WILD
+	"\n" as NEWLINE
+	"\n\t" as NEWTAB
+	"skls" as SKLS
+	"+" as PLUS
+	"-" as MINUS
+	"skill" as SKILL
+skillBrace-s are Braced
+	[,.] as SKILL_FILE with WILD as skill_file_name 
+	[\n\t,.] as SKILL_DESCRIPTION with WILD as description
+skillImport-s are Import
+	[><<\"entities/skills/\",skill_file_name,\".skls\">>\n] as IMPORT_SKILL from (NEWLINE|COMMENTS|skill_declaration)*; with SKILL_FILE SKLS
+skill_declaration
+	NAME as skillName in skill_names SKILL_DESCRIPTION? (NEWLINE|COMMENTS|PLUS skill_name as strength_name|MINUS skill_name as weakness_name )*
+
+
+#AFFINITY
+affinity_name-s are empty
+affinityToken-s
+	[[a-zA-Z_][a-zA-Z0-9_]*] as NAME
+	[.*] as WILD
+	"\n" as NEWLINE
+	"\n\t" as NEWTAB
+	"afts" as AFTS
+	"+" as PLUS
+	"-" as MINUS
+	"affinity" as AFFINITY
+affinityBrace-s are Braced
+	[,.] as AFFINITY_FILE with WILD as affinity_file_name 
+	[\n\t,.] as AFFINITY_DESCRIPTION with WILD as description
+affinityImport-s are Import
+	[><<\"entities/mods/affinities/\",affinity_file_name,\".afts\">>\n] as IMPORT_AFFINITY from (NEWLINE|COMMENTS|affinity_declaration)*; with AFFINITY_FILE AFTS
+affinity_declaration
+	NAME as affinityName in affinity_names AFFINITY_DESCRIPTION? (NEWLINE|COMMENTS|PLUS affinity_name as strength_name|MINUS affinity_name as weakness_name )*
+
+#CONDITION
+condition_name-s are empty
+conditionToken-s
+	[[a-zA-Z_][a-zA-Z0-9_]*] as NAME
+	[.*] as WILD
+	"\n" as NEWLINE
+	"\n\t" as NEWTAB
+	"\n\t\t" as NEWTABTAB
+	"cnds" as CNDS
+	"+" as PLUS
+	"-" as MINUS
+	"?" as REQUIRE
+	"!" as NOT
+	"*" as STAR
+	"accumulate" as ACCUMULATE
+	"condition" as CONDITION
+	"loss" as LOSS
+conditionBrace-s are Braced
+	[,.] as CONDITION_FILE with WILD as condition_file_name 
+	[\n\t,.] as CONDITION_DESCRIPTION with WILD as description
+conditionImport-s are Import
+	[><<\"entities/mods/conditions/\",condition_file_name,\".cnds\">>\n] as IMPORT_CONDITION from (NEWLINE|COMMENTS|condition_declaration)*; with CONDITION_FILE CNDS
+condition_declaration
+	NAME as conditionName in condition_names CONDITION_DESCRIPTION? condition_element*
+condition_element is silent
+	NEWLINE
+	COMMENTS
+	REQUIRE requirement
+	( LOSS ( has_chance ( IF boolean_statement )? ) as chance_pair ( NEWTABTAB has_chance ( IF boolean_statement )? )as chance_pair* ) as to_lose
+	( (STAR|ACCUMULATE) (imposition|acquisition)) as accumulation
+	imposition
+	acquisition
+	(event_name animation? BODY) as event
+#TRAIT
+trait_name-s are empty
+traitToken-s
+	[[a-zA-Z_][a-zA-Z0-9_]*] as NAME
+	[.*] as WILD
+	"\n" as NEWLINE
+	"\n\t" as NEWTAB
+	"trts" as TRTS
+	[[<>][=]?] as ORDINAL
+	"?" as REQUIRE
+	"EXP" as EXP
+	"trait" as TRAIT
+	"+" as PLUS
+	"-" as MINUS
+	"!" as NOT
+	"|" as OR
+traitBrace-s are Braced
+	[,.] as TRAITS_FILE with WILD as trait_file_name 
+	[\n\t,.] as TRAIT_DESCRIPTION with WILD as description
+trait-s are Import
+	[><<\"entities/mods/traits/\",trait_file_name,\".trts\">>\n] as IMPORT_TRAIT from (NEWLINE|COMMENTS|trait_declaration)*; with TRAITS_FILE TRTS
+trait_declaration
+	NAME as traitName in trait_names TRAIT_DESCRIPTION trait_element*
+trait_element is silent
+	NEWLINE
+	COMMENTS
+	REQUIRE requirement
+	imposition
+	acquisition
+
+#HEROES
+hero_stat-s
+	"STR" as STR
+	"DEX" as DEX
+	"CON" as CON
+	"KNW" as KNW
+	"MND" as MND
+	"CRM" as CRM
+statRange is silent
+	range hero_stat? ( (COMMA|PLUS) range hero_stat? ) as extra*
+
+#GENERAL
+generalToken-s
+	[[a-zA-Z_][a-zA-Z0-9_]*] as NAME
+	[[-]?\\d*\\Q.\\E\\d+] as FLOAT
+	[[-]?\\d+] as INTEGER
+	[.*] as WILD
+	[[<>][=]?] as ORDINAL
+	":" as COLON
+	";" as SEMICOLON
+	".." as DOTDOT
+	"->" as ACCESS
+	"." as DOT
+	"if" as IF
+	"else" as ELSE
+	"=" as EQUALSIGN
+	"==" as EQUALS
+	"!=" as NOTEQUALS
+	"+" as PLUS
+	"-" as MINUS
+	"*" as MULTIPLY
+	"/" as DIVIDE
+	"&" as AND
+	"|" as OR
+	"!" as NOT
+	"%" as PERCENT
+	"\n" as NEWLINE
+	"," as COMMA
+	"-" as DASH
+	"true" as TRUE
+	"false" as FALSE
+	"null" as NULL
+	"chance" as CHANCE
+	"gains" as GAINS
+	"loses" as LOSES
+	"from" as FROM
+	"this" as THIS
+	"on" as ON
+	"impose" as IMPOSE
+	"release" as RELEASE
+	"has" as HAS
+	"return" as RETURN
+	"new" as NEW
+generalBrace-s are Braced
+	[\",\"] as QUOTE with WILD as quote
+	[{,}] as BODY with (NEWLINE | COMMENTS | body_element)*
+	[(,)] as METHOD_PARAMETERS with statement? ( COMMA NEWLINE* statement)*
+	[(,)] as BRACED_STATEMENT with statement
+
+generalAltBrace-s are CharitableBraced
+	[,\n] as description with WILD as description
+
+num is silent
+	FLOAT
+	INTEGER
+range is silent
+	num as left ((DOTDOT|DASH) num as right) PERCENT as percent?
+operator
+	PLUS | MINUS | DIVIDE | MULTIPLY | EQUALS | NOTEQUALS | ORDINAL
+
+body_element
+	return_statement
+	if_statement
+	(variable_call acquisition) as acquisition
+	(variable_call imposition) as imposition
+	variable_declaration
+	statement
+
+acquisition
+	( GAINS | LOSES | PLUS as GAINS | MINUS as LOSES ) as operator ( THIS | aspect_name | condition_name | trait_name | attack_name ) ( FROM NAME as source_name )? 
+imposition
+	IMPOSE as operator INTEGER as amount ON hero_stat
+	RELEASE as operator hero_stat
+	(PLUS|MINUS)+ as operator hero_stat  
+
+if_statement
+	IF boolean_statement NEWLINE* BODY ( NEWLINE* ELSE NEWLINE* ( BODY | IF boolean_statement NEWLINE* BODY ) ) as else_statement*
+
+boolean_statement
+	(boolean_element ((AND|OR) as operator boolean_element )*
+boolean_element is silent
+	has_chance
+	has_statement
+	statement
+has_chance
+	num PERCENT CHANCE
+
+has_statement
+	NOT? variable_call HAS requirement
+requirement
+	requirement_element ( OR requirement_element )*
+requirement_element is silent
+	( NOT? hero_stat ORDINAL INTEGER ) as require_stat
+	( NOT? attack_name EXP ORDINAL INTEGER ) as require_exp
+	( NOT? attack_name ) as require_attack
+	( NOT? trait_name ) as require_trait
+
+return_statement
+	RETURN statement
+
+statement
+	NOT? BRACED_STATEMENT as braced ( operator NEWLINE* statement )*
+	NOT? variable_call ( operator NEWLINE* statement )*
+
+variable_declaration
+	type_name NAME as variableName EQUALSIGN statement
+
+variable_call
+	range as range ( ACCESS NAME as variableName | DOT method )*
+	( TRUE | FALSE | NULL | num ) as exact
+	( method | NAME as variableName | QUOTE )  ( ACCESS NAME as variableName | DOT method )*
+
+method
+	NEW type_name METHOD_PARAMETERS
+	NAME as methodName METHOD_PARAMETERS
+
+type_name
+	NAME as typeName ( DOT NAME as typeName )*
+
+#IMAGES
+image_name-s are empty
+imageToken-s
+	[[a-zA-Z_][a-zA-Z0-9_]*] as NAME
+	[.*] as WILD
+	"\n" as NEWLINE
+	"," as COMMA
+	[[Xx]] as CROSS
+	"-" as DASH
+	">" as LESSTHAN
+	"imgs" as IMGS
+imageBrace-s are Braced
+	[,.] as IMAGE_FILE with WILD as image_file_name
+imageImport-s are Import
+	[><<image_file_name,\".imgs\">>\n] as IMPORT_IMAGE from blank:(NEWLINE|image_declaration)+; with (IMAGE_FILE IMGS)
+image_declaration
+	NAME as imageName in image_names ( INTEGER as left CROSS INTEGER as right? ) EQUALSIGN IMAGE_FILE
+image_id
+	image_name ( INTEGER as left (COMMA INTEGER as right)? )?
+animation
+	image_id ( DASH INTEGER as frames? LESSTHAN ( image_name| INTEGER as left (COMMA INTEGER as right)?)) as delta*

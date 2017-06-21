@@ -1,0 +1,26 @@
+
+>physical.asps
+dagger
+	sharp if event->item->hp > 6
+	dull  if event->item->hp < 3
+	DaggerThrow if event->host has HandyWithAKnife
+	hp 10-15
+	dmg 0.15-0.175%STR + 0.1-0.125%DEX
+	def 20-30%DEX
+	value 50-100
+	post_attack {
+		if event->damage->hit & 10% chance{
+			if event->attacker->dex > event->defender->dex {
+				if 50% chance{
+					event->defender gains bleeding
+				}
+			}
+			else {
+				if event->defender->dex - event->attacker->dex < 10 {
+					if 20% chance{
+						event->defender gains bleeding
+					}
+				}
+			}
+		}
+	}

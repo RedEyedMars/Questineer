@@ -1,0 +1,157 @@
+
+entry method uses context
+	constant COMPLETE
+		0
+	constant INTERFACE
+		1
+	constant HEADER
+		2
+	constant IMPORTS
+		3
+	constant STATIC_COMPLETE
+		4
+	
+	var header as variable
+	var parameters = {}
+	var body as body_lines
+	var imports = {}
+	
+	var mode = COMPLETE
+	
+	constructor takes methodName,methodType
+		var self as context
+			this getSelf
+		this init:methodName general->methodType {} body_lines:{} self; ;
+	
+	constructor takes methodName,methodType as class
+		var self as context
+			this getSelf
+		this init:methodName methodType {} body_lines:{} self; ;
+	
+	constructor takes methodName, methodType, initialParameters as ListEntry
+		var self as context
+			this getSelf
+		this init:methodName general->methodType initialParameters body_lines:{} self; ;
+		set mode = INTERFACE
+	
+	constructor takes methodName, methodType, initialParameters as ListEntry, initialBody as ListEntry
+		var self as context
+			this getSelf
+		this init:methodName general->methodType initialParameters body_lines:initialBody self; ;
+	constructor takes methodName, methodType as class, initialParameters as ListEntry, initialBody as ListEntry
+		var self as context
+			this getSelf
+		this init:methodName methodType initialParameters body_lines:initialBody self; ;
+	constructor takes methodName, methodType as class, initialParameters as ListEntry, initialBody as body_lines
+		initialBody setParentContext
+			this getSelf
+		this init:methodName methodType initialParameters initialBody ;
+	
+	init takes methodName, methodType as class, initialParameters as ListEntry, initialBody as body_lines
+		set header = variable: methodName methodType;
+		header setMode
+			static variable SHOW_COMPLETE_TYPE
+		imports +=
+			header getImport
+		set parameters = initialParameters
+		each parameter as Entry in parameters
+			var p as variable
+				parameter
+			p setMode
+				static variable SHOW_COMPLETE_TYPE
+			imports+=
+				p getImport
+			this addVariable
+				p
+		set body = initialBody
+		var self as method
+			this getSelf
+		body setParentContext
+			namelessContext:namelessContext:self;;
+		imports setDelimiter  :"";
+	
+	constructor takes otherMethod as method
+		var oName
+			otherMethod getName
+		var oType
+			otherMethod getTypeName
+		var oParameters as ListEntry
+			otherMethod getParameters
+		var oBody as body_lines
+			otherMethod getBody
+		this init:oName general->oType oParameters oBody;
+	
+	getType as class
+		return
+			header getType
+	
+	addParameter takes newParameter as variable
+		parameters+=newParameter->SHOW_TYPE
+		imports+=
+			newParameter getImport
+	
+	addBodyElement takes newBodyElement as body_element
+		newBodyElement setParentContext
+			this getSelf
+		body addLine
+			newBodyElement
+	
+	setMode takes newMode as Integer
+		set mode = newMode
+	getName as String
+		return
+			header getName
+	getTypeName as String
+		return
+			header getTypeName
+	numberOfParameters as Integer
+		return
+			parameters size
+	getParameter as Entry takes index as Integer
+		return
+			parameters get
+				index
+	numberOfBodyElements as Integer
+		return
+			body size
+	getBodyElement as body_element takes index as Integer
+		return
+			body get
+				index
+	get as method takes option
+		var self as method
+			this getSelf
+		var ret = method:self;
+		if option is "STATIC_COMPLETE"
+			ret setMode
+				STATIC_COMPLETE
+			return
+				ret
+		if option is "COMPLETE"
+			ret setMode
+				COMPLETE
+			return
+				ret
+		if option is "INTERFACE"
+			ret setMode
+				INTERFACE
+			return
+				ret
+		if option is "HEADER"
+			ret setMode
+				HEADER
+			return
+				ret
+		if option is "IMPORTS"
+			ret setMode
+				IMPORTS
+			return
+				ret
+		return
+			ret
+	output
+			general declareMethod{ header parameters body } if mode is COMPLETE
+			general declareStaticMethod{ header parameters body } if mode is STATIC_COMPLETE
+			general declareInterfaceMethod { header parameters } if mode is INTERFACE
+			general exact{header} if mode is HEADER
+			general exact{imports} if mode is IMPORTS

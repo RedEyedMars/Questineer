@@ -19,80 +19,119 @@ damageMethodBody
 		history.get("damage").add(source);"
 gainMethodBody
 	"
-		traits.get(incTrait).add(source);"
-declareEntityClass
-	"package " Game Package ".entities;\n"+
-	"import " Game Package ".misc.*;\n"+
-	"import " Game Package ".traits.*;\n"+
-	"import " Game Package ".entities.misc.*;\n"+
-	"import java.util.ArrayList;\n"+
-	"import java.util.Arrays;\n"+
-	"public class Entity {\n"+
-	"" Stat Variables "\n" Stat Methods "\n" Stat Classes "\n}"
-declareStatClass
-	"public static class " Stat Type " {
-		private int value = 0;
-		private	List.Map.Source._Int history;
-		public " Stat Type "(int initialValue){
-			value = initialValue;
-			history = new List.Map.Source._Int();
-		}
-		public int getValue(){
-			return value;
-		}
-		public void setValue(int newValue){
-			value = newValue;
-		}
-		public synchronized void impose(Integer amount, Source source){
-			history.add(source,new Int(amount));
-			value+=amount;
-		}
-		public synchronized void release(Source source){
-			history.removeLast(source);
-		}
-		public String getName(){
-			return \"" Stat Name "\";
-		}" Content "\n\t}"
-declareStatModifierClass
-	"\t\tpublic static class Modifier implements Entity.Modifier {\n"+
-	"\t\t\tprivate float percent;\n"+
-	"\t\t\tpublic Modifier(Float initialPercent){\n"+
-	"\t\t\t\tpercent = initialPercent;\n"+
-	"\t\t\t}\n"+
-	"\t\t\t@Override\n"+
-	"\t\t\tpublic Float use(Entity inputEntity){\n"+
-	"\t\t\t\treturn inputEntity." Stat Name ".value*percent;\n"+
-	"\t\t\t}\n\t\t}"
-declareModifierClass
-	"public static interface Modifier {\n"+
-	"\t\tpublic Float use(Entity inputEntity);\n\t}"
-declareMultiModClass
-	"public static class MultiModifier extends ArrayList<Entity.Modifier> implements Entity.Modifier {\n\t\tpublic MultiModifier(Entity.Modifier ... mods){\n\t\t\tsuper(Arrays.asList(mods));\n\t\t}\n"+
-	"\t\tpublic Float use(Entity inputEntity){\n"+
-	"\t\t\tfloat sum = 0f;\n"+
+		aspects.add(source,incAspect);"
+statImposeBody
+	"synchronized(this){
+				history.add(source,new Int(amount));
+				value+=amount;
+				return value>0;
+			}"
+statReleaseBody
+	"synchronized(this){
+				history.removeLast(source);
+			}"
+statModifierDecreaseBody
+	"percent -= amount/inputEntity." Stat Name ".value;"
+statModifierUseBody
+	"return inputEntity." Stat Name ".value*percent"
+multiConstructorBody
+	"\n\t\t\tsuper(Arrays.asList(mods));"
+multiDecreaseBody
+	"\n\t\t\tfor(Modifier mod:this){\n\t\t\t\tmod.decrease(inputEntity,newValue/size());\n\t\t\t}"
+multiUseBody
+	"\n\t\t\tfloat sum = 0f;\n"+
 	"\t\t\tfor(Modifier mod:this){\n\t\t\t\tsum+=mod.use(inputEntity);\n\t\t\t}\n"+
-	"\t\t\treturn sum;\n\t\t}\n\t}"
+	"\t\t\treturn sum"
 
-
-declareGainMethod
-	"public void gain(Trait trait,Source source){
-		traits.add(trait);
-		history.add(source,trait);
-	}"
-declareLoseMethod
-	"public void lose(Class<? extends Trait> removeClass, Source source){
-		Trait toRemove = null;
-		for(Trait trait:history.getAll(source)){
-			if(trait.getClass()==removeClass){
-				toRemove = trait;
+declareMethod
+	"public " Header "(" Parameters "){" Body "\n\t}"
+multiRange
+	"new Entity.MultiModifier(" Parameters ")"
+hasMethod
+	"
+		for(" Param Type " " Param Name ":" List ".getAll()){
+			if(" Argument ".getId() == findId){
+				return true;
+			}
+		}
+		return false"
+gainMethod
+	"
+		" List ".add(source," Argument ");"
+loseMethod
+	"
+		" Class Name " toRemove = null;
+		for(" Param Type " " Param Obj ": " List ".getFrom(source)){
+			if(" Argument ".getId() == removeId){
+				toRemove = " Argument ";
 				break;
 			}
 		}
 		if(toRemove==null){
-			throw new RuntimeException(\"Trait:\"+removeClass+\" Not found!\");
+			throw new RuntimeException(\"" Class ":\"+removeId+\" Not found!\");
 		}
 		else {
-			traits.remove(toRemove);
-			history.remove(source,toRemove);
+			" List ".remove(source,toRemove);
+		}"
+itemDamageBody
+	"
+		Float sum = 0f;
+		for(Item item:equippedItems){
+			sum+=item.getDmg().use(this);
 		}
-	}"	
+		return sum"
+itemDefenseBody
+	"
+		Float sum = 0f;
+		for(Item item:equippedItems){
+			sum+=item.getDef().use(this);
+		}
+		return sum"
+canEquipBody
+	"
+		return this.str.getValue()>weightHeld+item.getWeight().use(this)"
+equipBody
+	"equippedItems.add(item);
+		weightHeld+=item.getWeight().use(this);
+		item.onEquip(new Events.Equip(this,item));"
+unequipBody
+	"
+		equippedItems.remove(item);
+		weightHeld-=item.getWeight().use(this);
+		item.onUnequip(new Events.Unequip(this,item));"
+onHitBody
+	"
+		Float eventDamage = event.getDamage().getTotal();
+		if(eventDamage<0.1f&&eventDamage>-0.1){
+			return;
+		}
+		int damageToTake = (int)(float)(eventDamage-this.con.getValue()-this.getItemDefense());
+		Float eventModifier = event.getDamage().getModifier();
+		for(Item item:event.getAttacker().getEquippedItems()){
+			item.getHp().decrease(this,item.getDmg().use(event.getAttacker())*eventModifier/eventDamage);
+			item.onChangeItem(new Events.ChangeItem(this,item));
+		}
+		if(damageToTake<1){
+			damageToTake = 1;
+		}
+		while(damageToTake>13){
+			damageToTake-=3;
+			if(!getRandomStat().impose(-3,event.getAttacker())){
+				onDie(new Events.Die(event.getAttacker(),this));
+			}
+		}
+		while(damageToTake>5){
+			damageToTake-=2;
+			if(!getRandomStat().impose(-2,event.getAttacker())){
+				onDie(new Events.Die(event.getAttacker(),this));
+			}
+		}
+		while(damageToTake>0){
+			--damageToTake;
+			if(!getRandomStat().impose(-1,event.getAttacker())){
+				onDie(new Events.Die(event.getAttacker(),this));
+			}
+		}"
+randomStatBody
+	"
+		return new Entity.Stat[]{" Stats "}[(int)(Math.random()*" Size ")]"

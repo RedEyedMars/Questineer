@@ -1,0 +1,50 @@
+Wounded
+	More than a flesh wound.
+	- DEX
+	- CON
+	- MND
+
+Maimed
+	Has impaired movement with one/more limbs.
+	? Wounded
+	? CON > 7 
+	-- STR
+	-  DEX
+	-  MND
+
+WoundHealed
+	Has been healed from a nasty wound.
+	?  Wounded
+	?  CON > 6
+	+ CRM
+
+WoundScarred
+	A wound has left a jagged scar.
+	?! Hardy
+	?  Wounded
+	+ KNW
+	- CRM
+
+Cowardly
+	Has been hurt one too many times, is now too afraid to do heroic acts. 
+	?! Hardy
+	?  Wounded | Confused | WoundScarred
+	-- CRM
+Hardy
+	Has weathered some storms, can now be counted on to withstand hardships normally too taxing.
+	?! Cowardly
+	?  WoundHealed | WoundScarred
+	?  CON > 10
+	+ MND
+	+ CRM
+
+HandyWithAKnife
+	Has mastered the use of small blades.
+	?! ButterFingers
+	?  DEX > 13
+	+ CRM
+
+ButterFingers
+	Has some slippy fingers.
+	- CRM
+	- DEX

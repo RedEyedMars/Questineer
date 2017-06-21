@@ -7,6 +7,7 @@
     <property name="dir.workspace" value="${dir.buildfile}/../"/>
     <property name="dir.jarfile" value="${dir.buildfile}/../"/>    
   	<property name="dir.items" value="${dir.buildfile}/GeneratedItems/"/>
+  	<property name="dir.srcs" value="${dir.buildfile}/Source/"/>
   	<target name="make_item_ruleset">
         <java jar="../rrlg.jar" fork="true">
             <arg line="${dir.items}/items.ruleset" />
@@ -16,10 +17,24 @@
         <java jar="../rgg.jar" fork="true">
             <arg line="./items/items.generator" />
         </java>
+    </target> 
+    <target name="make_main_ruleset">
+        <java jar="../rrlg.jar" fork="true">
+            <arg line="${dir.srcs}/main.ruleset" />
+        </java>
+    </target>
+    <target name="make_main_gen">
+        <java jar="../rgg.jar" fork="true">
+            <arg line="${dir.srcs}/main.generator" />
+        </java>
     </target>    
     <target name="make_items">
        <antcall target="make_item_ruleset"/>
        <antcall target="make_item_gen"/>
+    </target>
+    <target name="make_main">
+       <antcall target="make_main_ruleset"/>
+       <antcall target="make_main_gen"/>
     </target>
     <target name="import_jars">
         <jar destfile="${dir.buildfile}/rrlg.jar" filesetmanifest="mergewithoutmain">

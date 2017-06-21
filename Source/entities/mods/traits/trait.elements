@@ -1,0 +1,24 @@
+
+traitId
+	"Traits." Trait Name ".id"
+declareTraitsClass
+	"package " Game Package ".entities.mods.traits;\n"+
+	"import " Game Package ".entities.*;\n"+
+	"import " Game Package ".events.*;\n"+
+	"public class Traits {" Trait Classes "\n}"
+returnCall
+	"return " Return ""
+requireTrait
+	"if(!candidate.hasTrait(Traits." Trait Name ".getId())){
+				return false;
+			}"
+requireExp
+	"if(!(candidate.get" Stat Name "().getValue()" Operation " " Value ")){
+				return false;
+			}"
+plus
+	"event.getHost().get" Stat Name "().impose(" Amount ",this);"
+minus
+	"event.getHost().get" Stat Name "().impose(-" Amount ",this);"
+release
+	"event.getHost().get" Stat Name "().impose(this);"

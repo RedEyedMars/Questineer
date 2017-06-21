@@ -1,8 +1,18 @@
 
 semicoloned
 	"" subject ";"
+asPackageName
+	"" Game "." Package ""
+declarePackage
+	"package " Game Package "." Import Name ";"
+plainPackage
+	"" Game Package "." Import Name ""
 import
 	"import " Game "." Package ";"
+importStdPackage
+	"import " Import Name "." Class Name";"
+importGamePackage
+	"import " Game Package "." Import Name "." Class Name";"
 equals
 	"" left ".equals(" right ")"
 notEquals
@@ -27,16 +37,28 @@ elseWithBody
 	"else {" Body ""
 forStatement
 	"for(" Element ":" List "){" Contents ""
+returnCall
+	"return " Statement ""
 methodCall
 	"" Subject "." MethodName "(" Parameters ")"
 hasCall
 	"" Subject ".has" Group Name "(" Argument ")"
 subjectlessMethodCall
 	"" MethodName "(" Parameters ")"
+newObjectCall
+	"new " MethodName "(" Parameters ")"
 getMethod
 	"get" VariableName ""
+conditionalWithHeader
+	"" Name "(" Header "){" Body ""
+conditionalWithoutHeader
+	"" Name "{" Body ""
+variableAsParameter
+	"initial" Parameter Name ""
 declareVariable
-	"" Variable Type " = " Assignment ""
+	"" Variable Type " = " Assignment ";"
+declareMember
+	"" Variable Type " " Variable Name  " = " Variable Assignment ";"
 exact
 	"" Contents ""
 typeAndName
@@ -47,18 +69,34 @@ newRange
 	"new Range(" Left "f, " Right "f)"
 isChance
 	"Math.random()<=" Percent ""
+nameWithTemplateParameters
+	"" Name "<" Template Parameters ">"
+templateParameters
+	"<" Template Parameters ">"
 extends
 	"extends " Extends Class Name ""
+extendsAndImplements
+	"extends " Extends Class Name " implements " Interface List ""
 implements
 	" implements " Interface List ""
-importPackage
-	"import " Import Name "." Class Name";"
 packageStatement
 	"package " Game Package ";\n"
 getCall
 	"get" Method Name ""
 declareMethod
 	"public " Header "(" Parameters "){" Body "\n\t}"
+declareStaticMethod
+	"public static " Header "(" Parameters "){" Body "\n\t}"
+declareInterfaceMethod
+	"public " Header "(" Parameters ");"
+declareInterface
+	"" Package "\n" Imports "
+public interface " Class Name " {" Methods "
+}"
+declareSubInterface
+	"public static interface " Class Name " {" Methods "
+}"
+	
 declareClass
 	"" Package "\n"+
 	"" Imports "\n"+
@@ -68,10 +106,44 @@ declareClass
 	"\tpublic " Class Name "(" Class Parameters "){" Class Assignments "\n\t}\n"+
 	"" Methods "\n"+
 	"}"
+declareCustomWithDefault
+	"" Package "\n"+
+	"" Imports "\n"+
+	"public class " Class Name " " Extends "{\n"+
+	"" Members "\n"+
+	"\tpublic " Class Name "(){" Constructor Body "}\n"+
+	"\tpublic " Class Name "(" Class Parameters "){" Class Assignments "\n" Constructor Body "\n\t}\n"+
+	"" Methods "\n"+
+	"" Sub Classes "\n"+
+	"}"
+declareCustomSubWithDefault
+	"public static class " Class Name " " Extends "{\n"+
+	"" Members "\n"+
+	"\tpublic " Class Name "(){ " Constructor Body "\n\t}\n"+
+	"\tpublic " Class Name "(" Class Parameters "){" Class Assignments "\n" Constructor Body "\n\t}\n"+
+	"" Methods "\n"+
+	"" Sub Classes "\n"+
+	"}"
+declareCustom
+	"" Package "\n"+
+	"" Imports "\n"+
+	"public class " Class Name " " Extends "{\n"+
+	"" Members "\n"+
+	"\tpublic " Class Name "(){" Constructor Body " }\n"+
+	"" Methods "\n"+
+	"" Sub Classes "\n"+
+	"}"
+declareCustomSub
+	"public static class " Class Name " " Extends "{\n"+
+	"" Members "\n"+
+	"\tpublic " Class Name "(){" Constructor Body "}\n"+
+	"" Methods "\n"+
+	"" Sub Classes "\n"+
+	"}"
 clone
 	"" Subject ".clone()"
-asClass
-	"" Subject ".getClass()"
+getId
+	"" Subject ".getId()"
 defaultConstructor
 	"\tpublic " Class Name "(){}\n"
 declareListClass
@@ -81,73 +153,54 @@ public class List {" Lists "
 	public static class Map{" Maps "
 	}
 }"
-declareList
-	"public static class " List Name " extends ArrayList<" Game Package "." Package Name "." List Name ">{
-		public " List Name "( " Game Package "." Package Name "." List Name "... initialElements){
-			super(Arrays.asList(initialElements));
-		}
-	}"
+listConstructorBody
+	"super(Arrays.asList(initialElements));"
 declareMapSuperClass
 	"public static class " Left Name "{" Contents "
 		}"
-declareMapClass
-	"public static class _" Right Name " extends HashMap<" Left Name ",LinkedList<" Right Name ">> {
-				public LinkedList<" Right Name "> getAll("Left Name" key){
-					return super.get(key);
-				}
-				public void add(" Left Name " key," Right Name " element){
+mapClassAddBody
+	"
 					if(!super.containsKey(key)){
-						super.put(key,new LinkedList<" Right Name ">());
+						super.put(key,new " Right Name "());
 					}
-					super.get(key).add(element);
-				}
-				public void removeLast(" Left Name " key){
+					complete.add(element);
+					super.get(key).add(element);"
+mapClassRemoveLastBody
+	"
+					if(super.containsKey(key)&&!super.get(key).isEmpty()){
+						complete.remove(super.get(key).removeLast());
+					}"
+mapClassRemoveAllBody
+	"
 					if(super.containsKey(key)){
-						super.get(key).removeLast();
-					}
-				}
-				public void removeAll(" Left Name " key){
-					if(super.containsKey(key)){
-						super.get(key).clear();
-					}
-				}
-				public void remove(" Left Name " key, " Right Name " element){
+						" Right Name" list = super.get(key);
+						while(!list.isEmpty()){
+							complete.remove(list.removeLast());
+						}						
+					}"
+mapClassRemoveBody
+	"
 					super.get(key).remove(element);
-				}
-			}"
-declareRangeClass
-	"package " Game Package ".misc;\n"+
-	"import " Game Package ".entities.*;\n"+
-	"public class Range {\n"+
-	"\tprivate Float left;\n"+
-	"\tprivate Float right;\n"+
-	"\tpublic Range(Float initialLeft, Float initialRight){\n"+
-	"\t\tleft = initialLeft;\n"+
-	"\t\tright = initialRight;\n"+
-	"\t}\n"+
-	"\tpublic Range(int initialLeft, int initialRight){\n"+
+					complete.remove(element);"
+rangeIIbody
 	"\t\tleft = (float)initialLeft;\n"+
-	"\t\tright = (float)initialRight;\n"+
-	"\t}\n"+
-	"\tpublic Range(Float initialLeft, int initialRight){\n"+
+	"\t\tright = (float)initialRight;\n"
+rangeFIbody
 	"\t\tleft = initialLeft;\n"+
-	"\t\tright = (float)initialRight;\n"+
-	"\t}\n"+
-	"\tpublic Range(int initialLeft, float initialRight){\n"+
+	"\t\tright = (float)initialRight;\n"
+rangeIFbody
 	"\t\tleft = (float)initialLeft;\n"+
-	"\t\tright = initialRight;\n"+
-	"\t}\n"+
-	"\tpublic Entity.Modifier getModifier(){\n"+
+	"\t\tright = initialRight;\n"
+rangeGetModifierBody
 	"\t\treturn new Entity.Modifier(){\n"+
 	"\t\t\tprivate Float value = getRandom();\n"+
 	"\t\t\t@Override\n"+
+	"\t\t\tpublic void decrease(Entity inputEntity,Float amount){"+
+	"\t\t\t\tvalue -= amount;"+
+	"\t\t\t}"+
+	"\t\t\t@Override\n"+
 	"\t\t\tpublic Float use(Entity inputEntity){\n"+
 	"\t\t\t\treturn value;\n"+
-	"\t\t\t}\n\t\t};\n\t}\n"+
-	"\tpublic Float getRandom(){\n"+
-	"\t\treturn (float)(double)(((right-left)*Math.random())+left);\n"+
-	"\t}\n}"
-declareSourceClass	
-	"package " Game Package ".misc;
-public interface Source {
-}"
+	"\t\t\t}\n\t\t}"
+rangeGetRandomBody
+	"\t\treturn (float)(double)(((right-left)*Math.random())+left)"

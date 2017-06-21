@@ -1,0 +1,29 @@
+sharp
+	Gives a chance to cause @Bleeding when enemy is struck.
+	equip {
+		if event->host->dex < 5  & 5% chance{
+			event->host gains bleeding
+		}
+	}
+	post_attack {
+		if event->attacker->dex > event->defender->dex {
+			if 50% chance{
+				event->defender gains bleeding
+			}
+		}
+		else {
+			if event->defender->dex > event->attacker->dex - 5 {
+				if 20% chance{
+					event->defender gains bleeding
+				}
+			}
+		}
+	}
+dull
+	Gives extra miss chance.
+	equip {
+		event->host impose -1 on STR
+	}
+	unequip {
+		event->host release STR
+	}
