@@ -68,7 +68,7 @@ public class ItemsGenerator extends Generator {
 		superItemsClass.addImport("misc","Range");
 		superItemsClass.addImport("entities.mods.conditions","Conditions");
 		superItemsClass.addImport("entities.mods.traits","Traits");
-		superItemsClass.addImport("entities.attacks","Attacks");
+		superItemsClass.addImport("entities.skills.attacks","Attacks");
 		superItemClass = Generators.general.init(new ClassEntry("entities.items","Item",null,new ListEntry(Generators.general.get("Source")),new ListEntry(new VariableEntry("name","String"),new VariableEntry("equipper","Entity","null"),new VariableEntry("hp",superItemModifierClass),new VariableEntry("maxHp",superItemModifierClass),new VariableEntry("dmg",superItemModifierClass),new VariableEntry("def",superItemModifierClass),new VariableEntry("value",superItemModifierClass),new VariableEntry("weight",superItemModifierClass)),new ListEntry(new MethodEntry("onEquip","void",new ListEntry(new VariableEntry("event","Events.Equip")),new ListEntry(new BodyOperatorEntry(new BodyExactEntry(new StringEntry("equipper")),"=",new BodyMetCalEntry(new BodyExactEntry(new StringEntry("event")),new StringEntry("getHost"),new ListEntry())))),new MethodEntry("onUnequip","void",new ListEntry(new VariableEntry("event","Events.Unequip")),new ListEntry(new BodyOperatorEntry(new BodyExactEntry(new StringEntry("equipper")),"=",new BodyExactEntry(new StringEntry("null"))))),new MethodEntry("onChangeItem","void",new ListEntry(new VariableEntry("event","Events.ChangeItem")),new ListEntry())),new ListEntry()));
 		superItemClass.addSubClass(superItemModifierClass);
 		Generators.entities.addGainLoss("aspect","aspects","Aspect","Aspects.Id",superItemClass);

@@ -21,8 +21,10 @@ public class GeneralGenerator extends Generator {
 	private HashMap<String,ListEntry> mapOfListMapClasses = new HashMap<String,ListEntry>();
 	private ListEntry declaredListMapClasses = new ListEntry();
 	private HashSet<String> declaredListSet = new HashSet<String>();
+	private HashSet<String> declaredCriteriaSet = new HashSet<String>();
 	private ClassEntry superListClass = (ClassEntry)null;
 	private ClassEntry superListMapClass = (ClassEntry)null;
+	private ClassEntry criteriaClass = (ClassEntry)null;
 
 
 	public static final Element semicolonedElement = new Element("semicoloned",new String[]{"",/*subject*/";"});
@@ -249,12 +251,17 @@ public class GeneralGenerator extends Generator {
 		String setValueBody = "value = newValue;";
 		ClassEntry intClass = (ClassEntry)Generators.general.init(new ClassEntry("misc","Int",null,null,new ListEntry(new VariableEntry("value","Integer")),new ListEntry(new MethodEntry("setValue","void",new ListEntry(new VariableEntry("newValue","Integer")),new ListEntry(new StringEntry(setValueBody)))),new ListEntry()));
 		ClassEntry rangeClass = (ClassEntry)Generators.general.init(new ClassEntry("misc","Range",null,null,new ListEntry(new VariableEntry("left","Float"),new VariableEntry("right","Float")),new ListEntry(new MethodEntry("Range","",new ListEntry(new VariableEntry("initialLeft","Integer"),new VariableEntry("initialRight","Integer")),new ListEntry(new ElementEntry(GeneralGenerator.rangeIIbodyElement,new ListEntry()))),new MethodEntry("Range","",new ListEntry(new VariableEntry("initialLeft","Float"),new VariableEntry("initialRight","Integer")),new ListEntry(new ElementEntry(GeneralGenerator.rangeFIbodyElement,new ListEntry()))),new MethodEntry("Range","",new ListEntry(new VariableEntry("initialLeft","Integer"),new VariableEntry("initialRight","Float")),new ListEntry(new ElementEntry(GeneralGenerator.rangeIFbodyElement,new ListEntry()))),new MethodEntry("getModifier","Entity.Modifier",new ListEntry(),new ListEntry(new ElementEntry(GeneralGenerator.rangeGetModifierBodyElement,new ListEntry()))),new MethodEntry("getRandom","Float",new ListEntry(),new ListEntry(new ElementEntry(GeneralGenerator.rangeGetRandomBodyElement,new ListEntry())))),new ListEntry()));
+		ClassEntry candidateTypeClass = new ClassEntry("CandidateType");
+		candidateTypeClass = (ClassEntry)candidateTypeClass.get("WITHOUT_IMPORT");
+		criteriaClass = (ClassEntry)Generators.general.init(new ClassEntry("misc","Criteria",new ListEntry(new StringEntry("CandidateType extends Object"))));
+		criteriaClass.addMethod(new MethodEntry("satisfies","Boolean",new ListEntry(new VariableEntry("candidate",candidateTypeClass)),new ListEntry(new BodyReturnEntry(new StringEntry("false")))));
 		superListMapClass = new ClassEntry("misc","Map",null,null,new ListEntry(),new ListEntry(),new ListEntry());
 		superListClass = Generators.general.init(new ClassEntry("misc","List",null,null,new ListEntry(),new ListEntry(),new ListEntry(superListMapClass)));
 		ListEntry listImportList = (ListEntry)superListClass.getImportList();
 		listImportList.add(new TabEntry(0,new ListEntry(new ElementEntry(GeneralGenerator.importStdPackageElement,new ListEntry(new StringEntry("java.util"),new StringEntry("Arrays"))))));
 		Generators.general.addFile(miscDirectory,"Int.java",intClass.get("COMPLETE"));
 		Generators.general.addFile(miscDirectory,"Range.java",rangeClass.get("COMPLETE"));
+		Generators.general.addFile(miscDirectory,"Criteria.java",criteriaClass.get("COMPLETE"));
 		Generators.general.addFile(miscDirectory,"List.java",superListClass.get("COMPLETE"));
 	}
 	public Entry generateTypeName(IToken typeName){
@@ -747,6 +754,14 @@ public class GeneralGenerator extends Generator {
 			superListClass.addSubClass(new ClassEntry("misc",list,listClass,null,new ListEntry(),new ListEntry(new MethodEntry(listName,"",new ListEntry(new VariableEntry("...initialElements",fullName)),new ListEntry(new ElementEntry(GeneralGenerator.listConstructorBodyElement,new ListEntry())))),new ListEntry()));
 		}
 	}
+	public void createCriteria(ClassEntry crit){
+		String critName = crit.getName();
+		if((declaredCriteriaSet.add(critName))){
+			ClassEntry fullName = (ClassEntry)crit.get("NAME_WITH_IMPORTS");
+			ClassEntry critClass = (ClassEntry)new ClassEntry("misc","Criteria",new ListEntry(fullName));
+			criteriaClass.addSubClass(new ClassEntry("misc",crit,critClass,null,new ListEntry(),new ListEntry(new MethodEntry("satisfies","Boolean",new ListEntry(new VariableEntry("candidate",fullName)),new ListEntry(new BodyReturnEntry(new StringEntry("false"))))),new ListEntry()));
+		}
+	}
 	public ClassEntry createListMap(ClassEntry left,ClassEntry right){
 		String rightName = Generators.general.buildString("_",right.getName());
 		String fullName = Generators.general.buildString("Map.",left.getName(),".",rightName);
@@ -805,12 +820,20 @@ public class GeneralGenerator extends Generator {
 		return declaredListSet;
 	}
 
+	public HashSet<String> getDeclaredCriteriaSet(){
+		return declaredCriteriaSet;
+	}
+
 	public ClassEntry getSuperListClass(){
 		return superListClass;
 	}
 
 	public ClassEntry getSuperListMapClass(){
 		return superListMapClass;
+	}
+
+	public ClassEntry getCriteriaClass(){
+		return criteriaClass;
 	}
 
 	public String getName(){

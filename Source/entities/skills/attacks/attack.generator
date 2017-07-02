@@ -12,43 +12,31 @@ attacks
 		set directory
 			new File
 				general getDirectory
-				"entities/attacks"
+				"entities/skills/attacks"
 		directory mkdirs
 	aux generate takes data as ParseContext
 		var idClass as class
-			class:"entities.attacks" "Id" null null {}{}{};
+			class:"entities.skills.attacks" "Id" null null {}{}{};
 		set idVariable
 			variable:"id" idClass;
 		var damageClass as class
-			general init:class:"entities.attacks" "Damage" null null {variable:"value" "Float" "0f";variable:"modifier" "Float" "1f";variable:"hit" "Boolean" "false";}{
+			general init:class:"entities.skills.attacks" "Damage" null null {variable:"value" "Float" "0f";variable:"modifier" "Float" "1f";variable:"hit" "Boolean" "false";}{
 			method:"setValue" "void" {variable:"newValue" "Float";} {general semicoloned{\"value = newValue"}};
 			method:"setModifier" "void" {variable:"newModifier" "Float";} {general semicoloned{\"modifier = newModifier"}};
 			method:"setHit" "void" {variable:"newHit" "Boolean";} {general semicoloned{\"hit = newHit"}};
 			method:"getTotal" "Float" {} {general returnCall{\"value*modifier"}};}{};;
 		
 		set superAttacksClass
-			general init:class:"entities.attacks" "Attacks" null null {}{}{idClass};;
+			general init:class:"entities.skills.attacks" "Attacks" null null {}{}{idClass};;
 		superAttacksClass addImport
 			"misc"
 			"Range"
 		set superAttackClass
-			general init:class:"entities.attacks" "Attack" null {general->Source} {
-				variable:"experience" "Integer";
-				variable:"cooldown" "Integer"; 
-				variable:"range" "Entity.Modifier";
-				variable:"cost" "Entity.Modifier";
-				variable:"hasEntityFocus" "Boolean";}{
-				method:"getCost" "Integer" {variable:"entity" "Entity";}{attackGetCostBody{}};
-				method:"getRange" "Float" {variable:"entity" "Entity";} {attackGetRangeBody{}};
-				method:"isOffCooldown" "Boolean" {} {attackIsOffCDBody{}};
-				method:"setFocus" "void" {variable:"onThis" "Boolean";}{attackSetFocusBody{}};
-				method:"onTick" "void" {variable:"event" "Events.Tick";} {attackOnTickBody{}};
+			general init:class:"entities.skills.attacks" "Attack" general->Skill {general->Source} {}{
 				method:"attack" "void" {variable:"attacker" "Entity"; variable:"defender" "Entity";} {attackAttackBody{}};
-				method:"getName" "String" {} {general returnCall{\"null"}};
-				method:"getDescription" "String" {} {general returnCall{\"null"}};
 				method:"getDamage" "Attack.Damage" {variable:"attacker" "Entity";variable:"defender" "Entity";} {general returnCall{\"null"}};
 				method:"getId" "Attacks.Id" {} {general returnCall{\"null"}};}{ damageClass };;
-		
+		superAttackClass addImport:"events" "Events";
 		attacks addFile
 			directory
 			"Attacks.java"
@@ -62,7 +50,7 @@ attacks
 		var attackName
 			^attackDeclaration->attackName
 		var attackClass
-			class:"entities.attacks" attackName superAttackClass null {
+			class:"entities.skills.attacks" attackName superAttackClass null {
 				idVariable->PUBLIC->STATIC_FINAL}{}{};
 		superAttacksClass addSubClass
 			attackClass

@@ -1,7 +1,7 @@
 import "mods/affinities/affinity.generator"
 import "mods/conditions/condition.generator"
 import "mods/traits/trait.generator"
-import "skills/attacks/attack.generator"
+import "skills/skill.generator"
 import "items/items.generator"
 entities
 	elements from "entity.elements"

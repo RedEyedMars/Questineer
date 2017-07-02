@@ -53,7 +53,7 @@ items
 			"entities.mods.traits"
 			"Traits"
 		superItemsClass addImport
-			"entities.attacks"
+			"entities.skills.attacks"
 			"Attacks"
 		set superItemClass
 			general init:class:"entities.items" "Item" null {general->Source} {

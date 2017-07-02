@@ -20,6 +20,8 @@ entry import
 		if packageName does not startsWith "java"
 			set gamePackage
 				general getPackageName
+	setName takes newName
+		set name = newName
 	setPackage takes newPackage
 		set packageName = newPackage
 	setSuperPackage takes newSuperPackage as import
@@ -40,8 +42,8 @@ entry import
 				return
 					null 
 	output
-			superPackage if superPackage is not null
 			{} if name is "void" or name is ""
+			superPackage if superPackage is not null
 			(0 general importGamePackage{ \gamePackage \packageName \name}) if gamePackage is not null
 			(0 general importStdPackage{ \packageName \name}) otherwise
 

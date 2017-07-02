@@ -30,6 +30,7 @@ public class ClassEntry implements Entry,IContext {
 	private Integer mode = NAME;
 	private ImportEntry importPackage = null;
 	private ListEntry importList = new SetEntry();
+	private Entry nameWithTemps = null;
 	private ListEntry templateParameters = null;
 	private ListEntry parentClasses = null;
 	private ClassEntry parentClass = null;
@@ -196,6 +197,8 @@ public class ClassEntry implements Entry,IContext {
 		return importPackage;
 	}	public ListEntry getImportList(){
 		return importList;
+	}	public Entry getNameWithTemps(){
+		return nameWithTemps;
 	}	public ListEntry getTemplateParameters(){
 		return templateParameters;
 	}	public ListEntry getParentClasses(){
@@ -386,12 +389,19 @@ public class ClassEntry implements Entry,IContext {
 	public void setMode(Integer newMode){
 		mode = newMode;
 	}
+	public void deleteImportPackage(){
+		importPackage.setName("");
+	}
 	public ClassEntry get(String option){
 		if((option.equals("INTERFACE"))){
 			this.setDefaultAssignment(new BodyExactEntry(new StringEntry("null")));
 		}
 		ClassEntry self = (ClassEntry)this.getSelf();
 		ClassEntry ret = new ClassEntry(self);
+		if((option.equals("WITHOUT_IMPORT"))){
+			ret.deleteImportPackage();
+			return ret;
+		}
 		if((option.equals("NAME"))){
 			ret.setMode(NAME);
 			return ret;
@@ -420,6 +430,12 @@ public class ClassEntry implements Entry,IContext {
 		return ret;
 	}
 	public void get(StringBuilder builder){
+		if((templateParameters != null && !templateParameters.isEmpty())){
+			nameWithTemps = (Entry)new ElementEntry(GeneralGenerator.nameWithTemplateParametersElement,new ListEntry(new StringEntry(name),templateParameters));
+		}
+		else {
+			nameWithTemps = (Entry)new StringEntry(name);
+		}
 		if((mode == NAME)){
 			new StringEntry(name).get(builder);
 		}
@@ -436,16 +452,16 @@ public class ClassEntry implements Entry,IContext {
 			new ElementEntry(GeneralGenerator.declareSubInterfaceElement,new ListEntry(new StringEntry(name),methodList)).get(builder);
 		}
 		else if((mode == COMPLETE && surroundClass.isEmpty() && !constructorParameters.isEmpty())){
-			new ElementEntry(GeneralGenerator.declareCustomWithDefaultElement,new ListEntry(importPackage.get("AS_PACKAGE"),importList,new StringEntry(name),parentClasses,variableList,new StringEntry(name),constructorBody,new StringEntry(name),constructorParameters,constructorAssignments,constructorBody,methodList,subClassList)).get(builder);
+			new ElementEntry(GeneralGenerator.declareCustomWithDefaultElement,new ListEntry(importPackage.get("AS_PACKAGE"),importList,nameWithTemps,parentClasses,variableList,new StringEntry(name),constructorBody,new StringEntry(name),constructorParameters,constructorAssignments,constructorBody,methodList,subClassList)).get(builder);
 		}
 		else if((mode == COMPLETE && !surroundClass.isEmpty() && !constructorParameters.isEmpty())){
-			new ElementEntry(GeneralGenerator.declareCustomSubWithDefaultElement,new ListEntry(new StringEntry(name),parentClasses,variableList,new StringEntry(name),constructorBody,new StringEntry(name),constructorParameters,constructorAssignments,constructorBody,methodList,subClassList)).get(builder);
+			new ElementEntry(GeneralGenerator.declareCustomSubWithDefaultElement,new ListEntry(nameWithTemps,parentClasses,variableList,new StringEntry(name),constructorBody,new StringEntry(name),constructorParameters,constructorAssignments,constructorBody,methodList,subClassList)).get(builder);
 		}
 		else if((mode == COMPLETE && surroundClass.isEmpty() && constructorParameters.isEmpty())){
-			new ElementEntry(GeneralGenerator.declareCustomElement,new ListEntry(importPackage.get("AS_PACKAGE"),importList,new StringEntry(name),parentClasses,variableList,new StringEntry(name),constructorBody,methodList,subClassList)).get(builder);
+			new ElementEntry(GeneralGenerator.declareCustomElement,new ListEntry(importPackage.get("AS_PACKAGE"),importList,nameWithTemps,parentClasses,variableList,new StringEntry(name),constructorBody,methodList,subClassList)).get(builder);
 		}
 		else if((mode == COMPLETE && !surroundClass.isEmpty() && constructorParameters.isEmpty())){
-			new ElementEntry(GeneralGenerator.declareCustomSubElement,new ListEntry(new StringEntry(name),parentClasses,variableList,new StringEntry(name),constructorBody,methodList,subClassList)).get(builder);
+			new ElementEntry(GeneralGenerator.declareCustomSubElement,new ListEntry(nameWithTemps,parentClasses,variableList,new StringEntry(name),constructorBody,methodList,subClassList)).get(builder);
 		}
 		if((templateParameters != null && !templateParameters.isEmpty() && mode == NAME)){
 			new ElementEntry(GeneralGenerator.templateParametersElement,new ListEntry(templateParameters)).get(builder);

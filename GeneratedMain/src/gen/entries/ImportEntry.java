@@ -44,6 +44,9 @@ public class ImportEntry implements Entry {
 	}	public ImportEntry getSuperPackage(){
 		return superPackage;
 	}
+	public void setName(String newName){
+		name = newName;
+	}
 	public void setPackage(String newPackage){
 		packageName = newPackage;
 	}
@@ -67,11 +70,11 @@ public class ImportEntry implements Entry {
 		}
 	}
 	public void get(StringBuilder builder){
-		if((superPackage != null)){
-			superPackage.get(builder);
-		}
-		else if((name.equals("void") || name.equals(""))){
+		if((name.equals("void") || name.equals(""))){
 			new ListEntry().get(builder);
+		}
+		else if((superPackage != null)){
+			superPackage.get(builder);
 		}
 		else if((gamePackage != null)){
 			new TabEntry(0,new ListEntry(new ElementEntry(GeneralGenerator.importGamePackageElement,new ListEntry(new StringEntry(gamePackage),new StringEntry(packageName),new StringEntry(name))))).get(builder);

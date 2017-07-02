@@ -1,0 +1,106 @@
+#import general/general.clws#
+#import images/image.clws#
+#import entities/entity.clws#
+#import environments/environment.clws#
+
+import events/events.clws
+
+< Iterator		: \java.\util;
+< List 			: \java.\util;
+< Map 			: \java.\util;
+< HashMap 		: \java.\util;
+< Set 			: \java.\util;
+< HashSet 		: \java.\util;
+< File			: \java.\io;
+< Entry			: \com.\rem.\parser.\generation;
+< Generator		: \com.\rem.\parser.\generation;
+< IParser 		: \com.\rem.\parser.\parser;
+< IToken 		: \com.\rem.\parser.\token;
+< ParseContext 	: \com.\rem.\parser;
+< RegexParser	: \com.\rem.\parser.\parser;
+< Rules 		: \lists;
+< HeroStats 	: \lists;
+< EventNames 	: \lists;
+< GeneralTokens	: \lists;
+< Listnames		: \lists;
+< ExternalVariableEntry		: \clent;
+< ExternalMethodEntry		: \clent;
+< ExternalClassEntry		: \clent;
+< ExternalBodyEntry			: \clent;
+
+> String packageName = "com.rem.qstnr";
+> IParser rootParser = Rules.base;
+> List listnames = Listnames.parser;
+> List rules = Rules.parser;
+> RegexParser lazyNameParser = GeneralTokens.NAME;
+> void assignListElementNames(ParseContext context, IToken root){
+		context.retainList(new HeroStats());
+		context.retainList(new EventNames());
+	}
+> String getDirectory(String fileName, String knownDirectory){
+>		return "../Resource/";
+	}
+
+
+
+> void setup(ParseContext data){	
+>	IToken root = data.getRoot();
+>	root : import_any : imports {
+>		imports : IMPORT_EVENT : import_events {
+>			import_events : event_declaration : element { 
+>				\EventsClass.declaration(element);
+			}
+		}
+	}
+}
+> void generate(ParseContext data){
+	\setup(data);
+>	IToken root = data.getRoot();
+>	root : import_any : imports {
+>		\importAny(imports);
+	}
+	\output("../Questineer/src",data);
+}
+> void importAny(IToken import_any){
+>	import_any : IMPORT_EVENT : import_events {
+>		import_events : event_declaration : element {
+#>			\events.generateDeclaration(element);#
+		}
+	}
+>	import_any : IMPORT_ITEM : import_items {
+>		import_items : import_any : element {
+#>			importAny(element);#
+		}
+>		import_items : item_declaration : element {
+#>			items.generateDeclaration(element)#
+		}
+	}
+>	import_any : IMPORT_ASPECT : import_aspects {
+>		import_aspects : aspect_declaration : element {
+#>			aspects.generateDeclaration(element)#
+		}
+	}
+>	import_any : IMPORT_AFFINITY : import_affinities {
+>		import_affinities : affinity_declaration : element {
+#>			affinities.generateDeclaration(element)#
+		}
+	}
+>	import_any : IMPORT_TRAIT : import_traits {
+>		import_traits : trait_declaration : element {
+#>			traits.generateDeclaration(element)#
+		}
+	}
+>	import_any : IMPORT_ATTACK : import_attacks {
+>		import_attacks : attack_declaration : element {
+#>			attacks.generateDeclaration(element)#
+		}
+	}
+>	import_any : IMPORT_CONDITION : import_conditions {
+>		import_conditions : condition_declaration : element {
+#>			conditions.generateDeclaration(element)#
+		}
+	}
+}
+>String getTypeName(IToken nameToken){
+		return "$TYPE_NAME";
+	}

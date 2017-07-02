@@ -35,7 +35,7 @@ public class BodyMetCalEntry implements Entry,IBodyStatement {
 		parameters = iParameters;
 	}
 	public BodyMetCalEntry(Entry iSubject,Entry iMethodName,ListEntry iParameters){
-		subject = (IBodyStatement)iSubject;
+		subject = new BodyExactEntry(iSubject);
 		methodName = iMethodName;
 		parameters = iParameters;
 	}

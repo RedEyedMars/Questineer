@@ -14,8 +14,11 @@ general
 	var declaredListMapClasses = {}
 	var declaredListSet
 		new HashSet<String>
+	var declaredCriteriaSet
+		new HashSet<String>
 	var superListClass as class
 	var superListMapClass as class
+	var criteriaClass as class
 	aux setup takes data as ParseContext
 		set packageName
 			"com.rem.qstnr"
@@ -56,6 +59,11 @@ general
 				method:"Range" ""{variable:"initialLeft" "Integer"; variable:"initialRight" "Float";} {rangeIFbody{}};
 				method:"getModifier" "Entity.Modifier" {} {rangeGetModifierBody{}};
 				method:"getRandom" "Float" {} {rangeGetRandomBody{}};}{};;
+		var candidateTypeClass = class:"CandidateType";
+		set candidateTypeClass as class = candidateTypeClass->WITHOUT_IMPORT
+		set criteriaClass as class
+			general init:class:"misc" "Criteria" {\"CandidateType extends Object"};;
+		criteriaClass addMethod:method: "satisfies" "Boolean" {variable:"candidate" candidateTypeClass;} {body_return:\"false";};;
 		set superListMapClass
 			class:"misc" "Map" null null {}{}{};
 		set superListClass
@@ -71,6 +79,10 @@ general
 			miscDirectory
 			"Range.java"
 			rangeClass->COMPLETE
+		general addFile
+			miscDirectory
+			"Criteria.java"
+			criteriaClass->COMPLETE
 		general addFile
 			miscDirectory
 			"List.java"
@@ -520,8 +532,7 @@ general
 			general getType
 				type
 	
-	aux createList takes
-			list as class
+	aux createList takes list as class
 		var listName
 			list getName
 		if declaredListSet does add listName
@@ -531,6 +542,16 @@ general
 				class:"java.util" "ArrayList" {fullName};
 			superListClass addSubClass
 				class:"misc" list listClass null {} {method:listName ""{variable:"...initialElements" fullName;} {listConstructorBody{}};} {};
+	aux createCriteria takes crit as class
+		var critName
+			crit getName
+		if declaredCriteriaSet does add critName
+			var fullName as class
+				crit->NAME_WITH_IMPORTS
+			var critClass as class
+				class:"misc" "Criteria" {fullName};
+			criteriaClass addSubClass
+				class:"misc" crit critClass null {} {method:"satisfies" "Boolean"{variable:"candidate" fullName;} {body_return:\"false";};} {};
 	aux createListMap takes
 			left as class
 			right as class

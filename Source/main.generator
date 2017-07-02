@@ -2,6 +2,7 @@ import "general/general.generator"
 import "images/image.generator"
 import "events/events.generator"
 import "entities/entity.generator"
+import "environments/environment.generator"
 meta std
 	var rootParser as IParser
 		static Rules base

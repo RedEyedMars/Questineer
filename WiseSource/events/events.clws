@@ -1,0 +1,34 @@
+
+class packageName."events" Events {
+>	Map<String,List<Entry>> variableDefs = new HashMap<String, List<Entry>>();
+>	Set<String>					  eventNameSet = new HashSet<String>();
+>	void declaration(IToken declaration){
+>		String eventName = 'declaration->"eventName"';
+>		eventNameSet.add(eventName);
+>		String cev = \^eventName;
+>		Events +=
+			class packageName."events" cev Event {}
+>		declaration : parameter : element {
+>			element : type_name : atom {
+>				Events->cev +=
+					'\getTypeName(atom)' 'element->"name"'
+			}
+		}
+	}
+>	void addParameter(String eventName, ExternalMethodEntry method){
+>		method.addParameter(\eventName "event";);
+	}
+>	void addEventMethod(String eName, List<ExternalBodyEntry> body, ExternalClassEntry inputClass){
+>		ExternalMethodEntry newMethod = void "on"(Events->\^eName "event") {};
+>		newMethod.addBody(body);
+>		inputClass.addMethod(newMethod);
+	}
+>	void addEventMethods(ExternalClassEntry inputClass, List<String> nameToAdd, List<List<ExternalBodyEntry>> bodiesToAdd){
+>		Iterator<List<ExternalBodyEntry>> bodyItr = bodiesToAdd.iterator();
+>		for String name:nameToAdd {
+>			\addEventMethod(name, bodyItr.next(), inputClass);
+		}
+	}
+}
+class packageName."events" Event {
+}

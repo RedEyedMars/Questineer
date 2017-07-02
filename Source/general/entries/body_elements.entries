@@ -289,7 +289,7 @@ entry body_met_cal uses body_statement
 		set methodName  = iMethodName
 		set parameters = iParameters
 	constructor takes iSubject as Entry, iMethodName as Entry, iParameters as ListEntry
-		set subject as body_statement = iSubject
+		set subject = body_exact:iSubject;
 		set methodName  = iMethodName
 		set parameters = iParameters
 	

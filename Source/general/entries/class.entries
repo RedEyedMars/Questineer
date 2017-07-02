@@ -14,6 +14,7 @@ entry class uses context
 	var mode = NAME
 	entry importPackage = null
 	entry importList "" = []
+	entry nameWithTemps = null
 	entry templateParameters = null
 	entry parentClasses = null
 	entry parentClass = null
@@ -322,6 +323,9 @@ entry class uses context
 			'nameBuilder
 	setMode takes newMode as Integer
 		set mode = newMode
+	deleteImportPackage
+		importPackage setName
+			""
 	get takes option
 		if option is "INTERFACE"
 			this setDefaultAssignment
@@ -329,6 +333,10 @@ entry class uses context
 		var self as class
 			this getSelf
 		var ret = class:self;
+		if option is "WITHOUT_IMPORT"
+			ret deleteImportPackage
+			return
+				ret
 		if option is "NAME"
 			ret setMode:NAME;
 			return
@@ -360,11 +368,16 @@ entry class uses context
 			completeName if mode is COMPLETE_NAME
 			general declareInterface			{ importPackage->AS_PACKAGE importList \name methodList } if mode is INTERFACE and surroundClass is empty
 			general declareSubInterface			{ \name methodList } if mode is INTERFACE and surroundClass is not empty
-			general declareCustomWithDefault    { importPackage->AS_PACKAGE importList \name parentClasses variableList \name constructorBody \name constructorParameters constructorAssignments constructorBody methodList subClassList } if mode is COMPLETE and surroundClass is     empty and constructorParameters is not empty
-			general declareCustomSubWithDefault {				               		   \name parentClasses variableList \name constructorBody \name constructorParameters constructorAssignments constructorBody methodList subClassList } if mode is COMPLETE and surroundClass is not empty and constructorParameters is not empty
-			general declareCustom               { importPackage->AS_PACKAGE importList \name parentClasses variableList \name constructorBody                                                                    methodList subClassList } if mode is COMPLETE and surroundClass is     empty and constructorParameters is empty
-			general declareCustomSub            {                                      \name parentClasses variableList \name constructorBody                                                                    methodList subClassList } if mode is COMPLETE and surroundClass is not empty and constructorParameters is empty
+			general declareCustomWithDefault    { importPackage->AS_PACKAGE importList nameWithTemps parentClasses variableList \name constructorBody \name constructorParameters constructorAssignments constructorBody methodList subClassList } if mode is COMPLETE and surroundClass is     empty and constructorParameters is not empty
+			general declareCustomSubWithDefault {				               		   nameWithTemps parentClasses variableList \name constructorBody \name constructorParameters constructorAssignments constructorBody methodList subClassList } if mode is COMPLETE and surroundClass is not empty and constructorParameters is not empty
+			general declareCustom               { importPackage->AS_PACKAGE importList nameWithTemps parentClasses variableList \name constructorBody                                                                    methodList subClassList } if mode is COMPLETE and surroundClass is     empty and constructorParameters is empty
+			general declareCustomSub            {                                      nameWithTemps parentClasses variableList \name constructorBody                                                                    methodList subClassList } if mode is COMPLETE and surroundClass is not empty and constructorParameters is empty
 			+
 			general templateParameters{templateParameters} if templateParameters is not null and templateParameters is not empty and mode is NAME
 			general templateParameters{templateParameters} if templateParameters is not null and templateParameters is not empty and mode is NAME_WITH_IMPORTS
 			general templateParameters{templateParameters} if templateParameters is not null and templateParameters is not empty and mode is COMPLETE_NAME
+		if templateParameters is not null and templateParameters is not empty
+			set nameWithTemps as Entry
+				general nameWithTemplateParameters{\name templateParameters}
+		else
+			set nameWithTemps as Entry = \name
