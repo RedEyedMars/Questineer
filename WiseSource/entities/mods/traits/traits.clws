@@ -1,0 +1,7 @@
+class packageName."entities"."mods"."traits" Trait \Object Source {
+}
+class packageName."entities"."mods"."traits" Traits {
+> Statement getId(String name){
+    return |Traits->name.id|;
+  }
+}

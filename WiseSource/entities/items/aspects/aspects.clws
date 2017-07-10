@@ -1,0 +1,7 @@
+class packageName."entities"."items"."aspects" Aspect \Object Source {
+}
+class packageName."entities"."items"."aspects" Aspects {
+  > Statement getId(String name){
+    return |Aspects->name.id|;
+  }
+}

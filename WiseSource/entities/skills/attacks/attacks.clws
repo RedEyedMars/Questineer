@@ -1,0 +1,7 @@
+class packageName."entities"."skills"."attacks" Attack \Object Source {
+}
+class packageName."entities"."skills"."attacks" Attacks {
+  > Statement getId(String name){
+    return |Attacks->name.id|;
+  }
+}

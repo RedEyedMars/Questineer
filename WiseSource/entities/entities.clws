@@ -1,0 +1,93 @@
+import items/items.clws
+import skills/skills.clws
+import mods/affinities/affinities.clws
+import mods/conditions/conditions.clws
+import mods/traits/traits.clws
+
+
+class packageName."entities" Entity \Object Source {
+  interface packageName."entities" Modifier {
+  }
+  interface packageName."entities" MultiModifier {
+  }
+> Statement getRange(IToken rangeToken){
+    if rangeToken->"rangeToken" != null {
+      Parameters parameters = new Parameters ();
+      parameters.add(\getSingleRange(rangeToken));
+      rangeToken : element : extra {
+        parameters.add(\getSingleRange(element));
+      }
+      return |new MultiModifier(parameters)|;
+    }
+    return \getSingleRange(rangeToken);
+  }
+> Statement getSingleRange(IToken singleRangeToken){
+	if singleRangeToken->"hero_stats" != null {
+	  if singleRangeToken->"percent" != null {
+	    return |new Entity->'singleRangeToken->"hero_stats"'->Modifier(
+	      new Range('\percentify(singleRangeToken->"left")' + "f",
+	                '\percentify(singleRangeToken->"right")' + "f").getRandom())|;
+	  }
+	  else {
+	    return |new Entity->'singleRangeToken->"hero_stats"'->Modifier(
+	      new Range('singleRangeToken->"left"'+"f",
+	                'singleRangeToken->"right"'+"f").getRandom())|;
+	  }
+	}
+	else {
+	  return |`\getRange(singleRangeToken)`.getModifier()|;
+	}
+  }
+> Statement getImposition(IToken impositionToken, Boolean forGainBody, Statement subject){
+    
+    String impositionStat = ^impositionToken->"hero_stats";
+    String statGetMethod = "get"+impositionStat;
+    if forGainBody {
+      ~Integer count = 0;
+      impositionToken : element : PLUS { count = count + 1; }
+      impositionToken : element : MINUS { count = count - 1; }
+      impositionToken : element : amount { count = count + Integer.parseInt('element'); }
+      Integer realCount = count;
+      return | subject.statGetMethod.impose('realCount',this) |;
+    }
+    else {
+      return | subject.statGetMethod.release(this) |;
+    }
+  }
+  
+> void addGainLoss(Class inputClass, Class outputClass){
+    String asVariable = inputClass.getName().toLowerCase();
+    String asList = asVariable + "s";
+	outputClass +=
+	  Boolean has(inputClass->Id "findId"){
+	    for inputClass asVariable : asList.getAll() {
+		  if asVariable.getId() == "findId" {
+			return true;
+		  }
+		}
+	  }
+	outputClass +=
+	  void gain(inputClass asVariable, Source "source"){
+	    asList.add("source", asVariable);
+	  }
+	 
+	String errorMessage = inputClass.getName() + ":\"+removeId+\"  not found!";
+	outputClass +=
+	  void lose(inputClass->Id "removeId", Source "source"){
+	    ~inputClass "toRemove" = null;
+	    for inputClass asVariable : asList.getFrom("source") {
+	      if asVariable.getId() == "removeId" {
+	        "toRemove" = asVariable; 
+	      }
+	    }
+	    if "toRemove" == null {
+	      throw errorMessage;
+	    }
+	    else {
+	      asList.remove("source","toRemove");
+	    }
+	  }
+	\createListMap(Source, inputClass);
+	outputClass += Lists->Maps->Source asList
+  }
+}

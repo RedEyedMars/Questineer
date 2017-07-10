@@ -8,25 +8,30 @@ class packageName."events" Events {
 >		String cev = \^eventName;
 >		Events +=
 			class packageName."events" cev Event {}
->		declaration : parameter : element {
->			element : type_name : atom {
+>		declaration : element : parameter {
+>			element : atom : type_name {
 >				Events->cev +=
 					'\getTypeName(atom)' 'element->"name"'
 			}
 		}
 	}
->	void addParameter(String eventName, ExternalMethodEntry method){
+>	void addParameter(String eventName, Method method){
 >		method.addParameter(\eventName "event";);
 	}
->	void addEventMethod(String eName, List<ExternalBodyEntry> body, ExternalClassEntry inputClass){
->		ExternalMethodEntry newMethod = void "on"(Events->\^eName "event") {};
->		newMethod.addBody(body);
->		inputClass.addMethod(newMethod);
+>	Context addToEventMethod(String eName, Class inputClass, Body body){
+>		Method newMethod = void "on"(Events->\^eName "event") {};
+>		String newMethodName = newMethod.getName();
+>		if inputClass.getMethod(newMethodName) == null {
+>			inputClass += void "on"(Events->\^eName "event") {}
+		}
+>		Method establishedMethod = inputClass.getMethod(newMethodName);
+>		establishedMethod.appendToBody(body);
+>		return establishedMethod.getCurrentContext();
 	}
->	void addEventMethods(ExternalClassEntry inputClass, List<String> nameToAdd, List<List<ExternalBodyEntry>> bodiesToAdd){
->		Iterator<List<ExternalBodyEntry>> bodyItr = bodiesToAdd.iterator();
+>	void addEventMethods(Class inputClass, List<String> nameToAdd, List<Body > bodiesToAdd){
+>		Iterator<Body > bodyItr = bodiesToAdd.iterator();
 >		for String name:nameToAdd {
->			\addEventMethod(name, bodyItr.next(), inputClass);
+>			\addToEventMethod(name, inputClass, bodyItr.next());
 		}
 	}
 }

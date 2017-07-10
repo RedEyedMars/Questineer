@@ -1,0 +1,123 @@
+import aspects/aspects.clws
+
+
+interface packageName."misc" Source {
+}
+
+class packageName."entities"."items" Items {
+  class packageName."entities"."items" Id {
+  }
+  @Item createItem(String "itemName"){
+  	return null;
+  }
+> void setup(ParseContext data){
+	\createList(Aspect);
+	Entity.addGainLoss(Aspect, Item);
+	Item->Modifier.getContext().setEnder(|\getValue()|);
+  }
+> void declaration(IToken itemToken){
+>	String className = ^itemToken->"itemName";
+>	Items += class packageName."entities"."items" className Item {
+		  @Items->Id \id = new Items->Id();
+		}
+>	Items->*.appendToBody({ "name" = ''itemToken->"itemName"''; });
+>	Items->*"createItem".prependToBody({
+			if "itemName".equals(''className'') {
+				return new Items->className();
+			}
+		});
+#>	itemToken : element : animation { > Items->className->* += { \image = `Images.animation(element)`;} }#
+>	itemToken : element : hp { 
+> 		Items->className->* += { "hp"    = new Item->Modifier(`Entity.getRange(element)`,\this); }
+>		Items->className->* += { "maxHp" = new Item->Modifier(`Entity.getRange(element)`,\this); } }
+>	itemToken : element : attack { > Items->className->* += { "dmg"    = new Item->Modifier(`Entity.getRange(element)`,\this); } }
+>	itemToken : element : defense { > Items->className->* += { "def"    = new Item->Modifier(`Entity.getRange(element)`,\this); } }
+>	itemToken : element : value  { > Items->className->* += { "value"  = new Item->Modifier(`Entity.getRange(element)`,\this); } }
+>	itemToken : element : weight { > Items->className->* += { "weight" = new Item->Modifier(`Entity.getRange(element)`,\this); } }
+>	itemToken : element : gain_aspect {
+>		element : atom : aspect_names {
+>			\this.gain(atom, "change_item","change_item", "getItem", Aspects, Items->className);
+		}
+    }
+>	itemToken : element : gain_trait {
+>		element : atom : trait_names {
+>			\this.gain(atom, "equip","unequip", "getItem", Traits, Items->className);
+		}
+    }
+>	itemToken : element : gain_attack {
+>		element : atom : attack_names {
+>			\this.gain(atom, "equip","unequip", "getItem", Attacks, Items->className);
+		}
+    }
+>   itemToken : element : event {
+>	  Body bodyElementList = new Body ();
+>	  Context context = Events.addToEventMethod('element', Items->className, bodyElementList); 
+>     element : atom : body_element {
+>		bodyElementList.add(\getBodyElement(atom, context));
+	  }
+>	  Events.addToEventMethod('element', Items->className, bodyElementList);
+    }
+  }
+> void gain(IToken gainToken, String gainEventName, String loseEventName, String subject, Class gainClass, Class itemClass){
+>	String specificClassName = ^gainToken;
+>	Class specificClass = gainClass->\specificClassName;
+>	Class idClass = gainClass->Id;
+>   String asList = gainClass.getName().toLowerCase()+"s";
+>	if gainToken->"boolean_statement" == null {
+>	  itemClass->*+={
+	    asList.add(\this,new specificClass());
+	  }
+	}
+	else {
+>	  Context gainContext = Events.addToEventMethod(gainEventName, specificClass, new Body ());
+>	  Context loseContext = Events.addToEventMethod(gainEventName, specificClass, new Body ());
+>     gainToken : atom : boolean_statement {
+>		Statement gainHeader = \getBooleanStatement(atom, gainContext);
+>		Statement loseHeader = \getBooleanStatement(atom, loseContext);
+>		Events.addToEventMethod(gainEventName, specificClass, {
+			if `\getBooleanStatement(atom, gainContext)` &&! "event".subject.\has(specificClass."id") {
+				"event".subject.\gain(new specificClass(), \this);
+			}
+		});
+>		Events.addToEventMethod(loseEventName, specificClass, {
+			if `\getBooleanStatement(atom, gainContext)` && "event".subject.\has(specificClass."id") {
+				"event".subject.\lose(specificClass."id",\this);
+			}
+		});
+	  }
+	}
+  }
+}
+class packageName."entities"."items" Item \Object Source {
+  class packageName."entities"."items" Modifier \Object Entity->Modifier {
+  	Entity->Modifier "range";
+  	Item "host";
+  	Float use(Entity "inputEntity"){
+  	  return "range".use("inputEntity");
+  	}
+  	void decrease(Entity "inputEntity", Float "amount"){
+  	  "range".decrease("inputEntity","amount");
+  	}
+  	Float getValue(){
+  	  return "range".use("host");
+  	}
+  }
+  String "name";
+  Entity "equipper" = null;
+  Item->Modifier "hp";
+  Item->Modifier "maxHp";
+  Item->Modifier "dmg";
+  Item->Modifier "def";
+  Item->Modifier "value";
+  Item->Modifier "weight";
+  Item->Modifier "hp";
+  
+  void on(Events->\Equip "event"){
+  	"equipper" = "event".getHost();
+  }
+  void on(Events->\Unequip "event"){
+    "equipper" = null;
+  }
+  void on(Events->\ChangeItem "event"){
+  }
+}

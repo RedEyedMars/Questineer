@@ -1,0 +1,373 @@
+class packageName."misc" Range {
+}
+
+> Set<String> declaredCritSet = new HashSet<String>();
+> Set<String> declaredListSet = new HashSet<String>();
+class packageName."misc" Lists {
+  class packageName."misc" Maps {
+  }
+}
+class packageName."misc" Criteria<TypeName> {
+  Boolean satisfies( '"TypeName"' "candidate"){
+    return false;
+  }
+}
+
+> Statement getBodyElement(IToken elementToken, Context context){
+    elementToken : element
+      : statement {
+        return \getStatement(element, context);
+      }
+      : return_statement {
+        return |return `\getStatement(element, context)`;|;
+      }
+      : acquisition {
+        Statement subject = \getVariableCall(element->"variable_call",context);
+        return |`\getAcquisition(element, true, subject, context)`;|;
+      }
+	  : imposition {
+	    Statement subject = \getVariableCall(element->"variable_call",context);
+	    Boolean doom = element->"imposition"->"IMPOSE" != null || element->"imposition"->"PLUS" != null;
+	    return | `Entity.getImposition(element->"imposition",doom,subject)` ; | ;
+	  }
+	  : variable_declaration {
+	    return | `\getVariableDeclaration(element, context)`;|;
+	  }
+      : if_statement {
+        return | `\getIfStatement(element, context)`;|;
+      }
+    return null;
+  }
+> Statement getVariableDeclaration(IToken variableDeclarationToken, Context context){
+    String typeName = \getTypeName(variableDeclarationToken->"type_name");
+    Context type = context.getClassContext(typeName);
+    if type == null {
+      throw \Generator.completeTokenErrorMessage(variableDeclarationToken) + "Could not find type:" + typeName + "!";
+    }
+    if variableDeclarationToken->"statement" != null {
+      return | 'variableDeclarationToken->"variableName"' 'typeName' = `\getStatement(variableDeclarationToken->"statement", context)`; |;
+    }
+    else {
+      return | 'variableDeclarationToken->"variableName"' 'typeName' = null; |;
+    }
+  }
+> Statement getIfStatement(IToken ifStatementToken, Context context){
+    Statement header     = new Statement ();
+    Statement elseHeader = new Statement ();
+    Body      body       = new Body ();
+    Body      elseBody   = new Body ();
+    ~Integer   mode       = 0;
+    ifStatementToken : element
+      : boolean_statement {
+        header.add(\getBooleanStatement(element, context));
+      }
+      : body_element {
+        body.add(\getBodyElement(element, context));
+      }
+      : else_statement {
+        mode = 1;
+        element : atom
+          : body_element {
+            elseBody.add(\getBodyElement(atom,context));
+          }
+          : boolean_statement {
+            elseHeader.add(\getBooleanStatement(atom,context));
+            mode = 2;
+          }
+      }
+    if      mode == 0 { return |if header `body`                               |; }
+    else if mode == 1 { return |if header `body` else               `elseBody` |; }
+    else if mode == 2 { return |if header `body` else if elseHeader `elseBody` |; }
+    else              { return null;                                              }
+  }
+
+> Statement getBooleanStatement(IToken booleanStatement, Context context){
+    Statement operator = new Statement();
+    booleanStatement : element
+    	: has_chance {
+    		operator.add(\getChance(element));
+    	  }
+    	: has_statement {
+     		Statement variableCall = \getVariableCall(element->"variable_call",context);
+ 			Statement hasCall      = \getRequirement(element->"requirement",variableCall, true);
+ 			if element->"NOT" != null {
+ 				hasCall.negate();
+			}
+ 			operator.add(hasCall);
+    	  }
+    	: statement {
+     	    operator.add(\getStatement(element,context));
+    	  }
+    	: operator {
+     	    if 'element' == "&" {
+ 			  operator.set("&&");
+            }
+            else if 'element' == "|" {
+               operator.set("||");
+            }
+    	  }
+     return operator;
+  }
+
+> Statement getRequirement(IToken requirementToken, Statement candidate, Boolean showAsTrue){
+    Statement requireHeader = new Statement();
+ 	~String delimiter = "&&";
+ 	if showAsTrue {
+ 	  delimiter = "||";
+	} 
+ 	requireHeader.set(delimiter);
+ 	requirementToken : quanta : require_stat {
+ 	  String statName = ^quanta->"hero_stats";
+ 	  String methodName = "get"+statName;
+ 	  Statement innerHead = |candidate.methodName."getValue"()|;
+ 	  innerHead.set('quanta->"ORDINAL"');
+ 	  innerHead.add(|'quanta->"INTEGER"'|);
+ 	  if quanta->"NOT" != null {> innerHead.negate();}
+ 	  if showAsTrue == false {> innerHead.negate();}
+      requireHeader.add(innerHead);
+    }
+	requirementToken : quanta : require_trait {
+	  Statement id = Traits.getId(^quanta->"trait_names");
+	  Statement innerHead = |candidate."has"(id)|;
+	  if quanta->"NOT" != null {> innerHead.negate();}
+	  if showAsTrue == false {> innerHead.negate();}
+	  requireHeader.add(innerHead);
+    } 
+    requirementToken : quanta : require_attack {
+	  Statement id = Attacks.getId(^quanta->"attack_names");
+	  Statement innerHead = |candidate."has"(id)|;
+	  if quanta->"NOT" != null {> innerHead.negate();}
+	  if showAsTrue == false {> innerHead.negate();}
+	  requireHeader.add(innerHead);
+    }
+	return requireHeader;
+  }
+
+> Statement getStatement(IToken statementToken, Context context){
+	Statement ret = new Statement();
+	~Boolean negate = false;
+	statementToken : element
+		: NOT {> negate = true; }
+		: variable_call {
+			Statement variableCall = \getVariableCall(element,context);
+			if negate {> variableCall.negate(); > negate = false;}
+			ret.add(variableCall);
+		}
+		: statement {
+			Statement subStatement = \getStatement(element,context);
+			if negate {> subStatement.negate(); > negate = false;}
+			ret.add(subStatement);
+		}
+		: operator {
+			ret.set('element');
+		}
+		: braced {
+			Statement subStatement = \getStatement(element,context);
+			if negate {> subStatement.negate(); > negate = false;}
+			ret.add(subStatement);
+		}
+	return ret;
+  }
+
+> Statement getVariableCall(IToken variableCallToken, Context context){
+	~Context currentContext = context;
+	Statement ret = new Statement();
+    ret.set(".");
+	variableCallToken : element
+	  : range {
+	    ret.add(|new Range('element->"left"','element->"right"')|);
+	  }
+	  : exact {
+		ret.add(|'element'|);
+	  }
+	  : quote {
+	    ret.add(|''element''|);
+	  }
+	  : varibleName {
+	  	currentContext = currentContext.link('element'); 
+		if currentContext == null {
+		  throw "Could not find "+'element'+" variable in context!";
+		}
+		if  ret.size() == 0 {
+		  ret.add(|'element'|);
+		}
+		else {
+		  ret.add(|"get"+^element|); #MIGHT HAVE TO IMPLEMENT ^'X'#
+		}
+	  }
+	  : method {
+		String methodName;
+		if element->"methodName" != null {
+		  methodName = 'element->"methodName"';
+		}
+		else {
+		  methodName = \getTypeName(element->"type_name");
+		}
+		Parameters parameters = new Parameters();
+		element : atom
+		  : statement {
+			parameters.add(\getStatement(atom,context));
+		  }
+		if element->"NEW" != null {
+          currentContext = currentContext.getClassContext(methodName);
+		  if currentContext == null {
+		    throw "Could not find "+methodName+" type in context!";
+		  }
+		  ret.add(|new 'methodName'(parameters)|);
+		}
+	  	else {
+		  currentContext = currentContext.link(methodName);
+		  if currentContext == null {
+		    throw "Could not find "+'element'+" method in context!";
+		  }
+		  ret.add(|'element'(parameters)|);
+		}
+	  }
+	if currentContext != null && currentContext.hasEnder() {
+	  ret.add(currentContext.getEnder());
+	}
+	return ret;
+  }
+
+> Statement getAcquisition(IToken acquisitionToken, Boolean forGainBody, Statement subject, Context context){
+    ~Context source;
+    String sourceName;
+    if acquisitionToken->"source_name" != null {
+	  sourceName = 'acquisitionToken->"source_name"';
+    }
+    else {
+      sourceName = "this";
+    }
+    source = context.link(sourceName);
+    if source == null {> throw "Could not find "+sourceName+" source in context!"; }
+    Statement gainObj;
+    Statement id;
+    if acquisitionToken->"THIS" != null {
+ 	   gainObj = |\this.clone()|;
+ 	   id = |\this."id"|;
+    }
+    else if acquisitionToken->"aspect_names" != null {
+ 	  String className = ^acquisitionToken->"aspect_names"; 
+ 	  gainObj = |new Aspects->\className()|;
+ 	  id = |Aspects.className."id"|;
+    }
+    else if acquisitionToken->"trait_names" != null {
+ 	  String className = ^acquisitionToken->"trait_names"; 
+ 	  gainObj = |new Traits->\className()|;
+ 	  id = |Traits.className."id"|;
+    }
+    else if acquisitionToken->"attack_names" != null {
+ 	  String className = ^acquisitionToken->"attack_names"; 
+ 	  gainObj = |new Attacks->\className()|;
+ 	  id = |Attacks.className."id"|;
+    }
+    else if acquisitionToken->"condition_names" != null {
+ 	  String className = ^acquisitionToken->"condition_names"; 
+ 	  gainObj = |new Conditions->\className()|;
+ 	  id = |Conditions.className."id"|;
+    }
+    else {
+      gainObj = null;
+      id = null;
+    }
+ 	if acquisitionToken->"operator"->"GAINS" != null {
+ 	  if forGainBody {
+ 	  	return |subject.\gain(gainObj,sourceName)|;
+	  }
+ 	  else {
+ 		return |subject.\lose(id,sourceName)|;
+	  }
+	}
+	else {
+ 	  if forGainBody {
+ 		return |subject.\lose(id,sourceName)|;
+	  }
+ 	  else {
+ 		return |subject.\gain(gainObj,sourceName)|;
+	  }
+	}
+  }
+
+> Statement getRange(IToken rangeToken){
+    ~String left = 'rangeToken->"left"';
+    ~String right = 'rangeToken->"left"';
+    if rangeToken->"percent" != null {
+      left  = \percentify(left);
+      right = \percentify(right); 
+    }
+ 	return |new Range(left+"f",right+"f")|;
+  }
+
+> Statement getChance(IToken chanceToken){
+    Double value = Double.parseDouble('chanceToken') / 100.0;
+    return |\Math.random() <= 'value' |;
+  }
+> void createList(Class listClass) {
+	String listName = listClass.getName();
+	if declaredListSet.add(listName) {
+	  Lists += class packageName."misc" listName ArrayList<listClass> {
+	    listClass *('listName'... "elements" ){
+	      \super(Arrays.asList("elements"));
+	    }
+	  }
+	}
+  }
+> void createCriteria(Class critClass) {
+	String critName = critClass.getName();
+	if declaredCritSet.add(critName) {
+	  Criteria += class packageName."misc" critName Criteria<critClass> {
+	    Boolean satisfies(critClass "candidate"){
+	      return false;
+	    }
+	  }
+	}
+  }
+> void createListMap(Class leftClass, Class rightClass) {
+	String rightName = "_"+rightClass.getName();
+	String fullName  = "Map."+leftClass.getName()+"."+rightName;
+	if declaredListSet.add(fullName) {
+	  if Lists->Maps->leftClass == null{
+	    Lists->Maps += class packageName."misc" leftClass {}
+	  }
+	  Lists->Maps->leftClass  +=	
+	    class packageName."misc" rightName HashMap<leftClass, LinkedList<rightClass>> {
+	      LinkedList<rightClass> "completeList";
+	      LinkedList<rightClass> getFrom(leftClass "key"){
+	        return super.get("key");
+	      }
+	      void add(leftClass "key", rightClass "element"){
+	        if true &&! super.containsKey("key") {
+			  super.put("key",new LinkedList<rightClass>());
+			}
+			"completeList".add("element");
+			super.get("key").add("element");
+	      }
+	      void removeLast(leftClass "key"){
+	        if super.containsKey("key") &&! super.get("key").isEmpty() {
+			  "completeList".remove(super.get("key").removeLast());
+			}
+	      }
+		  void removeAll(leftClass "key"){
+		    if super.containsKey("key") {
+			  "completeList".removeAll(super.get("key"));
+			  super.get("key").clear();
+			}
+		  }
+		  void remove(leftClass "key", rightClass "element"){
+		    super.get("key").remove("element");
+			"completeList".remove("element");
+		  }
+		  List<rightClass> getAll(){
+		    return "completeList";
+		  }
+	    }
+	  }
+  }
+
+> String percentify(String input){
+	Double result = Double.parseDouble(input) / 100.0;
+	return 'result';
+  }
+> String percentify(IToken input){
+	return \percentify('input');
+  }
