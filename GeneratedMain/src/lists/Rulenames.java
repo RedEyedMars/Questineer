@@ -30,6 +30,13 @@ public class Rulenames extends ParseList {
 	public static final RegexParser trait_declaration = new RegexParser("trait_declaration","rulenames","trait_declaration");
 	public static final RegexParser trait_element = new RegexParser("trait_element","rulenames","trait_element");
 	public static final RegexParser statRange = new RegexParser("statRange","rulenames","statRange");
+	public static final RegexParser entity_declaration = new RegexParser("entity_declaration","rulenames","entity_declaration");
+	public static final RegexParser entity_definition = new RegexParser("entity_definition","rulenames","entity_definition");
+	public static final RegexParser tile_declaration = new RegexParser("tile_declaration","rulenames","tile_declaration");
+	public static final RegexParser tile_element = new RegexParser("tile_element","rulenames","tile_element");
+	public static final RegexParser map_header = new RegexParser("map_header","rulenames","map_header");
+	public static final RegexParser map_connection = new RegexParser("map_connection","rulenames","map_connection");
+	public static final RegexParser map_declaration = new RegexParser("map_declaration","rulenames","map_declaration");
 	public static final RegexParser num = new RegexParser("num","rulenames","num");
 	public static final RegexParser range = new RegexParser("range","rulenames","range");
 	public static final RegexParser operator = new RegexParser("operator","rulenames","operator");
@@ -54,5 +61,5 @@ public class Rulenames extends ParseList {
 	public static final RegexParser animation = new RegexParser("animation","rulenames","animation");
 
 	public static final ChoiceParser parser = new ChoiceParser(
-				base,import_any,event_declaration,aspect_declaration,item_declaration,item_parameter,attack_declaration,attack_element,skill_declaration,affinity_declaration,condition_declaration,condition_element,trait_declaration,trait_element,statRange,num,range,operator,body_element,acquisition,imposition,if_statement,boolean_statement,boolean_element,has_chance,has_statement,requirement,requirement_element,return_statement,statement,variable_declaration,variable_call,method,type_name,image_declaration,image_id,animation);
+				base,import_any,event_declaration,aspect_declaration,item_declaration,item_parameter,attack_declaration,attack_element,skill_declaration,affinity_declaration,condition_declaration,condition_element,trait_declaration,trait_element,statRange,entity_declaration,entity_definition,tile_declaration,tile_element,map_header,map_connection,map_declaration,num,range,operator,body_element,acquisition,imposition,if_statement,boolean_statement,boolean_element,has_chance,has_statement,requirement,requirement_element,return_statement,statement,variable_declaration,variable_call,method,type_name,image_declaration,image_id,animation);
 }

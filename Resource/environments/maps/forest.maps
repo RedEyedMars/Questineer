@@ -1,0 +1,72 @@
+Forest > forest.tile
+Connection(P)
+	+G
+	+++T
+	+++++g
+
+:	T T g G g P g g g g
+	T D g g g P P g T g
+	G g g g g g P g g g
+	P P g g g g P g g g
+	g P P P P P P P g g
+	g T g P T g g P P P
+	g g g P c g g g g g
+	g g g T g g g T g g
+	G G G G g T g G G g
+	G G G G G g G G G G
+
+:	G G G G G G g T G T
+	G G G g g g g g G g
+	G G g g c T g g T G
+	g g g g P g T T G G
+	P g g g P g g D g G
+	P P P P P P P g g g
+	g g g g g g P P P P
+	g T g T P P P g G G
+	g g P P P g g g G g
+	D g P g g g G T T T
+
+:	T T g g g G G P g T
+	g g R g g P P P G T
+	P P P P P P g g G G
+	g g P D g P P g g G  
+	C P P g g g P P P P
+	T T P g c T T T g G  
+	G G P P P g g G D G
+	G G G g g g T g T T
+	G G G G G G G T g g
+	T T G G G g g g g g
+
+:	g g T g G g g g g G
+	g g g G G c g T T g
+	T g g g G P D g g g
+	P P P P P P g g g g
+	g T g g g P P P P P
+	g g P P P P T T g T
+	g g P T T g G g g g
+	G G P P P P P g g G
+	G G G g g T P G R T
+	G T g g g T P G g g
+
+:	g g G D P g g T g g
+	g G g g P g g g g g
+	G g g g P g g G T g
+	T T T P P P g G g T
+	P P P P w P g T g g
+	w w w w w P w w w w
+	G G G T g P T G G G
+	g g D g g P P P P P
+	T T T g T g g g g T
+	T T T T T T g T g T
+
+Elder Glade:
+	T T T T T T T T T T
+	T T G g g g G T T T
+	T G g g g g g G T T
+	T G g g g g g g G T
+	T g g g g g g g g T
+	T g g g E g g g g T
+	T g g g P g g g g T
+	T G g g P g g g G T
+	T G g g P g g G T T
+	T T G g P g G T T T

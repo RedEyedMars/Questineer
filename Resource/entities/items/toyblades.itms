@@ -1,12 +1,10 @@
 >physical.asps
-dagger:
+dagger
 	hp 10-15
 	dmg 25-35%STR
 	def 20-30%DEX
 	value 50-100
 	weight 2-3
-	sharp
 	change_item {
 		event->host
 	}
-;

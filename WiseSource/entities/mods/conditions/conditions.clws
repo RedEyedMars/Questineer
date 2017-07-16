@@ -1,4 +1,122 @@
-class packageName."entities"."mods"."conditions" Condition \Object Source {
+class 'packageName'."entities"."mods"."conditions" Condition \Object Source {
+  class 'packageName'."entities"."mods"."conditions" Id {
+  }
+  Condition->Id getId(){
+    return null;
+  }
+  String "name";
+  String "description";
 }
-class packageName."entities"."mods"."conditions" Conditions {
-}
+class 'packageName'."entities"."mods"."conditions" Conditions {
+  @Condition createCondition(String "conditionName"){
+    return null;
+  }
+> void setup(ParseContext data){
+    Events.addEventMethods(Condition,new HashMap<String, Body >());
+  }
+> void declaration(IToken declarationToken){
+    String conditionName = ^declarationToken->"conditionName";
+	String conditionDescription = 'declarationToken->"description"';
+	Conditions += class 'packageName'."entities"."mods"."conditions" conditionName Condition Source {
+	  @Condition->Id "id" = new Condition->Id();
+	  String getName(){
+	    return ''conditionName'';
+	  }
+	  String getDescription(){
+	    return ''conditionDescription'';
+	  }
+	}
+	Body requirementsBody = new Body ();
+	Body gainBody = new Body ();
+	Body lossBody = new Body ();
+	Body tickBody = new Body ();
+	Statement eventHost = |"event"."getHost"()|;
+	Statement candidate = |"candidate"|;
+	declarationToken : element : requirement {
+	    requirementsBody.add(| if `\getRequirement(element,candidate,false)` { return false; } |);
+	}
+	declarationToken : element : imposition {
+	  gainBody.add(Entity.getImposition(element,true, eventHost));
+	  lossBody.add(Entity.getImposition(element,false, eventHost));
+	}
+	Context gainContext = Events.addToEventMethod("gain",Conditions->\conditionName,{});
+	Context loseContext = Events.addToEventMethod("loss",Conditions->\conditionName,{});
+	Context tickContext = Events.addToEventMethod("tick",Conditions->\conditionName,{});
+	declarationToken : element : acquisition {
+	  gainBody.add(\getAcquisition(element,true,eventHost,gainContext));
+	  gainBody.add(\getAcquisition(element,false,eventHost,loseContext));
+	}
+	declarationToken : element : accumulation {
+	  element : atom : imposition {
+		tickBody.add(Entity.getImposition(atom,true,eventHost));
+	  }
+	  element : atom : acquisition {
+		tickBody.add(\getAcquisition(atom,true,eventHost,tickContext));
+	  }
+	}
+	~Boolean isFirst = true;
+	declarationToken : element : to_lose {
+	  element : atom : chance_pair {
+	    Statement chanceHeader = new Statement ();
+	    atom : quark : has_chance {
+	      chanceHeader.add(\getChance(quark));
+	    }
+	    if atom->"boolean_statement" == null {
+	      if isFirst {
+	        tickBody.add(|if `chanceHeader` { "event"."getHost"()."lose"("id",this); }|);
+	      }
+	      else {
+	        tickBody.add(|else if `chanceHeader` { "event"."getHost"()."lose"("id",this); }|);
+	      }
+	      isFirst = true;
+	    }
+	    else {
+	      if isFirst {
+	        tickBody.add(| if `\getBooleanStatement(atom->"boolean_statement", tickContext)` {
+	          if `chanceHeader` { "event"."getHost"()."lose"("id",this); } }|);
+	        isFirst = false;
+	      }
+	      else {
+	        tickBody.add(| else if `\getBooleanStatement(atom->"boolean_statement", tickContext)` {
+	          if `chanceHeader` { "event"."getHost"()."lose"("id",this); } }|);
+	      } 
+	    }
+	  }
+	}
+	requirementsBody.add(|return true;|);
+	
+	HashMap<String, Body > eventBodies = new HashMap<String, Body >();
+	declarationToken : element : event {
+	  ~Body eventBody = new Body ();
+	  ~String eventName = 'element->"event_names"';
+	  if eventName.equals("lose"){
+	    eventName = "loss";
+	  }
+	  ~Context eventContext = Events.addToEventMethod(eventName,Conditions->\conditionName,{});
+	  if eventName.equals("gain"){
+	    eventBody = gainBody;
+	  }
+	  else if eventName.equals("loss"){
+	    eventBody = lossBody;
+	  }
+	  else if eventName.equals("tick"){
+	    eventBody = tickBody;
+	  }
+	  element : atom : body_element {
+	    eventBody.add(\getBodyElement(atom,eventContext));
+	  }
+	  eventBodies.put(eventName,eventBody);
+	}
+	eventBodies.put("gain",gainBody);
+	eventBodies.put("loss",lossBody);
+	eventBodies.put("tick",tickBody);
+    Events.addEventMethodsExclusive(Conditions->\conditionName,eventBodies);
+    Conditions->\conditionName += Boolean hasRequirements(Entity "candidate"){}
+    Conditions->\conditionName.getMethod("hasRequirements").appendToBody(requirementsBody);
+    Conditions.getMethod("createCondition").prependToBody(| if ''conditionName''.equals("conditionName"){
+      return new Conditions->\conditionName(); }|);
+  }
+  > Statement getId(String name){
+    return |Conditions->'name'.id|;
+  }
+} 

@@ -31,6 +31,13 @@ public class Rules extends ParseList {
 	public static final IRule trait_declaration = TraitDeclaration.parser;
 	public static final IRule trait_element = TraitElement.parser;
 	public static final IRule statRange = StatRange.parser;
+	public static final IRule entity_declaration = EntityDeclaration.parser;
+	public static final IRule entity_definition = EntityDefinition.parser;
+	public static final IRule tile_declaration = TileDeclaration.parser;
+	public static final IRule tile_element = TileElement.parser;
+	public static final IRule map_header = MapHeader.parser;
+	public static final IRule map_connection = MapConnection.parser;
+	public static final IRule map_declaration = MapDeclaration.parser;
 	public static final IRule num = Num.parser;
 	public static final IRule range = Range.parser;
 	public static final IRule operator = Operator.parser;
@@ -55,5 +62,5 @@ public class Rules extends ParseList {
 	public static final IRule animation = Animation.parser;
 
 	public static final ChoiceParser parser = new ChoiceParser(
-				base,import_any,event_declaration,aspect_declaration,item_declaration,item_parameter,attack_declaration,attack_element,skill_declaration,affinity_declaration,condition_declaration,condition_element,trait_declaration,trait_element,statRange,num,range,operator,body_element,acquisition,imposition,if_statement,boolean_statement,boolean_element,has_chance,has_statement,requirement,requirement_element,return_statement,statement,variable_declaration,variable_call,method,type_name,image_declaration,image_id,animation);
+				base,import_any,event_declaration,aspect_declaration,item_declaration,item_parameter,attack_declaration,attack_element,skill_declaration,affinity_declaration,condition_declaration,condition_element,trait_declaration,trait_element,statRange,entity_declaration,entity_definition,tile_declaration,tile_element,map_header,map_connection,map_declaration,num,range,operator,body_element,acquisition,imposition,if_statement,boolean_statement,boolean_element,has_chance,has_statement,requirement,requirement_element,return_statement,statement,variable_declaration,variable_call,method,type_name,image_declaration,image_id,animation);
 }

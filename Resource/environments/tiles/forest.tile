@@ -1,0 +1,41 @@
+Start(S)
+	Start.
+Path(P)
+	Path.
+Grass(g)
+Minor Chest(c)
+Major Chest(C)
+Treasure Chest(x)
+Legendary Chest(X)
+Tree(T)
+Water(w)
+Long Grass(G)
+	+Praying Matris {
+    	STR 5-7 | DEX 6-9 | CON 2-3 | KNW 1-2 | MND 1-2 | CRM 1
+	}
+	+++Killer Bees {
+    	STR 2-3 | DEX 3-4 | CON 1-3 | KNW 1-2 | MND 1-2 | CRM 1
+	}
+Lone Rock(R)
+	++Wolf {
+		wild
+		STR 7-9 | DEX 4-6 | CON 4-6 | KNW 1-2 | MND 3-4 | CRM 2
+	}
+	+Dire Wolf {
+		wild
+		STR 9-12 | DEX 5-7 | CON 6-8 | KNW 3-4 | MND 2-3 | CRM 2
+	}
+Bear Den(D)
+	++Bear Cub {
+		wild
+		STR 4-6 | DEX 3-4 | CON 8-10 | KNW 1-2 | MND 3-4 | CRM 2
+	}
+	+Mother Bear {
+		wild
+		STR 9-12 | DEX 4-5 | CON 11-13 | KNW 3-4 | MND 2-3 | CRM 2
+	}
+Elder Stag Pedestal(E)
+	-Elder Stag {
+		ethereal
+		STR 20-25 | DEX 15-20 | CON 20-25 | KNW 25-30 | MND 10-15 | CRM 15-20
+	}

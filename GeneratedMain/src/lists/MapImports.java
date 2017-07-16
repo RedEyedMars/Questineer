@@ -4,28 +4,30 @@ import com.rem.parser.*;
 import com.rem.parser.token.*;
 import com.rem.parser.parser.*;
 
-public class Traits extends ParseList {
+public class MapImports extends ParseList {
 
 	@Override
 	public String getName() {
-		return "traits";
+		return "mapImports";
 	}
 	@Override
 	public String getSingular() {
-		return "trait";
+		return "mapImport";
 	}
 
-	public static final ImportParser IMPORT_TRAIT = new ImportParser(
+	public static final ImportParser IMPORT_MAP = new ImportParser(
 						new ChainParser(
-							TraitBraces.TRAITS_FILE,
-							TraitTokens.TRTS),"IMPORT_TRAIT","traits","><<\"entities/mods/traits/\",trait_file_name,\".trts\">>\n",
+							MapBraces.MAP_FILE,
+							MapTokens.MAPS),"IMPORT_MAP","mapImports","><<\"environments/maps/\",map_file_name,\".maps\">>\n",
 							new ManyParser(
 									
 									new ChoiceParser(
 											ConditionTokens.NEWLINE,
 											Comments.COMMENTS,
-											Rules.trait_declaration)));
+											Rules.map_header,
+											Rules.map_connection,
+											Rules.map_declaration)));
 
 	public static final ChoiceParser parser = new ChoiceParser(
-				IMPORT_TRAIT);
+				IMPORT_MAP);
 }

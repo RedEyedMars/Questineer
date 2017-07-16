@@ -28,7 +28,7 @@ public class VariableCall extends ConcreteRule {
 									new AddTokenParser(
 										ConditionTokens.NAME,"variableName")),
 								new ChainParser(
-									GeneralTokens.DOT,
+									TileTokens.DOT,
 									Rules.method)))),
 					new AddTokenParser(
 						
@@ -52,7 +52,7 @@ public class VariableCall extends ConcreteRule {
 									new AddTokenParser(
 										ConditionTokens.NAME,"variableName")),
 								new ChainParser(
-									GeneralTokens.DOT,
+									TileTokens.DOT,
 									Rules.method))))));
 
 	}

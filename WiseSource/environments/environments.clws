@@ -1,0 +1,410 @@
+class 'packageName'."environments" Environment {
+  Map<Integer, Map<Integer,List<Entity>>> "entityZones" = new HashMap<Integer,Map<Integer,List<Entity>>>();
+  List<Entity> getZone(Integer "zoneX", Integer "zoneY"){
+    if true &&! "entityZones".containsKey("zoneX") {
+      "entityZones".put("zoneX", new HashMap<Integer, List<Entity>>());
+    }
+    if true &&! "entityZones".get("zoneX").containsKey("zoneY") {
+      "entityZones".get("zoneX").put("zoneY", new ArrayList<Entity>());
+    }
+    return "entityZones".get("zoneX").get("zoneY");
+  }
+  void addEntity(Entity "entity"){
+    "entity".getLocation().setParent(this);
+    "entity".getLocation().update();
+  }
+  List<Entity> getEntitiesWithin(Environment->Position "position", Float "within"){
+    return \getEntitiesWithin("position","within",2.0*\Math.PI,0.0);
+  }
+  List<Entity> getEntitiesWithin(Environment->Position "position", Float "within", Double "angleLeft", Double "angleRight"){
+    List<Entity> "result" = new ArrayList<Entity>();
+    for Entity "candidate" : \getZone("position".getZoneX(),"position".getZoneY()) {
+      if "candidate".getLocation().isWithin("position","within","angleLeft","angleRight") {
+        "result".add("candidate");
+      }
+    }
+    for Entity "candidate" : \getZone("position".getZoneX()+1,"position".getZoneY()) {
+      if "candidate".getLocation().isWithin("position","within","angleLeft","angleRight"){
+        "result".add("candidate");
+      }
+    }
+    for Entity "candidate" : \getZone("position".getZoneX()+1,"position".getZoneY()+1) {
+      if "candidate".getLocation().isWithin("position","within","angleLeft","angleRight"){
+        "result".add("candidate");
+      }
+    }
+    for Entity "candidate" : \getZone("position".getZoneX(),"position".getZoneY()+1) {
+      if "candidate".getLocation().isWithin("position","within","angleLeft","angleRight"){
+        "result".add("candidate");
+      }
+    }
+    for Entity "candidate" : \getZone("position".getZoneX()-1,"position".getZoneY()+1) {
+      if "candidate".getLocation().isWithin("position","within","angleLeft","angleRight"){
+        "result".add("candidate");
+      }
+    }
+    for Entity "candidate" : \getZone("position".getZoneX()-1,"position".getZoneY()) {
+      if "candidate".getLocation().isWithin("position","within","angleLeft","angleRight"){
+        "result".add("candidate");
+      }
+    }
+    for Entity "candidate" : \getZone("position".getZoneX()-1,"position".getZoneY()-1) {
+      if "candidate".getLocation().isWithin("position","within","angleLeft","angleRight"){
+        "result".add("candidate");
+      }
+    }
+    for Entity "candidate" : \getZone("position".getZoneX(),"position".getZoneY()-1) {
+      if "candidate".getLocation().isWithin("position","within","angleLeft","angleRight"){
+        "result".add("candidate");
+      }
+    }
+    for Entity "candidate" : \getZone("position".getZoneX()+1,"position".getZoneY()-1) {
+      if "candidate".getLocation().isWithin("position","within","angleLeft","angleRight"){
+        "result".add("candidate");
+      }
+    }
+    return "result";
+  }
+  class 'packageName'."environments" Position {
+    Integer "zoneX" = -1001;
+    Integer "zoneY" = -1001;
+    Float   "locationX" = 1001f;
+    Float   "locationY" = 1001f;
+    Environment "parent" = null;
+    
+    Float getX(){
+      return "locationX" \+ "zoneX" * 1000f;
+    }
+    Float getY(){
+      return "locationY" \+ "zoneY" * 1000f;
+    }
+    Double getDistanceTo(Position "otherPosition"){
+      Float "xDirection" = "otherPosition".getX() - \getX() ;
+      Float "yDirection" = "otherPosition".getX() - \getY();
+      return \Math.sqrt(\Math.pow("xDirection",2.0)+\Math.pow("yDirection",2.0));
+    }
+    Double getDirectionTo(Position "otherPosition"){
+      Float "xDirection" = "otherPosition".getX() - \getX() ;
+      Float "yDirection" = "otherPosition".getX() - \getY();
+      if "xDirection" == 0 {
+        if "yDirection" > 0 {
+          return \Math.PI / 2.0;
+        }
+        else if "yDirection" < 0 {
+          return \Math.PI * 3.0 / 2.0;
+        }
+        else {
+          return 0.0;
+        }
+      }
+      else {
+        return \Math.atan2("yDirection","xDirection");
+      }
+    }
+    
+    Boolean isWithin(Environment->Position "otherPosition", Float "range", Double "angleLeft", Double "angleRight"){
+      Float "xDirection" = \getX() - "otherPosition".getX() ;
+      Float "yDirection" = \getY() - "otherPosition".getY();
+      Double "radius" = \Math.sqrt(\Math.pow("xDirection",2.0)+\Math.pow("yDirection",2.0));
+      if "xDirection" == 0 {
+        if "yDirection" < 0 {
+          return "radius" <= "range" && "angleLeft" >= \Math.PI * 3.0 / 2.0 && "angleRight" <= \Math.PI * 3.0 / 2.0;
+        } 
+        else if "yDirection" > 0 {
+          return "radius" <= "range" && "angleLeft" >= \Math.PI / 2.0 && "angleRight" <= \Math.PI / 2.0;
+        }
+        else {
+          return true;
+        }
+      }
+      else {
+        Double "angle" = \Math.atan2("yDirection" , "xDirection");
+        return "radius" <= "range" && "angleLeft" >= "angle" && "angleRight" <= "angle";
+      }
+    }
+  }
+  class 'packageName'."environments" Location Environment->Position{
+    Entity "host" = null;
+    Float "facing" = 0f;
+    Boolean "zonified" = false;
+    Boolean isWithin(Environment->Location "otherLocation", Float "range", Double "angleLeft", Double "angleRight"){
+      Float "tFacing" = "otherLocation".getFacing();
+      return \super.isWithin("otherLocation", "range", "angleLeft" \+ "tFacing", "angleRight" \+ "tFacing");
+    }
+    List<Entity> getEntitiesWithin(Float "within"){
+      return "parent".getEntitiesWithin(this,"within");
+    }
+    List<Entity> getEntitiesWithin(Float "within", Double "angleLeft", Double "angleRight"){
+      return "parent".getEntitiesWithin(this,"within", "angleLeft", "angleRight");
+    }
+    void setParent(Environment "newParent"){
+      "parent" = "newParent";
+    }
+    void move(Float "xDirection", Float "yDirection"){
+      "locationX" \+= "xDirection";
+      "locationY" \+= "yDirection";
+      \update();
+    }
+    void move(Double "xDirection", Double "yDirection"){
+      "locationX" \+= "(float)(double)xDirection";
+      "locationY" \+= "(float)(double)yDirection";
+      \update();
+    }
+    void moveTo(Float "xDirection", Float "yDirection"){
+      if "zonified" {
+        "parent".getZone("zoneX","zoneY").remove("host");
+      }
+      "zoneX" = "(int)(float)xDirection" / 1000;
+      "zoneY" = "(int)(float)xDirection" / 1000;
+      "locationX" = "xDirection" - "zoneX" * 1000;
+      "locationY" = "yDirection" - "zoneY" * 1000;
+      "parent".getZone("zoneX","zoneY").add("host");
+      "zonified" = true;
+    }
+    void update(){
+      if "locationX" > 1000 {
+        if "zonified" {
+           "parent".getZone("zoneX","zoneY").remove("host");
+        }
+        if "locationY" > 1000 {
+        
+          "locationX" = -1000f;
+          "locationY" = -1000f;
+          "zoneX" \+= 1;
+          "zoneY" \+= 1;
+        }
+        else if "locationY" < 1000 {
+          "locationX" = -1000f;
+          "locationY" = 1000f;
+          "zoneX" \+= 1;
+          "zoneY" \-= 1;
+        }
+        else {
+          "locationX" = -1000f;
+          "zoneX" \+= 1;
+        }
+      }
+      else if "locationX" < 1000 {
+        if "locationY" > 1000 {
+          "locationX" = 1000f;
+          "locationY" = -1000f;
+          "zoneX" \-= 1;
+          "zoneY" \+= 1;
+        }
+        else if "locationY" < 1000 {
+          "locationX" = 1000f;
+          "locationY" = 1000f;
+          "zoneX" \-= 1;
+          "zoneY" \-= 1;
+        }
+        else {
+          "locationX" = 1000f;
+          "zoneX" \-= 1;
+        }
+      }
+      else {
+        if "locationY" > 1000 {
+          if "zonified" {
+            "parent".getZone("zoneX","zoneY").remove("host");
+          }
+          "locationY" = -1000f;
+          "zoneY" \+= 1;
+        }
+        else if "locationY" < 1000 {
+          if "zonified" {
+            "parent".getZone("zoneX","zoneY").remove("host");
+          }
+          "locationY" = 1000f;
+          "zoneY" \-= 1;
+        }
+      }
+      "parent".getZone("zoneX","zoneY").add("host");
+      "zonified" = true;
+    }
+  }
+  class 'packageName'."environments" Tile Environment->Position {
+    Float "width" = 1f;
+    Float "height" = 1f;
+    Boolean isWithin(Position "otherPosition"){
+      return \super.isWithin("otherPosition", "width"/4f \+ "height"/4f, \Math.PI * 2.0, 0.0);
+    }
+  }
+}
+
+class 'packageName'."environments" Path Environment->Tile{
+  Path "leftPath" = null;
+  Path "rightPath" = null;
+  Path "upPath" = null;
+  Path "downPath" = null;
+  
+  Boolean "isStop" = false;
+    
+  Path step(Entity "stepper", Path "next"){
+    Float "speed" = "stepper".getWalkingSpeed();
+    if "next" == "leftPath" {
+      "stepper".getLocation().move(-1f * "speed", 0f);
+    }
+    else if "next" == "rightPath" {
+      "stepper".getLocation().move(1f * "speed", 0f);
+    } 
+    else if "next" == "upPath" {
+      "stepper".getLocation().move(0f, 1f * "speed");
+    }
+    else if "next" == "downPath" {
+      "stepper".getLocation().move(0f, -1f * "speed");
+    }
+    else {
+      Double "direction" = \getDirectionTo("next");
+      "stepper".getLocation().move(\Math.cos("direction") * "speed", \Math.sin("direction") * "speed"); 
+    }
+    if "next".isWithin("stepper".getLocation()) {
+      if "next".isStopper() {
+        "stepper".rememberIncomingPath(this,"next");
+      }
+      return "next";
+    }
+    else {
+      return this;
+    }
+  }
+  void setLeft(Path "newLeft"){
+    if "leftPath" != "newLeft" {
+      "leftPath" = "newLeft";
+      "newLeft".setRight(this);
+    }
+    \updateStatus();
+  }
+  void setRight(Path "newRight"){
+    if "rightPath" != "newRight" {
+      "rightPath" = "newRight";
+      "newRight".setLeft(this);
+    }
+    \updateStatus();
+  }
+  void setUp(Path "newUp"){
+    if "upPath" != "newUp" {
+      "upPath" = "newUp";
+      "newUp".setDown(this);
+   }
+   \updateStatus();
+  }
+  void setDown(Path "newDown"){
+    if "downPath" != "newDown" {
+      "downPath" = "newDown";
+      "newDown".setUp(this);
+    }
+    \updateStatus();
+  }
+  void \updateStatus(){
+    ~Integer "count" = 0;
+    if "leftPath" != null {
+      "count" \+= 1;
+    }
+    if "rightPath" != null {
+      "count" \+= 1;
+    }
+    if "upPath" != null {
+      "count" \+= 1;
+    }
+    if "downPath" != null {
+      "count" \+= 1;
+    }
+    "isStop" = "count" != 2; 
+  }
+  Boolean isStopper(){
+    return "isStop";
+  }
+  List<Way> getWaysTo(Path "goalPath"){
+    \TreeSet<Way> "ways" = new \TreeSet<Way>();
+    Way "firstWay" = new Way();
+    "firstWay".setGoal("goalPath");
+    "firstWay".add(this);
+    "ways".add("firstWay");
+    ~Integer "count" = 0;
+    List<Way> "result" = new ArrayList<Way>();
+    while "count" < 50 &&! "ways".isEmpty() {
+      "count" \+= 1;
+      Way "way" = "ways".pollFirst(); 
+      if "way".at("goalPath"){
+        "result".add("way");
+      }
+      else {
+        Path "currentPath" = "way".get("way".size() - 1);
+        if "currentPath"."leftPath" != null {
+          Way "newWay" = new Way("way");
+          if "newWay".add("currentPath"."leftPath") {
+            "ways".add("newWay");
+          }
+        }
+        if "currentPath"."rightPath" != null {
+          Way "newWay" = new Way("way");
+          if "newWay".add("currentPath"."rightPath") {
+            "ways".add("newWay");
+          }
+        }
+        if "currentPath"."upPath" != null {
+          Way "newWay" = new Way("way");
+          if "newWay".add("currentPath"."upPath") {
+            "ways".add("newWay");
+          }
+        }
+        if "currentPath"."downPath" != null {
+          Way "newWay" = new Way("way");
+          if "newWay".add("currentPath"."downPath") {
+            "ways".add("newWay");
+          }
+        }
+      }
+    }
+    return "result";
+  }
+  class 'packageName'."environments" Way ArrayList<Path> \Comparable<Way>{
+    HashSet<Path> "checkSet";
+    Path "goal";
+    Double "distanceToGoal" = 0.0;
+    Way *(Way "parentWay"){
+      "goal" = "parentWay".getGoal();
+      for Path "path":"parentWay" {
+        \add("path");
+      }
+      "distanceToGoal" = "goal".getDistanceTo(\get(\size() - 1)); 
+    }
+    void setGoal(Path "newGoal"){
+      "goal" = "newGoal";
+    }
+    Boolean at(Path "destination"){
+      if \isEmpty() {
+        return false;
+      }
+      else {
+        if \get(\size() - 1).isStopper() {
+          return true;
+       }
+       return \get(\size() - 1) == "destination";
+     }
+   }
+   \boolean add(Path "newPath"){
+      if "checkSet".add("newPath") {
+        "distanceToGoal" = "goal".getDistanceTo("newPath"); 
+        return \super.add("newPath");
+      }
+      else {
+        return false;
+      }
+    }
+    \int compareTo(Way "otherWay") {
+      Double "distance" = "otherWay".getDistanceToGoal() - "distanceToGoal";
+      if "(int)(double)distance" == 0 {
+        if "otherWay".size() == \size() && "checkSet".containsAll("otherWay".getCheckSet()) {
+          return 0;
+        }
+        else {
+          return 1;
+        }
+      }
+      else {
+        return "(int)(double)distance";
+      }
+    }
+  }
+}

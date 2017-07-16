@@ -19,15 +19,14 @@
 < RegexParser	: \com.\rem.\parser.\parser;
 < Rules 		: \lists;
 < HeroStats 	: \lists;
-< EventNames 	: \lists;
 < GeneralTokens	: \lists;
 < Listnames		: \lists;
 
 #import images/image.clws#
-#import environments/environment.clws#
 
 import general/general.clws
 import entities/entities.clws
+import environments/environments.clws
 import events/events.clws
 
 > String packageName = "com.rem.qstnr";
@@ -37,83 +36,84 @@ import events/events.clws
 > RegexParser lazyNameParser = GeneralTokens.NAME;
 > void assignListElementNames(ParseContext context, IToken root){
 		context.retainList(new HeroStats());
-		context.retainList(new EventNames());
 	}
 > String getDirectory(String fileName, String knownDirectory){
 >		return "../Resource/";
 	}
-
-
-
-> void setup(ParseContext data){	
->	IToken root = data.getRoot();
->	root : imports : import_any {
->		imports : import_events : IMPORT_EVENT {
->			import_events : element : event_declaration { 
->				\EventsClass.declaration(element);
+> void setup(ParseContext data){
+  }
+> void generate(ParseContext data){
+	\setup();
+	IToken root = data.getRoot();
+	root : imports : import_any {
+		imports : import_events : IMPORT_EVENT {
+			import_events : element : event_declaration { 
+				\EventsClass.declaration(element);
 			}
 		}
 	}
-}
-> void generate(ParseContext data){
-	\setup(data);
->	IToken root = data.getRoot();
->	root : imports : import_any {
->		\importAny(imports);
+	
+	Conditions.setup(data);
+	Aspects.setup(data);
+	Items.setup(data);
+	Entity.setup(data);
+	Skills.setup(data);
+	root : imports : import_any {
+		\importAny(imports);
 	}
 	\output("../Questineer/src",data);
 }
 > void importAny(IToken import_any){
->	import_any : import_events : IMPORT_EVENT {
->		import_events : element : event_declaration {
+	import_any : import_events : IMPORT_EVENT {
+		import_events : element : event_declaration {
 #>			\events.generateDeclaration(element);#
 		}
 	}
->	import_any : import_items : IMPORT_ITEM {
->		import_items : element : import_any {
-#>			importAny(element);#
+	import_any : import_items : IMPORT_ITEM {
+		import_items : element : import_any {
+			\importAny(element);
 		}
->		import_items : element : item_declaration {
-#>			items.generateDeclaration(element)#
-		}
-	}
->	import_any : import_aspects : IMPORT_ASPECT {
->		import_aspects : element : aspect_declaration {
-#>			aspects.generateDeclaration(element)#
+		import_items : element : item_declaration {
+			Items.declaration(element);
 		}
 	}
->	import_any : import_affinities : IMPORT_AFFINITY {
->		import_affinities : element : affinity_declaration {
-#>			affinities.generateDeclaration(element)#
+	import_any : import_aspects : IMPORT_ASPECT {
+		import_aspects : element : aspect_declaration {
+			Aspects.declaration(element);
 		}
 	}
->	import_any : import_traits : IMPORT_TRAIT {
->		import_traits : element : trait_declaration {
-#>			traits.generateDeclaration(element)#
+	import_any : import_affinities : IMPORT_AFFINITY {
+		import_affinities : element : affinity_declaration {
+			Affinities.declaration(element);
 		}
 	}
->	import_any : import_attacks : IMPORT_ATTACK {
->		import_attacks : element : attack_declaration{
-#>			attacks.generateDeclaration(element)#
+	import_any : import_traits : IMPORT_TRAIT {
+		import_traits : element : trait_declaration {
+			Traits.declaration(element);
 		}
 	}
->	import_any : import_conditions : IMPORT_CONDITION {
->		import_conditions : element : condition_declaration {
-#>			conditions.generateDeclaration(element)#
+	import_any : import_attacks : IMPORT_ATTACK {
+		import_attacks : element : attack_declaration{
+			Attacks.declaration(element);
+		}
+	}
+	import_any : import_conditions : IMPORT_CONDITION {
+		import_conditions : element : condition_declaration {
+			Conditions.declaration(element);
 		}
 	}
  }
 > String getTypeName(IToken nameToken){
->	StringBuilder nameBuilder = new StringBuilder();
->	~Boolean isFirst = true;
->	nameToken : element : typeName {
->		if isFirst==false {
->			nameBuilder.append(".");
+	StringBuilder nameBuilder = new StringBuilder();
+	~Boolean isFirst = true;
+	nameToken : element : typeName {
+		if isFirst==false {
+			nameBuilder.append(".");
 		}
->		else {
->			isFirst =false;
+		else {
+			isFirst =false;
 		}
->		nameBuilder.append(^element);
+		nameBuilder.append(^element);
 	}
->	return 'nameBuilder';
+	return 'nameBuilder';
  }

@@ -22,7 +22,7 @@ public class TypeName extends ConcreteRule {
 					new ManyParser(
 							
 								new ChainParser(
-									GeneralTokens.DOT,
+									TileTokens.DOT,
 									new AddTokenParser(
 										ConditionTokens.NAME,"typeName")))));
 

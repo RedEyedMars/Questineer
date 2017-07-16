@@ -30,7 +30,7 @@ public class Listnames extends ParseList {
 	public static final RegexParser attack_name = new RegexParser("attack_name","listnames","attack_names\b");
 	public static final RegexParser attackToken = new RegexParser("attackToken","listnames","attackTokens\b");
 	public static final RegexParser attackBrace = new RegexParser("attackBrace","listnames","attackBraces\b");
-	public static final RegexParser attack = new RegexParser("attack","listnames","attacks\b");
+	public static final RegexParser attackImport = new RegexParser("attackImport","listnames","attackImports\b");
 	public static final RegexParser skill_name = new RegexParser("skill_name","listnames","skill_names\b");
 	public static final RegexParser skillToken = new RegexParser("skillToken","listnames","skillTokens\b");
 	public static final RegexParser skillBrace = new RegexParser("skillBrace","listnames","skillBraces\b");
@@ -46,8 +46,19 @@ public class Listnames extends ParseList {
 	public static final RegexParser trait_name = new RegexParser("trait_name","listnames","trait_names\b");
 	public static final RegexParser traitToken = new RegexParser("traitToken","listnames","traitTokens\b");
 	public static final RegexParser traitBrace = new RegexParser("traitBrace","listnames","traitBraces\b");
-	public static final RegexParser trait = new RegexParser("trait","listnames","traits\b");
+	public static final RegexParser traitImport = new RegexParser("traitImport","listnames","traitImports\b");
 	public static final RegexParser hero_stat = new RegexParser("hero_stat","listnames","hero_stats\b");
+	public static final RegexParser entityToken = new RegexParser("entityToken","listnames","entityTokens\b");
+	public static final RegexParser entityBrace = new RegexParser("entityBrace","listnames","entityBraces\b");
+	public static final RegexParser tile_name = new RegexParser("tile_name","listnames","tile_names\b");
+	public static final RegexParser tile_symbol = new RegexParser("tile_symbol","listnames","tile_symbols\b");
+	public static final RegexParser tileToken = new RegexParser("tileToken","listnames","tileTokens\b");
+	public static final RegexParser tileBrace = new RegexParser("tileBrace","listnames","tileBraces\b");
+	public static final RegexParser tileImport = new RegexParser("tileImport","listnames","tileImports\b");
+	public static final RegexParser map_name = new RegexParser("map_name","listnames","map_names\b");
+	public static final RegexParser mapToken = new RegexParser("mapToken","listnames","mapTokens\b");
+	public static final RegexParser mapBrace = new RegexParser("mapBrace","listnames","mapBraces\b");
+	public static final RegexParser mapImport = new RegexParser("mapImport","listnames","mapImports\b");
 	public static final RegexParser generalToken = new RegexParser("generalToken","listnames","generalTokens\b");
 	public static final RegexParser generalBrace = new RegexParser("generalBrace","listnames","generalBraces\b");
 	public static final RegexParser generalAltBrace = new RegexParser("generalAltBrace","listnames","generalAltBraces\b");
@@ -57,5 +68,5 @@ public class Listnames extends ParseList {
 	public static final RegexParser imageImport = new RegexParser("imageImport","listnames","imageImports\b");
 
 	public static final ChoiceParser parser = new ChoiceParser(
-				comment,event_name,eventToken,eventBrace,eventImport,aspect_name,aspectToken,aspectBrace,aspectImport,itemToken,itemBrace,itemImport,attack_name,attackToken,attackBrace,attack,skill_name,skillToken,skillBrace,skillImport,affinity_name,affinityToken,affinityBrace,affinityImport,condition_name,conditionToken,conditionBrace,conditionImport,trait_name,traitToken,traitBrace,trait,hero_stat,generalToken,generalBrace,generalAltBrace,image_name,imageToken,imageBrace,imageImport);
+				comment,event_name,eventToken,eventBrace,eventImport,aspect_name,aspectToken,aspectBrace,aspectImport,itemToken,itemBrace,itemImport,attack_name,attackToken,attackBrace,attackImport,skill_name,skillToken,skillBrace,skillImport,affinity_name,affinityToken,affinityBrace,affinityImport,condition_name,conditionToken,conditionBrace,conditionImport,trait_name,traitToken,traitBrace,traitImport,hero_stat,entityToken,entityBrace,tile_name,tile_symbol,tileToken,tileBrace,tileImport,map_name,mapToken,mapBrace,mapImport,generalToken,generalBrace,generalAltBrace,image_name,imageToken,imageBrace,imageImport);
 }

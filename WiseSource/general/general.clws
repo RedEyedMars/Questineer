@@ -1,13 +1,50 @@
-class packageName."misc" Range {
-}
 
 > Set<String> declaredCritSet = new HashSet<String>();
 > Set<String> declaredListSet = new HashSet<String>();
-class packageName."misc" Lists {
-  class packageName."misc" Maps {
+interface 'packageName'."misc" Source {
+}
+class 'packageName'."misc" Range {
+  Float "left" = 0f;
+  Float "right" = 0f;
+  
+  >String floatCast = "(float)(int)";
+  
+  Range *(Integer "initialLeft", Integer "initialRight"){
+    "left" = 'floatCast+"initialLeft"';
+    "right" = 'floatCast+"initialRight"';
+  } 
+  Range *(Float "initialLeft", Integer "initialRight"){
+    "left" = "initialLeft";
+    "right" = 'floatCast+"initialRight"';
+  }
+  Range *(Integer "initialLeft", Float "initialRight"){
+    "left" = 'floatCast+"initialLeft"';
+    "right" = "initialRight";
+  }
+  Entity->Modifier getModifier(){
+    return new Range->Modifier(\getRandom());
+  }
+  class 'packageName'."misc" Modifier \Object Entity->Modifier{
+	Double "value" = 0.0;
+	> String doubleCast = "(float)(double)";
+	void decrease(Entity "inputEntity",Float "amount"){
+	  "value" = "value" - "amount";
+	}
+	Float use(Entity "inputEntity"){
+	  return 'doubleCast+"value"';
+	}
+  }
+  Double getRandom(){
+    Float "difference" = "right" - "left";
+    return "difference" * \Math.random() + "left";
   }
 }
-class packageName."misc" Criteria<TypeName> {
+
+class 'packageName'."misc" Lists {
+  class 'packageName'."misc" Maps {
+  }
+}
+class 'packageName'."misc" Criteria<TypeName> {
   Boolean satisfies( '"TypeName"' "candidate"){
     return false;
   }
@@ -23,18 +60,18 @@ class packageName."misc" Criteria<TypeName> {
       }
       : acquisition {
         Statement subject = \getVariableCall(element->"variable_call",context);
-        return |`\getAcquisition(element, true, subject, context)`;|;
+        return \getAcquisition(element->"acquisition", true, subject, context);
       }
 	  : imposition {
 	    Statement subject = \getVariableCall(element->"variable_call",context);
 	    Boolean doom = element->"imposition"->"IMPOSE" != null || element->"imposition"->"PLUS" != null;
-	    return | `Entity.getImposition(element->"imposition",doom,subject)` ; | ;
+	    return Entity.getImposition(element->"imposition",doom,subject);
 	  }
 	  : variable_declaration {
-	    return | `\getVariableDeclaration(element, context)`;|;
+	    return \getVariableDeclaration(element, context);
 	  }
       : if_statement {
-        return | `\getIfStatement(element, context)`;|;
+        return \getIfStatement(element, context);
       }
     return null;
   }
@@ -81,7 +118,11 @@ class packageName."misc" Criteria<TypeName> {
     else              { return null;                                              }
   }
 
+
 > Statement getBooleanStatement(IToken booleanStatement, Context context){
+    return \getBooleanStatement(booleanStatement, false, context);
+  }
+> Statement getBooleanStatement(IToken booleanStatement, Boolean negate, Context context){
     Statement operator = new Statement();
     booleanStatement : element
     	: has_chance {
@@ -89,21 +130,31 @@ class packageName."misc" Criteria<TypeName> {
     	  }
     	: has_statement {
      		Statement variableCall = \getVariableCall(element->"variable_call",context);
- 			Statement hasCall      = \getRequirement(element->"requirement",variableCall, true);
+ 			Statement hasCall      = \getRequirement(element->"requirement",variableCall, negate);
  			if element->"NOT" != null {
  				hasCall.negate();
 			}
  			operator.add(hasCall);
     	  }
     	: statement {
-     	    operator.add(\getStatement(element,context));
+     	    operator.add(\getStatement(element,negate,context));
     	  }
     	: operator {
      	    if 'element' == "&" {
- 			  operator.set("&&");
+     	      if negate {
+     	        operator.set("||");
+     	      }
+     	      else {
+     	        operator.set("&&");
+     	      }
             }
             else if 'element' == "|" {
-               operator.set("||");
+               if negate {
+                 operator.set("&&");
+               }
+               else {
+                 operator.set("||");
+               }
             }
     	  }
      return operator;
@@ -117,13 +168,15 @@ class packageName."misc" Criteria<TypeName> {
 	} 
  	requireHeader.set(delimiter);
  	requirementToken : quanta : require_stat {
- 	  String statName = ^quanta->"hero_stats";
- 	  String methodName = "get"+statName;
- 	  Statement innerHead = |candidate.methodName."getValue"()|;
- 	  innerHead.set('quanta->"ORDINAL"');
+ 	  String statName = 'quanta->"hero_stats"'.toLowerCase();
+ 	  String methodName = "get"+^statName;
+ 	  Statement innerHead = |candidate.'methodName'()."getValue"()|;
+ 	  ~String operator = 'quanta->"ORDINAL"';
+ 	  if quanta->"NOT" != null && showAsTrue || quanta->"NOT" == null &&! showAsTrue{
+ 	  	operator = \negateOperator(operator);
+ 	  }
+ 	  innerHead.set(operator);
  	  innerHead.add(|'quanta->"INTEGER"'|);
- 	  if quanta->"NOT" != null {> innerHead.negate();}
- 	  if showAsTrue == false {> innerHead.negate();}
       requireHeader.add(innerHead);
     }
 	requirementToken : quanta : require_trait {
@@ -142,37 +195,43 @@ class packageName."misc" Criteria<TypeName> {
     }
 	return requireHeader;
   }
-
 > Statement getStatement(IToken statementToken, Context context){
+    return \getStatement(statementToken,false,context);
+  }
+> Statement getStatement(IToken statementToken,Boolean initialNegate, Context context){
 	Statement ret = new Statement();
-	~Boolean negate = false;
+	~Boolean negate = initialNegate;
 	statementToken : element
-		: NOT {> negate = true; }
+		: NOT { negate =! negate; }
 		: variable_call {
 			Statement variableCall = \getVariableCall(element,context);
-			if negate {> variableCall.negate(); > negate = false;}
 			ret.add(variableCall);
 		}
 		: statement {
 			Statement subStatement = \getStatement(element,context);
-			if negate {> subStatement.negate(); > negate = false;}
 			ret.add(subStatement);
 		}
 		: operator {
-			ret.set('element');
+		    if negate {
+		      ret.set(\negateOperator('element'));
+		    }
+		    else {
+			  ret.set('element');
+			}
 		}
 		: braced {
 			Statement subStatement = \getStatement(element,context);
-			if negate {> subStatement.negate(); > negate = false;}
 			ret.add(subStatement);
 		}
+	if ret.getSize() == 1 && negate {
+	  ret.negate();
+	}
 	return ret;
   }
 
 > Statement getVariableCall(IToken variableCallToken, Context context){
 	~Context currentContext = context;
-	Statement ret = new Statement();
-    ret.set(".");
+	Statement ret = new Statement(".");
 	variableCallToken : element
 	  : range {
 	    ret.add(|new Range('element->"left"','element->"right"')|);
@@ -183,16 +242,16 @@ class packageName."misc" Criteria<TypeName> {
 	  : quote {
 	    ret.add(|''element''|);
 	  }
-	  : varibleName {
+	  : variableName {
 	  	currentContext = currentContext.link('element'); 
 		if currentContext == null {
-		  throw "Could not find "+'element'+" variable in context!";
+		  throw "Could not find \"+element+\" variable in context!";
 		}
 		if  ret.size() == 0 {
 		  ret.add(|'element'|);
 		}
 		else {
-		  ret.add(|"get"+^element|); #MIGHT HAVE TO IMPLEMENT ^'X'#
+		  ret.add(|'"get"+^element'()|); #MIGHT HAVE TO IMPLEMENT ^'X'#
 		}
 	  }
 	  : method {
@@ -211,7 +270,7 @@ class packageName."misc" Criteria<TypeName> {
 		if element->"NEW" != null {
           currentContext = currentContext.getClassContext(methodName);
 		  if currentContext == null {
-		    throw "Could not find "+methodName+" type in context!";
+		    throw "Could not find \"+methodName+\" type in context!";
 		  }
 		  ret.add(|new 'methodName'(parameters)|);
 		}
@@ -249,22 +308,22 @@ class packageName."misc" Criteria<TypeName> {
     else if acquisitionToken->"aspect_names" != null {
  	  String className = ^acquisitionToken->"aspect_names"; 
  	  gainObj = |new Aspects->\className()|;
- 	  id = |Aspects.className."id"|;
+ 	  id = |Aspects->'className'."id"|;
     }
     else if acquisitionToken->"trait_names" != null {
  	  String className = ^acquisitionToken->"trait_names"; 
  	  gainObj = |new Traits->\className()|;
- 	  id = |Traits.className."id"|;
+ 	  id = |Traits->'className'."id"|;
     }
     else if acquisitionToken->"attack_names" != null {
  	  String className = ^acquisitionToken->"attack_names"; 
  	  gainObj = |new Attacks->\className()|;
- 	  id = |Attacks.className."id"|;
+ 	  id = |Attacks->'className'."id"|;
     }
     else if acquisitionToken->"condition_names" != null {
  	  String className = ^acquisitionToken->"condition_names"; 
  	  gainObj = |new Conditions->\className()|;
- 	  id = |Conditions.className."id"|;
+ 	  id = |Conditions->'className'."id"|;
     }
     else {
       gainObj = null;
@@ -272,30 +331,30 @@ class packageName."misc" Criteria<TypeName> {
     }
  	if acquisitionToken->"operator"->"GAINS" != null {
  	  if forGainBody {
- 	  	return |subject.\gain(gainObj,sourceName)|;
+ 	  	return |subject.\gain(gainObj,'sourceName');|;
 	  }
  	  else {
- 		return |subject.\lose(id,sourceName)|;
+ 		return |subject.\lose(id,'sourceName');|;
 	  }
 	}
 	else {
  	  if forGainBody {
- 		return |subject.\lose(id,sourceName)|;
+ 		return |subject.\lose(id,'sourceName');|;
 	  }
  	  else {
- 		return |subject.\gain(gainObj,sourceName)|;
+ 		return |subject.\gain(gainObj,'sourceName');|;
 	  }
 	}
   }
 
-> Statement getRange(IToken rangeToken){
+> Statement primeRange(IToken rangeToken){
     ~String left = 'rangeToken->"left"';
     ~String right = 'rangeToken->"left"';
     if rangeToken->"percent" != null {
       left  = \percentify(left);
       right = \percentify(right); 
     }
- 	return |new Range(left+"f",right+"f")|;
+ 	return |new Range('left'+"f",'right'+"f")|;
   }
 
 > Statement getChance(IToken chanceToken){
@@ -303,19 +362,19 @@ class packageName."misc" Criteria<TypeName> {
     return |\Math.random() <= 'value' |;
   }
 > void createList(Class listClass) {
-	String listName = listClass.getName();
+	String listName = listClass.getName()+ "List";
 	if declaredListSet.add(listName) {
-	  Lists += class packageName."misc" listName ArrayList<listClass> {
-	    listClass *('listName'... "elements" ){
+	  Lists += class 'packageName'."misc" listName ArrayList<listClass> {
+	    'listName' *(listClass... "elements" ){
 	      \super(Arrays.asList("elements"));
 	    }
 	  }
 	}
   }
 > void createCriteria(Class critClass) {
-	String critName = critClass.getName();
+	String critName = "of"+critClass.getName();
 	if declaredCritSet.add(critName) {
-	  Criteria += class packageName."misc" critName Criteria<critClass> {
+	  Criteria += class 'packageName'."misc" critName Criteria<critClass> {
 	    Boolean satisfies(critClass "candidate"){
 	      return false;
 	    }
@@ -323,14 +382,15 @@ class packageName."misc" Criteria<TypeName> {
 	}
   }
 > void createListMap(Class leftClass, Class rightClass) {
+	String leftName  = leftClass.getName()+"s";
 	String rightName = "_"+rightClass.getName();
-	String fullName  = "Map."+leftClass.getName()+"."+rightName;
+	String fullName  = "Maps."+leftName+"."+rightName;
 	if declaredListSet.add(fullName) {
-	  if Lists->Maps->leftClass == null{
-	    Lists->Maps += class packageName."misc" leftClass {}
+	  if Lists->Maps->\leftName == null{
+	    Lists->Maps += class 'leftClass.getPackage()' leftName {}
 	  }
-	  Lists->Maps->leftClass  +=	
-	    class packageName."misc" rightName HashMap<leftClass, LinkedList<rightClass>> {
+	  Lists->Maps->\leftName  +=	
+	    class 'packageName'."misc" rightName HashMap<leftClass, LinkedList<rightClass>> {
 	      LinkedList<rightClass> "completeList";
 	      LinkedList<rightClass> getFrom(leftClass "key"){
 	        return super.get("key");
@@ -370,4 +430,33 @@ class packageName."misc" Criteria<TypeName> {
   }
 > String percentify(IToken input){
 	return \percentify('input');
+  }
+> String negateOperator(String operator){
+    if "==".equals(operator){
+ 	  return "!=";
+ 	}
+ 	else if "!=".equals(operator){
+ 	  return "==";
+ 	}
+ 	else if "<".equals(operator){
+ 	  return ">=";
+ 	}
+ 	else if "<=".equals(operator){
+ 	  return ">";
+ 	}
+ 	else if ">".equals(operator){
+ 	  return "<=";
+ 	}
+ 	else if ">=".equals(operator){
+ 	  return "<";
+ 	}
+ 	else if "&&".equals(operator){
+ 	  return "||";
+ 	}
+ 	else if "||".equals(operator){
+ 	  return "&&";
+ 	}
+ 	else {
+ 	  return "COULD NOT NEGATE ("+operator+")";
+ 	}
   }

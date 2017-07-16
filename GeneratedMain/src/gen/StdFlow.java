@@ -42,7 +42,6 @@ public class StdFlow extends FlowController {
 	}
 	public void assignListElementNames(ParseContext context,IToken root){
 		context.retainList(new HeroStats());
-		context.retainList(new EventNames());
 	}
 	public String getDirectory(String fileName,String knownDirectory){
 		return "../Resource/";

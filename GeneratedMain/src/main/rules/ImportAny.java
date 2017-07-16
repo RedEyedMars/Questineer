@@ -20,11 +20,12 @@ public class ImportAny extends ConcreteRule {
 					EventImports.IMPORT_EVENT,
 					ItemImports.IMPORT_ITEM,
 					ImageImports.IMPORT_IMAGE,
-					Traits.IMPORT_TRAIT,
+					TraitImports.IMPORT_TRAIT,
 					AspectImports.IMPORT_ASPECT,
 					AffinityImports.IMPORT_AFFINITY,
 					ConditionImports.IMPORT_CONDITION,
-					Attacks.IMPORT_ATTACK));
+					AttackImports.IMPORT_ATTACK,
+					MapImports.IMPORT_MAP));
 
 	}
 

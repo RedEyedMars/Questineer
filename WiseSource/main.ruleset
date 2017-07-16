@@ -1,7 +1,7 @@
 base is silent
 	( NEWLINE | COMMENTS | import_any )*
 import_any
-	IMPORT_EVENT | IMPORT_ITEM | IMPORT_IMAGE | IMPORT_TRAIT | IMPORT_ASPECT | IMPORT_AFFINITY | IMPORT_CONDITION | IMPORT_ATTACK
+	IMPORT_EVENT | IMPORT_ITEM | IMPORT_IMAGE | IMPORT_TRAIT | IMPORT_ASPECT | IMPORT_AFFINITY | IMPORT_CONDITION | IMPORT_ATTACK | IMPORT_MAP
 comment-s are Braced
 	[#,#] as COMMENTS with WILD as comment
 
@@ -85,7 +85,7 @@ attackToken-s
 attackBrace-s are Braced
 	[,.] as ATTACK_FILE with WILD as attack_file_name 
 	[\n\t,.] as ATTACK_DESCRIPTION with WILD as description
-attack-s are Import
+attackImport-s are Import
 	[><<\"entities/skills/attacks/\",attack_file_name,\".atks\">>\n] as IMPORT_ATTACK from (NEWLINE|COMMENTS|attack_declaration)*; with ATTACK_FILE ATKS
 attack_declaration
 	NAME as attackName in attack_names ATTACK_DESCRIPTION attack_element*
@@ -187,7 +187,7 @@ traitToken-s
 traitBrace-s are Braced
 	[,.] as TRAITS_FILE with WILD as trait_file_name 
 	[\n\t,.] as TRAIT_DESCRIPTION with WILD as description
-trait-s are Import
+traitImport-s are Import
 	[><<\"entities/mods/traits/\",trait_file_name,\".trts\">>\n] as IMPORT_TRAIT from (NEWLINE|COMMENTS|trait_declaration)*; with TRAITS_FILE TRTS
 trait_declaration
 	NAME as traitName in trait_names TRAIT_DESCRIPTION trait_element*
@@ -208,6 +208,78 @@ hero_stat-s
 	"CRM" as CRM
 statRange is silent
 	range hero_stat? ( (COMMA|PLUS) range hero_stat? ) as extra*
+
+entityToken-s
+	[[a-zA-Z_][a-zA-Z0-9_]*] as NAME
+	[.*] as WILD
+	"\n" as NEWLINE
+	"|" as PIPE
+entityBrace-s are Braced
+	[{,}] as ENTITY_DEFINITION with entity_definition*
+
+entity_declaration
+	NEWLINE* (NAME+) as entityName NEWLINE* ENTITY_DEFINITION
+entity_definition
+	NEWLINE
+	COMMENTS
+	affinity_name
+	(hero_stat (range|num)) as statRange (PIPE hero_stat (range|num)) as statRange*
+
+#TILES
+tile_name-s are empty
+tile_symbol-s are empty
+tileToken-s
+	[[a-zA-Z_][a-zA-Z0-9_]*] as NAME
+	[.*] as WILD
+	"\n" as NEWLINE
+	"\n\t" as NEWTAB
+	"tile" as TILE
+	"Path" as PATH
+	"Start" as START
+	"." as DOT
+	"+" as PLUS
+	"-" as MINUS
+	"(" as OPEN_PARA
+	")" as CLOSE_PARA
+tileBrace-s are Braced
+	[,.] as TILE_FILE with WILD as tile_file_name
+tileImport-s are Import
+	[><<\"environments/tiles/\",tile_file_name,\".tile\">>\n] as IMPORT_TILE from (NEWLINE|COMMENTS|tile_declaration)*; with TILE_FILE TILE
+tile_declaration
+	( NAME+ ) as tileName in tile_names OPEN_PARA NAME as symbolName in tile_symbols CLOSE_PARA tile_element*
+tile_element is silent
+	NEWLINE* COMMENTS
+	NEWTAB ( START DOT ) as start
+	NEWTAB ( PATH DOT ) as path
+	NEWTAB ( (PLUS|MINUS)+ entity_declaration ) as entity
+	NEWLINE+
+
+#MAP
+map_name-s are empty
+mapToken-s
+	[[a-zA-Z_][a-zA-Z0-9_]*] as NAME
+	[.*] as WILD
+	"\n" as NEWLINE
+	"\n\t" as NEWTAB
+	"\t" as TAB
+	"maps" as MAPS
+	"Connection" as CONNECTION
+	"." as DOT
+	"+" as PLUS
+	"-" as MINUS
+	":" as COLON
+	"(" as OPEN_PARA
+	")" as CLOSE_PARA
+mapBrace-s are Braced
+	[,.] as MAP_FILE with WILD as map_file_name
+mapImport-s are Import
+	[><<\"environments/maps/\",map_file_name,\".maps\">>\n] as IMPORT_MAP from (NEWLINE|COMMENTS|map_header|map_connection|map_declaration)*; with MAP_FILE MAPS
+map_header
+	NAME as mapName IMPORT_TILE
+map_connection
+	CONNECTION OPEN_PARA tile_symbol as path_symbol CLOSE_PARA ( NEWTAB ( PLUS+ tile_symbol ) as benign_symbol | NEWLINE+ )*
+map_declaration
+	NEWLINE* (NAME+) as mapElementName? COLON NEWLINE* ( tile_symbol+ ) as line ( NEWTAB tile_symbol+) as line*
 
 #GENERAL
 generalToken-s

@@ -4,12 +4,182 @@ import mods/affinities/affinities.clws
 import mods/conditions/conditions.clws
 import mods/traits/traits.clws
 
+class 'packageName'."misc" Int {
+  Integer "value" = 0;
+  void setValue(Integer "newValue"){
+    "value" = "newValue";
+  }
+}
+class 'packageName'."entities" Entity \Object Source {
+  interface 'packageName'."entities" Modifier {
+    Float use(Entity "inputEntity"){}
+    void  decrease(Entity "inputEntity",Float "newValue"){}
+  }
+  class 'packageName'."entities" MultiModifier ArrayList<Modifier> Entity->Modifier{
+    MultiModifier *(Entity->Modifier... "mods"){
+      super(Arrays.asList("mods"));
+    }
+	Float use(Entity "inputEntity"){
+	  Float "sum" = 0f;
+	  for Entity->Modifier "mod" : this {
+	    "sum" += "mod".use("inputEntity");
+	  }
+	  return "sum";
+	}
+	void decrease(Entity "inputEntity", Float "amount"){
+	  for Entity->Modifier "mod" : this {
+	    "mod".decrease("inputEntity","amount" / \size());
+	  }
+	}
+  }
+  interface 'packageName'."entities" Stat {
+    Integer getValue(){}
+	void setValue(Integer "newValue"){}
+	Boolean impose(Integer "amount", Source "source"){}
+	void release(Source "source"){}
+	String getName(){}
+  }
+  Float "weightHeld" = 0f;
+  Float "walkingSpeed" = 0.2f;
+  Lists->\ItemList "equippedItems";
+  Environment->Location "location" = new Environment->Location(-1001,-1001,1001f,1001f,null,this,0f,false);
+  Map<Path,Set<Path>> "pathStoppers" = new HashMap<Path,Set<Path>>();
+  Float getItemDamage(){
+    Float "sum" = 0f;
+	for Item "item" : "equippedItems" {
+	  "sum" \+= "item".getDmg().use(this);
+	}
+	return "sum";
+  }
+  Float getItemDefense(){
+    Float "sum" = 0f;
+	for Item "item" : "equippedItems" {
+	  "sum" \+= "item".getDef().use(this);
+	}
+	return "sum";
+  }
+  Boolean canEquip(Item "item"){
+    return this."str".getValue() > "weightHeld" \+ "item".getWeight().use(this);
+  }
+  void equip(Item "item"){
+    "equippedItems".add("item");
+	"weightHeld" = "weightHeld" \+ "item".getWeight().use(this);
+	"item".on(new Events->\Equip(this,"item"));
+  }
+  void equip(Item "item"){
+    "equippedItems".remove("item");
+	"weightHeld" = "weightHeld" \+ "item".getWeight().use(this);
+	"item".on(new Events->\Unequip(this,"item"));
+  }
+  void rememberIncomingPath(Path "in", Path "to"){
+    if true &&! "pathStoppers".containsKey("in"){
+      "pathStoppers".put("in", new HashSet<Path>());
+    }
+    "pathStoppers".get("in").add("to");
+  }
+> void setup(ParseContext data){
+	List<String> namesToAdd = new ArrayList<String>();
+	namesToAdd.add("hit");
+	Map<String, Body > bodiesToAdd = new HashMap<String, Body >();
+	bodiesToAdd.put("hit", \onHitBody());
+    Events.addEventMethods(Entity,bodiesToAdd);
+    Entity.addGainLoss(Condition,Entity);
+    Entity.addGainLoss(Attack,Entity);
+    Entity.addGainLoss(Trait,Entity);
+    Entity.addGainLoss(Affinity,Entity);
+    
+    \createList(Item);
+    \createListMap(Source, Int);
+    Set<String> statNames = data.getListElements("hero_stats");
+    Parameters allStatList = new Parameters ();
+    Body randomStatBody = {};
+    for String statName : statNames {
+      String vName = statName.toLowerCase();
+      Entity += class 'packageName'."entities" statName \Object Entity->Stat {
+        Integer "value" = 0;
+        Lists->Maps->\Sources->\_Int "history";
+        void setValue(Integer "newValue"){
+          "value" = "newValue";
+        }
+        Boolean impose(Integer "amount", Source "source"){
+          synchronized this {
+            "history".add("source",new Int("amount"));
+          }
+          "value" \+= "amount";
+          return "value" > 0;
+        }
+		void release(Source "source"){
+		  synchronized this {
+			"history".removeLast("source");
+		  }
+		}
+		String getName(){
+		  return ''statName'';
+		}
+      }
+      Entity->'statName' += class 'packageName'."entities" Modifier \Object Entity->Modifier {
+          Float "percent" = 1f;
+          Modifier *(Double "initialPercent"){
+            "percent" = "(float)(double)initialPercent";
+          }
+          Float use(Entity "inputEntity"){
+            return "inputEntity".'vName'."value" * "percent";
+          }
+		  void decrease(Entity "inputEntity", Float "amount"){
+		    "percent" \-= "amount" / "inputEntity".'vName'."value";
+		  }
+        }
+      Entity.addVariable(Entity->'statName' 'vName';);
+      randomStatBody.add(|case 'allStatList.getSize()' {return 'vName';}|);
+      allStatList.add(|'vName'|);
+      Entity->'statName'.getContext().setEnder(|\getValue()|);
+    }
+    
+    Entity += Entity->Stat getRandomStat(){
+      Double "randomIndex" = \Math.random() * 'allStatList.getSize()';
+      switch "(int)(double)randomIndex" `randomStatBody`
+      return null;
+    }
+  }
 
-class packageName."entities" Entity \Object Source {
-  interface packageName."entities" Modifier {
+> Body onHitBody(){
+    return {
+    	Float "eventDamage" = "event".getDamage().getTotal();
+		if "eventDamage" < 0.1f && "eventDamage" > -0.1 {
+			return void;
+		}
+		Float "preciseDamage" = "eventDamage" - this.con.getValue() - this.getItemDefense();
+		Integer "damageToTake" = "(int)(float)preciseDamage";
+		Float "eventModifier" = "event".getDamage().getModifier();
+		for Item "item" : "event".getAttacker().getEquippedItems() {
+		  "item".getHp().decrease(this,
+		     "item".getDef().use(this) * "eventModifier" / "eventDamage" );
+		  "item".on(new Events->\ChangeItem(this,"item"));
+		}
+		if "damageToTake" < 1 {
+		  "damageToTake" = 1;
+		}
+		while "damageToTake" > 13 {
+			"damageToTake" -= 3;
+			if true &&! \getRandomStat().impose(-3, "event".getAttacker()) {
+				\on(new Events->\Die("event".getAttacker(),this));
+			}
+		}
+		while "damageToTake" > 5{
+			"damageToTake" -= 2;
+			if true &&! \getRandomStat().impose(-2, "event".getAttacker()) {
+				\on(new Events->\Die("event".getAttacker(),this));
+			}
+		}
+		while "damageToTake" > 0{
+			"damageToTake" -= 1;
+			if true &&! \getRandomStat().impose(-1, "event".getAttacker()) {
+				\on(new Events->\Die("event".getAttacker(),this));
+			}
+		}
+	};
   }
-  interface packageName."entities" MultiModifier {
-  }
+  
 > Statement getRange(IToken rangeToken){
     if rangeToken->"rangeToken" != null {
       Parameters parameters = new Parameters ();
@@ -35,23 +205,30 @@ class packageName."entities" Entity \Object Source {
 	  }
 	}
 	else {
-	  return |`\getRange(singleRangeToken)`.getModifier()|;
+	  return |`\primeRange(singleRangeToken)`.getModifier()|;
 	}
   }
 > Statement getImposition(IToken impositionToken, Boolean forGainBody, Statement subject){
-    
-    String impositionStat = ^impositionToken->"hero_stats";
-    String statGetMethod = "get"+impositionStat;
-    if forGainBody {
+    ~Boolean useImpose = false;
+    IToken operator = impositionToken->"operator";
+    if forGainBody && operator->"IMPOSE" == null {
+      useImpose = true;
+    }
+    else if operator->"IMPOSE" != null &&! forGainBody{
+      useImpose = true;
+    }
+    String impositionStat = 'impositionToken->"hero_stats"'.toLowerCase();
+    String statGetMethod = "get"+^impositionStat;
+    if useImpose {
       ~Integer count = 0;
       impositionToken : element : PLUS { count = count + 1; }
       impositionToken : element : MINUS { count = count - 1; }
       impositionToken : element : amount { count = count + Integer.parseInt('element'); }
       Integer realCount = count;
-      return | subject.statGetMethod.impose('realCount',this) |;
+      return | subject.'statGetMethod'().impose('realCount',this); |;
     }
     else {
-      return | subject.statGetMethod.release(this) |;
+      return | subject.'statGetMethod'().release(this); |;
     }
   }
   
@@ -60,34 +237,37 @@ class packageName."entities" Entity \Object Source {
     String asList = asVariable + "s";
 	outputClass +=
 	  Boolean has(inputClass->Id "findId"){
-	    for inputClass asVariable : asList.getAll() {
-		  if asVariable.getId() == "findId" {
+	    for inputClass 'asVariable' : 'asList'.getAll() {
+		  if 'asVariable'.getId() == "findId" {
 			return true;
 		  }
 		}
+		return false;
 	  }
 	outputClass +=
-	  void gain(inputClass asVariable, Source "source"){
-	    asList.add("source", asVariable);
+	  void gain(inputClass 'asVariable', Source "source"){
+	    'asList'.add("source", 'asVariable');
 	  }
-	 
+	
 	String errorMessage = inputClass.getName() + ":\"+removeId+\"  not found!";
 	outputClass +=
 	  void lose(inputClass->Id "removeId", Source "source"){
 	    ~inputClass "toRemove" = null;
-	    for inputClass asVariable : asList.getFrom("source") {
-	      if asVariable.getId() == "removeId" {
-	        "toRemove" = asVariable; 
+	    for inputClass 'asVariable' : 'asList'.getFrom("source") {
+	      if 'asVariable'.getId() == "removeId" {
+	        "toRemove" = 'asVariable'; 
 	      }
 	    }
 	    if "toRemove" == null {
-	      throw errorMessage;
+	      throw 'errorMessage';
 	    }
 	    else {
-	      asList.remove("source","toRemove");
+	      'asList'.remove("source","toRemove");
 	    }
 	  }
 	\createListMap(Source, inputClass);
-	outputClass += Lists->Maps->Source asList
+	String sources = "Sources";
+	String inputName = "_" + inputClass.getName();
+	outputClass += Lists->Maps->\sources->\inputName 'asList'
   }
 }
