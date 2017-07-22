@@ -218,12 +218,12 @@ entityBrace-s are Braced
 	[{,}] as ENTITY_DEFINITION with entity_definition*
 
 entity_declaration
-	NEWLINE* (NAME+) as entityName NEWLINE* ENTITY_DEFINITION
+	NEWLINE* (NAME as entityName+) NEWLINE* ENTITY_DEFINITION
 entity_definition
 	NEWLINE
 	COMMENTS
+	(hero_stat INTEGER as left (DASH INTEGER as right)?) as statRange (PIPE hero_stat INTEGER as left (DASH INTEGER as right)?) as statRange*
 	affinity_name
-	(hero_stat (range|num)) as statRange (PIPE hero_stat (range|num)) as statRange*
 
 #TILES
 tile_name-s are empty
@@ -239,6 +239,7 @@ tileToken-s
 	"." as DOT
 	"+" as PLUS
 	"-" as MINUS
+	"<" as EXTENDS
 	"(" as OPEN_PARA
 	")" as CLOSE_PARA
 tileBrace-s are Braced
@@ -246,11 +247,9 @@ tileBrace-s are Braced
 tileImport-s are Import
 	[><<\"environments/tiles/\",tile_file_name,\".tile\">>\n] as IMPORT_TILE from (NEWLINE|COMMENTS|tile_declaration)*; with TILE_FILE TILE
 tile_declaration
-	( NAME+ ) as tileName in tile_names OPEN_PARA NAME as symbolName in tile_symbols CLOSE_PARA tile_element*
+	NAME+ as tileName in tile_names (EXTENDS PATH)? OPEN_PARA NAME as symbolName in tile_symbols CLOSE_PARA tile_element*
 tile_element is silent
 	NEWLINE* COMMENTS
-	NEWTAB ( START DOT ) as start
-	NEWTAB ( PATH DOT ) as path
 	NEWTAB ( (PLUS|MINUS)+ entity_declaration ) as entity
 	NEWLINE+
 
@@ -279,7 +278,7 @@ map_header
 map_connection
 	CONNECTION OPEN_PARA tile_symbol as path_symbol CLOSE_PARA ( NEWTAB ( PLUS+ tile_symbol ) as benign_symbol | NEWLINE+ )*
 map_declaration
-	NEWLINE* (NAME+) as mapElementName? COLON NEWLINE* ( tile_symbol+ ) as line ( NEWTAB tile_symbol+) as line*
+	NEWLINE* (NAME as mapElementName*) COLON NEWLINE* ( tile_symbol+ ) as line ( NEWTAB tile_symbol+) as line*
 
 #GENERAL
 generalToken-s

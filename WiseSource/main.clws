@@ -48,7 +48,7 @@ import events/events.clws
 	root : imports : import_any {
 		imports : import_events : IMPORT_EVENT {
 			import_events : element : event_declaration { 
-				\EventsClass.declaration(element);
+				Events.declaration(element);
 			}
 		}
 	}
@@ -58,6 +58,8 @@ import events/events.clws
 	Items.setup(data);
 	Entity.setup(data);
 	Skills.setup(data);
+	Environment.setup(data);
+	Tile.setup(data);
 	root : imports : import_any {
 		\importAny(imports);
 	}
@@ -66,7 +68,7 @@ import events/events.clws
 > void importAny(IToken import_any){
 	import_any : import_events : IMPORT_EVENT {
 		import_events : element : event_declaration {
-#>			\events.generateDeclaration(element);#
+			Events.declaration(element);
 		}
 	}
 	import_any : import_items : IMPORT_ITEM {
@@ -101,6 +103,9 @@ import events/events.clws
 		import_conditions : element : condition_declaration {
 			Conditions.declaration(element);
 		}
+	}
+	import_any : import_map : IMPORT_MAP {
+		Environment.declaration(import_map);
 	}
  }
 > String getTypeName(IToken nameToken){

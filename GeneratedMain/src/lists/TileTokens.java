@@ -25,9 +25,10 @@ public class TileTokens extends ParseList {
 	public static final ExactParser DOT = new ExactParser("DOT","tileTokens",".");
 	public static final ExactParser PLUS = new ExactParser("PLUS","tileTokens","+");
 	public static final ExactParser MINUS = new ExactParser("MINUS","tileTokens","-");
+	public static final ExactParser EXTENDS = new ExactParser("EXTENDS","tileTokens","<");
 	public static final ExactParser OPEN_PARA = new ExactParser("OPEN_PARA","tileTokens","(");
 	public static final ExactParser CLOSE_PARA = new ExactParser("CLOSE_PARA","tileTokens",")");
 
 	public static final ChoiceParser parser = new ChoiceParser(
-				NAME,WILD,NEWLINE,NEWTAB,TILE,PATH,START,DOT,PLUS,MINUS,OPEN_PARA,CLOSE_PARA);
+				NAME,WILD,NEWLINE,NEWTAB,TILE,PATH,START,DOT,PLUS,MINUS,EXTENDS,OPEN_PARA,CLOSE_PARA);
 }

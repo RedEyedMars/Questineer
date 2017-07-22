@@ -18,9 +18,13 @@ public class TileDeclaration extends ConcreteRule {
 		set(
 				new ChainParser(
 					new AddTokenToListParser(
-						
-							new MultipleParser(
-									ConditionTokens.NAME),"tileName","tile_names"),
+						new MultipleParser(
+							ConditionTokens.NAME),"tileName","tile_names"),
+					new OptionalParser(
+							
+								new ChainParser(
+									TileTokens.EXTENDS,
+									TileTokens.PATH)),
 					TileTokens.OPEN_PARA,
 					new AddTokenToListParser(
 						ConditionTokens.NAME,"symbolName","tile_symbols"),

@@ -27,20 +27,6 @@ public class TileElement extends ConcreteRule {
 					new AddTokenParser(
 						
 						new ChainParser(
-							TileTokens.START,
-							TileTokens.DOT),"start")),
-				new ChainParser(
-					ConditionTokens.NEWTAB,
-					new AddTokenParser(
-						
-						new ChainParser(
-							TileTokens.PATH,
-							TileTokens.DOT),"path")),
-				new ChainParser(
-					ConditionTokens.NEWTAB,
-					new AddTokenParser(
-						
-						new ChainParser(
 							new MultipleParser(
 									
 									new ChoiceParser(

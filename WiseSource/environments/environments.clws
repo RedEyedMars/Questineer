@@ -1,5 +1,9 @@
-class 'packageName'."environments" Environment {
+import tiles.clws
+
+class 'packageName'."environments" Environment \Object Loaddable Tickable {
   Map<Integer, Map<Integer,List<Entity>>> "entityZones" = new HashMap<Integer,Map<Integer,List<Entity>>>();
+  List<Tile> "tiles" = new ArrayList<Tile>();
+  List<Path> "paths" = new ArrayList<Path>();
   List<Entity> getZone(Integer "zoneX", Integer "zoneY"){
     if true &&! "entityZones".containsKey("zoneX") {
       "entityZones".put("zoneX", new HashMap<Integer, List<Entity>>());
@@ -155,9 +159,21 @@ class 'packageName'."environments" Environment {
         "parent".getZone("zoneX","zoneY").remove("host");
       }
       "zoneX" = "(int)(float)xDirection" / 1000;
-      "zoneY" = "(int)(float)xDirection" / 1000;
+      "zoneY" = "(int)(float)yDirection" / 1000;
       "locationX" = "xDirection" - "zoneX" * 1000;
       "locationY" = "yDirection" - "zoneY" * 1000;
+      "parent".getZone("zoneX","zoneY").add("host");
+      "zonified" = true;
+    }
+    void moveTo(Environment->Position "otherPosition"){
+      if "zonified" {
+        "parent".getZone("zoneX","zoneY").remove("host");
+      }
+      "zoneX" = "otherPosition"."zoneX";
+      "zoneY" = "otherPosition"."zoneY";
+      "locationX" = "otherPosition"."locationX";
+      "locationY" = "otherPosition"."locationY";
+      "parent" = "otherPosition"."parent";
       "parent".getZone("zoneX","zoneY").add("host");
       "zonified" = true;
     }
@@ -222,189 +238,174 @@ class 'packageName'."environments" Environment {
       "zonified" = true;
     }
   }
-  class 'packageName'."environments" Tile Environment->Position {
-    Float "width" = 1f;
-    Float "height" = 1f;
-    Boolean isWithin(Position "otherPosition"){
-      return \super.isWithin("otherPosition", "width"/4f \+ "height"/4f, \Math.PI * 2.0, 0.0);
+  interface 'packageName'."environments" FactoryHelper {
+    void populate(Environment "client", Integer "zoneX", Integer "zoneY", Float "locationX", Float "locationY"){}
+  }
+  interface 'packageName'."environments" Factory {
+    Environment create(){}
+  }
+  void load(){
+    ~Integer "index" = 0;
+    while "index" < "tiles".size() {
+      "tiles".get("index").load();
+      "index" \+= 1;
+    }
+    for Integer "xZone" : "entityZones".keySet() {
+      for Integer "yZone" : "entityZones".keySet() {
+		List<Entity> "entityZone" = "entityZones".get("xZone").get("yZone");
+		"index" = 0;
+        while "index" < "entityZone".size() {
+          "entityZone".get("index").load();
+          "index" \+= 1;
+        }
+      }
+    }
+  }
+  void tick(Double "millisSinceLastFrame"){
+    ~Integer "index" = 0;
+    while "index" < "tiles".size() {
+      "tiles".get("index").tick("millisSinceLastFrame");
+      "index" \+= 1;
+    }
+    for Integer "xZone" : "entityZones".keySet() {
+      for Integer "yZone" : "entityZones".keySet() {
+		List<Entity> "entityZone" = "entityZones".get("xZone").get("yZone");
+		"index" = 0;
+        while "index" < "entityZone".size() {
+          "entityZone".get("index").tick("millisSinceLastFrame");
+          "index" \+= 1;
+        }
+      }
+    }
+  }
+> void setup(ParseContext data){
+    Class factoryHelper = Environment->FactoryHelper;
+    Environment += List<factoryHelper> "helpers" = new ArrayList<factoryHelper>()
+  }
+> void declaration(IToken declarationToken){
+    String mapName = 'declarationToken->"map_header"->"mapName"';
+    
+    Environments += class 'packageName'."environments" mapName Environment {
+    }
+    Environments->\mapName += class 'packageName'."environments" Factory \Object Environment->Factory {
+        Environment create(){
+          return new Environments->'mapName'();
+        }
+      }
+    Environments->*"createEnvironment".prependToBody(|
+      if "environmentName".equals(''mapName'') {
+        return new Environments->'mapName'();
+      }|);
+    Map<String, String> tileSymbol = new HashMap<String, String>();
+    Map<String, String> pathSymbol = new HashMap<String, String>();
+    declarationToken : element : map_header {
+      element : atom : IMPORT_TILE {
+        atom : quark : tile_declaration {
+          StringBuilder tileNameBuilder = new StringBuilder();
+          IToken tileNameToken = quark->"tileName";
+          tileNameToken : energy : NAME {
+            tileNameBuilder.append('energy'.trim());
+          }
+          String tileName = mapName+'tileNameBuilder'; 
+          Class extendsClass;
+          if quark->"PATH" != null {
+            extendsClass = Path;
+            pathSymbol.put('quark->"symbolName"',tileName);
+          }
+          else {
+            extendsClass = Tile;
+          }
+          tileSymbol.put('quark->"symbolName"',tileName);
+          Tiles += class 'packageName'."environments" tileName extendsClass {
+          }
+          Tiles->*"createTile".prependToBody({
+            if "tileName".equals(''tileName'') {
+              return new Tiles->\tileName(); 
+            }
+          });
+          Tiles->\tileName += class 'packageName'."environments" Factory \Object Tile->Factory {
+              Tile create(){
+                return new Tiles->'tileName'();
+              }
+            }
+          quark : energy : entity {            
+            Class entityFactory = Entities.declaration(energy->"entity_declaration");
+            energy : quanta : PLUS {
+              Tiles->'tileName'->*.prependToBody(|"onTickEntityFactories".add(new entityFactory());|);
+            }
+            energy : quanta : MINUS {
+              Tiles->'tileName'->*.prependToBody(|"onLoadEntityFactories".add(new entityFactory());|);
+            }
+          }
+          
+        }
+      }
+    }
+    ~Integer mapIndex = 1;
+    declarationToken : element : map_declaration {
+      String mapElementName;
+      if element->"mapElementName" != null {
+        StringBuilder mapElementNameBuilder = new StringBuilder();
+        element : atom : mapElementName {
+          mapElementNameBuilder.append('atom');
+        }
+        mapElementName = mapElementNameBuilder.toString();
+      }
+      else {
+        mapElementName = mapName + mapIndex;
+        mapIndex \+= 1;
+      }
+      Environments->\mapName += class 'packageName'."environments" mapElementName \Object FactoryHelper {
+        void populate(Environment "client", Integer "zoneX", Integer "zoneY", Float "locationX", Float "locationY"){
+        }
+      } 
+      Class mapElementClass = Environments->\mapName->\mapElementName;
+      Environments->\mapName->*.prependToBody(|"helpers".add(new mapElementClass());|);
+      ~Integer yIndex = 0;
+      Map<Integer, Map<Integer, String>> knownPaths = new HashMap<Integer, Map<Integer, String>>();
+      element : atom : line {
+        ~Integer xIndex = 0;
+        atom : quark : tile_symbols {
+          Integer xValue = xIndex;
+          Integer yValue = yIndex;
+          String subTileName = 'quark'+'xValue'+'yValue';
+          String tileJustName = 'quark';
+          if pathSymbol.containsKey('quark') {
+            mapElementClass.getMethod("populate").appendToBody({
+              Path 'subTileName' = new Tiles->'tileSymbol.get(tileJustName)'("zoneX","zoneY","locationX" \+ 'xValue',"locationY" \+ 'yValue' ,"client");
+              "client"."tiles".add('subTileName');
+			  "client"."paths".add('subTileName');
+			});
+			if true &&! knownPaths.containsKey(xValue) {
+			  knownPaths.put(xValue, new HashMap<Integer, String>());
+			}
+			knownPaths.get(xValue).put(yValue,subTileName);
+			if knownPaths.get(xValue).containsKey(yValue - 1 ) {
+			  mapElementClass.getMethod("populate").appendToBody({
+                'subTileName'.setUp('knownPaths.get(xValue).get(yValue - 1)');
+			  });
+			}
+			if knownPaths.containsKey(xValue - 1) && knownPaths.get(xValue - 1).containsKey(yValue) {
+			  mapElementClass.getMethod("populate").appendToBody({
+                'subTileName'.setLeft('knownPaths.get(xValue - 1).get(yValue)');
+			  });
+			}
+          }
+          else {
+            mapElementClass.getMethod("populate").appendToBody({
+              Tile 'subTileName' = new Tiles->'tileSymbol.get(tileJustName)'("zoneX","zoneY","locationX" \+ 'xValue',"locationY" \+ 'yValue' ,"client");            
+              "client"."tiles".add('subTileName');
+            });
+          }
+          xIndex \+= 1; 
+        }
+        yIndex \+= 1;
+      }
     }
   }
 }
-
-class 'packageName'."environments" Path Environment->Tile{
-  Path "leftPath" = null;
-  Path "rightPath" = null;
-  Path "upPath" = null;
-  Path "downPath" = null;
-  
-  Boolean "isStop" = false;
-    
-  Path step(Entity "stepper", Path "next"){
-    Float "speed" = "stepper".getWalkingSpeed();
-    if "next" == "leftPath" {
-      "stepper".getLocation().move(-1f * "speed", 0f);
-    }
-    else if "next" == "rightPath" {
-      "stepper".getLocation().move(1f * "speed", 0f);
-    } 
-    else if "next" == "upPath" {
-      "stepper".getLocation().move(0f, 1f * "speed");
-    }
-    else if "next" == "downPath" {
-      "stepper".getLocation().move(0f, -1f * "speed");
-    }
-    else {
-      Double "direction" = \getDirectionTo("next");
-      "stepper".getLocation().move(\Math.cos("direction") * "speed", \Math.sin("direction") * "speed"); 
-    }
-    if "next".isWithin("stepper".getLocation()) {
-      if "next".isStopper() {
-        "stepper".rememberIncomingPath(this,"next");
-      }
-      return "next";
-    }
-    else {
-      return this;
-    }
-  }
-  void setLeft(Path "newLeft"){
-    if "leftPath" != "newLeft" {
-      "leftPath" = "newLeft";
-      "newLeft".setRight(this);
-    }
-    \updateStatus();
-  }
-  void setRight(Path "newRight"){
-    if "rightPath" != "newRight" {
-      "rightPath" = "newRight";
-      "newRight".setLeft(this);
-    }
-    \updateStatus();
-  }
-  void setUp(Path "newUp"){
-    if "upPath" != "newUp" {
-      "upPath" = "newUp";
-      "newUp".setDown(this);
-   }
-   \updateStatus();
-  }
-  void setDown(Path "newDown"){
-    if "downPath" != "newDown" {
-      "downPath" = "newDown";
-      "newDown".setUp(this);
-    }
-    \updateStatus();
-  }
-  void \updateStatus(){
-    ~Integer "count" = 0;
-    if "leftPath" != null {
-      "count" \+= 1;
-    }
-    if "rightPath" != null {
-      "count" \+= 1;
-    }
-    if "upPath" != null {
-      "count" \+= 1;
-    }
-    if "downPath" != null {
-      "count" \+= 1;
-    }
-    "isStop" = "count" != 2; 
-  }
-  Boolean isStopper(){
-    return "isStop";
-  }
-  List<Way> getWaysTo(Path "goalPath"){
-    \TreeSet<Way> "ways" = new \TreeSet<Way>();
-    Way "firstWay" = new Way();
-    "firstWay".setGoal("goalPath");
-    "firstWay".add(this);
-    "ways".add("firstWay");
-    ~Integer "count" = 0;
-    List<Way> "result" = new ArrayList<Way>();
-    while "count" < 50 &&! "ways".isEmpty() {
-      "count" \+= 1;
-      Way "way" = "ways".pollFirst(); 
-      if "way".at("goalPath"){
-        "result".add("way");
-      }
-      else {
-        Path "currentPath" = "way".get("way".size() - 1);
-        if "currentPath"."leftPath" != null {
-          Way "newWay" = new Way("way");
-          if "newWay".add("currentPath"."leftPath") {
-            "ways".add("newWay");
-          }
-        }
-        if "currentPath"."rightPath" != null {
-          Way "newWay" = new Way("way");
-          if "newWay".add("currentPath"."rightPath") {
-            "ways".add("newWay");
-          }
-        }
-        if "currentPath"."upPath" != null {
-          Way "newWay" = new Way("way");
-          if "newWay".add("currentPath"."upPath") {
-            "ways".add("newWay");
-          }
-        }
-        if "currentPath"."downPath" != null {
-          Way "newWay" = new Way("way");
-          if "newWay".add("currentPath"."downPath") {
-            "ways".add("newWay");
-          }
-        }
-      }
-    }
-    return "result";
-  }
-  class 'packageName'."environments" Way ArrayList<Path> \Comparable<Way>{
-    HashSet<Path> "checkSet";
-    Path "goal";
-    Double "distanceToGoal" = 0.0;
-    Way *(Way "parentWay"){
-      "goal" = "parentWay".getGoal();
-      for Path "path":"parentWay" {
-        \add("path");
-      }
-      "distanceToGoal" = "goal".getDistanceTo(\get(\size() - 1)); 
-    }
-    void setGoal(Path "newGoal"){
-      "goal" = "newGoal";
-    }
-    Boolean at(Path "destination"){
-      if \isEmpty() {
-        return false;
-      }
-      else {
-        if \get(\size() - 1).isStopper() {
-          return true;
-       }
-       return \get(\size() - 1) == "destination";
-     }
-   }
-   \boolean add(Path "newPath"){
-      if "checkSet".add("newPath") {
-        "distanceToGoal" = "goal".getDistanceTo("newPath"); 
-        return \super.add("newPath");
-      }
-      else {
-        return false;
-      }
-    }
-    \int compareTo(Way "otherWay") {
-      Double "distance" = "otherWay".getDistanceToGoal() - "distanceToGoal";
-      if "(int)(double)distance" == 0 {
-        if "otherWay".size() == \size() && "checkSet".containsAll("otherWay".getCheckSet()) {
-          return 0;
-        }
-        else {
-          return 1;
-        }
-      }
-      else {
-        return "(int)(double)distance";
-      }
-    }
+class 'packageName'."environments" Environments {
+  @Environment createEnvironment(String "environmentName"){
+    return null;
   }
 }

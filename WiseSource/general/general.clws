@@ -1,14 +1,28 @@
 
 > Set<String> declaredCritSet = new HashSet<String>();
 > Set<String> declaredListSet = new HashSet<String>();
-interface 'packageName'."misc" Source {
+interface 'packageName'."misc"."interfaces" Listenable {
+  void listen(Event "event"){}
+}
+interface 'packageName'."misc"."interfaces" Source {
+}
+interface 'packageName'."misc"."interfaces" Loaddable {
+  void load(){}
+}
+interface 'packageName'."misc"."interfaces" Tickable {
+  void tick(Double "millisSinceLastFrame"){}
 }
 class 'packageName'."misc" Range {
   Float "left" = 0f;
   Float "right" = 0f;
   
   >String floatCast = "(float)(int)";
-  
+  @Integer getIntegerBetween(Integer "bottom", Integer "top"){
+    
+    Integer "difference" = "top" - "bottom";
+    Double  "result" = "difference" * \Math.random() + "bottom";
+    return "(int)(double)result";
+  }
   Range *(Integer "initialLeft", Integer "initialRight"){
     "left" = 'floatCast+"initialLeft"';
     "right" = 'floatCast+"initialRight"';
@@ -112,9 +126,9 @@ class 'packageName'."misc" Criteria<TypeName> {
             mode = 2;
           }
       }
-    if      mode == 0 { return |if header `body`                               |; }
-    else if mode == 1 { return |if header `body` else               `elseBody` |; }
-    else if mode == 2 { return |if header `body` else if elseHeader `elseBody` |; }
+    if      mode == 0 { return |if `header` `body`                                 |; }
+    else if mode == 1 { return |if `header` `body` else                 `elseBody` |; }
+    else if mode == 2 { return |if `header` `body` else if `elseHeader` `elseBody` |; }
     else              { return null;                                              }
   }
 
@@ -170,7 +184,7 @@ class 'packageName'."misc" Criteria<TypeName> {
  	requirementToken : quanta : require_stat {
  	  String statName = 'quanta->"hero_stats"'.toLowerCase();
  	  String methodName = "get"+^statName;
- 	  Statement innerHead = |candidate.'methodName'()."getValue"()|;
+ 	  Statement innerHead = |`candidate`.'methodName'()."getValue"()|;
  	  ~String operator = 'quanta->"ORDINAL"';
  	  if quanta->"NOT" != null && showAsTrue || quanta->"NOT" == null &&! showAsTrue{
  	  	operator = \negateOperator(operator);
@@ -181,16 +195,16 @@ class 'packageName'."misc" Criteria<TypeName> {
     }
 	requirementToken : quanta : require_trait {
 	  Statement id = Traits.getId(^quanta->"trait_names");
-	  Statement innerHead = |candidate."has"(id)|;
-	  if quanta->"NOT" != null {> innerHead.negate();}
-	  if showAsTrue == false {> innerHead.negate();}
+	  Statement innerHead = |`candidate`."has"(`id`)|;
+	  if quanta->"NOT" != null { innerHead.negate();}
+	  if showAsTrue == false { innerHead.negate();}
 	  requireHeader.add(innerHead);
     } 
     requirementToken : quanta : require_attack {
 	  Statement id = Attacks.getId(^quanta->"attack_names");
-	  Statement innerHead = |candidate."has"(id)|;
-	  if quanta->"NOT" != null {> innerHead.negate();}
-	  if showAsTrue == false {> innerHead.negate();}
+	  Statement innerHead = |`candidate`."has"(`id`)|;
+	  if quanta->"NOT" != null { innerHead.negate();}
+	  if showAsTrue == false { innerHead.negate();}
 	  requireHeader.add(innerHead);
     }
 	return requireHeader;
@@ -331,18 +345,18 @@ class 'packageName'."misc" Criteria<TypeName> {
     }
  	if acquisitionToken->"operator"->"GAINS" != null {
  	  if forGainBody {
- 	  	return |subject.\gain(gainObj,'sourceName');|;
+ 	  	return |`subject`.\gain(`gainObj`,'sourceName');|;
 	  }
  	  else {
- 		return |subject.\lose(id,'sourceName');|;
+ 		return |`subject`.\lose(`id`,'sourceName');|;
 	  }
 	}
 	else {
  	  if forGainBody {
- 		return |subject.\lose(id,'sourceName');|;
+ 		return |`subject`.\lose(`id`,'sourceName');|;
 	  }
  	  else {
- 		return |subject.\gain(gainObj,'sourceName');|;
+ 		return |`subject`.\gain(`gainObj`,'sourceName');|;
 	  }
 	}
   }
@@ -365,7 +379,7 @@ class 'packageName'."misc" Criteria<TypeName> {
 	String listName = listClass.getName()+ "List";
 	if declaredListSet.add(listName) {
 	  Lists += class 'packageName'."misc" listName ArrayList<listClass> {
-	    'listName' *(listClass... "elements" ){
+	    'listName' *( listClass... "elements" ){
 	      \super(Arrays.asList("elements"));
 	    }
 	  }
@@ -387,7 +401,7 @@ class 'packageName'."misc" Criteria<TypeName> {
 	String fullName  = "Maps."+leftName+"."+rightName;
 	if declaredListSet.add(fullName) {
 	  if Lists->Maps->\leftName == null{
-	    Lists->Maps += class 'leftClass.getPackage()' leftName {}
+	    Lists->Maps += class 'packageName'."misc" leftName {}
 	  }
 	  Lists->Maps->\leftName  +=	
 	    class 'packageName'."misc" rightName HashMap<leftClass, LinkedList<rightClass>> {

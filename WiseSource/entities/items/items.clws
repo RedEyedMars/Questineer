@@ -58,10 +58,10 @@ class 'packageName'."entities"."items" Items {
 	Context loseContext = Events.addToEventMethod(loseEventName, itemClass, new Body ());
 	if gainToken->"boolean_statement" == null {
 	  Events.addToEventMethod(gainEventName, itemClass, {
-		"event".subject.\gain(new specificClass(), this);
+		"event".`subject`.\gain(new specificClass(), this);
 	  });
 	  Events.addToEventMethod(loseEventName, itemClass, {
-		"event".subject.\lose(specificClass."id",\this);
+		"event".`subject`.\lose(specificClass."id",\this);
 	  });
 	}
 	else {
@@ -69,13 +69,13 @@ class 'packageName'."entities"."items" Items {
 		Statement gainHeader = \getBooleanStatement(atom, gainContext);
 		Statement loseHeader = \getBooleanStatement(atom, loseContext);
 		Events.addToEventMethod(gainEventName, itemClass, {
-		  if `\getBooleanStatement(atom, false, gainContext)` &&! "event".subject.\has(specificClass."id") {
-			"event".subject.\gain(new specificClass(), \this);
+		  if `\getBooleanStatement(atom, false, gainContext)` &&! "event".`subject`.\has(specificClass."id") {
+			"event".`subject`.\gain(new specificClass(), \this);
 		  }
 	    });
 		Events.addToEventMethod(loseEventName, itemClass, {
-			if `\getBooleanStatement(atom, true, gainContext)` && "event".subject.\has(specificClass."id") {
-				"event".subject.\lose(specificClass."id",\this);
+			if `\getBooleanStatement(atom, true, gainContext)` && "event".`subject`.\has(specificClass."id") {
+				"event".`subject`.\lose(specificClass."id",\this);
 			}
 		});
 	  }

@@ -19,11 +19,10 @@ public class MapDeclaration extends ConcreteRule {
 				new ChainParser(
 					new ManyParser(
 							ConditionTokens.NEWLINE),
-					new OptionalParser(
-							new AddTokenParser(
-								
-									new MultipleParser(
-											ConditionTokens.NAME),"mapElementName")),
+					
+							new ManyParser(
+									new AddTokenParser(
+										ConditionTokens.NAME,"mapElementName")),
 					GeneralTokens.COLON,
 					new ManyParser(
 							ConditionTokens.NEWLINE),

@@ -1,7 +1,4 @@
-Start(S)
-	Start.
-Path(P)
-	Path.
+Path < Path(P)
 Grass(g)
 Minor Chest(c)
 Major Chest(C)

@@ -34,5 +34,7 @@ die
 	Source source
 	Entity victim
 
+load
+	Entity host
 tick
 	Entity host

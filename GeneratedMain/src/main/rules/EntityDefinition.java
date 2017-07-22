@@ -24,20 +24,29 @@ public class EntityDefinition extends ConcreteRule {
 						
 						new ChainParser(
 							new ListNameElementParser("hero_stats"),
-							
-							new ChoiceParser(
-									Rules.range,
-									Rules.num)),"statRange"),
+							new AddTokenParser(
+								GeneralTokens.INTEGER,"left"),
+							new OptionalParser(
+									
+										new ChainParser(
+											GeneralTokens.DASH,
+											new AddTokenParser(
+												GeneralTokens.INTEGER,"right")))),"statRange"),
 					new ManyParser(
 							new AddTokenParser(
 								
 								new ChainParser(
 									EntityTokens.PIPE,
 									new ListNameElementParser("hero_stats"),
-									
-									new ChoiceParser(
-											Rules.range,
-											Rules.num)),"statRange")))));
+									new AddTokenParser(
+										GeneralTokens.INTEGER,"left"),
+									new OptionalParser(
+											
+												new ChainParser(
+													GeneralTokens.DASH,
+													new AddTokenParser(
+														GeneralTokens.INTEGER,"right")))),"statRange"))),
+					new ListNameElementParser("affinity_names")));
 
 	}
 

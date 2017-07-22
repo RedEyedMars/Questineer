@@ -10,7 +10,47 @@ class 'packageName'."misc" Int {
     "value" = "newValue";
   }
 }
-class 'packageName'."entities" Entity \Object Source {
+class 'packageName'."entities" Entities {
+  @Entity createEntity(String "entityName"){
+    return null;
+  } 
+> Class declaration(IToken declarationToken){
+    StringBuilder entityNameBuilder = new StringBuilder();
+	declarationToken : element : entityName {
+	  entityNameBuilder.append('element');
+	}
+	String entityName = entityNameBuilder.toString();
+    Entities += class 'packageName'."entities" entityName Entity {
+    }
+    Entities->\entityName += class 'packageName'."entities" Factory \Object Entity->Factory {
+        Entity create(){
+          return new Entities->'entityName'();
+        }
+      }
+    declarationToken : element : entity_definition {
+      element : atom : affinity_names {
+    	Entities->'entityName'->*.appendToBody(| this.gain(new Affinities->'^atom'(), this); |);
+      }
+      element : atom : statRange {
+        String heroStatName = 'atom->"hero_stats"'.toLowerCase();
+        String leftBound = 'atom->"left"';
+        String rightBound;
+        if atom->"right" != null {
+          rightBound = 'atom->"left"';
+        }
+        else {
+          rightBound = leftBound; 
+        }
+    	Entities->'entityName'->*.appendToBody(| this.'heroStatName'.setValue(Range.getIntegerBetween('leftBound','rightBound')); |);
+      }
+    }
+    return Entities->'entityName'->Factory;
+  }
+}
+class 'packageName'."entities" Entity \Object Source Loaddable Tickable {
+  interface 'packageName'."entities" Factory {
+    Entity create(){}
+  }
   interface 'packageName'."entities" Modifier {
     Float use(Entity "inputEntity"){}
     void  decrease(Entity "inputEntity",Float "newValue"){}
@@ -76,6 +116,12 @@ class 'packageName'."entities" Entity \Object Source {
       "pathStoppers".put("in", new HashSet<Path>());
     }
     "pathStoppers".get("in").add("to");
+  }
+  void load(){
+    \on(new Events->\Load(this));
+  }
+  void tick(Double millisSinceLastFrame){
+    \on(new Events->\Tick(this));
   }
 > void setup(ParseContext data){
 	List<String> namesToAdd = new ArrayList<String>();
@@ -225,10 +271,10 @@ class 'packageName'."entities" Entity \Object Source {
       impositionToken : element : MINUS { count = count - 1; }
       impositionToken : element : amount { count = count + Integer.parseInt('element'); }
       Integer realCount = count;
-      return | subject.'statGetMethod'().impose('realCount',this); |;
+      return | `subject`.'statGetMethod'().impose('realCount',this); |;
     }
     else {
-      return | subject.'statGetMethod'().release(this); |;
+      return | `subject`.'statGetMethod'().release(this); |;
     }
   }
   
