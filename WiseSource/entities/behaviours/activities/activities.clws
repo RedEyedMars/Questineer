@@ -1,0 +1,116 @@
+class 'packageName'."entities"."behaviours"."activities" Activity \Object Source{
+  class Id // {
+  }
+  interface Factory // {
+    Activity create(){}
+  }
+  ~String name = null;
+  ~String description = null;
+  ~Map<Path,Set<Path>> pathStoppers = new HashMap<Path,Set<Path>>();
+  ~Entity towardEntity = null;
+  ~Tile   towardTile = null;
+  ~Float  distanceToTarget = 0f;
+  ~Boolean isChasing = false;
+  void setTarget(Entity target, Float distance){
+    towardEntity = target;
+    distanceToTarget = distance;
+  }
+  void setTarget(Tile target, Float distance){
+    towardTile = target;
+    distanceToTarget = distance;
+  }
+  void rememberIncomingPath(Path in, Path to){
+    if pathStoppers.containsKey(in){
+      pathStoppers.put(in, new HashSet<Path>());
+    }
+    pathStoppers.get(in).add(to);
+  }
+  void step(Entity host){
+    if isChasing {
+      if towardEntity != null {
+        host.getLocation().step(host.getWalkingSpeed(),towardEntity.getLocation());
+        if host.getLocation().getDistanceTo(towardEntity.getLocation()) < distanceToTarget {
+          isChasing = false;
+          towardEntity = null;
+        }
+      }
+      else if towardTile != null {
+        host.getLocation().step(host.getWalkingSpeed(),towardTile);
+        if host.getLocation().getDistanceTo(towardTile) < distanceToTarget {
+          isChasing = false;
+          towardTile = null;
+        }
+      }
+    }
+    else {
+      if host.getFocusSkill()==null || "usables".containsKey(host.getFocusSkill().getId()) == false || host.getFocusSkill().use(host,this) == false {
+        for Usable usable : "usables" {
+          if usable!=host.getFocusSkill() && usable.use(host,this) {
+            return void;
+          }
+        }
+        isChasing = true;
+        Float distance = Float.MAX_VALUE;
+        Entity targetEntity = null;
+        for Usable usable : "usables" {
+          if usable.canChase() {
+            Float range = usable.getRange(host);
+            Entity potentialEntity = host.getLocation().getClosestEntity(usable.getTargetCriteria());
+            if potentialEntity!=null&&potentialEntity.getLocation().getDistanceTo(host.getLocation()) < distance {
+              distance = range;
+              targetEntity = potentialEntity;
+            }
+          }
+        }
+        if targetEntity != null {
+          \setTarget(targetEntity, distance);
+        }
+        else {
+          host.stepNextActivity();
+        }
+      }
+    }
+  }
+  Activity->Id getId(){
+    return null;
+  }
+}
+class 'packageName'."entities"."behaviours"."activities" Activities {
+  @Activity create(String activityName){
+    return null;
+  }
+> void setup(ParseContext data){
+    Entity.addGainLoss(Usable,Activity);
+  }
+> void declaration(IToken declarationToken){
+    String activityName = ^declarationToken->"activityName";
+    String description = 'declarationToken->"description"';
+    Activities += class activityName / Activity / {
+      @Activity->Id id = new Activity->Id();
+      String getName(){
+        return ''activityName'';
+      }
+      String getDescription(){
+        return ''description'';
+      }
+      
+      Activity->Id getId(){
+        return id;
+      }
+    }
+    Entity.addGainLoss(Usable,Activities->'activityName');
+    Activities->*"create".prependToBody({
+      if "activityName".equals(''activityName'') {
+        return new Activities->'activityName'(); 
+      }
+    });
+    Entity += ~Activities->'activityName' 'activityName+"Activity"' 
+    declarationToken : element : className {
+      String methodName = "gain["+'element'+",Source]";
+      String variableName = 'element'.toLowerCase();
+      Entity->*'methodName'.appendToBody({
+          'activityName+"Activity"'.gain('variableName',"source");
+        });
+    }
+  }
+}

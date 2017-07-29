@@ -9,7 +9,7 @@ class 'packageName'."entities"."items"."aspects" Aspect \Object Source {
 }
 class 'packageName'."entities"."items"."aspects" Aspects {
   
-  @Aspect createAspect(String "aspectName"){
+  @Aspect create(String "aspectName"){
     return null;
   }
   > void setup(ParseContext data){
@@ -33,7 +33,7 @@ class 'packageName'."entities"."items"."aspects" Aspects {
 	  }
 	  Aspects->\aspectName.addMethod(eventMethod);
 	}
-	Aspects.getMethod("createAspect").prependToBody(
+	Aspects.getMethod("create").prependToBody(
 	  | if ''aspectName''.equals("aspectName") {
 			return new Aspects->\aspectName();
 		} |);

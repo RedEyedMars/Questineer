@@ -18,7 +18,7 @@ public class ConditionElement extends ConcreteRule {
 		isSilent(true);
 		set(
 			new ChoiceParser(
-					ConditionTokens.NEWLINE,
+					AssociationTokens.NEWLINE,
 					Comments.COMMENTS,
 				new ChainParser(
 					ConditionTokens.REQUIRE,
@@ -34,7 +34,7 @@ public class ConditionElement extends ConcreteRule {
 									new OptionalParser(
 											
 												new ChainParser(
-													GeneralTokens.IF,
+													AssociationTokens.IF,
 													Rules.boolean_statement))),"chance_pair"),
 							new ManyParser(
 									new AddTokenParser(
@@ -45,7 +45,7 @@ public class ConditionElement extends ConcreteRule {
 											new OptionalParser(
 													
 														new ChainParser(
-															GeneralTokens.IF,
+															AssociationTokens.IF,
 															Rules.boolean_statement))),"chance_pair"))),"to_lose"),
 					new AddTokenParser(
 						

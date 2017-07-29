@@ -27,7 +27,7 @@ public class StatRange extends ConcreteRule {
 								new ChainParser(
 									
 									new ChoiceParser(
-											GeneralTokens.COMMA,
+											ActivityTokens.COMMA,
 											ConditionTokens.PLUS),
 									Rules.range,
 									new OptionalParser(

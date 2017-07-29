@@ -22,7 +22,7 @@ public class TraitImports extends ParseList {
 							new ManyParser(
 									
 									new ChoiceParser(
-											ConditionTokens.NEWLINE,
+											AssociationTokens.NEWLINE,
 											Comments.COMMENTS,
 											Rules.trait_declaration)));
 

@@ -22,7 +22,7 @@ public class TileImports extends ParseList {
 							new ManyParser(
 									
 									new ChoiceParser(
-											ConditionTokens.NEWLINE,
+											AssociationTokens.NEWLINE,
 											Comments.COMMENTS,
 											Rules.tile_declaration)));
 

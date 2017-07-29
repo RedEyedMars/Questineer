@@ -20,7 +20,7 @@ public class Base extends ConcreteRule {
 					new ManyParser(
 							
 							new ChoiceParser(
-									ConditionTokens.NEWLINE,
+									AssociationTokens.NEWLINE,
 									Comments.COMMENTS,
 									Rules.import_any)));
 

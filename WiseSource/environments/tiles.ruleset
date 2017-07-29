@@ -1,0 +1,27 @@
+#TILES
+tile_name-s are empty
+tile_symbol-s are empty
+tileToken-s
+	[[a-zA-Z_][a-zA-Z0-9_]*] as NAME
+	[.*] as WILD
+	"\n" as NEWLINE
+	"\n\t" as NEWTAB
+	"tile" as TILE
+	"Path" as PATH
+	"Start" as START
+	"." as DOT
+	"+" as PLUS
+	"-" as MINUS
+	"<" as EXTENDS
+	"(" as OPEN_PARA
+	")" as CLOSE_PARA
+tileBrace-s are Braced
+	[,.] as TILE_FILE with WILD as tile_file_name
+tileImport-s are Import
+	[><<\"environments/tiles/\",tile_file_name,\".tile\">>\n] as IMPORT_TILE from (NEWLINE|COMMENTS|tile_declaration)*; with TILE_FILE TILE
+tile_declaration
+	NAME+ as tileName in tile_names (EXTENDS PATH)? OPEN_PARA NAME as symbolName in tile_symbols CLOSE_PARA tile_element*
+tile_element is silent
+	NEWLINE* COMMENTS
+	NEWTAB ( (PLUS|MINUS)+ entity_declaration ) as entity
+	NEWLINE+

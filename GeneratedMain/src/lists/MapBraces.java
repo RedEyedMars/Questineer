@@ -17,7 +17,7 @@ public class MapBraces extends ParseList {
 
 	public static final BracedParser MAP_FILE = new BracedParser(
 							new AddTokenParser(
-								ConditionTokens.WILD,"map_file_name"),"MAP_FILE","mapBraces",",.");
+								AssociationTokens.WILD,"map_file_name"),"MAP_FILE","mapBraces",",.");
 
 	public static final ChoiceParser parser = new ChoiceParser(
 				MAP_FILE);

@@ -18,13 +18,13 @@ public class AffinityDeclaration extends ConcreteRule {
 		set(
 				new ChainParser(
 					new AddTokenToListParser(
-						ConditionTokens.NAME,"affinityName","affinity_names"),
+						AssociationTokens.NAME,"affinityName","affinity_names"),
 					new OptionalParser(
 							AffinityBraces.AFFINITY_DESCRIPTION),
 					new ManyParser(
 							
 							new ChoiceParser(
-									ConditionTokens.NEWLINE,
+									AssociationTokens.NEWLINE,
 									Comments.COMMENTS,
 								new ChainParser(
 									ConditionTokens.PLUS,

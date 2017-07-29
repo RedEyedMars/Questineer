@@ -17,10 +17,10 @@ public class AffinityBraces extends ParseList {
 
 	public static final BracedParser AFFINITY_FILE = new BracedParser(
 							new AddTokenParser(
-								ConditionTokens.WILD,"affinity_file_name"),"AFFINITY_FILE","affinityBraces",",.");
+								AssociationTokens.WILD,"affinity_file_name"),"AFFINITY_FILE","affinityBraces",",.");
 	public static final BracedParser AFFINITY_DESCRIPTION = new BracedParser(
 							new AddTokenParser(
-								ConditionTokens.WILD,"description"),"AFFINITY_DESCRIPTION","affinityBraces","\n\t,.");
+								AssociationTokens.WILD,"description"),"AFFINITY_DESCRIPTION","affinityBraces","\n\t,.");
 
 	public static final ChoiceParser parser = new ChoiceParser(
 				AFFINITY_FILE,AFFINITY_DESCRIPTION);

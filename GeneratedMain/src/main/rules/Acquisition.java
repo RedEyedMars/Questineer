@@ -38,7 +38,7 @@ public class Acquisition extends ConcreteRule {
 								new ChainParser(
 									GeneralTokens.FROM,
 									new AddTokenParser(
-										ConditionTokens.NAME,"source_name")))));
+										AssociationTokens.NAME,"source_name")))));
 
 	}
 

@@ -22,7 +22,7 @@ public class ItemImports extends ParseList {
 							new ManyParser(
 									
 									new ChoiceParser(
-											ConditionTokens.NEWLINE,
+											AssociationTokens.NEWLINE,
 											Comments.COMMENTS,
 											Rules.import_any,
 											Rules.item_declaration)));

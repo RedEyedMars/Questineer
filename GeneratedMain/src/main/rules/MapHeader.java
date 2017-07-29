@@ -18,7 +18,7 @@ public class MapHeader extends ConcreteRule {
 		set(
 				new ChainParser(
 					new AddTokenParser(
-						ConditionTokens.NAME,"mapName"),
+						AssociationTokens.NAME,"mapName"),
 					TileImports.IMPORT_TILE));
 
 	}

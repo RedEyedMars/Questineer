@@ -19,7 +19,8 @@ public class EntityTokens extends ParseList {
 	public static final RegexParser WILD = new RegexParser("WILD","entityTokens",".*");
 	public static final ExactParser NEWLINE = new ExactParser("NEWLINE","entityTokens","\n");
 	public static final ExactParser PIPE = new ExactParser("PIPE","entityTokens","|");
+	public static final ExactParser STAT = new ExactParser("STAT","entityTokens","stat");
 
 	public static final ChoiceParser parser = new ChoiceParser(
-				NAME,WILD,NEWLINE,PIPE);
+				NAME,WILD,NEWLINE,PIPE,STAT);
 }

@@ -17,10 +17,10 @@ public class AttackBraces extends ParseList {
 
 	public static final BracedParser ATTACK_FILE = new BracedParser(
 							new AddTokenParser(
-								ConditionTokens.WILD,"attack_file_name"),"ATTACK_FILE","attackBraces",",.");
+								AssociationTokens.WILD,"attack_file_name"),"ATTACK_FILE","attackBraces",",.");
 	public static final BracedParser ATTACK_DESCRIPTION = new BracedParser(
 							new AddTokenParser(
-								ConditionTokens.WILD,"description"),"ATTACK_DESCRIPTION","attackBraces","\n\t,.");
+								AssociationTokens.WILD,"description"),"ATTACK_DESCRIPTION","attackBraces","\n\t,.");
 
 	public static final ChoiceParser parser = new ChoiceParser(
 				ATTACK_FILE,ATTACK_DESCRIPTION);

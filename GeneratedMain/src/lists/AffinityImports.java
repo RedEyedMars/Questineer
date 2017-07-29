@@ -22,7 +22,7 @@ public class AffinityImports extends ParseList {
 							new ManyParser(
 									
 									new ChoiceParser(
-											ConditionTokens.NEWLINE,
+											AssociationTokens.NEWLINE,
 											Comments.COMMENTS,
 											Rules.affinity_declaration)));
 

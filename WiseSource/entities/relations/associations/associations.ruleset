@@ -1,0 +1,29 @@
+#ASSOCIATION
+association_name-s are empty
+associationToken-s
+	[[a-zA-Z_][a-zA-Z0-9_]*] as NAME
+	[.*] as WILD
+	"\n" as NEWLINE
+	"\n\t" as NEWTAB
+	"asos" as ASOS
+	"start" as START
+	"join" as JOIN
+	"on" as ON
+	"if" as IF
+	"association" as ASSOCIATION
+associationBrace-s are Braced
+	[,.] as ASSOCIATION_FILE with WILD as association_file_name 
+associationImport-s are Import
+	[><<\"entities/relations/associations/\",association_file_name,\".asos\">>\n] as IMPORT_ASSOCIATION from (NEWLINE|COMMENTS|association_declaration)*; with ASSOCIATION_FILE ASOS
+association_declaration
+	NAME as associationName in association_names (COMMENTS|association_element|NEWLINE )*
+association_element is silent
+	NEWTAB association_start
+	NEWTAB association_event
+	NEWTAB association_join
+association_start
+	START NAME as specificName ( ON event_name ) as onEvent
+association_join
+	JOIN NAME as specificName IF boolean_statement
+association_event
+	event_name BODY

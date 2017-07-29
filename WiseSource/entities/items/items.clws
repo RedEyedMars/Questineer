@@ -4,7 +4,7 @@ import aspects/aspects.clws
 class 'packageName'."entities"."items" Items {
   class 'packageName'."entities"."items" Id {
   }
-  @Item createItem(String "itemName"){
+  @Item create(String "itemName"){
   	return null;
   }
 > void setup(ParseContext data){
@@ -18,7 +18,7 @@ class 'packageName'."entities"."items" Items {
 		  @Items->Id \id = new Items->Id();
 		}
 	Items->\className->*.appendToBody({ "name" = ''itemToken->"itemName"''; });
-	Items->*"createItem".prependToBody({
+	Items->*"create".prependToBody({
 			if "itemName".equals(''className'') {
 				return new Items->\className();
 			}

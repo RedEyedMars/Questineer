@@ -1,0 +1,13 @@
+Wild
+	start default on load
+	join default if spawned in Forest
+HeroesGuild
+	start default on load
+	join default if spawned in Guild
+	joined {
+	  event->recruit.join(new Associations.Party(null, event->recruit->name + "\'s Party"))
+	}
+Party
+Hive
+Pack
+Cubs

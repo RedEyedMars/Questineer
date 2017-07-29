@@ -26,9 +26,9 @@ public class VariableCall extends ConcreteRule {
 								new ChainParser(
 									GeneralTokens.ACCESS,
 									new AddTokenParser(
-										ConditionTokens.NAME,"variableName")),
+										AssociationTokens.NAME,"variableName")),
 								new ChainParser(
-									TileTokens.DOT,
+									GeneralTokens.DOT,
 									Rules.method)))),
 					new AddTokenParser(
 						
@@ -41,8 +41,9 @@ public class VariableCall extends ConcreteRule {
 					
 					new ChoiceParser(
 							Rules.method,
+							Rules.variable_group,
 							new AddTokenParser(
-								ConditionTokens.NAME,"variableName"),
+								AssociationTokens.NAME,"variableName"),
 							GeneralBraces.QUOTE),
 					new ManyParser(
 							
@@ -50,9 +51,9 @@ public class VariableCall extends ConcreteRule {
 								new ChainParser(
 									GeneralTokens.ACCESS,
 									new AddTokenParser(
-										ConditionTokens.NAME,"variableName")),
+										AssociationTokens.NAME,"variableName")),
 								new ChainParser(
-									TileTokens.DOT,
+									GeneralTokens.DOT,
 									Rules.method))))));
 
 	}

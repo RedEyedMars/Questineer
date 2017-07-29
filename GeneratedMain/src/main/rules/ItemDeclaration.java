@@ -18,13 +18,13 @@ public class ItemDeclaration extends ConcreteRule {
 		set(
 				new ChainParser(
 					new AddTokenParser(
-						ConditionTokens.NAME,"itemName"),
+						AssociationTokens.NAME,"itemName"),
 					new ManyParser(
 							Rules.item_parameter),
 					new ManyParser(
 							
 								new ChainParser(
-									ConditionTokens.NEWTAB,
+									AssociationTokens.NEWTAB,
 									new ManyParser(
 											Rules.item_parameter)))));
 

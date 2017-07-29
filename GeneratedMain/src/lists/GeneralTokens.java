@@ -50,6 +50,10 @@ public class GeneralTokens extends ParseList {
 	public static final ExactParser FROM = new ExactParser("FROM","generalTokens","from");
 	public static final ExactParser THIS = new ExactParser("THIS","generalTokens","this");
 	public static final ExactParser ON = new ExactParser("ON","generalTokens","on");
+	public static final ExactParser IN = new ExactParser("IN","generalTokens","in");
+	public static final ExactParser OF = new ExactParser("OF","generalTokens","of");
+	public static final ExactParser WITH = new ExactParser("WITH","generalTokens","with");
+	public static final ExactParser SPAWNED = new ExactParser("SPAWNED","generalTokens","spawned");
 	public static final ExactParser IMPOSE = new ExactParser("IMPOSE","generalTokens","impose");
 	public static final ExactParser RELEASE = new ExactParser("RELEASE","generalTokens","release");
 	public static final ExactParser HAS = new ExactParser("HAS","generalTokens","has");
@@ -57,5 +61,5 @@ public class GeneralTokens extends ParseList {
 	public static final ExactParser NEW = new ExactParser("NEW","generalTokens","new");
 
 	public static final ChoiceParser parser = new ChoiceParser(
-				NAME,FLOAT,INTEGER,WILD,ORDINAL,COLON,SEMICOLON,DOTDOT,ACCESS,DOT,IF,ELSE,EQUALSIGN,EQUALS,NOTEQUALS,PLUS,MINUS,MULTIPLY,DIVIDE,AND,OR,NOT,PERCENT,NEWLINE,COMMA,DASH,TRUE,FALSE,NULL,CHANCE,GAINS,LOSES,FROM,THIS,ON,IMPOSE,RELEASE,HAS,RETURN,NEW);
+				NAME,FLOAT,INTEGER,WILD,ORDINAL,COLON,SEMICOLON,DOTDOT,ACCESS,DOT,IF,ELSE,EQUALSIGN,EQUALS,NOTEQUALS,PLUS,MINUS,MULTIPLY,DIVIDE,AND,OR,NOT,PERCENT,NEWLINE,COMMA,DASH,TRUE,FALSE,NULL,CHANCE,GAINS,LOSES,FROM,THIS,ON,IN,OF,WITH,SPAWNED,IMPOSE,RELEASE,HAS,RETURN,NEW);
 }

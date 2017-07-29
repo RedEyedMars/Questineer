@@ -1,13 +1,20 @@
+
+import behaviours/activities/activities.clws
+import behaviours/skills/skills.clws
+import behaviours/quests/quests.clws
 import items/items.clws
-import skills/skills.clws
 import mods/affinities/affinities.clws
 import mods/conditions/conditions.clws
 import mods/traits/traits.clws
+import relations/relations.clws
 
 class 'packageName'."misc" Int {
-  Integer "value" = 0;
-  void setValue(Integer "newValue"){
-    "value" = "newValue";
+  Integer value = 0;
+  void setValue(Integer newValue){
+    value = newValue;
+  }
+  void increase(Integer amount){
+    value \+= amount;
   }
 }
 class 'packageName'."entities" Entities {
@@ -30,6 +37,23 @@ class 'packageName'."entities" Entities {
     declarationToken : element : entity_definition {
       element : atom : affinity_names {
     	Entities->'entityName'->*.appendToBody(| this.gain(new Affinities->'^atom'(), this); |);
+      }
+      element : atom : event {
+        Context eventContext = Events.addToEventMethod('atom->"event_names"', Entities->'entityName', {});
+        Body eventBody = new Body ();
+        atom : quark : body_element {
+          eventBody.add(\getBodyElement(quark,eventContext));
+        }
+        Events.addToEventMethod('atom->"event_names"', Entities->'entityName', eventBody);
+      }
+      element : atom : skill {
+        Statement arguments = new Statement ();
+        arguments.set(",");
+        Context bodyContext = Entity.getContext();
+        atom : quark : statement {
+          arguments.add(\getStatement(quark,bodyContext));
+        }
+    	Entities->'entityName'->*.appendToBody(| this.gain(new Skills->'^atom->"skill_names"'(`arguments`), this); |);
       }
       element : atom : statRange {
         String heroStatName = 'atom->"hero_stats"'.toLowerCase();
@@ -79,11 +103,18 @@ class 'packageName'."entities" Entity \Object Source Loaddable Tickable {
 	void release(Source "source"){}
 	String getName(){}
   }
-  Float "weightHeld" = 0f;
-  Float "walkingSpeed" = 0.2f;
-  Lists->\ItemList "equippedItems";
-  Environment->Location "location" = new Environment->Location(-1001,-1001,1001f,1001f,null,this,0f,false);
-  Map<Path,Set<Path>> "pathStoppers" = new HashMap<Path,Set<Path>>();
+  String name = null;
+  ~Float "weightHeld" = 0f;
+  ~Float "walkingSpeed" = 0.2f;
+  ~Tile "spawn" = null;
+  ~\ItemList "equippedItems";
+  ~Skill focusSkill;
+  ~Environment->Location "location" = new Environment->Location(-1001,-1001,1001f,1001f,null,this);
+  ~\EntityMap->\_Reason "relationships";
+  ~Activity currentActivity = null;
+  ~Integer currentActivityIndex = -1;
+  List<Activity> activityList = new ArrayList<Activity>();
+  
   Float getItemDamage(){
     Float "sum" = 0f;
 	for Item "item" : "equippedItems" {
@@ -111,17 +142,43 @@ class 'packageName'."entities" Entity \Object Source Loaddable Tickable {
 	"weightHeld" = "weightHeld" \+ "item".getWeight().use(this);
 	"item".on(new Events->\Unequip(this,"item"));
   }
-  void rememberIncomingPath(Path "in", Path "to"){
-    if true &&! "pathStoppers".containsKey("in"){
-      "pathStoppers".put("in", new HashSet<Path>());
+  void rememberIncomingPath(Path in, Path to){
+    if currentActivity != null {
+      currentActivity.rememberIncomingPath(in,to);
     }
-    "pathStoppers".get("in").add("to");
   }
   void load(){
     \on(new Events->\Load(this));
   }
   void tick(Double millisSinceLastFrame){
+    if currentActivity==null &&! activityList.isEmpty() {
+      currentActivity = activityList.get(0);
+      currentActivityIndex = 0;
+    }
+    if currentActivity!=null {
+      currentActivity.step(this);
+    }
     \on(new Events->\Tick(this));
+  }
+  void join(Entity recruiter, Association newAssociation){
+    newAssociation.add(this);
+    \gain(newAssociation,recruiter);
+    \on(new Events->\Joined(recruiter, this));
+  }
+  void stepNextActivity(){
+    currentActivityIndex \+= 1;
+    if currentActivityIndex < activityList.size(){
+      Activity previousActivity = currentActivity;
+      Integer previousActivityIndex = currentActivityIndex;
+      currentActivity = activityList.get(currentActivityIndex);
+      currentActivity.step(this);
+      currentActivity = previousActivity;
+      currentActivityIndex = previousActivityIndex;
+    }
+    else {
+      currentActivity = null;
+      currentActivityIndex = -1;
+    }
   }
 > void setup(ParseContext data){
 	List<String> namesToAdd = new ArrayList<String>();
@@ -129,13 +186,20 @@ class 'packageName'."entities" Entity \Object Source Loaddable Tickable {
 	Map<String, Body > bodiesToAdd = new HashMap<String, Body >();
 	bodiesToAdd.put("hit", \onHitBody());
     Events.addEventMethods(Entity,bodiesToAdd);
+    
     Entity.addGainLoss(Condition,Entity);
-    Entity.addGainLoss(Attack,Entity);
     Entity.addGainLoss(Trait,Entity);
     Entity.addGainLoss(Affinity,Entity);
+    Entity.addGainLoss(Association,Entity);
+    Entity.addGainLoss(Skill,Entity);
+    Entity.addGainLoss(Attack,Entity);
+    Entity.addGainLoss(Support,Entity);
+    Entity.addGainLoss(Quest,Entity);
     
     \createList(Item);
     \createListMap(Source, Int);
+    \createMap(Entity, Relationship->Reason);
+    
     Set<String> statNames = data.getListElements("hero_stats");
     Parameters allStatList = new Parameters ();
     Body randomStatBody = {};
@@ -143,7 +207,7 @@ class 'packageName'."entities" Entity \Object Source Loaddable Tickable {
       String vName = statName.toLowerCase();
       Entity += class 'packageName'."entities" statName \Object Entity->Stat {
         Integer "value" = 0;
-        Lists->Maps->\Sources->\_Int "history";
+        ListMaps->\Sources->\_Int "history";
         void setValue(Integer "newValue"){
           "value" = "newValue";
         }
@@ -281,26 +345,48 @@ class 'packageName'."entities" Entity \Object Source Loaddable Tickable {
 > void addGainLoss(Class inputClass, Class outputClass){
     String asVariable = inputClass.getName().toLowerCase();
     String asList = asVariable + "s";
+    Statement getIdStatement;
+    if inputClass == Attack {
+      getIdStatement = | 'asVariable'.getAttackId() |;
+    }
+    else if inputClass == Support {
+      getIdStatement = | 'asVariable'.getSupportId() |;
+    }
+    else {
+      getIdStatement = | 'asVariable'.getId() |;
+    }
 	outputClass +=
 	  Boolean has(inputClass->Id "findId"){
 	    for inputClass 'asVariable' : 'asList'.getAll() {
-		  if 'asVariable'.getId() == "findId" {
+		  if `getIdStatement` == "findId" {
 			return true;
 		  }
 		}
 		return false;
 	  }
 	outputClass +=
+	  inputClass get(inputClass->Id "findId"){
+	    for inputClass 'asVariable' : 'asList'.getAll() {
+		  if `getIdStatement` == "findId" {
+			return 'asVariable';
+		  }
+		}
+		return null;
+	  }
+	outputClass +=
 	  void gain(inputClass 'asVariable', Source "source"){
 	    'asList'.add("source", 'asVariable');
 	  }
-	
+	outputClass +=
+	  void gain(inputClass 'asVariable'){
+	    'asList'.add(this, 'asVariable');
+	  }
 	String errorMessage = inputClass.getName() + ":\"+removeId+\"  not found!";
 	outputClass +=
 	  void lose(inputClass->Id "removeId", Source "source"){
 	    ~inputClass "toRemove" = null;
 	    for inputClass 'asVariable' : 'asList'.getFrom("source") {
-	      if 'asVariable'.getId() == "removeId" {
+	      if `getIdStatement` == "removeId" {
 	        "toRemove" = 'asVariable'; 
 	      }
 	    }
@@ -314,6 +400,6 @@ class 'packageName'."entities" Entity \Object Source Loaddable Tickable {
 	\createListMap(Source, inputClass);
 	String sources = "Sources";
 	String inputName = "_" + inputClass.getName();
-	outputClass += Lists->Maps->\sources->\inputName 'asList'
+	outputClass += ListMaps->\sources->\inputName 'asList'
   }
 }

@@ -27,7 +27,7 @@ public class Statement extends ConcreteRule {
 								new ChainParser(
 									Rules.operator,
 									new ManyParser(
-											ConditionTokens.NEWLINE),
+											AssociationTokens.NEWLINE),
 									Rules.statement))),
 				new ChainParser(
 					new OptionalParser(
@@ -38,7 +38,7 @@ public class Statement extends ConcreteRule {
 								new ChainParser(
 									Rules.operator,
 									new ManyParser(
-											ConditionTokens.NEWLINE),
+											AssociationTokens.NEWLINE),
 									Rules.statement)))));
 
 	}

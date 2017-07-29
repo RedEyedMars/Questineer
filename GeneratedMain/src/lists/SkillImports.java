@@ -18,11 +18,11 @@ public class SkillImports extends ParseList {
 	public static final ImportParser IMPORT_SKILL = new ImportParser(
 						new ChainParser(
 							SkillBraces.SKILL_FILE,
-							SkillTokens.SKLS),"IMPORT_SKILL","skillImports","><<\"entities/skills/\",skill_file_name,\".skls\">>\n",
+							SkillTokens.SKLS),"IMPORT_SKILL","skillImports","><<\"entities/behaviours/skills/\",skill_file_name,\".skls\">>\n",
 							new ManyParser(
 									
 									new ChoiceParser(
-											ConditionTokens.NEWLINE,
+											AssociationTokens.NEWLINE,
 											Comments.COMMENTS,
 											Rules.skill_declaration)));
 

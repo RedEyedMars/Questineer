@@ -1,0 +1,18 @@
+#AFFINITY
+affinity_name-s are empty
+affinityToken-s
+	[[a-zA-Z_][a-zA-Z0-9_]*] as NAME
+	[.*] as WILD
+	"\n" as NEWLINE
+	"\n\t" as NEWTAB
+	"afts" as AFTS
+	"+" as PLUS
+	"-" as MINUS
+	"affinity" as AFFINITY
+affinityBrace-s are Braced
+	[,.] as AFFINITY_FILE with WILD as affinity_file_name 
+	[\n\t,.] as AFFINITY_DESCRIPTION with WILD as description
+affinityImport-s are Import
+	[><<\"entities/mods/affinities/\",affinity_file_name,\".afts\">>\n] as IMPORT_AFFINITY from (NEWLINE|COMMENTS|affinity_declaration)*; with AFFINITY_FILE AFTS
+affinity_declaration
+	NAME as affinityName in affinity_names AFFINITY_DESCRIPTION? (NEWLINE|COMMENTS|PLUS affinity_name as strength_name|MINUS affinity_name as weakness_name )*

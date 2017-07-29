@@ -20,10 +20,10 @@ public class TileElement extends ConcreteRule {
 			new ChoiceParser(
 				new ChainParser(
 					new ManyParser(
-							ConditionTokens.NEWLINE),
+							AssociationTokens.NEWLINE),
 					Comments.COMMENTS),
 				new ChainParser(
-					ConditionTokens.NEWTAB,
+					AssociationTokens.NEWTAB,
 					new AddTokenParser(
 						
 						new ChainParser(
@@ -34,7 +34,7 @@ public class TileElement extends ConcreteRule {
 											ConditionTokens.MINUS)),
 							Rules.entity_declaration),"entity")),
 					new MultipleParser(
-							ConditionTokens.NEWLINE)));
+							AssociationTokens.NEWLINE)));
 
 	}
 

@@ -18,7 +18,7 @@ public class ConditionDeclaration extends ConcreteRule {
 		set(
 				new ChainParser(
 					new AddTokenToListParser(
-						ConditionTokens.NAME,"conditionName","condition_names"),
+						AssociationTokens.NAME,"conditionName","condition_names"),
 					new OptionalParser(
 							ConditionBraces.CONDITION_DESCRIPTION),
 					new ManyParser(

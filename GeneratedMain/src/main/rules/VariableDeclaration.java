@@ -17,9 +17,7 @@ public class VariableDeclaration extends ConcreteRule {
 	public void setup(){
 		set(
 				new ChainParser(
-					Rules.type_name,
-					new AddTokenParser(
-						ConditionTokens.NAME,"variableName"),
+					Rules.variable_header,
 					GeneralTokens.EQUALSIGN,
 					Rules.statement));
 

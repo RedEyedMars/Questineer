@@ -22,7 +22,7 @@ public class MapImports extends ParseList {
 							new ManyParser(
 									
 									new ChoiceParser(
-											ConditionTokens.NEWLINE,
+											AssociationTokens.NEWLINE,
 											Comments.COMMENTS,
 											Rules.map_header,
 											Rules.map_connection,

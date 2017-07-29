@@ -17,10 +17,10 @@ public class TraitBraces extends ParseList {
 
 	public static final BracedParser TRAITS_FILE = new BracedParser(
 							new AddTokenParser(
-								ConditionTokens.WILD,"trait_file_name"),"TRAITS_FILE","traitBraces",",.");
+								AssociationTokens.WILD,"trait_file_name"),"TRAITS_FILE","traitBraces",",.");
 	public static final BracedParser TRAIT_DESCRIPTION = new BracedParser(
 							new AddTokenParser(
-								ConditionTokens.WILD,"description"),"TRAIT_DESCRIPTION","traitBraces","\n\t,.");
+								AssociationTokens.WILD,"description"),"TRAIT_DESCRIPTION","traitBraces","\n\t,.");
 
 	public static final ChoiceParser parser = new ChoiceParser(
 				TRAITS_FILE,TRAIT_DESCRIPTION);

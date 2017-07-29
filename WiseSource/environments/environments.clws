@@ -1,9 +1,48 @@
 import tiles.clws
 
 class 'packageName'."environments" Environment \Object Loaddable Tickable {
-  Map<Integer, Map<Integer,List<Entity>>> "entityZones" = new HashMap<Integer,Map<Integer,List<Entity>>>();
-  List<Tile> "tiles" = new ArrayList<Tile>();
-  List<Path> "paths" = new ArrayList<Path>();
+  String name = null;
+  ~Map<Integer, Map<Integer,List<Entity>>> "entityZones" = new HashMap<Integer,Map<Integer,List<Entity>>>();
+  ~Map<Integer, Map<Integer,List<Tile>>> "tileZones" = new HashMap<Integer,Map<Integer,List<Tile>>>();
+  ~List<Tile> "tiles" = new ArrayList<Tile>();
+  ~List<Path> "paths" = new ArrayList<Path>();
+  List<Tile> getTiles(Environment->Position position){
+    if tileZones.containsKey(position.getZoneX())==false {
+      tileZones.put(position.getZoneX(), new HashMap<Integer, List<Tile>>());
+    }
+    if tileZones.get(position.getZoneX()).containsKey(position.getZoneY()) ==  false {
+      tileZones.get(position.getZoneX()).put(position.getZoneY(), new ArrayList<Tile>());
+    }
+    return tileZones.get(position.getZoneX()).get(position.getZoneY());
+  }
+  Tile getTile(Environment->Position position){
+    List<Tile> tiles = \getTiles(position);
+    for Tile tile:tiles {
+      if tile.isWithin(position) {
+        return tile;
+      }
+    }
+    return null;
+  }
+  Path getClosestPath(Environment->Position position){
+    List<Tile> tiles = \getTiles(position);
+    Double distance = Double.MAX_VALUE;
+    Path potentialPath = null;
+    for Tile tile:tiles {
+      if tile.isPath() {
+        Double potentialDistance = tile.getDistanceTo(position);
+        if potentialDistance < distance {
+          distance = potentialDistance;
+          potentialPath = "(Path)tile";
+        }
+      }
+    }
+    return potentialPath;
+  }
+  void addTile(Tile newTile){
+    tiles.add(newTile);
+    \getTiles(newTile).add(newTile);
+  }
   List<Entity> getZone(Integer "zoneX", Integer "zoneY"){
     if true &&! "entityZones".containsKey("zoneX") {
       "entityZones".put("zoneX", new HashMap<Integer, List<Entity>>());
@@ -16,6 +55,18 @@ class 'packageName'."environments" Environment \Object Loaddable Tickable {
   void addEntity(Entity "entity"){
     "entity".getLocation().setParent(this);
     "entity".getLocation().update();
+  }
+  Entity getClosestEntity(Environment->Position position, \EntityCriteria criteria){
+    Entity potentialEntity = null;
+    Double potentialDistance = Double.MAX_VALUE;
+    for Entity candidate : \getZone(position.getZoneX(),position.getZoneY()) {
+      Double distance = position.getDistanceTo(candidate.getLocation());
+      if distance < potentialDistance && criteria.satisfies(candidate) {
+        potentialEntity = candidate;
+        potentialDistance = distance;
+      }
+    }
+    return potentialEntity;
   }
   List<Entity> getEntitiesWithin(Environment->Position "position", Float "within"){
     return \getEntitiesWithin("position","within",2.0*\Math.PI,0.0);
@@ -82,6 +133,9 @@ class 'packageName'."environments" Environment \Object Loaddable Tickable {
     Float getY(){
       return "locationY" \+ "zoneY" * 1000f;
     }
+    void setParent(Environment newParent){
+      "parent" = newParent;
+    }
     Double getDistanceTo(Position "otherPosition"){
       Float "xDirection" = "otherPosition".getX() - \getX() ;
       Float "yDirection" = "otherPosition".getX() - \getY();
@@ -129,8 +183,10 @@ class 'packageName'."environments" Environment \Object Loaddable Tickable {
   }
   class 'packageName'."environments" Location Environment->Position{
     Entity "host" = null;
-    Float "facing" = 0f;
-    Boolean "zonified" = false;
+    ~Float "facing" = 0f;
+    ~Boolean "zonified" = false;
+    ~Tile locationTile = null;
+    ~Boolean hasChanged = true;
     Boolean isWithin(Environment->Location "otherLocation", Float "range", Double "angleLeft", Double "angleRight"){
       Float "tFacing" = "otherLocation".getFacing();
       return \super.isWithin("otherLocation", "range", "angleLeft" \+ "tFacing", "angleRight" \+ "tFacing");
@@ -141,17 +197,47 @@ class 'packageName'."environments" Environment \Object Loaddable Tickable {
     List<Entity> getEntitiesWithin(Float "within", Double "angleLeft", Double "angleRight"){
       return "parent".getEntitiesWithin(this,"within", "angleLeft", "angleRight");
     }
-    void setParent(Environment "newParent"){
-      "parent" = "newParent";
+    Entity getClosestEntity(\EntityCriteria criteria){
+      if "parent"!=null {
+        return "parent".getClosestEntity(this,criteria);
+      }
+      else {
+        return null;
+      }
+    }
+    Path getClosestPath(){
+      if "parent"!=null {
+        return "parent".getClosestPath(this);
+      }
+      else {
+        return null;
+      }
+    }
+    Tile getTile(){
+      if "parent"!=null {
+        if hasChanged {
+          locationTile = "parent".getTile(this);
+        }
+        return locationTile;
+      }
+      else {
+        return null;
+      }
+    }
+    void step(Float speed, Environment->Position toward){
+      Double direction = \getDirectionTo(toward);
+      \move(\Math.cos(direction) * speed, \Math.sin(direction) * speed); 
     }
     void move(Float "xDirection", Float "yDirection"){
       "locationX" \+= "xDirection";
       "locationY" \+= "yDirection";
+      hasChanged = true;
       \update();
     }
     void move(Double "xDirection", Double "yDirection"){
       "locationX" \+= "(float)(double)xDirection";
       "locationY" \+= "(float)(double)yDirection";
+      hasChanged = true;
       \update();
     }
     void moveTo(Float "xDirection", Float "yDirection"){
@@ -164,6 +250,7 @@ class 'packageName'."environments" Environment \Object Loaddable Tickable {
       "locationY" = "yDirection" - "zoneY" * 1000;
       "parent".getZone("zoneX","zoneY").add("host");
       "zonified" = true;
+      hasChanged = true;
     }
     void moveTo(Environment->Position "otherPosition"){
       if "zonified" {
@@ -176,6 +263,7 @@ class 'packageName'."environments" Environment \Object Loaddable Tickable {
       "parent" = "otherPosition"."parent";
       "parent".getZone("zoneX","zoneY").add("host");
       "zonified" = true;
+      hasChanged = true;
     }
     void update(){
       if "locationX" > 1000 {
@@ -280,7 +368,7 @@ class 'packageName'."environments" Environment \Object Loaddable Tickable {
   }
 > void setup(ParseContext data){
     Class factoryHelper = Environment->FactoryHelper;
-    Environment += List<factoryHelper> "helpers" = new ArrayList<factoryHelper>()
+    Environment += ~List<factoryHelper> "helpers" = new ArrayList<factoryHelper>()
   }
 > void declaration(IToken declarationToken){
     String mapName = 'declarationToken->"map_header"->"mapName"';
@@ -292,7 +380,7 @@ class 'packageName'."environments" Environment \Object Loaddable Tickable {
           return new Environments->'mapName'();
         }
       }
-    Environments->*"createEnvironment".prependToBody(|
+    Environments->*"create".prependToBody(|
       if "environmentName".equals(''mapName'') {
         return new Environments->'mapName'();
       }|);
@@ -318,7 +406,7 @@ class 'packageName'."environments" Environment \Object Loaddable Tickable {
           tileSymbol.put('quark->"symbolName"',tileName);
           Tiles += class 'packageName'."environments" tileName extendsClass {
           }
-          Tiles->*"createTile".prependToBody({
+          Tiles->*"create".prependToBody({
             if "tileName".equals(''tileName'') {
               return new Tiles->\tileName(); 
             }
@@ -373,7 +461,7 @@ class 'packageName'."environments" Environment \Object Loaddable Tickable {
           if pathSymbol.containsKey('quark') {
             mapElementClass.getMethod("populate").appendToBody({
               Path 'subTileName' = new Tiles->'tileSymbol.get(tileJustName)'("zoneX","zoneY","locationX" \+ 'xValue',"locationY" \+ 'yValue' ,"client");
-              "client"."tiles".add('subTileName');
+              "client".addTile('subTileName');
 			  "client"."paths".add('subTileName');
 			});
 			if true &&! knownPaths.containsKey(xValue) {
@@ -394,7 +482,7 @@ class 'packageName'."environments" Environment \Object Loaddable Tickable {
           else {
             mapElementClass.getMethod("populate").appendToBody({
               Tile 'subTileName' = new Tiles->'tileSymbol.get(tileJustName)'("zoneX","zoneY","locationX" \+ 'xValue',"locationY" \+ 'yValue' ,"client");            
-              "client"."tiles".add('subTileName');
+              "client".addTile('subTileName');
             });
           }
           xIndex \+= 1; 
@@ -402,10 +490,15 @@ class 'packageName'."environments" Environment \Object Loaddable Tickable {
         yIndex \+= 1;
       }
     }
+    Environments->\mapName->*.prependToBody({
+        if name == null {
+          name = ''mapName'';
+        }
+      });
   }
 }
 class 'packageName'."environments" Environments {
-  @Environment createEnvironment(String "environmentName"){
+  @Environment create(String "environmentName"){
     return null;
   }
 }

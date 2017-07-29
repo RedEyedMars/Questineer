@@ -18,22 +18,12 @@ public class SkillDeclaration extends ConcreteRule {
 		set(
 				new ChainParser(
 					new AddTokenToListParser(
-						ConditionTokens.NAME,"skillName","skill_names"),
+						AssociationTokens.NAME,"skillName","skill_names"),
 					new OptionalParser(
-							SkillBraces.SKILL_DESCRIPTION),
+							GeneralBraces.METHOD_PARAMETERS),
+					SkillBraces.SKILL_DESCRIPTION,
 					new ManyParser(
-							
-							new ChoiceParser(
-									ConditionTokens.NEWLINE,
-									Comments.COMMENTS,
-								new ChainParser(
-									ConditionTokens.PLUS,
-									new AddTokenParser(
-										new ListNameElementParser("skill_names"),"strength_name")),
-								new ChainParser(
-									ConditionTokens.MINUS,
-									new AddTokenParser(
-										new ListNameElementParser("skill_names"),"weakness_name"))))));
+							Rules.skill_element)));
 
 	}
 

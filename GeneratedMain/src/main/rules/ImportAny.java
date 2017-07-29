@@ -24,8 +24,14 @@ public class ImportAny extends ConcreteRule {
 					AspectImports.IMPORT_ASPECT,
 					AffinityImports.IMPORT_AFFINITY,
 					ConditionImports.IMPORT_CONDITION,
+					ActivityImports.IMPORT_ACTIVITY,
+					SkillImports.IMPORT_SKILL,
 					AttackImports.IMPORT_ATTACK,
-					MapImports.IMPORT_MAP));
+					SupportImports.IMPORT_SUPPORT,
+					QuestImports.IMPORT_QUEST,
+					MapImports.IMPORT_MAP,
+					ReasonImports.IMPORT_REASON,
+					AssociationImports.IMPORT_ASSOCIATION));
 
 	}
 

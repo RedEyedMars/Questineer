@@ -18,13 +18,13 @@ public class TypeName extends ConcreteRule {
 		set(
 				new ChainParser(
 					new AddTokenParser(
-						ConditionTokens.NAME,"typeName"),
+						AssociationTokens.NAME,"typeName"),
 					new ManyParser(
 							
 								new ChainParser(
-									TileTokens.DOT,
+									GeneralTokens.DOT,
 									new AddTokenParser(
-										ConditionTokens.NAME,"typeName")))));
+										AssociationTokens.NAME,"typeName")))));
 
 	}
 

@@ -10,7 +10,7 @@ class 'packageName'."entities"."mods"."affinities" Affinity \Object Source {
   }
 }
 class 'packageName'."entities"."mods"."affinities" Affinities {
-  @Affinity createAffinity(String "affinityName"){
+  @Affinity create(String "affinityName"){
     return null;
   }
 > void declaration(IToken declarationToken){
@@ -39,7 +39,7 @@ class 'packageName'."entities"."mods"."affinities" Affinities {
 		return "damage";
       }
     }
-    Affinities.getMethod("createAffinity").prependToBody(|if ''affinityClassName''.equals("affinityName"){ return new Affinities->'affinityClassName'();} |);
+    Affinities.getMethod("create").prependToBody(|if ''affinityClassName''.equals("affinityName"){ return new Affinities->'affinityClassName'();} |);
   }
 > Statement hasAffinity(String affinityName){
     return |"defender".has(Affinities->'affinityName'."id")|;

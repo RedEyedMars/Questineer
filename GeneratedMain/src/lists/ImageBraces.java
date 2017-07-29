@@ -17,7 +17,7 @@ public class ImageBraces extends ParseList {
 
 	public static final BracedParser IMAGE_FILE = new BracedParser(
 							new AddTokenParser(
-								ConditionTokens.WILD,"image_file_name"),"IMAGE_FILE","imageBraces",",.");
+								AssociationTokens.WILD,"image_file_name"),"IMAGE_FILE","imageBraces",",.");
 
 	public static final ChoiceParser parser = new ChoiceParser(
 				IMAGE_FILE);

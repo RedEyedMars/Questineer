@@ -18,17 +18,17 @@ public class AttackElement extends ConcreteRule {
 		isSilent(true);
 		set(
 			new ChoiceParser(
-					ConditionTokens.NEWLINE,
+					AssociationTokens.NEWLINE,
 					Comments.COMMENTS,
 					new AddTokenParser(
 						
 						new ChainParser(
-							AttackTokens.RANGE,
+							SupportTokens.RANGE,
 							Rules.statRange),"range"),
 					new AddTokenParser(
 						
 						new ChainParser(
-							AttackTokens.COOLDOWN,
+							SupportTokens.COOLDOWN,
 							Rules.statRange),"cooldown"),
 					new AddTokenParser(
 						
@@ -37,9 +37,9 @@ public class AttackElement extends ConcreteRule {
 								new OptionalParser(
 									
 									new ChoiceParser(
-											AttackTokens.BODY_DMG,
-											AttackTokens.MIND_DMG)),"dmg_type"),
-							AttackTokens.DAMAGE,
+											SupportTokens.BODY_DMG,
+											SupportTokens.MIND_DMG)),"dmg_type"),
+							SupportTokens.DAMAGE,
 							
 							new ChoiceParser(
 									new AddTokenParser(
@@ -48,18 +48,18 @@ public class AttackElement extends ConcreteRule {
 					new AddTokenParser(
 						
 						new ChainParser(
-							AttackTokens.MISS,
+							SupportTokens.MISS,
 							new ManyParser(
 									new AddTokenParser(
 										
 										new ChainParser(
 											new ManyParser(
-													ConditionTokens.NEWLINE),
+													AssociationTokens.NEWLINE),
 											Rules.has_chance,
 											new OptionalParser(
 													
 														new ChainParser(
-															GeneralTokens.IF,
+															AssociationTokens.IF,
 															Rules.boolean_statement))),"option"))),"miss")));
 
 	}

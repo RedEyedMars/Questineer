@@ -22,7 +22,7 @@ public class Imposition extends ConcreteRule {
 						GeneralTokens.IMPOSE,"operator"),
 					new AddTokenParser(
 						GeneralTokens.INTEGER,"amount"),
-					GeneralTokens.ON,
+					AssociationTokens.ON,
 					new ListNameElementParser("hero_stats")),
 				new ChainParser(
 					new AddTokenParser(

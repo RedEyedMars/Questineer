@@ -20,11 +20,11 @@ public class Method extends ConcreteRule {
 				new ChainParser(
 					GeneralTokens.NEW,
 					Rules.type_name,
-					GeneralBraces.METHOD_PARAMETERS),
+					GeneralBraces.METHOD_ARGUMENTS),
 				new ChainParser(
 					new AddTokenParser(
-						ConditionTokens.NAME,"methodName"),
-					GeneralBraces.METHOD_PARAMETERS)));
+						AssociationTokens.NAME,"methodName"),
+					GeneralBraces.METHOD_ARGUMENTS)));
 
 	}
 

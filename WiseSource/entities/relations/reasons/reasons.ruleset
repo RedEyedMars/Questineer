@@ -1,0 +1,19 @@
+#REASON
+reason_name-s are empty
+reasonToken-s
+	[[a-zA-Z_][a-zA-Z0-9_]*] as NAME
+	[.*] as WILD
+	[[^$]*] as NON_VAR
+	"$" as VAR
+	"\n" as NEWLINE
+	"rsns" as RSNS
+	"reason" as REASON
+reasonBrace-s are Braced
+	[,.] as REASON_FILE with WILD as reason_file_name
+	[\n\t,;;] as REASON_DESCRIPTION with ( VAR num as variableIndex | NON_VAR as description )+
+reasonAltBrace-s are CharitableBraced
+	[,\n] as REASON_NAME with WILD 
+reasonImport-s are Import
+	[><<\"entities/relations/reasons/\",reason_file_name,\".afls\">>\n] as IMPORT_REASON from (NEWLINE|COMMENTS|reason_declaration)*; with REASON_FILE RSNS
+reason_declaration
+	REASON_NAME as reasonName in reason_names REASON_DESCRIPTION

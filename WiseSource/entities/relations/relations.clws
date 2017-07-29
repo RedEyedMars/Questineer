@@ -1,0 +1,68 @@
+
+import associations/associations.clws
+
+class 'packageName'."entities"."relations" Relationship {
+  ~Integer influence = 0;
+  void influence(Relationship->Reason reason, Integer amount){
+    "influences".add(reason,new Int(amount));
+    influence \+= amount;
+  }
+> void setup(ParseContext data){
+    \createListMap(Relationship->Reason, Int);
+    Relationship += ~ListMaps->\Reasons->\_Int "influences"
+  }
+  class 'packageName'."entities"."relations" Reason {
+    ~String name = null;
+    ~String description = null;
+    \boolean equals(\Object otherReason){
+      return otherReason != null && "((Reason)otherReason)"."name".equals("name");
+    }
+    \int hashCode(){
+      return "name".hashCode();
+    }
+    class 'packageName'."entities"."relations" Factory {
+      Relationship->Reason create(){
+        return null;
+      }
+    }
+  }
+> void declaration(IToken declarationToken){
+	String reasonName = 'declarationToken->"reasonName"';
+    String reasonClassName = reasonName.replace(" ","");
+    Relationship->Reasons += class 'packageName'."entities"."relations" reasonClassName Relationship->Reason {
+    }
+    Relationship->Reasons->'reasonName' += class 'packageName'."entities"."relations" Factory Relationship->Reason->Factory{
+        Relationship->Reason create(){
+          return new Relationship->Reasons->'reasonName'();
+        }
+      }
+    StringBuilder descriptionBuilder = new StringBuilder(); 
+    declarationToken : element
+      : variableIndex {
+        String index = 'element';
+        String variableName = '"_" + index';
+        Relationship->Reasons += String 'variableName'
+        descriptionBuilder.append("\"+_" + variableName + "+\""); 
+      }
+      : description {
+        descriptionBuilder.append('element'); 
+      }
+    Relationship->Reasons->'reasonName'->*.prependToBody({
+      if "name" == null {
+        "name" = ''reasonName'';
+      }
+      if "description" == null {
+        "description" = '' 'descriptionBuilder' '';
+      }
+    });
+    Relationship->Reasons->*"create".prependToBody({
+      if ''reasonName''.equals("reasonName") || ''reasonName''.replace(" ","").equals("reasonClassName"){
+        return new Relationship->Reasons->'reasonClassName'(); 
+      }});
+  }
+  class 'packageName'."entities"."relations" Reasons {
+    @Relationship->Reason create(String reasonName){
+      return null;
+    }
+  }
+}

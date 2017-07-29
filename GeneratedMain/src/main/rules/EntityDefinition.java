@@ -17,7 +17,7 @@ public class EntityDefinition extends ConcreteRule {
 	public void setup(){
 		set(
 			new ChoiceParser(
-					ConditionTokens.NEWLINE,
+					AssociationTokens.NEWLINE,
 					Comments.COMMENTS,
 				new ChainParser(
 					new AddTokenParser(
@@ -46,6 +46,17 @@ public class EntityDefinition extends ConcreteRule {
 													GeneralTokens.DASH,
 													new AddTokenParser(
 														GeneralTokens.INTEGER,"right")))),"statRange"))),
+					new AddTokenParser(
+						
+						new ChainParser(
+							new ListNameElementParser("event_names"),
+							GeneralBraces.BODY),"event"),
+					new AddTokenParser(
+						
+						new ChainParser(
+							new ListNameElementParser("skill_names"),
+							new OptionalParser(
+									GeneralBraces.METHOD_ARGUMENTS)),"skill"),
 					new ListNameElementParser("affinity_names")));
 
 	}

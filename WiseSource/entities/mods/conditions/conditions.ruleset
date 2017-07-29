@@ -1,0 +1,34 @@
+
+#CONDITION
+condition_name-s are empty
+conditionToken-s
+	[[a-zA-Z_][a-zA-Z0-9_]*] as NAME
+	[.*] as WILD
+	"\n" as NEWLINE
+	"\n\t" as NEWTAB
+	"\n\t\t" as NEWTABTAB
+	"cnds" as CNDS
+	"+" as PLUS
+	"-" as MINUS
+	"?" as REQUIRE
+	"!" as NOT
+	"*" as STAR
+	"accumulate" as ACCUMULATE
+	"condition" as CONDITION
+	"loss" as LOSS
+conditionBrace-s are Braced
+	[,.] as CONDITION_FILE with WILD as condition_file_name 
+	[\n\t,.] as CONDITION_DESCRIPTION with WILD as description
+conditionImport-s are Import
+	[><<\"entities/mods/conditions/\",condition_file_name,\".cnds\">>\n] as IMPORT_CONDITION from (NEWLINE|COMMENTS|condition_declaration)*; with CONDITION_FILE CNDS
+condition_declaration
+	NAME as conditionName in condition_names CONDITION_DESCRIPTION? condition_element*
+condition_element is silent
+	NEWLINE
+	COMMENTS
+	REQUIRE requirement
+	( LOSS ( has_chance ( IF boolean_statement )? ) as chance_pair ( NEWTABTAB has_chance ( IF boolean_statement )? )as chance_pair* ) as to_lose
+	( (STAR|ACCUMULATE) (imposition|acquisition)) as accumulation
+	imposition
+	acquisition
+	(event_name animation? BODY) as event

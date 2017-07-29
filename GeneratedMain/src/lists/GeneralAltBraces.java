@@ -17,7 +17,7 @@ public class GeneralAltBraces extends ParseList {
 
 	public static final CharitableBracedParser description = new CharitableBracedParser(
 							new AddTokenParser(
-								ConditionTokens.WILD,"description"),"description","generalAltBraces",",\n");
+								AssociationTokens.WILD,"description"),"description","generalAltBraces",",\n");
 
 	public static final ChoiceParser parser = new ChoiceParser(
 				description);

@@ -23,7 +23,7 @@ public class ImageImports extends ParseList {
 							new MultipleParser(
 									
 									new ChoiceParser(
-											ConditionTokens.NEWLINE,
+											AssociationTokens.NEWLINE,
 											Rules.image_declaration)),"blank"));
 
 	public static final ChoiceParser parser = new ChoiceParser(

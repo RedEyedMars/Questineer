@@ -22,7 +22,7 @@ public class AspectImports extends ParseList {
 							new ManyParser(
 									
 									new ChoiceParser(
-											ConditionTokens.NEWLINE,
+											AssociationTokens.NEWLINE,
 											Comments.COMMENTS,
 											Rules.aspect_declaration)),"blank"));
 

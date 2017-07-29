@@ -11,7 +11,7 @@ class 'packageName'."entities"."mods"."traits" Trait \Object Source {
   String "description";
 }
 class 'packageName'."entities"."mods"."traits" Traits {
-  @Trait createTrait(String "traitName"){
+  @Trait create(String "traitName"){
     return null;
   }
 > Statement getId(String name){
@@ -42,5 +42,7 @@ class 'packageName'."entities"."mods"."traits" Traits {
 	declarationToken : element : requirement {
 	   Traits->'traitName'.getMethod("hasRequirements").prependToBody(| if `\getRequirement(element, candidate, false)` { return false; }|);
 	}
+	Traits.getMethod("create").prependToBody(| if ''traitName''.equals("traitName"){
+      return new Traits->'traitName'(); }|);
   }
 }

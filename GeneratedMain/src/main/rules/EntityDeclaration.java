@@ -18,13 +18,13 @@ public class EntityDeclaration extends ConcreteRule {
 		set(
 				new ChainParser(
 					new ManyParser(
-							ConditionTokens.NEWLINE),
+							AssociationTokens.NEWLINE),
 					
 							new MultipleParser(
 									new AddTokenParser(
-										ConditionTokens.NAME,"entityName")),
+										AssociationTokens.NAME,"entityName")),
 					new ManyParser(
-							ConditionTokens.NEWLINE),
+							AssociationTokens.NEWLINE),
 					EntityBraces.ENTITY_DEFINITION));
 
 	}

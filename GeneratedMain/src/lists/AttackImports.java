@@ -18,11 +18,11 @@ public class AttackImports extends ParseList {
 	public static final ImportParser IMPORT_ATTACK = new ImportParser(
 						new ChainParser(
 							AttackBraces.ATTACK_FILE,
-							AttackTokens.ATKS),"IMPORT_ATTACK","attackImports","><<\"entities/skills/attacks/\",attack_file_name,\".atks\">>\n",
+							AttackTokens.ATKS),"IMPORT_ATTACK","attackImports","><<\"entities/behaviours/skills/attacks/\",attack_file_name,\".atks\">>\n",
 							new ManyParser(
 									
 									new ChoiceParser(
-											ConditionTokens.NEWLINE,
+											AssociationTokens.NEWLINE,
 											Comments.COMMENTS,
 											Rules.attack_declaration)));
 

@@ -17,10 +17,10 @@ public class SkillBraces extends ParseList {
 
 	public static final BracedParser SKILL_FILE = new BracedParser(
 							new AddTokenParser(
-								ConditionTokens.WILD,"skill_file_name"),"SKILL_FILE","skillBraces",",.");
+								AssociationTokens.WILD,"skill_file_name"),"SKILL_FILE","skillBraces",",.");
 	public static final BracedParser SKILL_DESCRIPTION = new BracedParser(
 							new AddTokenParser(
-								ConditionTokens.WILD,"description"),"SKILL_DESCRIPTION","skillBraces","\n\t,.");
+								AssociationTokens.WILD,"description"),"SKILL_DESCRIPTION","skillBraces","\n\t,.");
 
 	public static final ChoiceParser parser = new ChoiceParser(
 				SKILL_FILE,SKILL_DESCRIPTION);

@@ -8,7 +8,7 @@ class 'packageName'."entities"."mods"."conditions" Condition \Object Source {
   String "description";
 }
 class 'packageName'."entities"."mods"."conditions" Conditions {
-  @Condition createCondition(String "conditionName"){
+  @Condition create(String "conditionName"){
     return null;
   }
 > void setup(ParseContext data){
@@ -113,8 +113,8 @@ class 'packageName'."entities"."mods"."conditions" Conditions {
     Events.addEventMethodsExclusive(Conditions->\conditionName,eventBodies);
     Conditions->\conditionName += Boolean hasRequirements(Entity "candidate"){}
     Conditions->\conditionName.getMethod("hasRequirements").appendToBody(requirementsBody);
-    Conditions.getMethod("createCondition").prependToBody(| if ''conditionName''.equals("conditionName"){
-      return new Conditions->\conditionName(); }|);
+    Conditions.getMethod("create").prependToBody(| if ''conditionName''.equals("conditionName"){
+      return new Conditions->'conditionName'(); }|);
   }
   > Statement getId(String name){
     return |Conditions->'name'.id|;

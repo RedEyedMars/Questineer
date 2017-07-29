@@ -1,0 +1,18 @@
+
+#ACTIVITY
+activityname-s are empty
+activityToken-s
+	[[a-zA-Z_][a-zA-Z0-9_]*] as NAME
+	[.*] as WILD
+	"\n" as NEWLINE
+	"\n\t" as NEWTAB
+	"atvs" as ATVS
+	"activity" as ACTIVITY
+	"," as COMMA
+activityBrace-s are Braced
+	[,.] as ACTIVITY_FILE with WILD as activity_file_name 
+	[\n\t,;;] as ACTIVITY_DESCRIPTION with WILD as description
+activityImport-s are Import
+	[><<\"entities/behaviours/activities/\",activity_file_name,\".atvs\">>\n] as IMPORT_ACTIVITY from (NEWLINE|COMMENTS|activity_declaration)*; with ACTIVITY_FILE ATVS
+activity_declaration
+	NAME as activityName in activitynames ( NAME as className ( COMMA NAME as className )* )? ACTIVITY_DESCRIPTION

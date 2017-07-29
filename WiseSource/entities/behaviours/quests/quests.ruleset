@@ -1,0 +1,17 @@
+
+#QUEST
+questToken-s
+	[[a-zA-Z_][a-zA-Z0-9_]*] as NAME
+	[.*] as WILD
+	"\n" as NEWLINE
+	"\n\t" as NEWTAB
+	"qsts" as QSTS
+	"quest" as QUEST
+	"," as COMMA
+questBrace-s are Braced
+	[,.] as QUEST_FILE with WILD as quest_file_name 
+	[\n\t,;;] as QUEST_DESCRIPTION with WILD as description
+questImport-s are Import
+	[><<\"entities/behaviours/quests/\",quest_file_name,\".atvs\">>\n] as IMPORT_QUEST from (NEWLINE|COMMENTS|quest_declaration)*; with QUEST_FILE QSTS
+quest_declaration
+	NAME as questName QUEST_DESCRIPTION

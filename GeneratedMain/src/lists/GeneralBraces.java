@@ -17,28 +17,40 @@ public class GeneralBraces extends ParseList {
 
 	public static final BracedParser QUOTE = new BracedParser(
 							new AddTokenParser(
-								ConditionTokens.WILD,"quote"),"QUOTE","generalBraces","\",\"");
+								AssociationTokens.WILD,"quote"),"QUOTE","generalBraces","\",\"");
 	public static final BracedParser BODY = new BracedParser(
 							new ManyParser(
 									
 									new ChoiceParser(
-											ConditionTokens.NEWLINE,
+											AssociationTokens.NEWLINE,
 											Comments.COMMENTS,
 											Rules.body_element)),"BODY","generalBraces","{,}");
-	public static final BracedParser METHOD_PARAMETERS = new BracedParser(
+	public static final BracedParser METHOD_ARGUMENTS = new BracedParser(
 						new ChainParser(
+							new ManyParser(
+									AssociationTokens.NEWLINE),
 							new OptionalParser(
 									Rules.statement),
 							new ManyParser(
 									
 										new ChainParser(
-											GeneralTokens.COMMA,
+											ActivityTokens.COMMA,
 											new ManyParser(
-													ConditionTokens.NEWLINE),
-											Rules.statement))),"METHOD_PARAMETERS","generalBraces","(,)");
+													AssociationTokens.NEWLINE),
+											Rules.statement))),"METHOD_ARGUMENTS","generalBraces","(,)");
+	public static final BracedParser METHOD_PARAMETERS = new BracedParser(
+							new OptionalParser(
+									
+										new ChainParser(
+											Rules.variable_header,
+											new ManyParser(
+													
+														new ChainParser(
+															ActivityTokens.COMMA,
+															Rules.variable_header)))),"METHOD_PARAMETERS","generalBraces","(,)");
 	public static final BracedParser BRACED_STATEMENT = new BracedParser(
 							Rules.statement,"BRACED_STATEMENT","generalBraces","(,)");
 
 	public static final ChoiceParser parser = new ChoiceParser(
-				QUOTE,BODY,METHOD_PARAMETERS,BRACED_STATEMENT);
+				QUOTE,BODY,METHOD_ARGUMENTS,METHOD_PARAMETERS,BRACED_STATEMENT);
 }

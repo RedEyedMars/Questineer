@@ -1,0 +1,116 @@
+class 'packageName'."entities"."behaviours"."quests" Quest Object Usable {
+  class Id / Usable->Id / {
+  }
+  ~class TargetCriteria /\EntityCriteria / {
+    Boolean satisfies(Entity "user"){
+      return false;
+    }
+  }
+  @Integer UNSTARTED   = -1;
+  @Integer IN_PROGRESS = 0;
+  @Integer SUCCESS     = 1;
+  @Integer FAIL        = 2;
+  ~List<Path> destinations       = new ArrayList<Path>();
+  ~List<Path> failedDestinations = new ArrayList<Path>();
+  ~List<Way>  currentWays        = null;
+  ~Way        currentWay         = null;
+  ~Path       currentProgress    = null;
+  ~Path       currentFulfillment = null;
+  ~Integer    status             = UNSTARTED;
+  Quest->Id getId(){ return null; }
+  Boolean canChase(){
+    return false;
+  }
+  Float getRange(Entity user){
+    return 0f;
+  }
+  \EntityCriteria getTargetCriteria(){
+    return new Quest->TargetCriteria();
+  }
+  void generateDestinations(Entity quester){}
+  Boolean fulfill(Entity quester, Path destinationReached){
+    return true;
+  }
+  Boolean use(Entity quester, Activity activity){
+    if status == UNSTARTED {
+      \generateDestinations(quester);
+      status = IN_PROGRESS;
+      return true;
+    }
+    else if status != IN_PROGRESS {
+      return false;
+    }
+    else if currentFulfillment != null {
+      if \fulfill(quester,currentFulfillment) {
+        currentFulfillment = null;
+      }
+      return true;
+    }
+    else if currentProgress!=null &&! currentProgress.isWithin(quester.getLocation()){
+      quester.getLocation().step(quester.getWalkingSpeed(),currentProgress);
+      return true;
+    }
+    else if currentWay==null &&! destinations.isEmpty(){
+      if currentWays!=null &&! currentWays.isEmpty() {
+        currentWay = currentWays.remove(0);
+        return true;
+      }
+      else {
+        if currentProgress == null {
+          if quester.getLocation().getTile().isPath() {
+            currentProgress = "(Path)quester".getLocation().getTile();
+          }
+          else {
+            currentProgress = quester.getLocation().getTile().getClosestPath();
+            return true;
+          }
+        }
+        currentWays = currentProgress.getWaysTo(destinations.get(0),activity.getPathStoppers());
+        while currentWays.isEmpty() &&! destinations.isEmpty() {
+          failedDestinations.add(destinations.remove(0));
+          currentWays = currentProgress.getWaysTo(destinations.get(0),activity.getPathStoppers());
+        }
+        if currentWays.isEmpty() {
+          List<Path> deadDestinations = new ArrayList<Path>();
+          while currentWays.isEmpty() &&! failedDestinations.isEmpty() {
+            destinations.add(failedDestinations.remove(0));
+            currentWays = currentProgress.getWaysTo(destinations.get(0),activity.getPathStoppers());
+            if currentWays.isEmpty()==false {
+              currentWay = currentWays.remove(0);
+              return true;
+            }
+            else {
+              deadDestinations.add(destinations.remove(0));
+            }
+          }
+          failedDestinations.addAll(deadDestinations);
+          return false;
+        }
+        else {
+          currentWay = currentWays.remove(0);
+          return true;
+        }
+      }
+    }
+    else if currentWay==null && destinations.isEmpty() {
+      \generateDestinations(quester);
+      return \use(quester,activity);
+    }
+    else if currentWay!=null {
+      currentProgress = currentProgress.step(quester,currentWay.remove(0));
+      if currentWay.isEmpty() {
+        currentWay = null;
+      }
+      for Path destination : destinations {
+        if currentProgress == destination {
+          currentFulfillment = destination;
+          return true;
+        }
+      }
+      return true;
+    }
+    return false;
+  }
+}
+class 'packageName'."entities"."behaviours"."quests" Quests {
+}

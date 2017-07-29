@@ -1,0 +1,29 @@
+#ATTACK
+attack_name-s are empty
+attackToken-s
+	[[a-zA-Z_][a-zA-Z0-9_]*] as NAME
+	[.*] as WILD
+	"\n" as NEWLINE
+	"\n\t" as NEWTAB
+	"atks" as ATKS
+	"attack" as ATTACK
+	"range" as RANGE
+	"cd" as COOLDOWN
+	"damage" as DAMAGE
+	"miss" as MISS
+	"body" as BODY_DMG
+	"mind" as MIND_DMG
+attackBrace-s are Braced
+	[,.] as ATTACK_FILE with WILD as attack_file_name 
+	[\n\t,.] as ATTACK_DESCRIPTION with WILD as description
+attackImport-s are Import
+	[><<\"entities/behaviours/skills/attacks/\",attack_file_name,\".atks\">>\n] as IMPORT_ATTACK from (NEWLINE|COMMENTS|attack_declaration)*; with ATTACK_FILE ATKS
+attack_declaration
+	NAME as attackName in attack_names ATTACK_DESCRIPTION attack_element*
+attack_element is silent
+	NEWLINE
+	COMMENTS
+	(RANGE statRange) as range
+	(COOLDOWN statRange)as cooldown
+	((BODY_DMG|MIND_DMG)? as dmg_type DAMAGE ( statRange as by_stat | BODY)) as damage
+	(MISS (NEWLINE* has_chance ( IF boolean_statement)?) as option* ) as miss

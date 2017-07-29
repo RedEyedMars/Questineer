@@ -1,5 +1,5 @@
 class 'packageName'."environments" Tiles {
-  @Tile createTile(String "tileName"){
+  @Tile create(String "tileName"){
     return null;
   }
 }
@@ -8,6 +8,10 @@ class 'packageName'."environments" Tile Environment->Position Loaddable Tickable
   ~Float "height" = 1f;
   ~Integer "numberOfAliveGeneratedEntities" = 0;
   ~Integer "limit" = 5;
+  ~Boolean isPath = false;
+  Boolean isPath(){
+    return false;
+  }
   Boolean isWithin(Environment->Position "otherPosition"){
     return \super.isWithin("otherPosition", "width"/4f \+ "height"/4f, \Math.PI * 2.0, 0.0);
   }
@@ -22,25 +26,39 @@ class 'packageName'."environments" Tile Environment->Position Loaddable Tickable
       }
     }
   }
+  Path getClosestPath(){
+    if "parent"!=null {
+      return "parent".getClosestPath(this);
+    }
+    else {
+      return null;
+    }
+  }
   void load(){
     
   }
-  void tick(Double "millisSinceLastFrame"){
+  void tick(Double millisSinceLastFrame){
     if \Math.random() > 0.05 && "numberOfAliveGeneratedEntities" < "limit" {
-      Double "randomIndex" = \Math.random() * "onTickEntityFactories".size();
-      Entity "newEntity" = "onTickEntityFactories".get("(int)(double)randomIndex").create();
-      "newEntity".getLocation().moveTo(this);
-      "newEntity".add(new Tile->Listener->Die(this));
+      Double randomIndex = \Math.random() * "onTickEntityFactories".size();
+      Entity newEntity = "onTickEntityFactories".get("(int)(double)randomIndex").create();
+      newEntity.setSpawn(this);
+      newEntity.getLocation().moveTo(this);
+      newEntity.add(new Tile->Listener->Die(this));
       "numberOfAliveGeneratedEntities" \+= 1;
     }
   }
   void decreaseAliveGeneratedEntities(){
     "numberOfAliveGeneratedEntities" \-= 1;
   }
+  Association get(Association->Id id, Association->Factory factory){
+    return "associations".get(id,factory);
+  }
 > void setup(ParseContext data){
     Class entityFactory = Entity->Factory;
     Tile += ~List<entityFactory> "onTickEntityFactories" = new ArrayList<entityFactory>()
     Tile += ~List<entityFactory> "onLoadEntityFactories" = new ArrayList<entityFactory>()
+    \createMap(Association->Id,Association);
+    Tile += ~\IdMap->\_Association "associations"
   }
 }
 class 'packageName'."environments" Path Tile{
@@ -50,37 +68,39 @@ class 'packageName'."environments" Path Tile{
   ~Path "downPath" = null;
   
   ~Boolean "isStop" = false;
-    
-  Path step(Entity "stepper", Path "next"){
-    Float "speed" = "stepper".getWalkingSpeed();
+  Boolean isPath(){
+    return isPath;
+  }
+  Path step(Entity stepper, Path next){
+    Float speed = stepper.getWalkingSpeed();
     ~Boolean moved = false;
-    if this.isWithin("stepper".getLocation()) {
-    if "next" == "leftPath" {
-      "stepper".getLocation().move(-1f * "speed", 0f);
+    if this.isWithin(stepper.getLocation()) {
+    if next == leftPath {
+      stepper.getLocation().move(-1f * speed, 0f);
       moved = true;
     }
-    else if "next" == "rightPath" {
-      "stepper".getLocation().move(1f * "speed", 0f);
+    else if next == rightPath {
+      "stepper".getLocation().move(1f * speed, 0f);
       moved = true;
     } 
-    else if "next" == "upPath" {
-      "stepper".getLocation().move(0f, 1f * "speed");
+    else if next == upPath {
+      "stepper".getLocation().move(0f, 1f * speed);
       moved = true;
     }
-    else if "next" == "downPath" {
-      "stepper".getLocation().move(0f, -1f * "speed");
+    else if next == downPath {
+      stepper.getLocation().move(0f, -1f * speed);
       moved = true;
     }
     }
     if moved == false{
-      Double "direction" = stepper.getLocation().getDirectionTo("next");
-      "stepper".getLocation().move(\Math.cos("direction") * "speed", \Math.sin("direction") * "speed"); 
+      Double direction = stepper.getLocation().getDirectionTo(next);
+      stepper.getLocation().move(\Math.cos(direction) * speed, \Math.sin(direction) * speed); 
     }
-    if "next".isWithin("stepper".getLocation()) {
-      if "next".isStopper() {
-        "stepper".rememberIncomingPath(this,"next");
+    if next.isWithin(stepper.getLocation()) {
+      if next.isStopper() {
+        stepper.rememberIncomingPath(this,next);
       }
-      return "next";
+      return next;
     }
     else {
       return this;
@@ -133,51 +153,56 @@ class 'packageName'."environments" Path Tile{
   Boolean isStopper(){
     return "isStop";
   }
-  List<Way> getWaysTo(Path "goalPath"){
-    \TreeSet<Way> "ways" = new \TreeSet<Way>();
-    Way "firstWay" = new Way();
-    "firstWay".setGoal("goalPath");
-    "firstWay".add(this);
-    "ways".add("firstWay");
-    ~Integer "count" = 0;
-    List<Way> "result" = new ArrayList<Way>();
-    while "count" < 50 &&! "ways".isEmpty() {
-      "count" \+= 1;
-      Way "way" = "ways".pollFirst(); 
-      if "way".at("goalPath"){
-        "result".add("way");
+  List<Way> getWaysTo(Path goalPath, Map<Path,Set<Path>> stoppers){
+    \TreeSet<Way> ways = new \TreeSet<Way>();
+    Way firstWay = new Way();
+    firstWay.setGoal(goalPath);
+    firstWay.add(this);
+    ways.add(firstWay);
+    ~Integer count = 0;
+    List<Way> result = new ArrayList<Way>();
+    while count < 50 &&! ways.isEmpty() {
+      count \+= 1;
+      Way way = ways.pollFirst(); 
+      if way.at(goalPath){
+        result.add(way);
       }
       else {
-        Path "currentPath" = "way".get("way".size() - 1);
-        if "currentPath"."leftPath" != null {
-          Way "newWay" = new Way("way");
-          if "newWay".add("currentPath"."leftPath") {
-            "ways".add("newWay");
+        Path currentPath = way.get(way.size() - 1);
+        Set<Path> currentStopper = new HashSet<Path>();
+        if stoppers.containsKey(currentPath) {
+          currentStopper = stoppers.get(currentPath);
+        }
+        if currentPath.leftPath != null && currentStopper.contains(currentPath.leftPath){
+          Way newWay = new Way(way);
+          if newWay.add(currentPath.leftPath) {
+            ways.add(newWay);
           }
         }
-        if "currentPath"."rightPath" != null {
-          Way "newWay" = new Way("way");
-          if "newWay".add("currentPath"."rightPath") {
-            "ways".add("newWay");
+        if currentPath.rightPath != null && currentStopper.contains(currentPath.rightPath) {
+          Way newWay = new Way(way);
+          if newWay.add(currentPath.rightPath) {
+            ways.add(newWay);
           }
         }
-        if "currentPath"."upPath" != null {
-          Way "newWay" = new Way("way");
-          if "newWay".add("currentPath"."upPath") {
-            "ways".add("newWay");
+        if currentPath.upPath != null && currentStopper.contains(currentPath.upPath) {
+          Way newWay = new Way(way);
+          if newWay.add(currentPath.upPath) {
+            ways.add(newWay);
           }
         }
-        if "currentPath"."downPath" != null {
-          Way "newWay" = new Way("way");
-          if "newWay".add("currentPath"."downPath") {
-            "ways".add("newWay");
+        if currentPath.downPath != null && currentStopper.contains(currentPath.downPath) {
+          Way newWay = new Way(way);
+          if newWay.add(currentPath.downPath) {
+            ways.add(newWay);
           }
         }
       }
     }
-    return "result";
+    return result;
   }
-  class 'packageName'."environments" Way ArrayList<Path> \Comparable<Way>{
+}
+class 'packageName'."environments" Way ArrayList<Path> \Comparable<Way>{
     HashSet<Path> "checkSet";
     Path "goal";
     Double "distanceToGoal" = 0.0;
@@ -225,5 +250,4 @@ class 'packageName'."environments" Path Tile{
         return "(int)(double)distance";
       }
     }
-  }
 }

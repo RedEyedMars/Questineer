@@ -23,6 +23,64 @@ public class RequirementElement extends ConcreteRule {
 						new ChainParser(
 							new OptionalParser(
 									ConditionTokens.NOT),
+							
+								new ChainParser(
+									EntityTokens.STAT,
+									GeneralTokens.IN,
+									new AddTokenParser(
+										AssociationTokens.NAME,"variableName")),
+							GeneralTokens.ORDINAL,
+							GeneralTokens.INTEGER),"require_stat"),
+					new AddTokenParser(
+						
+						new ChainParser(
+							new OptionalParser(
+									ConditionTokens.NOT),
+							
+								new ChainParser(
+									AttackTokens.ATTACK,
+									new AddTokenParser(
+										AssociationTokens.NAME,"variableName")),
+							TraitTokens.EXP,
+							GeneralTokens.ORDINAL,
+							GeneralTokens.INTEGER),"require_exp"),
+					new AddTokenParser(
+						
+						new ChainParser(
+							new OptionalParser(
+									ConditionTokens.NOT),
+							
+								new ChainParser(
+									AttackTokens.ATTACK,
+									new AddTokenParser(
+										AssociationTokens.NAME,"variableName"))),"require_attack"),
+					new AddTokenParser(
+						
+						new ChainParser(
+							new OptionalParser(
+									ConditionTokens.NOT),
+							
+								new ChainParser(
+									TraitTokens.TRAIT,
+									GeneralTokens.OF,
+									new AddTokenParser(
+										AssociationTokens.NAME,"variableName"))),"require_trait"),
+					new AddTokenParser(
+						
+						new ChainParser(
+							new OptionalParser(
+									ConditionTokens.NOT),
+							
+								new ChainParser(
+									AssociationTokens.ASSOCIATION,
+									GeneralTokens.WITH,
+									new AddTokenParser(
+										AssociationTokens.NAME,"variableName"))),"require_association"),
+					new AddTokenParser(
+						
+						new ChainParser(
+							new OptionalParser(
+									ConditionTokens.NOT),
 							new ListNameElementParser("hero_stats"),
 							GeneralTokens.ORDINAL,
 							GeneralTokens.INTEGER),"require_stat"),
@@ -46,7 +104,13 @@ public class RequirementElement extends ConcreteRule {
 						new ChainParser(
 							new OptionalParser(
 									ConditionTokens.NOT),
-							new ListNameElementParser("trait_names")),"require_trait")));
+							new ListNameElementParser("trait_names")),"require_trait"),
+					new AddTokenParser(
+						
+						new ChainParser(
+							new OptionalParser(
+									ConditionTokens.NOT),
+							new ListNameElementParser("association_names")),"require_association")));
 
 	}
 

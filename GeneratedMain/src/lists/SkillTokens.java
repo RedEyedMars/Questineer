@@ -23,7 +23,9 @@ public class SkillTokens extends ParseList {
 	public static final ExactParser PLUS = new ExactParser("PLUS","skillTokens","+");
 	public static final ExactParser MINUS = new ExactParser("MINUS","skillTokens","-");
 	public static final ExactParser SKILL = new ExactParser("SKILL","skillTokens","skill");
+	public static final ExactParser USE = new ExactParser("USE","skillTokens","use");
+	public static final ExactParser REQUIRE = new ExactParser("REQUIRE","skillTokens","?");
 
 	public static final ChoiceParser parser = new ChoiceParser(
-				NAME,WILD,NEWLINE,NEWTAB,SKLS,PLUS,MINUS,SKILL);
+				NAME,WILD,NEWLINE,NEWTAB,SKLS,PLUS,MINUS,SKILL,USE,REQUIRE);
 }

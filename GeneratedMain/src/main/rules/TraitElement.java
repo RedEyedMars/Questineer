@@ -18,7 +18,7 @@ public class TraitElement extends ConcreteRule {
 		isSilent(true);
 		set(
 			new ChoiceParser(
-					ConditionTokens.NEWLINE,
+					AssociationTokens.NEWLINE,
 					Comments.COMMENTS,
 				new ChainParser(
 					ConditionTokens.REQUIRE,

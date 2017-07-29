@@ -32,7 +32,11 @@ miss
 	Attack.Damage damage
 die
 	Source source
-	Entity victim
+	Entity deceased
+
+joined
+	Entity recruiter
+	Entity recruit
 
 load
 	Entity host

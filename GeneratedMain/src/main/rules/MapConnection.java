@@ -26,7 +26,7 @@ public class MapConnection extends ConcreteRule {
 							
 							new ChoiceParser(
 								new ChainParser(
-									ConditionTokens.NEWTAB,
+									AssociationTokens.NEWTAB,
 									new AddTokenParser(
 										
 										new ChainParser(
@@ -34,7 +34,7 @@ public class MapConnection extends ConcreteRule {
 													ConditionTokens.PLUS),
 											new ListNameElementParser("tile_symbols")),"benign_symbol")),
 									new MultipleParser(
-											ConditionTokens.NEWLINE)))));
+											AssociationTokens.NEWLINE)))));
 
 	}
 

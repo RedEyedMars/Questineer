@@ -17,28 +17,28 @@ public class IfStatement extends ConcreteRule {
 	public void setup(){
 		set(
 				new ChainParser(
-					GeneralTokens.IF,
+					AssociationTokens.IF,
 					Rules.boolean_statement,
 					new ManyParser(
-							ConditionTokens.NEWLINE),
+							AssociationTokens.NEWLINE),
 					GeneralBraces.BODY,
 					new ManyParser(
 							new AddTokenParser(
 								
 								new ChainParser(
 									new ManyParser(
-											ConditionTokens.NEWLINE),
+											AssociationTokens.NEWLINE),
 									GeneralTokens.ELSE,
 									new ManyParser(
-											ConditionTokens.NEWLINE),
+											AssociationTokens.NEWLINE),
 									
 									new ChoiceParser(
 											GeneralBraces.BODY,
 										new ChainParser(
-											GeneralTokens.IF,
+											AssociationTokens.IF,
 											Rules.boolean_statement,
 											new ManyParser(
-													ConditionTokens.NEWLINE),
+													AssociationTokens.NEWLINE),
 											GeneralBraces.BODY))),"else_statement"))));
 
 	}

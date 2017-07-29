@@ -43,7 +43,7 @@ import events/events.clws
 > void setup(ParseContext data){
   }
 > void generate(ParseContext data){
-	\setup();
+	\setup("../Questineer/src");
 	IToken root = data.getRoot();
 	root : imports : import_any {
 		imports : import_events : IMPORT_EVENT {
@@ -58,12 +58,14 @@ import events/events.clws
 	Items.setup(data);
 	Entity.setup(data);
 	Skills.setup(data);
+	Activities.setup(data);
+	Relationship.setup(data);
 	Environment.setup(data);
 	Tile.setup(data);
 	root : imports : import_any {
 		\importAny(imports);
 	}
-	\output("../Questineer/src",data);
+	\output(data);
 }
 > void importAny(IToken import_any){
 	import_any : import_events : IMPORT_EVENT {
@@ -77,6 +79,11 @@ import events/events.clws
 		}
 		import_items : element : item_declaration {
 			Items.declaration(element);
+		}
+	}
+	import_any : import_reason : IMPORT_REASON {
+		import_reason : element : reason_declaration {
+			Relationship.declaration(element);
 		}
 	}
 	import_any : import_aspects : IMPORT_ASPECT {
@@ -94,14 +101,39 @@ import events/events.clws
 			Traits.declaration(element);
 		}
 	}
+	import_any : import_conditions : IMPORT_CONDITION {
+		import_conditions : element : condition_declaration {
+			Conditions.declaration(element);
+		}
+	}
+	import_any : import_activities : IMPORT_ACTIVITY {
+		import_activities : element : activity_declaration{
+			Activities.declaration(element);
+		}
+	}
+	import_any : import_skills : IMPORT_SKILL {
+		import_skills : element : skill_declaration{
+			Skills.declaration(element);
+		}
+	}
 	import_any : import_attacks : IMPORT_ATTACK {
 		import_attacks : element : attack_declaration{
 			Attacks.declaration(element);
 		}
 	}
-	import_any : import_conditions : IMPORT_CONDITION {
-		import_conditions : element : condition_declaration {
-			Conditions.declaration(element);
+	import_any : import_supports : IMPORT_SUPPORT {
+		import_supports : element : support_declaration{
+			Supports.declaration(element);
+		}
+	}
+	import_any : import_quests : IMPORT_QUEST {
+		import_quests : element : quest_declaration{
+#			Quests.declaration(element);#
+		}
+	}
+	import_any : import_association : IMPORT_ASSOCIATION {
+		import_association : element : association_declaration {
+			Associations.declaration(element);
 		}
 	}
 	import_any : import_map : IMPORT_MAP {

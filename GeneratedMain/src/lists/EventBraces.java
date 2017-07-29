@@ -17,7 +17,7 @@ public class EventBraces extends ParseList {
 
 	public static final BracedParser EVENT_FILE = new BracedParser(
 							new AddTokenParser(
-								ConditionTokens.WILD,"event_file_name"),"EVENT_FILE","eventBraces",",.");
+								AssociationTokens.WILD,"event_file_name"),"EVENT_FILE","eventBraces",",.");
 
 	public static final ChoiceParser parser = new ChoiceParser(
 				EVENT_FILE);

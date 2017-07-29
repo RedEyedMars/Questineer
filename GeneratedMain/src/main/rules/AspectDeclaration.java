@@ -18,12 +18,12 @@ public class AspectDeclaration extends ConcreteRule {
 		set(
 				new ChainParser(
 					new AddTokenToListParser(
-						ConditionTokens.NAME,"aspectName","aspect_names"),
+						AssociationTokens.NAME,"aspectName","aspect_names"),
 					AspectBraces.ASPECT_DESCRIPTION,
 					new ManyParser(
 							
 							new ChoiceParser(
-									ConditionTokens.NEWLINE,
+									AssociationTokens.NEWLINE,
 									new AddTokenParser(
 										
 										new ChainParser(

@@ -36,7 +36,7 @@ public class Animation extends ConcreteRule {
 											new OptionalParser(
 													
 														new ChainParser(
-															GeneralTokens.COMMA,
+															ActivityTokens.COMMA,
 															new AddTokenParser(
 																GeneralTokens.INTEGER,"right")))))),"delta"))));
 

@@ -18,7 +18,7 @@ public class ImageDeclaration extends ConcreteRule {
 		set(
 				new ChainParser(
 					new AddTokenToListParser(
-						ConditionTokens.NAME,"imageName","image_names"),
+						AssociationTokens.NAME,"imageName","image_names"),
 					
 						new ChainParser(
 							new AddTokenParser(

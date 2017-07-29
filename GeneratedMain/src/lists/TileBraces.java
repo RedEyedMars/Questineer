@@ -17,7 +17,7 @@ public class TileBraces extends ParseList {
 
 	public static final BracedParser TILE_FILE = new BracedParser(
 							new AddTokenParser(
-								ConditionTokens.WILD,"tile_file_name"),"TILE_FILE","tileBraces",",.");
+								AssociationTokens.WILD,"tile_file_name"),"TILE_FILE","tileBraces",",.");
 
 	public static final ChoiceParser parser = new ChoiceParser(
 				TILE_FILE);

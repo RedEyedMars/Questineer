@@ -52,7 +52,7 @@ public class ItemParameter extends ConcreteRule {
 							new OptionalParser(
 									
 										new ChainParser(
-											GeneralTokens.IF,
+											AssociationTokens.IF,
 											Rules.boolean_statement))),"gain_aspect"),
 					new AddTokenParser(
 						
@@ -61,7 +61,7 @@ public class ItemParameter extends ConcreteRule {
 							new OptionalParser(
 									
 										new ChainParser(
-											GeneralTokens.IF,
+											AssociationTokens.IF,
 											Rules.boolean_statement))),"gain_trait"),
 					new AddTokenParser(
 						
@@ -70,7 +70,7 @@ public class ItemParameter extends ConcreteRule {
 							new OptionalParser(
 									
 										new ChainParser(
-											GeneralTokens.IF,
+											AssociationTokens.IF,
 											Rules.boolean_statement))),"gain_attack")));
 
 	}

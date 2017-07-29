@@ -18,7 +18,7 @@ public class TraitDeclaration extends ConcreteRule {
 		set(
 				new ChainParser(
 					new AddTokenToListParser(
-						ConditionTokens.NAME,"traitName","trait_names"),
+						AssociationTokens.NAME,"traitName","trait_names"),
 					TraitBraces.TRAIT_DESCRIPTION,
 					new ManyParser(
 							Rules.trait_element)));

@@ -18,14 +18,14 @@ public class MapDeclaration extends ConcreteRule {
 		set(
 				new ChainParser(
 					new ManyParser(
-							ConditionTokens.NEWLINE),
+							AssociationTokens.NEWLINE),
 					
 							new ManyParser(
 									new AddTokenParser(
-										ConditionTokens.NAME,"mapElementName")),
+										AssociationTokens.NAME,"mapElementName")),
 					GeneralTokens.COLON,
 					new ManyParser(
-							ConditionTokens.NEWLINE),
+							AssociationTokens.NEWLINE),
 					new AddTokenParser(
 						
 							new MultipleParser(
@@ -34,7 +34,7 @@ public class MapDeclaration extends ConcreteRule {
 							new AddTokenParser(
 								
 								new ChainParser(
-									ConditionTokens.NEWTAB,
+									AssociationTokens.NEWTAB,
 									new MultipleParser(
 											new ListNameElementParser("tile_symbols"))),"line"))));
 

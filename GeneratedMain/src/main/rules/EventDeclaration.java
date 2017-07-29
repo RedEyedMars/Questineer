@@ -18,7 +18,7 @@ public class EventDeclaration extends ConcreteRule {
 		set(
 				new ChainParser(
 					new AddTokenToListParser(
-						ConditionTokens.NAME,"eventName","event_names"),
+						AssociationTokens.NAME,"eventName","event_names"),
 					new ManyParser(
 							
 							new ChoiceParser(
@@ -26,11 +26,11 @@ public class EventDeclaration extends ConcreteRule {
 									new AddTokenParser(
 										
 										new ChainParser(
-											ConditionTokens.NEWTAB,
+											AssociationTokens.NEWTAB,
 											Rules.type_name,
 											new AddTokenParser(
-												ConditionTokens.NAME,"name")),"parameter"),
-									ConditionTokens.NEWLINE))));
+												AssociationTokens.NAME,"name")),"parameter"),
+									AssociationTokens.NEWLINE))));
 
 	}
 

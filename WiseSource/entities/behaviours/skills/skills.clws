@@ -1,0 +1,164 @@
+import attacks/attacks.clws
+import supports/supports.clws
+class 'packageName'."entities"."behaviours"."skills" Skill \Object Source Usable {
+  class Id / Usable->Id /{
+  }
+  ~Integer "experience" = 0;
+  Integer "cooldown" = -1; 
+  Entity->Modifier "range" = null;
+  Entity->Modifier "cost" = null;
+  ~Boolean "hasEntityFocus" = null;
+  ~\EntityCriteria "targetCriteria" = null;
+  
+  String getName(){ return null; }
+  String getDescription(){ return null; }
+  void setFocus(Boolean "newFocus"){
+	"hasEntityFocus" = "newFocus";
+  }
+  Integer getCost(Entity "entity"){
+    return "(int)(float)cost".use("entity");
+  }
+  Boolean canChase(){
+    return true;
+  }
+  Float getRange(Entity "entity"){
+	return "range".use("entity");
+  }
+  Boolean isOffCooldown(){
+    return "cooldown" == 0;
+  }
+  void on(Events->\Tick "event"){
+	if "cooldown" > 0 {
+	  "cooldown" \+= 1;
+	}
+  }
+  void setFocus(Boolean "newFocus"){
+    "hasEntityFocus" = "newFocus";
+  }
+  Integer compareTo(Skill "otherSkill"){
+	if "cooldown" == "otherSkill"."cooldown" {
+	  if "hasEntityFocus" {
+	    return "otherSkill"."experience" - "experience";
+	  }
+	  else {
+		return "experience" - "otherSkill"."experience";
+	  }
+	}
+	else {
+	  return "otherSkill"."cooldown" - "cooldown";
+	} 
+  }
+  Boolean use(Entity user, Activity activity){
+    if \isOffCooldown() {
+      return false;
+    }
+	for Entity potential : user.getLocation().getEntitiesWithin(\getRange(user)) {
+	  if targetCriteria.satisfies(potential) {
+	    \use(user,potential);
+	    return true;
+	  }
+	}
+	return false;
+  }
+  void use(Entity "user", Entity "victim"){}
+  String getName(){ return null; }
+  String getDescription(){ return null; }
+  Skill->Id getId(){
+    return null;
+  }
+}
+class 'packageName'."entities"."behaviours"."skills" Skills {
+  @Skill create(String skillName){
+    return null;
+  }
+> void setup(ParseContext data){
+    \createCriteria(Entity);
+    \createList(Entity);
+  }
+> void declaration(IToken declarationToken){
+    String skillName = ^declarationToken->"skillName";
+    Statement description = new Statement ("+");
+    declarationToken : element : description {
+	  description.add(|''element''|);
+	}
+    Skills += class skillName / Skill / {
+      @Skill->Id "id" = new Skill->Id();
+      Skill->Id getId(){
+        return id;
+      }
+	  String getName(){
+	    return ''skillName'';
+	  }
+	  String getDescription(){
+	    return `description`;
+	  }
+	  void use(Entity "user", Entity "victim"){
+      }
+      
+    }
+    Skills->'skillName' += ~class TargetCriteria /\EntityCriteria / {
+        Boolean satisfies(Entity "user"){
+          return true;
+        }
+      }
+    Skills->'skillName'->*.appendToBody({
+      "targetCriteria" = new Skills->'skillName'->TargetCriteria();
+    });
+    Context useContext = Skills->'skillName'.getMethod("use").getCurrentContext();
+    ~Boolean isFirst = true;
+    declarationToken : element
+      : variable_header {
+        \addVariableHeader(element,Skills->'skillName');
+      }
+      : require {
+        element : atom : boolean_statement {
+          Context canUseContext = Skills->'skillName'->TargetCriteria.getMethod("satisfies").getCurrentContext();
+          Skills->'skillName'->TargetCriteria->*"satisfies".prependToBody(| if `\getBooleanStatement(atom,true,canUseContext)` {
+            return false;
+          }|);
+        }
+      } 
+      : cooldown {
+        Skills->'skillName'->* += | "cost" = `Entity.getRange(element)`; |
+      }
+      : range {
+        Skills->'skillName'->* += | "range" = `Entity.getRange(element)`; |
+      }
+      : use {
+        element : atom 
+          : body_element {
+            Skills->'skillName'->*"use" += |`\getBodyElement(useContext)`|
+          }
+      }
+      : miss {
+        element : atom : option {
+          Statement chance = | `\getChance(atom->"has_chance")` |;
+          if atom->"boolean_statement" != null {
+            Statement bool = | `\getBooleanStatement(atom->"boolean_statement", useContext)` |;
+            if isFirst {
+              Skills->'skillName'->*"use".prependToBody(| if `bool` { if `chance` { return void; } } |);
+              isFirst = false;
+            }
+            else {
+              Skills->'skillName'->*"use".prependToBody(| if `bool` { else if `chance` { return void; } } |);
+            }
+          }
+          else {
+            if isFirst {
+              Skills->'skillName'->*"use".prependToBody(| if `chance` { return void;} |);
+              isFirst = false;
+            }
+            else {
+              Skills->'skillName'->*"use".prependToBody(| else if `chance` { return void;} |);
+            }
+          }
+        }
+      }
+    
+	Skills.getMethod("create").prependToBody(| if ''skillName''.equals("skillName"){
+      return new Skills->'skillName'(); }|);
+  }
+ > Statement getId(String name){
+    return |Skills->name.id|;
+  }
+}

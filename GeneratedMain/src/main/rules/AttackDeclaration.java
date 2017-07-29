@@ -18,7 +18,7 @@ public class AttackDeclaration extends ConcreteRule {
 		set(
 				new ChainParser(
 					new AddTokenToListParser(
-						ConditionTokens.NAME,"attackName","attack_names"),
+						AssociationTokens.NAME,"attackName","attack_names"),
 					AttackBraces.ATTACK_DESCRIPTION,
 					new ManyParser(
 							Rules.attack_element)));

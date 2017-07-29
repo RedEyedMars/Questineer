@@ -17,7 +17,7 @@ public class Comments extends ParseList {
 
 	public static final BracedParser COMMENTS = new BracedParser(
 							new AddTokenParser(
-								ConditionTokens.WILD,"comment"),"COMMENTS","comments","#,#");
+								AssociationTokens.WILD,"comment"),"COMMENTS","comments","#,#");
 
 	public static final ChoiceParser parser = new ChoiceParser(
 				COMMENTS);

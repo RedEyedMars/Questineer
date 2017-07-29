@@ -1,0 +1,22 @@
+
+#IMAGES
+image_name-s are empty
+imageToken-s
+	[[a-zA-Z_][a-zA-Z0-9_]*] as NAME
+	[.*] as WILD
+	"\n" as NEWLINE
+	"," as COMMA
+	[[Xx]] as CROSS
+	"-" as DASH
+	">" as LESSTHAN
+	"imgs" as IMGS
+imageBrace-s are Braced
+	[,.] as IMAGE_FILE with WILD as image_file_name
+imageImport-s are Import
+	[><<image_file_name,\".imgs\">>\n] as IMPORT_IMAGE from blank:(NEWLINE|image_declaration)+; with (IMAGE_FILE IMGS)
+image_declaration
+	NAME as imageName in image_names ( INTEGER as left CROSS INTEGER as right? ) EQUALSIGN IMAGE_FILE
+image_id
+	image_name ( INTEGER as left (COMMA INTEGER as right)? )?
+animation
+	image_id ( DASH INTEGER as frames? LESSTHAN ( image_name| INTEGER as left (COMMA INTEGER as right)?)) as delta*

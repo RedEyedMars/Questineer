@@ -1,0 +1,30 @@
+
+#HEROES
+hero_stat-s
+	"STR" as STR
+	"DEX" as DEX
+	"CON" as CON
+	"KNW" as KNW
+	"MND" as MND
+	"CRM" as CRM
+statRange is silent
+	range hero_stat? ( (COMMA|PLUS) range hero_stat? ) as extra*
+
+entityToken-s
+	[[a-zA-Z_][a-zA-Z0-9_]*] as NAME
+	[.*] as WILD
+	"\n" as NEWLINE
+	"|" as PIPE
+	"stat" as STAT
+entityBrace-s are Braced
+	[{,}] as ENTITY_DEFINITION with entity_definition*
+
+entity_declaration
+	NEWLINE* (NAME as entityName+) NEWLINE* ENTITY_DEFINITION
+entity_definition
+	NEWLINE
+	COMMENTS
+	(hero_stat INTEGER as left (DASH INTEGER as right)?) as statRange (PIPE hero_stat INTEGER as left (DASH INTEGER as right)?) as statRange*
+	( event_name BODY ) as event
+	( skill_name METHOD_ARGUMENTS? ) as skill
+	affinity_name

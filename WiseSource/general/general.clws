@@ -1,6 +1,7 @@
 
 > Set<String> declaredCritSet = new HashSet<String>();
 > Set<String> declaredListSet = new HashSet<String>();
+> Set<String> declaredMapSet = new HashSet<String>();
 interface 'packageName'."misc"."interfaces" Listenable {
   void listen(Event "event"){}
 }
@@ -11,6 +12,15 @@ interface 'packageName'."misc"."interfaces" Loaddable {
 }
 interface 'packageName'."misc"."interfaces" Tickable {
   void tick(Double "millisSinceLastFrame"){}
+}
+interface 'packageName'."misc"."interfaces" Usable {
+  class Id // {
+  }
+  Boolean use(Entity user, Activity activity){}
+  Boolean canChase(){}
+  Float getRange(Entity user){}
+  \EntityCriteria getTargetCriteria(){}
+  Usable->Id getId(){}
 }
 class 'packageName'."misc" Range {
   Float "left" = 0f;
@@ -54,9 +64,7 @@ class 'packageName'."misc" Range {
   }
 }
 
-class 'packageName'."misc" Lists {
-  class 'packageName'."misc" Maps {
-  }
+class 'packageName'."misc" ListMaps {
 }
 class 'packageName'."misc" Criteria<TypeName> {
   Boolean satisfies( '"TypeName"' "candidate"){
@@ -67,7 +75,7 @@ class 'packageName'."misc" Criteria<TypeName> {
 > Statement getBodyElement(IToken elementToken, Context context){
     elementToken : element
       : statement {
-        return \getStatement(element, context);
+        return | `\getStatement(element, context)` ; | ;
       }
       : return_statement {
         return |return `\getStatement(element, context)`;|;
@@ -90,17 +98,25 @@ class 'packageName'."misc" Criteria<TypeName> {
     return null;
   }
 > Statement getVariableDeclaration(IToken variableDeclarationToken, Context context){
-    String typeName = \getTypeName(variableDeclarationToken->"type_name");
+	String typeName = \getTypeName(variableDeclarationToken->"variable_header"->"type_name");
     Context type = context.getClassContext(typeName);
     if type == null {
       throw \Generator.completeTokenErrorMessage(variableDeclarationToken) + "Could not find type:" + typeName + "!";
     }
     if variableDeclarationToken->"statement" != null {
-      return | 'variableDeclarationToken->"variableName"' 'typeName' = `\getStatement(variableDeclarationToken->"statement", context)`; |;
+      return | 'typeName' 'variableDeclarationToken->"variable_header"->"variableName"' = `\getStatement(variableDeclarationToken->"statement", context)`; |;
     }
     else {
-      return | 'variableDeclarationToken->"variableName"' 'typeName' = null; |;
+      return | 'typeName' 'variableDeclarationToken->"variable_header"->"variableName"' = null; |;
     }
+  }
+> void addVariableHeader(IToken variableHeaderToken, Class inputClass){
+    String typeName = \getTypeName(variableHeaderToken->"type_name");
+    Context type = inputClass.getContext().getClassContext(typeName);
+    if type == null {
+      throw \Generator.completeTokenErrorMessage(variableHeaderToken) + "Could not find type:" + typeName + "!";
+    }
+    inputClass += 'typeName' 'variableHeaderToken->"variableName"'
   }
 > Statement getIfStatement(IToken ifStatementToken, Context context){
     Statement header     = new Statement ();
@@ -141,6 +157,9 @@ class 'packageName'."misc" Criteria<TypeName> {
     booleanStatement : element
     	: has_chance {
     		operator.add(\getChance(element));
+    	  }
+    	: spawn_statement {
+    		operator.add(|'' 'element->"environmentName"' ''.equals("spawn".getParent().getName())|);
     	  }
     	: has_statement {
      		Statement variableCall = \getVariableCall(element->"variable_call",context);
@@ -207,6 +226,21 @@ class 'packageName'."misc" Criteria<TypeName> {
 	  if showAsTrue == false { innerHead.negate();}
 	  requireHeader.add(innerHead);
     }
+    requirementToken : quanta : require_association {
+	  ~Statement idValue;
+	  if quanta->"association_names" != null {
+	    idValue = Associations.getId(^quanta->"association_names");
+	  }
+	  else {
+	    String variableName = 'quanta->"variableName"';
+	    idValue = |'variableName'.getId()|;
+	  }
+	  Statement id = idValue;
+	  Statement innerHead = |`candidate`."has"(`id`)|;
+	  if quanta->"NOT" != null { innerHead.negate();}
+	  if showAsTrue == false { innerHead.negate();}
+	  requireHeader.add(innerHead);
+    }
 	return requireHeader;
   }
 > Statement getStatement(IToken statementToken, Context context){
@@ -256,6 +290,9 @@ class 'packageName'."misc" Criteria<TypeName> {
 	  : quote {
 	    ret.add(|''element''|);
 	  }
+	  : variable_group {
+	    ret.add(\getIdFromName(element));
+	  }
 	  : variableName {
 	  	currentContext = currentContext.link('element'); 
 		if currentContext == null {
@@ -286,20 +323,30 @@ class 'packageName'."misc" Criteria<TypeName> {
 		  if currentContext == null {
 		    throw "Could not find \"+methodName+\" type in context!";
 		  }
-		  ret.add(|new 'methodName'(parameters)|);
+		  ret.add(|new 'methodName'(`parameters`)|);
 		}
 	  	else {
 		  currentContext = currentContext.link(methodName);
 		  if currentContext == null {
 		    throw "Could not find "+'element'+" method in context!";
 		  }
-		  ret.add(|'element'(parameters)|);
+		  ret.add(|'element'(`parameters`)|);
 		}
 	  }
 	if currentContext != null && currentContext.hasEnder() {
 	  ret.add(currentContext.getEnder());
 	}
 	return ret;
+  }
+> Statement getIdFromName(IToken nameToken){
+    nameToken : element
+      : association_names { return Associations.getId(^element); }
+      : affinity_names    { return Affinities.getId(^element); }
+      : condition_names   { return Conditions.getId(^element); }
+      : skill_names       { return Skills.getId(^element); }
+      : trait_names       { return Traits.getId(^element); }
+      : association_names { return Associations.getId(^element); }
+    return null;
   }
 
 > Statement getAcquisition(IToken acquisitionToken, Boolean forGainBody, Statement subject, Context context){
@@ -378,7 +425,7 @@ class 'packageName'."misc" Criteria<TypeName> {
 > void createList(Class listClass) {
 	String listName = listClass.getName()+ "List";
 	if declaredListSet.add(listName) {
-	  Lists += class 'packageName'."misc" listName ArrayList<listClass> {
+	  class 'packageName'."misc"."lists" listName ArrayList<listClass> {
 	    'listName' *( listClass... "elements" ){
 	      \super(Arrays.asList("elements"));
 	    }
@@ -386,26 +433,30 @@ class 'packageName'."misc" Criteria<TypeName> {
 	}
   }
 > void createCriteria(Class critClass) {
-	String critName = "of"+critClass.getName();
+	String critName = critClass.getName()+"Criteria";
 	if declaredCritSet.add(critName) {
-	  Criteria += class 'packageName'."misc" critName Criteria<critClass> {
+	  class 'packageName'."misc"."criteria" critName Criteria<critClass> {
 	    Boolean satisfies(critClass "candidate"){
 	      return false;
 	    }
 	  }
 	}
   }
+  
 > void createListMap(Class leftClass, Class rightClass) {
 	String leftName  = leftClass.getName()+"s";
 	String rightName = "_"+rightClass.getName();
 	String fullName  = "Maps."+leftName+"."+rightName;
 	if declaredListSet.add(fullName) {
-	  if Lists->Maps->\leftName == null{
-	    Lists->Maps += class 'packageName'."misc" leftName {}
+	  if ListMaps->\leftName == null{
+	    ListMaps += class 'packageName'."misc" leftName {}
 	  }
-	  Lists->Maps->\leftName  +=	
-	    class 'packageName'."misc" rightName HashMap<leftClass, LinkedList<rightClass>> {
+	  ListMaps->\leftName  +=	
+	    class 'packageName'."misc" rightName HashMap<leftClass, LinkedList<rightClass>> \Iterable<rightClass>{
 	      LinkedList<rightClass> "completeList";
+	      \Iterator<rightClass> iterator(){
+	        return "completeList".iterator();
+	      }
 	      LinkedList<rightClass> getFrom(leftClass "key"){
 	        return super.get("key");
 	      }
@@ -437,7 +488,28 @@ class 'packageName'."misc" Criteria<TypeName> {
 	    }
 	  }
   }
-
+> void createMap(Class keyClass, Class valueClass) {
+    String keyName  = keyClass.getName()+"Map";
+	String valueName = "_"+valueClass.getName();
+	String fullName  = "Maps."+keyName+"."+valueName;
+	if declaredMapSet.add(fullName) {
+	  class 'packageName'."misc"."maps" keyName {
+	  }
+	  keyName += class 'packageName'."misc"."maps" valueName HashMap<keyClass, valueClass> {
+	    valueClass get(keyClass "key", valueClass->Factory "factory"){
+	      valueClass "result" = \get("key");
+	      if "result" == null {
+	        "result" = "factory".create();
+	        \put("key", "result");
+	        return "result";
+	      }
+	      else {
+	        return "result";
+	      }
+	    }
+	  }
+	}
+  }
 > String percentify(String input){
 	Double result = Double.parseDouble(input) / 100.0;
 	return 'result';

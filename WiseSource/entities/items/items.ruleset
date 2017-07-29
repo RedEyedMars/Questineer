@@ -1,0 +1,28 @@
+#ITEMS
+itemToken-s
+	[[a-zA-Z_][a-zA-Z0-9_]*] as NAME
+	[.*] as WILD
+	"itms" as ITMS
+	"hp" as HP
+	"def" as DEF
+	"dmg" as DMG
+	"value" as VAL
+	"weight" as WEI
+	"\n\t" as NEWTAB
+itemBrace-s are Braced 
+	[,.] as ITEM_FILE with WILD as item_file_name 
+	[\n\t,.] as ITEM_DESCRIPTION with WILD as description
+itemImport-s are Import
+	[><<\"entities/items/\",item_file_name,\".itms\">>\n] as IMPORT_ITEM from (NEWLINE|COMMENTS|import_any|item_declaration)*; with ITEM_FILE ITMS
+item_declaration
+	NAME as itemName item_parameter* ( NEWTAB item_parameter* )*
+item_parameter is silent
+	HP statRange as hp
+	DMG statRange as attack
+	DEF statRange as defense
+	VAL statRange as value
+	WEI statRange as weight
+	( event_name animation? BODY ) as event
+	( aspect_name ( IF boolean_statement )? ) as gain_aspect
+	( trait_name ( IF boolean_statement )? ) as gain_trait
+	( attack_name ( IF boolean_statement )? ) as gain_attack
