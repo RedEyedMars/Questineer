@@ -1,5 +1,5 @@
 Swing
-	Uses any weapon(if equipped) to attack foe.
+	Uses any weapon(if equipped) to attack foe;;
 	cd 4.5-5.5,-10..-10%DEX,1..2%CON
 	range 0.8-1.0,1-2%STR,0.5-1%CON,1-2%MND
 	damage {
@@ -15,7 +15,7 @@ Swing
 	}
 #
 Slash
-	Uses a blade to slash the foe.
+	Uses a blade to slash the foe;;
 	< host has item with blade
 	cd 3.5-4.5,-7.5..-7.5%DEX,1..2%CON,-5..-5%STR
 	range 0.75-0.95,1-2%DEX,1-1.5%CON
@@ -32,7 +32,7 @@ Slash
 	}#
 
 DaggerThrow
-	Throws your small blade a the foe.
+	Throws your small blade a the foe;;
 	cd				1-1.5 + -2.5..-2.5%DEX + 1..2%CON + -1..-1%MND
 	range 			4-5  +  2..5%STR
 	body damage 75..75%STR + 25..25%DEX

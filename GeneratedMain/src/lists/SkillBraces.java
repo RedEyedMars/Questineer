@@ -20,7 +20,7 @@ public class SkillBraces extends ParseList {
 								AssociationTokens.WILD,"skill_file_name"),"SKILL_FILE","skillBraces",",.");
 	public static final BracedParser SKILL_DESCRIPTION = new BracedParser(
 							new AddTokenParser(
-								AssociationTokens.WILD,"description"),"SKILL_DESCRIPTION","skillBraces","\n\t,.");
+								AssociationTokens.WILD,"description"),"SKILL_DESCRIPTION","skillBraces","\n\t,;;");
 
 	public static final ChoiceParser parser = new ChoiceParser(
 				SKILL_FILE,SKILL_DESCRIPTION);

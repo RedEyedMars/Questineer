@@ -1,5 +1,5 @@
 sharp
-	Gives a chance to cause @Bleeding when enemy is struck.
+	Gives a chance to cause @Bleeding when enemy is struck;;
 	equip {
 		if event->host->dex < 5  & 5% chance{
 			event->host gains bleeding
@@ -20,7 +20,7 @@ sharp
 		}
 	}
 dull
-	Gives extra miss chance.
+	Gives extra miss chance;;
 	equip {
 		event->host impose -1 on STR
 	}

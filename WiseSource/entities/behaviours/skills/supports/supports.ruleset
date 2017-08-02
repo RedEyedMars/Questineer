@@ -15,7 +15,7 @@ supportToken-s
 	"mind" as MIND_DMG
 supportBrace-s are Braced
 	[,.] as SUPPORT_FILE with WILD as support_file_name 
-	[\n\t,.] as SUPPORT_DESCRIPTION with WILD as description
+	[\n\t,;;] as SUPPORT_DESCRIPTION with WILD as description
 supportImport-s are Import
 	[><<\"entities/behaviours/skills/supports/\",support_file_name,\".sups\">>\n] as IMPORT_SUPPORT from (NEWLINE|COMMENTS|support_declaration)*; with SUPPORT_FILE SUPS
 support_declaration

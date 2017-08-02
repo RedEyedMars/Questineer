@@ -16,7 +16,7 @@ traitToken-s
 	"|" as OR
 traitBrace-s are Braced
 	[,.] as TRAITS_FILE with WILD as trait_file_name 
-	[\n\t,.] as TRAIT_DESCRIPTION with WILD as description
+	[\n\t,;;] as TRAIT_DESCRIPTION with WILD as description
 traitImport-s are Import
 	[><<\"entities/mods/traits/\",trait_file_name,\".trts\">>\n] as IMPORT_TRAIT from (NEWLINE|COMMENTS|trait_declaration)*; with TRAITS_FILE TRTS
 trait_declaration

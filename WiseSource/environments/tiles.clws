@@ -9,6 +9,7 @@ class 'packageName'."environments" Tile Environment->Position Loaddable Tickable
   ~Integer "numberOfAliveGeneratedEntities" = 0;
   ~Integer "limit" = 5;
   ~Boolean isPath = false;
+  ~Area area = null;
   Boolean isPath(){
     return false;
   }
@@ -203,6 +204,21 @@ class 'packageName'."environments" Path Tile{
   }
 }
 class 'packageName'."environments" Way ArrayList<Path> \Comparable<Way>{
+	~class Stepper // {
+	  Integer i = 0;
+	  void step(Entity stepper){
+	    if i >= \size() \- 1 {
+	      return false;
+	    }
+	    else {
+	      Path newPath = \get(i).step(stepper,\get(1));
+	      if newPath != \get(i) {
+	        i \+= 1;
+	      }
+	      return true;
+	    }
+	  }
+	}
     HashSet<Path> "checkSet";
     Path "goal";
     Double "distanceToGoal" = 0.0;

@@ -1,12 +1,12 @@
 TerritorialAggression
-	This monster establishes a radius within which it will attack unprovoked.
+	This monster establishes a radius within which it will attack unprovoked;;
 	cd 20-25
 	range 3.0-4.0
 	use {
 	  user->relationships.influence(new Relationship.Reasons.WithinTerritory(victim->name,user->name),-50)
 	}
 DefendMemberOf (Association group)
-	This monster defends other monsters of the same group as them.
+	This monster defends other monsters of the same group as them;;
 	? user has association with group
 	cd 5-10
 	range 8.0-10.0

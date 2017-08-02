@@ -41,6 +41,10 @@ public class VariableGroup extends ConcreteRule {
 					new OptionalParser(
 							ConditionTokens.CONDITION)),
 				new ChainParser(
+					new ListNameElementParser("activitynames"),
+					new OptionalParser(
+							ActivityTokens.ACTIVITY)),
+				new ChainParser(
 					new ListNameElementParser("map_names"),
 					new OptionalParser(
 							new AddTokenParser(

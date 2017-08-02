@@ -17,18 +17,19 @@ public class Statement extends ConcreteRule {
 	public void setup(){
 		set(
 			new ChoiceParser(
-				new ChainParser(
-					new OptionalParser(
-							ConditionTokens.NOT),
 					new AddTokenParser(
-						GeneralBraces.BRACED_STATEMENT,"braced"),
-					new ManyParser(
+						
+						new ChainParser(
+							GeneralTokens.ENTITY,
+							GeneralBraces.ENTITY_ID_CHOICE),"entity_selector"),
+					new AddTokenParser(
+						
+						new ChainParser(
 							
-								new ChainParser(
-									Rules.operator,
-									new ManyParser(
-											AssociationTokens.NEWLINE),
-									Rules.statement))),
+							new ChoiceParser(
+									new ListNameElementParser("map_names"),
+									ConditionTokens.STAR),
+							GeneralBraces.TILE_ID_CHOICE),"map_selector"),
 				new ChainParser(
 					new OptionalParser(
 							ConditionTokens.NOT),

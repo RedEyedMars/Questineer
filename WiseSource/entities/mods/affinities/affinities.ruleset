@@ -11,7 +11,7 @@ affinityToken-s
 	"affinity" as AFFINITY
 affinityBrace-s are Braced
 	[,.] as AFFINITY_FILE with WILD as affinity_file_name 
-	[\n\t,.] as AFFINITY_DESCRIPTION with WILD as description
+	[\n\t,;;] as AFFINITY_DESCRIPTION with WILD as description
 affinityImport-s are Import
 	[><<\"entities/mods/affinities/\",affinity_file_name,\".afts\">>\n] as IMPORT_AFFINITY from (NEWLINE|COMMENTS|affinity_declaration)*; with AFFINITY_FILE AFTS
 affinity_declaration

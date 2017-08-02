@@ -17,13 +17,16 @@ public class Operator extends ConcreteRule {
 	public void setup(){
 		set(
 			new ChoiceParser(
+					GeneralTokens.PLUSEQUALS,
+					GeneralTokens.MINUSEQUALS,
 					ConditionTokens.PLUS,
 					ConditionTokens.MINUS,
 					GeneralTokens.DIVIDE,
 					GeneralTokens.MULTIPLY,
 					GeneralTokens.EQUALS,
 					GeneralTokens.NOTEQUALS,
-					GeneralTokens.ORDINAL));
+					GeneralTokens.ORDINAL,
+					GeneralTokens.EQUALSIGN));
 
 	}
 

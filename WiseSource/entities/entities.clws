@@ -103,13 +103,16 @@ class 'packageName'."entities" Entity \Object Source Loaddable Tickable {
 	void release(Source "source"){}
 	String getName(){}
   }
+  @Integer ALIVE = 0;
+  @Integer DEAD  = 1;
   String name = null;
+  ~Integer status = ALIVE;
   ~Float "weightHeld" = 0f;
   ~Float "walkingSpeed" = 0.2f;
   ~Tile "spawn" = null;
   ~\ItemList "equippedItems";
   ~Skill focusSkill;
-  ~Environment->Location "location" = new Environment->Location(-1001,-1001,1001f,1001f,null,this);
+  ~Environment->Location location = new Environment->Location(-1001,-1001,1001f,1001f,null,this);
   ~\EntityMap->\_Reason "relationships";
   ~Activity currentActivity = null;
   ~Integer currentActivityIndex = -1;
@@ -156,7 +159,7 @@ class 'packageName'."entities" Entity \Object Source Loaddable Tickable {
       currentActivityIndex = 0;
     }
     if currentActivity!=null {
-      currentActivity.step(this);
+      currentActivity.on(new Events->\Tick(this));
     }
     \on(new Events->\Tick(this));
   }
@@ -164,6 +167,13 @@ class 'packageName'."entities" Entity \Object Source Loaddable Tickable {
     newAssociation.add(this);
     \gain(newAssociation,recruiter);
     \on(new Events->\Joined(recruiter, this));
+  }
+  void start(Activity newActivity){
+    activityList.add(0,newActivity);
+    currentActivityIndex \+= 1;
+  }
+  void stop(Activity oldActivity){
+    activityList.remove(oldActivity);
   }
   void stepNextActivity(){
     currentActivityIndex \+= 1;
@@ -195,6 +205,7 @@ class 'packageName'."entities" Entity \Object Source Loaddable Tickable {
     Entity.addGainLoss(Attack,Entity);
     Entity.addGainLoss(Support,Entity);
     Entity.addGainLoss(Quest,Entity);
+    Entity.addGainLoss(Activity,Entity);
     
     \createList(Item);
     \createListMap(Source, Int);
@@ -250,6 +261,9 @@ class 'packageName'."entities" Entity \Object Source Loaddable Tickable {
       switch "(int)(double)randomIndex" `randomStatBody`
       return null;
     }
+  }
+  Boolean isDead(){
+    return status == DEAD;
   }
 
 > Body onHitBody(){
@@ -400,6 +414,6 @@ class 'packageName'."entities" Entity \Object Source Loaddable Tickable {
 	\createListMap(Source, inputClass);
 	String sources = "Sources";
 	String inputName = "_" + inputClass.getName();
-	outputClass += ListMaps->\sources->\inputName 'asList'
+	outputClass += ~ListMaps->\sources->\inputName 'asList'
   }
 }

@@ -7,17 +7,10 @@ class 'packageName'."entities"."behaviours"."activities" Activity \Object Source
   ~String name = null;
   ~String description = null;
   ~Map<Path,Set<Path>> pathStoppers = new HashMap<Path,Set<Path>>();
-  ~Entity towardEntity = null;
-  ~Tile   towardTile = null;
-  ~Float  distanceToTarget = 0f;
-  ~Boolean isChasing = false;
-  void setTarget(Entity target, Float distance){
-    towardEntity = target;
-    distanceToTarget = distance;
-  }
-  void setTarget(Tile target, Float distance){
-    towardTile = target;
-    distanceToTarget = distance;
+  ~Entity targetEntity = null;
+  ~Boolean failed = false;
+  Boolean hasTarget() {
+    return targetEntity != null;
   }
   void rememberIncomingPath(Path in, Path to){
     if pathStoppers.containsKey(in){
@@ -25,51 +18,60 @@ class 'packageName'."entities"."behaviours"."activities" Activity \Object Source
     }
     pathStoppers.get(in).add(to);
   }
-  void step(Entity host){
-    if isChasing {
-      if towardEntity != null {
-        host.getLocation().step(host.getWalkingSpeed(),towardEntity.getLocation());
-        if host.getLocation().getDistanceTo(towardEntity.getLocation()) < distanceToTarget {
-          isChasing = false;
-          towardEntity = null;
-        }
-      }
-      else if towardTile != null {
-        host.getLocation().step(host.getWalkingSpeed(),towardTile);
-        if host.getLocation().getDistanceTo(towardTile) < distanceToTarget {
-          isChasing = false;
-          towardTile = null;
+  Entity getTarget(Entity host, \EntityCriteria targetCriteria){
+    return host.getLocation().getClosestEntity(targetCriteria);
+  }
+  Tile getDestination(Entity host){
+    return null;
+  }
+  Boolean hasSucceeded(Entity host){
+    return false;
+  }
+  Boolean hasFailed(Entity host){
+    return failed;
+  }
+  List<Usable> getUsables(){
+    return null;
+  }
+  void add(Usable newUsable){
+  }
+  void remove(Usable newUsable){
+  }
+  void on(Events->\Tick event){
+  	Entity host = event.getHost();
+    if \hasSucceeded(host){
+      \on(new Events->\Success(host,this));
+      host.stop(this);
+    }
+    else if \hasFailed(host){
+      \on(new Events->\Fail(host,this));
+      host.stop(this);
+    }
+    else if \step(host)==false {
+      \on(new Events->\Idle(host,this));
+    }
+  }
+  Boolean step(Entity host){
+    if host.getFocusSkill()==null || \getUsables().contains(host.getFocusSkill()) == false || host.getFocusSkill().use(host,this) == false {
+      for Usable usable : \getUsables() {
+        if usable!=host.getFocusSkill() && usable.use(host,this) {
+          return true;
         }
       }
     }
-    else {
-      if host.getFocusSkill()==null || "usables".containsKey(host.getFocusSkill().getId()) == false || host.getFocusSkill().use(host,this) == false {
-        for Usable usable : "usables" {
-          if usable!=host.getFocusSkill() && usable.use(host,this) {
-            return void;
-          }
-        }
-        isChasing = true;
-        Float distance = Float.MAX_VALUE;
-        Entity targetEntity = null;
-        for Usable usable : "usables" {
-          if usable.canChase() {
-            Float range = usable.getRange(host);
-            Entity potentialEntity = host.getLocation().getClosestEntity(usable.getTargetCriteria());
-            if potentialEntity!=null&&potentialEntity.getLocation().getDistanceTo(host.getLocation()) < distance {
-              distance = range;
-              targetEntity = potentialEntity;
-            }
-          }
-        }
-        if targetEntity != null {
-          \setTarget(targetEntity, distance);
-        }
-        else {
-          host.stepNextActivity();
-        }
-      }
-    }
+	return false;
+  }
+  void on(Events->\Idle event){
+    List<Entity> entitiesToTarget = event.getHost().getLocation().getEntitiesWithin(20f);
+	for Entity candidate : entitiesToTarget {
+	  for Usable usable : \getUsables() {
+	    if usable.getTargetCriteria().satisfies(candidate) {
+	      event.getHost().start( new Activities->\ChasingEntity(25, candidate, usable.getRange(event.getHost())) );
+	      return void;
+	    }
+	  }
+	}
+	failed = true;
   }
   Activity->Id getId(){
     return null;
@@ -80,37 +82,99 @@ class 'packageName'."entities"."behaviours"."activities" Activities {
     return null;
   }
 > void setup(ParseContext data){
-    Entity.addGainLoss(Usable,Activity);
+    \createCriteria(Activity);
+    Events.addToEventMethod("load",Activity,{});
+    Events.addToEventMethod("idle",Activity,{});
+    Events.addToEventMethod("success",Activity,{});
+    Events.addToEventMethod("fail",Activity,{});
   }
 > void declaration(IToken declarationToken){
     String activityName = ^declarationToken->"activityName";
     String description = 'declarationToken->"description"';
+    
+    
     Activities += class activityName / Activity / {
       @Activity->Id id = new Activity->Id();
+      @List<Usable> allUsables = new ArrayList<Usable>();
+      ~Entity host = null;
       String getName(){
         return ''activityName'';
       }
       String getDescription(){
         return ''description'';
       }
-      
+      List<Usable> getUsables(){
+        return allUsables;
+      }
+      Boolean hasSucceeded(Entity host){
+      }
+      Boolean hasFailed(Entity host){
+      }
       Activity->Id getId(){
         return id;
       }
     }
-    Entity.addGainLoss(Usable,Activities->'activityName');
+    declarationToken : element : variable_header {
+      \addVariableHeader(element, Activities->'activityName');
+    }
+    declarationToken : element : variable_declaration {
+      Variable variable = \addVariableHeader(element->"variable_header", Activities->'activityName');
+      variable.setIsWeak(true);
+      if element->"statement" != null {
+        variable.setAssignment(\getStatement(element->"statement",Activities->'activityName'.getContext()));
+      }
+    }
     Activities->*"create".prependToBody({
       if "activityName".equals(''activityName'') {
         return new Activities->'activityName'(); 
       }
     });
-    Entity += ~Activities->'activityName' 'activityName+"Activity"' 
     declarationToken : element : className {
       String methodName = "gain["+'element'+",Source]";
       String variableName = 'element'.toLowerCase();
       Entity->*'methodName'.appendToBody({
-          'activityName+"Activity"'.gain('variableName',"source");
+          Activities->'activityName'."allUsables".add('variableName');
         });
     }
+    declarationToken : element : endState {
+      if element->"SUCCEED" != null {
+        Context successContext = Activities->'activityName'->*"hasSucceeded[Entity]".getContext();
+        Activities->'activityName'->*"hasSucceeded[Entity]".appendToBody({
+          if `\getBooleanStatement(element->"boolean_statement",successContext)` {
+            return true;
+          }
+        });
+      }
+      else {
+        Context failContext = Activities->'activityName'->*"hasFailed[Entity]".getContext();
+        Activities->'activityName'->*"hasFailed[Entity]".appendToBody({
+          if `\getBooleanStatement(element->"boolean_statement",failContext)` {
+            return true;
+          }
+        });
+      }
+    }
+    declarationToken : element : getTarget {
+      Activities->'activityName' += Entity getTarget(Entity host, \EntityCriteria targetCriteria){}
+      Context getTargetContext = Activities->'activityName'->*"getTarget[Entity,EntityCriteria]".getContext();
+      element : atom : body_element {
+        Activities->'activityName'->*"getTarget[Entity,EntityCriteria]".appendToBody(\getBodyElement(atom,getTargetContext));
+      }
+    }
+    declarationToken : element : getDestination {
+      Activities->'activityName' += Entity getDestination(Entity host){}
+      Context getTargetContext = Activities->'activityName'->*"getDestination[Entity]".getContext();
+      element : atom : body_element {
+        Activities->'activityName'->*"getDestination[Entity]".appendToBody(\getBodyElement(atom,getTargetContext));
+      }
+    }
+    declarationToken : element : event {
+      Context eventContext = Events.getEventContext('element->"event_names"',Activities->'activityName');
+      Events.addToEventMethod('element->"event_names"',Activities->'activityName',\getBodyElements(element,eventContext));
+    }
+    
+    Activities->'activityName'->*.appendToBody({\on(new Events->\Load(host));});
+    Activities->'activityName'->*"hasSucceeded[Entity]".appendToBody({return false;});
+    Activities->'activityName'->*"hasFailed[Entity]".appendToBody({return false;});
   }
 }

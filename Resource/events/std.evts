@@ -38,7 +38,21 @@ joined
 	Entity recruiter
 	Entity recruit
 
+startQuest
+	Quest quest
+idle
+	Entity host
+	Activity idling
+success
+	Entity host
+	Activity succeeded
+fail
+	Entity host
+	Activity failed
+
 load
+	Entity host
+start
 	Entity host
 tick
 	Entity host

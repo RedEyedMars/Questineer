@@ -8,10 +8,27 @@ questToken-s
 	"qsts" as QSTS
 	"quest" as QUEST
 	"," as COMMA
+	"type" as TYPE
+	"goto" as GOTO
+	"reach" as REACHED
+	"|" as QUEST_OR
+	"start" as START
+	"listen" as LISTEN
 questBrace-s are Braced
+	[[,]] as TILE_NAME_SELECT with WILD as tileName
 	[,.] as QUEST_FILE with WILD as quest_file_name 
 	[\n\t,;;] as QUEST_DESCRIPTION with WILD as description
 questImport-s are Import
-	[><<\"entities/behaviours/quests/\",quest_file_name,\".atvs\">>\n] as IMPORT_QUEST from (NEWLINE|COMMENTS|quest_declaration)*; with QUEST_FILE QSTS
-quest_declaration
-	NAME as questName QUEST_DESCRIPTION
+	[><<\"entities/behaviours/quests/\",quest_file_name,\".qsts\">>\n] as IMPORT_QUEST from (NEWLINE|COMMENTS|quest_type_declaration)*; with QUEST_FILE QSTS
+quest_type_declaration
+	TYPE NAME as questName QUEST_DESCRIPTION quest_type_element*
+quest_type_element is silent
+	COMMENTS
+	PLUS variable_declaration
+	( LISTEN BODY ) as listen
+	( ( START | event_name ) as event_names BODY ) as event
+	NEWLINE
+quest_destination
+	GOTO ( quest_tile_description ( QUEST_OR quest_tile_description )* )REACHED BODY
+quest_tile_description
+	map_name TILE_NAME_SELECT ORDINAL INTEGER

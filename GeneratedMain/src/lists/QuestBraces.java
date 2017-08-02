@@ -15,6 +15,9 @@ public class QuestBraces extends ParseList {
 		return "questBrace";
 	}
 
+	public static final BracedParser TILE_NAME_SELECT = new BracedParser(
+							new AddTokenParser(
+								AssociationTokens.WILD,"tileName"),"TILE_NAME_SELECT","questBraces","[,]");
 	public static final BracedParser QUEST_FILE = new BracedParser(
 							new AddTokenParser(
 								AssociationTokens.WILD,"quest_file_name"),"QUEST_FILE","questBraces",",.");
@@ -23,5 +26,5 @@ public class QuestBraces extends ParseList {
 								AssociationTokens.WILD,"description"),"QUEST_DESCRIPTION","questBraces","\n\t,;;");
 
 	public static final ChoiceParser parser = new ChoiceParser(
-				QUEST_FILE,QUEST_DESCRIPTION);
+				TILE_NAME_SELECT,QUEST_FILE,QUEST_DESCRIPTION);
 }

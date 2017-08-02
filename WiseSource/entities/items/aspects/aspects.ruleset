@@ -9,7 +9,7 @@ aspectToken-s
 	"-ness" as ASPECT_NESS
 aspectBrace-s are Braced
 	[,.] as ASPECT_FILE with WILD as aspect_file_name 
-	[\n\t,.] as ASPECT_DESCRIPTION with WILD as description
+	[\n\t,;;] as ASPECT_DESCRIPTION with WILD as description
 aspectImport-s are Import
 	[><<\"entities/items/aspects/\",aspect_file_name,\".asps\">>\n] as IMPORT_ASPECT from blank:(NEWLINE|COMMENTS|aspect_declaration)*; with ASPECT_FILE ASPS
 aspect_declaration

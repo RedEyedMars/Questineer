@@ -92,7 +92,7 @@ class 'packageName'."entities"."behaviours"."skills"."attacks" Attacks {
         Attack->Damage "damage" = new Attack->Damage();
       }
     }
-    Context damageContext = Attacks->'attackName'.getMethod("getDamage").getCurrentContext();
+    Context damageContext = Attacks->'attackName'.getMethod("getDamage").getContext();
     ~Boolean isFirst = true;
     declarationToken : element 
       : cooldown {

@@ -72,6 +72,14 @@ class 'packageName'."misc" Criteria<TypeName> {
   }
 }
 
+> Body getBodyElements(IToken elementsToken, Context context){
+    Body result = new Body ();
+    result.setParentContext(context);
+    elementsToken : element : body_element {
+      result.add(\getBodyElement(element,result.getContext()));
+    }
+    return result;
+  }
 > Statement getBodyElement(IToken elementToken, Context context){
     elementToken : element
       : statement {
@@ -95,6 +103,9 @@ class 'packageName'."misc" Criteria<TypeName> {
       : if_statement {
         return \getIfStatement(element, context);
       }
+      : for_statement {
+        return \getForStatement(element, context);
+      }
     return null;
   }
 > Statement getVariableDeclaration(IToken variableDeclarationToken, Context context){
@@ -110,13 +121,14 @@ class 'packageName'."misc" Criteria<TypeName> {
       return | 'typeName' 'variableDeclarationToken->"variable_header"->"variableName"' = null; |;
     }
   }
-> void addVariableHeader(IToken variableHeaderToken, Class inputClass){
+> Variable addVariableHeader(IToken variableHeaderToken, Class inputClass){
     String typeName = \getTypeName(variableHeaderToken->"type_name");
     Context type = inputClass.getContext().getClassContext(typeName);
     if type == null {
       throw \Generator.completeTokenErrorMessage(variableHeaderToken) + "Could not find type:" + typeName + "!";
     }
     inputClass += 'typeName' 'variableHeaderToken->"variableName"'
+    return inputClass.getVariable('variableHeaderToken->"variableName"');
   }
 > Statement getIfStatement(IToken ifStatementToken, Context context){
     Statement header     = new Statement ();
@@ -146,6 +158,22 @@ class 'packageName'."misc" Criteria<TypeName> {
     else if mode == 1 { return |if `header` `body` else                 `elseBody` |; }
     else if mode == 2 { return |if `header` `body` else if `elseHeader` `elseBody` |; }
     else              { return null;                                              }
+  }
+> Statement getForStatement(IToken forStatementToken, Context context){
+    
+    if forStatementToken->"fromList" != null {
+      IToken variableHeaderToken = forStatementToken->"fromList"->"variable_header";
+      String typeName = \getTypeName(variableHeaderToken->"type_name");
+      Context type = context.getClassContext(typeName);
+      if type == null {
+        throw \Generator.completeTokenErrorMessage(variableHeaderToken) + "Could not find type:" + typeName + "!";
+      }
+      context.add('typeName' 'variableHeaderToken->"variableName"';);
+      Statement right = \getStatement(forStatementToken->"fromList"->"statement", context) ;
+      Body body = \getBodyElements(forStatementToken, context);
+      return |for 'typeName' 'variableHeaderToken->"variableName"' : `right` `body`|;
+    }
+    return null;
   }
 
 
@@ -293,10 +321,24 @@ class 'packageName'."misc" Criteria<TypeName> {
 	  : variable_group {
 	    ret.add(\getIdFromName(element));
 	  }
+	  
+	  : access_static {
+	    String typeName = \getTypeName(element->"type_name");
+	    Context typeContext = currentContext.getClassContext(typeName);
+	    if typeContext == null {
+		    throw "Could not find "+'typeName'+" type in context!";
+		}
+	    String variableName = 'element->"variableName"';
+	    currentContext = typeContext.link(variableName); 
+		if currentContext == null {
+		    throw "Could not find "+'variableName'+" variable in context!";
+		}
+		ret.add(|'typeName'.'variableName'|);
+	  }
 	  : variableName {
 	  	currentContext = currentContext.link('element'); 
 		if currentContext == null {
-		  throw "Could not find \"+element+\" variable in context!";
+		    throw "Could not find "+'element'+" variable in context!";
 		}
 		if  ret.size() == 0 {
 		  ret.add(|'element'|);
@@ -428,6 +470,9 @@ class 'packageName'."misc" Criteria<TypeName> {
 	  class 'packageName'."misc"."lists" listName ArrayList<listClass> {
 	    'listName' *( listClass... "elements" ){
 	      \super(Arrays.asList("elements"));
+	    }
+	    void sort(\Comparator<listClass> comparator){
+	      \Collections.sort(this,comparator);
 	    }
 	  }
 	}

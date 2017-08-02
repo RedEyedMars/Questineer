@@ -1,8 +1,179 @@
-Attacking Attack
+attacking(Float range) Attack
 	Attack target;;
-Supporting Support
+supporting Support
 	Keep everyone safe;;
-Questing Quest
-	Go to certain places and reap their rewards;;
-Wandering
-	Just walk around;;
+questing Quest
+	Go to certain places, do certain things, and reap their rewards;;
+	+ Quest currentQuest = null
+	succeed if currentQuest!=null & currentQuest->status == Quest=>SUCCESS
+	fail if failed | currentQuest!=null & currentQuest->status == Quest=>FAIL
+	step {
+	  if currentQuest == null {
+	    if !getUsable().isEmpty() {
+	      currentQuest = Quest<-getUsables().get(int<-(Math.random() * getUsables().size()))
+	    }
+	    else {
+	      failed = true
+	      return false
+	    }
+	  }
+	  if currentQuest.getStatus() == Quest=>UNSTARTED {
+	    currentQuest.on(new Events.StartQuest(currentQuest,host))
+	  }
+	  if currentQuest.getCurrentActivity() != null {
+	    currentQuest.getCurrentActivity().on(new Events.Tick(host))
+	    return true
+	  }
+	  else {
+	    return false
+	  }
+	}
+hunt(EntityCriteria criteriaToTarget, Tile.Id huntingGrounds, Float range, Events.Die.Listener deathListener, ActivityCriteria toSucceed) Attack
+	Hunt monsters until told otherwise.;;
+	+ TileList toHuntLocations
+	+ TileList huntedLocations
+	succeed if toSucceed.satisfies(this)
+	load {
+	  TileList toAdd = event->host->location.getTilesWithin(250.0 , huntingGrounds)
+	  toAdd.sort(new Tiles.Comparators.DescendingDistance(event->host->location))
+	  toHuntLocations.addAll(toAdd)
+	}
+	step {
+	  EntityList entitiesToTarget = host->location.getEntitiesWithin(range,criteriaToTarget)
+	  Entities.sort(entitiesToTarget,new Entities.Comparators.AscendingDistance(host->location))
+	  if !entitiesToTarget.isEmpty() {
+	    host.add(0,new Activities.Kill(entitiesToTarget.get(0)))
+	  }
+	  else if !toHuntLocations.isEmpty() {
+	    Tile toHunt = toHuntLocations.remove(toHuntLocations.size() - 1)
+	    host.add(0,new Activities.Goto(toHunt))
+	    huntedLocations.add(toHunt)
+	  }
+	  else {
+	    TileList toAdd = host->location.getTilesWithin(250.0,huntingGrounds)
+	    toAdd.removeAll(huntedLocations)
+	    if !toAdd.isEmpty() {
+	      Tiles.sort(toAdd,new Tiles.Comparators.DescendingDistance(host->position))
+	      toHuntLocations.addAll(toAdd)
+	      on(event)
+	    }
+	    else {
+	     failed = true
+	    }
+	  }
+	  else {
+	    failed = true
+	  }
+	}
+kill(Entity toKill) Attack
+	Go kill one particular monster.;;
+	+ Activity chaseActivity = null
+	succeed if toKill.isDead()
+	load {
+	  setTargetEntity(toKill)
+	  on(new Events.Idle(this,event->host))
+	}
+	listen {
+	  if event.getId() == Events.Fail=>id & (Events.Collect<-event)->failed == chaseActivity {
+	    failed = true
+	  }
+	}
+	idle {
+	  Float longestRange = -1
+	  for Usable usable : getUsables() {
+	    Float potentialRange = usable.getRange(event->host)
+	    if usable.getTargetCriteria().satisfies(toKill) {
+	      if potentialRange > longestRange {
+	        longestRange = potentialRange
+	      }
+	    }
+	  }
+	  if longestRange >= 0 {
+	    chaseActivity = new Activities.ChasingEntity(25,toKill,longestRange)
+	    chaseActivity.add(new Activity.Listeners.Fail(this))
+	    event->host.add(0,chaseActivity)
+	  }
+	}
+chasingEntity(Integer ticks, Entity toChase, Float successRange)
+	Get close to one monster(disregard the path).;;
+	succeed if host->location.getDistanceTo(toChase->location) <= successRange
+	fail if ticks <= 0
+	tick { ticks -= 1 }
+	step {
+	  event->host->location.step(event->host->walkingSpeed,toChase->location)
+	  return true
+	}
+chasingTile(Integer ticks, Tile toChase, Float successRange)
+	Get close to one particular tile (disregard the path).;;
+	succeed if host->location.getDistanceTo(toChase) <= successRange
+	fail if ticks <= 0
+	tick { ticks -= 1 }
+	step { 
+	  host->location.step(host->walkingSpeed,toChase)
+	  return true
+	}
+goto(Tile.Id gotoId)
+	Find a particular tile, follow path to get to it.;;
+	succeed if hasReachedEnd & host->location.getDistanceTo(destination) <= 0.5
+	+ Tile destination = null
+	+ Way.Stepper stepper = null
+	+ Path closestPath = null
+	+ Boolean hasExplored = false
+	+ Boolean hasReachedEnd = false
+	load {
+	  destination = event->host->location.getClosestTile(gotoId)
+	  closestPath = Path<-(event->host->location.getClosestPath())
+	}
+	step {
+	  if stepper != null {
+	    if hasReachedEnd {
+	      host->location.step(host->walkingSpeed,destination)
+	    }
+	    else if !stepper.step(host) {
+	      hasReachedEnd = true
+	    }
+	    return true
+	  }
+	  else if host->location.getTile() != closestPath {
+	    host->location.step(host->walkingSpeed,closestPath)
+	  }
+	  else {
+	    Path destinationPath = destination.getClosestPath()
+	    WayList ways = closestPath.getWaysTo(destinationPath, this.getPathStoppers())
+	    if ways.isEmpty() {
+	      return false
+	    }
+	    else {
+	      currentWay = ways.get(0)
+	    }
+	  }
+	  return true
+	}
+	idle {
+	  if hasExplored {
+	    failed = true
+	  }
+	  else {
+	    event->host.start(new Activities.Exploring(50))
+	  }
+	}
+Exploring(Integer ticks)
+	Go to unexplored parts of the map.;;
+	+ Tile destination = null
+	succeed if ticks <=0
+	load {
+	  destination = event->host->location.getUnexploredPath()
+	}
+	idle {
+	  destination = event->host->location.getUnexploredPath()
+	}
+	step {
+	  ticks -= 1
+	  if destination.isWithin(event->host->location) {
+	    return false
+	  }
+	  else { 
+	    event->host->location.step(event->host->walkingSpeed,toChase->location)
+	    return true
+	  }
+	}

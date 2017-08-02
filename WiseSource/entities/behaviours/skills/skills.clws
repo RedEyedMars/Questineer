@@ -52,8 +52,15 @@ class 'packageName'."entities"."behaviours"."skills" Skill \Object Source Usable
     if \isOffCooldown() {
       return false;
     }
-	for Entity potential : user.getLocation().getEntitiesWithin(\getRange(user)) {
-	  if targetCriteria.satisfies(potential) {
+    if activity.hasTarget() {
+      if targetCriteria.satisfies(activity.getTargetEntity()) {
+        \use(user, activity.getTargetEntity());
+	    return true;
+      }
+      return false;
+    }
+    else {
+	  for Entity potential : user.getLocation().getEntitiesWithin(\getRange(user),targetCriteria) {
 	    \use(user,potential);
 	    return true;
 	  }
@@ -104,7 +111,7 @@ class 'packageName'."entities"."behaviours"."skills" Skills {
     Skills->'skillName'->*.appendToBody({
       "targetCriteria" = new Skills->'skillName'->TargetCriteria();
     });
-    Context useContext = Skills->'skillName'.getMethod("use").getCurrentContext();
+    Context useContext = Skills->'skillName'.getMethod("use").getContext();
     ~Boolean isFirst = true;
     declarationToken : element
       : variable_header {
@@ -112,7 +119,7 @@ class 'packageName'."entities"."behaviours"."skills" Skills {
       }
       : require {
         element : atom : boolean_statement {
-          Context canUseContext = Skills->'skillName'->TargetCriteria.getMethod("satisfies").getCurrentContext();
+          Context canUseContext = Skills->'skillName'->TargetCriteria.getMethod("satisfies").getContext();
           Skills->'skillName'->TargetCriteria->*"satisfies".prependToBody(| if `\getBooleanStatement(atom,true,canUseContext)` {
             return false;
           }|);

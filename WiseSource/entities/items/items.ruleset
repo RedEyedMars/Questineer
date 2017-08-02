@@ -11,7 +11,7 @@ itemToken-s
 	"\n\t" as NEWTAB
 itemBrace-s are Braced 
 	[,.] as ITEM_FILE with WILD as item_file_name 
-	[\n\t,.] as ITEM_DESCRIPTION with WILD as description
+	[\n\t,;;] as ITEM_DESCRIPTION with WILD as description
 itemImport-s are Import
 	[><<\"entities/items/\",item_file_name,\".itms\">>\n] as IMPORT_ITEM from (NEWLINE|COMMENTS|import_any|item_declaration)*; with ITEM_FILE ITMS
 item_declaration

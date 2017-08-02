@@ -10,13 +10,10 @@ class 'packageName'."entities"."behaviours"."quests" Quest Object Usable {
   @Integer IN_PROGRESS = 0;
   @Integer SUCCESS     = 1;
   @Integer FAIL        = 2;
-  ~List<Path> destinations       = new ArrayList<Path>();
-  ~List<Path> failedDestinations = new ArrayList<Path>();
-  ~List<Way>  currentWays        = null;
-  ~Way        currentWay         = null;
-  ~Path       currentProgress    = null;
-  ~Path       currentFulfillment = null;
   ~Integer    status             = UNSTARTED;
+  ~Activity currentActivity      = null;
+  ~Integer currentActivityIndex  = -1;
+  ~List<Activity> activities      = new ArrayList<Activity>();
   Quest->Id getId(){ return null; }
   Boolean canChase(){
     return false;
@@ -27,90 +24,97 @@ class 'packageName'."entities"."behaviours"."quests" Quest Object Usable {
   \EntityCriteria getTargetCriteria(){
     return new Quest->TargetCriteria();
   }
-  void generateDestinations(Entity quester){}
-  Boolean fulfill(Entity quester, Path destinationReached){
-    return true;
+  void add(Activity newActivity){
+    activities.add(newActivity);
+    newActivity.add(new Quest.Listeners.Success(this,activities.size()));
+    newActivity.add(new Quest.Listeners.Fail(this));
   }
-  Boolean use(Entity quester, Activity activity){
-    if status == UNSTARTED {
-      \generateDestinations(quester);
-      status = IN_PROGRESS;
-      return true;
+  void advanceTo(Integer newIndex){
+    if newIndex < activities.size() {
+      currentActivity = activities.get(newIndex);
+      currentActivityIndex = newIndex;
     }
-    else if status != IN_PROGRESS {
-      return false;
+    else {
+      status = SUCCESS;
     }
-    else if currentFulfillment != null {
-      if \fulfill(quester,currentFulfillment) {
-        currentFulfillment = null;
-      }
-      return true;
-    }
-    else if currentProgress!=null &&! currentProgress.isWithin(quester.getLocation()){
-      quester.getLocation().step(quester.getWalkingSpeed(),currentProgress);
-      return true;
-    }
-    else if currentWay==null &&! destinations.isEmpty(){
-      if currentWays!=null &&! currentWays.isEmpty() {
-        currentWay = currentWays.remove(0);
-        return true;
-      }
-      else {
-        if currentProgress == null {
-          if quester.getLocation().getTile().isPath() {
-            currentProgress = "(Path)quester".getLocation().getTile();
-          }
-          else {
-            currentProgress = quester.getLocation().getTile().getClosestPath();
-            return true;
-          }
-        }
-        currentWays = currentProgress.getWaysTo(destinations.get(0),activity.getPathStoppers());
-        while currentWays.isEmpty() &&! destinations.isEmpty() {
-          failedDestinations.add(destinations.remove(0));
-          currentWays = currentProgress.getWaysTo(destinations.get(0),activity.getPathStoppers());
-        }
-        if currentWays.isEmpty() {
-          List<Path> deadDestinations = new ArrayList<Path>();
-          while currentWays.isEmpty() &&! failedDestinations.isEmpty() {
-            destinations.add(failedDestinations.remove(0));
-            currentWays = currentProgress.getWaysTo(destinations.get(0),activity.getPathStoppers());
-            if currentWays.isEmpty()==false {
-              currentWay = currentWays.remove(0);
-              return true;
-            }
-            else {
-              deadDestinations.add(destinations.remove(0));
-            }
-          }
-          failedDestinations.addAll(deadDestinations);
-          return false;
-        }
-        else {
-          currentWay = currentWays.remove(0);
-          return true;
-        }
-      }
-    }
-    else if currentWay==null && destinations.isEmpty() {
-      \generateDestinations(quester);
-      return \use(quester,activity);
-    }
-    else if currentWay!=null {
-      currentProgress = currentProgress.step(quester,currentWay.remove(0));
-      if currentWay.isEmpty() {
-        currentWay = null;
-      }
-      for Path destination : destinations {
-        if currentProgress == destination {
-          currentFulfillment = destination;
-          return true;
-        }
-      }
-      return true;
-    }
-    return false;
   }
 }
 class 'packageName'."entities"."behaviours"."quests" Quests {
+> void setup(ParseContext data){
+    Events.addToEventMethod("startQuest",Quest,{
+      if "activities".isEmpty()==false {
+        currentActivity = activities.get(0);
+        currentActivityIndex = 0;
+        status = IN_PROGRESS;
+      }
+      else {
+        status = FAIL;
+      }
+    });
+  }
+> void typeDeclaration(IToken declarationToken){
+    String questName = 'declarationToken->"questName"';
+    String description = 'declarationToken->"description"';
+    Quests += class questName / Quest / {
+      void generateDestinations(Entity quester){}
+      Boolean fulfill(Entity quester, Path destinationReached){
+        return true;
+      }
+    }
+    Statement tileClauses = new Statement();
+    tileClauses.set("&&");
+    ~Integer tileCount = 0;
+    declarationToken : element : quest_destination {
+      Statement tileClause = new Statement();
+      tileClause.brace();
+      tileClause.set("||");
+      Quests->'questName' += ~Set<Path> '"visited"+tileCount' = new HashSet<Path>()
+      Quests->'questName' += ~Set<Path> '"toVisit"+tileCount' = new HashSet<Path>()
+      element : atom : quest_tile_description {
+        String tileName = 'atom->"tileName"'.replace(" ","");
+        String mapName = 'atom->"mapName"'.replace(" ","");
+        String negatedOperator = \negateOperator('atom->"ORDINAL"');
+        Statement tileNameClause = new Statement();
+        tileNameClause.set(negatedOperator);
+        tileNameClause.add(|'"visited"+tileCount'.size()|);
+        tileNameClause.add(|'atom->"INTEGER"'|);
+        tileClause.add(tileNameClause);
+        
+        Quests->*"fulfill".prependToBody({
+          if '"toVisit"+tileCount'.contains("destinationReached") {
+            '"visited"+tileCount'.add("destinationReached");
+          }
+        });
+        Quests->*"generateDestinations".prependToBody({
+          '"toVisited"+tileCount'.add("quester".getLocation().getEnvironment(Environments->'mapName'."id").getPathFromId("quester".getLocation(),Tiles->'mapName+tileName'."id"));
+        });
+      }
+      tileClauses.add(tileClause);
+      tileCount \+= 1;
+    }
+    if tileClauses.size() > 0 {
+      Quests->*"fulfill".prependToBody({
+        if `tileClauses` {
+          return false;
+        }
+      });
+    }
+    declarationToken : element : event {
+      Body eventBody = new Body ();
+      ~String eventName = 'element->"event_names"';
+      if eventName == "start" || eventName == "load" {
+        eventName = "startQuest";
+      }
+      Context eventContext = Events.addToEventMethod(eventName,Quests->'questName',{});
+      element : atom : body_element {
+        eventBody.add(\getBodyElement(atom,eventContext));
+      }
+      eventBody.add(|super.on("event");|);
+      Events.addToEventMethod(eventName,Quests->'questName',eventBody);
+    }
+    Quests->'questName'->*"fulfill".prependToBody({
+      return true;
+    });
+    
+  }
 }

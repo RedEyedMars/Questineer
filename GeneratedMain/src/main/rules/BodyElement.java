@@ -19,6 +19,8 @@ public class BodyElement extends ConcreteRule {
 			new ChoiceParser(
 					Rules.return_statement,
 					Rules.if_statement,
+					Rules.while_statement,
+					Rules.for_statement,
 					new AddTokenParser(
 						
 						new ChainParser(
@@ -29,6 +31,11 @@ public class BodyElement extends ConcreteRule {
 						new ChainParser(
 							Rules.variable_call,
 							Rules.imposition),"imposition"),
+					new AddTokenParser(
+						
+						new ChainParser(
+							Rules.variable_call,
+							Rules.quest_addition),"quest_addition"),
 					Rules.variable_declaration,
 					Rules.statement));
 

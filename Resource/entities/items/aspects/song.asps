@@ -1,6 +1,6 @@
 
 poisoning
-	Chance to cause @Poisoned to enemies struck.
+	Chance to cause @Poisoned to enemies struck;;
 	equip {
 		if event->hero->dex < 8 & 25% chance {
 			event->hero gains poisoned from event->item
@@ -48,7 +48,7 @@ poisoned
 	}
 
 flaming
-	Has a chance to cause @Aflame to enemies struck.
+	Has a chance to cause @Aflame to enemies struck;;
 	equip {
 		if event->hero->con < 8 {
 			if 20% chance {
@@ -102,7 +102,7 @@ flaming
 		}
 	}
 aflame
-	Causes damage for each @Aflame that the host has.
+	Causes damage for each @Aflame that the host has;;
 	gained {
 		if event->host->con > 14 | event->host has affinity for ground {
 			if 15% chance {
@@ -152,9 +152,9 @@ aflame
 		}
 	}
 disintegerate
-	Destroys the target by overpowering it with fire.
+	Destroys the target by overpowering it with fire;;
 molten
-	Has a chance to @Disintegerate either enemy struck, or itself.
+	Has a chance to @Disintegerate either enemy struck, or itself;;
 	equip {
 		if event->hero->con < 8 {
 			if 30% chance { 
@@ -199,7 +199,7 @@ molten
 			host.destroy(event->attack,self)
 		}
 cold
-	Has a chance give @Frozen to enemies struck.
+	Has a chance give @Frozen to enemies struck;;
 	pre_attack {
 		if event->defender is healing {
 			if event->attacker->str > event->defender->con + 5 {
@@ -242,7 +242,7 @@ cold
 	}
 
 frozen
-	Every tick has a chance to stun the host.
+	Every tick has a chance to stun the host;;
 	gained {
 		event->host gains stun from self
 	}

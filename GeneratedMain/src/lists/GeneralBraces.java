@@ -50,7 +50,31 @@ public class GeneralBraces extends ParseList {
 															Rules.variable_header)))),"METHOD_PARAMETERS","generalBraces","(,)");
 	public static final BracedParser BRACED_STATEMENT = new BracedParser(
 							Rules.statement,"BRACED_STATEMENT","generalBraces","(,)");
+	public static final BracedParser TILE_ID_CHOICE = new BracedParser(
+						new ChainParser(
+							new MultipleParser(
+									new AddTokenParser(
+										AssociationTokens.NAME,"tileName")),
+							new ManyParser(
+									
+										new ChainParser(
+											EntityTokens.PIPE,
+											new MultipleParser(
+													new AddTokenParser(
+														AssociationTokens.NAME,"tileName"))))),"TILE_ID_CHOICE","generalBraces","[,]");
+	public static final BracedParser ENTITY_ID_CHOICE = new BracedParser(
+						new ChainParser(
+							new MultipleParser(
+									new AddTokenParser(
+										AssociationTokens.NAME,"tileName")),
+							new ManyParser(
+									
+										new ChainParser(
+											EntityTokens.PIPE,
+											new MultipleParser(
+													new AddTokenParser(
+														AssociationTokens.NAME,"tileName"))))),"ENTITY_ID_CHOICE","generalBraces","[,]");
 
 	public static final ChoiceParser parser = new ChoiceParser(
-				QUOTE,BODY,METHOD_ARGUMENTS,METHOD_PARAMETERS,BRACED_STATEMENT);
+				QUOTE,BODY,METHOD_ARGUMENTS,METHOD_PARAMETERS,BRACED_STATEMENT,TILE_ID_CHOICE,ENTITY_ID_CHOICE);
 }

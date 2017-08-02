@@ -36,15 +36,10 @@ public class VariableCall extends ConcreteRule {
 							GeneralTokens.TRUE,
 							GeneralTokens.FALSE,
 							GeneralTokens.NULL,
-							Rules.num),"exact"),
+							GeneralTokens.FLOAT,
+							GeneralTokens.INTEGER),"exact"),
 				new ChainParser(
-					
-					new ChoiceParser(
-							Rules.method,
-							Rules.variable_group,
-							new AddTokenParser(
-								AssociationTokens.NAME,"variableName"),
-							GeneralBraces.QUOTE),
+					Rules.variable_call_element,
 					new ManyParser(
 							
 							new ChoiceParser(

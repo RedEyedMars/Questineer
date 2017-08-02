@@ -18,8 +18,11 @@ public class VariableDeclaration extends ConcreteRule {
 		set(
 				new ChainParser(
 					Rules.variable_header,
-					GeneralTokens.EQUALSIGN,
-					Rules.statement));
+					new OptionalParser(
+							
+								new ChainParser(
+									GeneralTokens.EQUALSIGN,
+									Rules.statement))));
 
 	}
 

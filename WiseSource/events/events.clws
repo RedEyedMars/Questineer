@@ -19,6 +19,19 @@ class 'packageName'."events" Events {
 > void addParameter(String eventName, Method method){
    	method.addParameter(\eventName "event";);
   }
+> Context getEventContext(String eName, Class inputClass){
+	Method newMethod = void "on"(Events->\^eName "event") {};
+	String newMethodName = newMethod.getName();
+	if inputClass.getMethod(newMethodName) == null {
+	  inputClass += void "on"(Events->\^eName "event") {}
+	  inputClass += void "add"(Events->\^eName->Listener "newListener") {
+		'eName'+"Listeners".add("newListener");
+	  }
+	  \createList(Listenable);
+	  inputClass += ~\ListenableList 'eName'+"Listeners" 
+	}
+	return inputClass.getMethod(newMethodName).getContext();
+  }
 > Context addToEventMethod(String eName, Class inputClass, Body body){
 	Method newMethod = void "on"(Events->\^eName "event") {};
 	String newMethodName = newMethod.getName();
@@ -32,7 +45,7 @@ class 'packageName'."events" Events {
 	}
 	Method establishedMethod = inputClass.getMethod(newMethodName);
 	establishedMethod.appendToBody(body);
-	return establishedMethod.getCurrentContext();
+	return establishedMethod.getContext();
   }
 > void addEventMethods(Class inputClass, Map<String, Body > bodiesToAdd){
 	for String name : eventNameSet {

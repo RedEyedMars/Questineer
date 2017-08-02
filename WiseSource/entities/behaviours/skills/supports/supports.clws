@@ -43,7 +43,7 @@ class 'packageName'."entities"."behaviours"."skills"."supports" Supports {
 	  }
     }
     ~Boolean isFirst = true;
-    Context useContext = Supports->'supportName'->*"use[Entity,Entity]".getCurrentContext();
+    Context useContext = Supports->'supportName'->*"use[Entity,Entity]".getContext();
     declarationToken : element 
       : cooldown {
         Supports->'supportName'->* += | "cost" = `Entity.getRange(element)`; |

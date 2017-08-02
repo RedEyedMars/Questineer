@@ -18,13 +18,13 @@ public class QuestImports extends ParseList {
 	public static final ImportParser IMPORT_QUEST = new ImportParser(
 						new ChainParser(
 							QuestBraces.QUEST_FILE,
-							QuestTokens.QSTS),"IMPORT_QUEST","questImports","><<\"entities/behaviours/quests/\",quest_file_name,\".atvs\">>\n",
+							QuestTokens.QSTS),"IMPORT_QUEST","questImports","><<\"entities/behaviours/quests/\",quest_file_name,\".qsts\">>\n",
 							new ManyParser(
 									
 									new ChoiceParser(
 											AssociationTokens.NEWLINE,
 											Comments.COMMENTS,
-											Rules.quest_declaration)));
+											Rules.quest_type_declaration)));
 
 	public static final ChoiceParser parser = new ChoiceParser(
 				IMPORT_QUEST);

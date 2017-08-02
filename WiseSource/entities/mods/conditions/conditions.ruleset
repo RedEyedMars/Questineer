@@ -18,7 +18,7 @@ conditionToken-s
 	"loss" as LOSS
 conditionBrace-s are Braced
 	[,.] as CONDITION_FILE with WILD as condition_file_name 
-	[\n\t,.] as CONDITION_DESCRIPTION with WILD as description
+	[\n\t,;;] as CONDITION_DESCRIPTION with WILD as description
 conditionImport-s are Import
 	[><<\"entities/mods/conditions/\",condition_file_name,\".cnds\">>\n] as IMPORT_CONDITION from (NEWLINE|COMMENTS|condition_declaration)*; with CONDITION_FILE CNDS
 condition_declaration

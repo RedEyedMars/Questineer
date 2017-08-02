@@ -16,7 +16,7 @@ public class GeneralTokens extends ParseList {
 	}
 
 	public static final RegexParser NAME = new RegexParser("NAME","generalTokens","[a-zA-Z_][a-zA-Z0-9_]*");
-	public static final RegexParser FLOAT = new RegexParser("FLOAT","generalTokens","[-]?\\d*\\Q.\\E\\d+");
+	public static final RegexParser FLOAT = new RegexParser("FLOAT","generalTokens","[-]?\\d+\\Q.\\E\\d+");
 	public static final RegexParser INTEGER = new RegexParser("INTEGER","generalTokens","[-]?\\d+");
 	public static final RegexParser WILD = new RegexParser("WILD","generalTokens",".*");
 	public static final RegexParser ORDINAL = new RegexParser("ORDINAL","generalTokens","[<>][=]?");
@@ -24,12 +24,17 @@ public class GeneralTokens extends ParseList {
 	public static final ExactParser SEMICOLON = new ExactParser("SEMICOLON","generalTokens",";");
 	public static final ExactParser DOTDOT = new ExactParser("DOTDOT","generalTokens","..");
 	public static final ExactParser ACCESS = new ExactParser("ACCESS","generalTokens","->");
+	public static final ExactParser STATIC_ACCESS = new ExactParser("STATIC_ACCESS","generalTokens","=>");
 	public static final ExactParser DOT = new ExactParser("DOT","generalTokens",".");
+	public static final ExactParser FOR = new ExactParser("FOR","generalTokens","for");
+	public static final ExactParser WHILE = new ExactParser("WHILE","generalTokens","while");
 	public static final ExactParser IF = new ExactParser("IF","generalTokens","if");
 	public static final ExactParser ELSE = new ExactParser("ELSE","generalTokens","else");
 	public static final ExactParser EQUALSIGN = new ExactParser("EQUALSIGN","generalTokens","=");
 	public static final ExactParser EQUALS = new ExactParser("EQUALS","generalTokens","==");
 	public static final ExactParser NOTEQUALS = new ExactParser("NOTEQUALS","generalTokens","!=");
+	public static final ExactParser PLUSEQUALS = new ExactParser("PLUSEQUALS","generalTokens","+=");
+	public static final ExactParser MINUSEQUALS = new ExactParser("MINUSEQUALS","generalTokens","-=");
 	public static final ExactParser PLUS = new ExactParser("PLUS","generalTokens","+");
 	public static final ExactParser MINUS = new ExactParser("MINUS","generalTokens","-");
 	public static final ExactParser MULTIPLY = new ExactParser("MULTIPLY","generalTokens","*");
@@ -59,7 +64,12 @@ public class GeneralTokens extends ParseList {
 	public static final ExactParser HAS = new ExactParser("HAS","generalTokens","has");
 	public static final ExactParser RETURN = new ExactParser("RETURN","generalTokens","return");
 	public static final ExactParser NEW = new ExactParser("NEW","generalTokens","new");
+	public static final ExactParser CAST_ARROW = new ExactParser("CAST_ARROW","generalTokens","<-");
+	public static final ExactParser QUEST_ADD = new ExactParser("QUEST_ADD","generalTokens","<<");
+	public static final ExactParser QUEST_SEPARATOR = new ExactParser("QUEST_SEPARATOR","generalTokens","/");
+	public static final ExactParser STAR = new ExactParser("STAR","generalTokens","*");
+	public static final ExactParser ENTITY = new ExactParser("ENTITY","generalTokens","Entity");
 
 	public static final ChoiceParser parser = new ChoiceParser(
-				NAME,FLOAT,INTEGER,WILD,ORDINAL,COLON,SEMICOLON,DOTDOT,ACCESS,DOT,IF,ELSE,EQUALSIGN,EQUALS,NOTEQUALS,PLUS,MINUS,MULTIPLY,DIVIDE,AND,OR,NOT,PERCENT,NEWLINE,COMMA,DASH,TRUE,FALSE,NULL,CHANCE,GAINS,LOSES,FROM,THIS,ON,IN,OF,WITH,SPAWNED,IMPOSE,RELEASE,HAS,RETURN,NEW);
+				NAME,FLOAT,INTEGER,WILD,ORDINAL,COLON,SEMICOLON,DOTDOT,ACCESS,STATIC_ACCESS,DOT,FOR,WHILE,IF,ELSE,EQUALSIGN,EQUALS,NOTEQUALS,PLUSEQUALS,MINUSEQUALS,PLUS,MINUS,MULTIPLY,DIVIDE,AND,OR,NOT,PERCENT,NEWLINE,COMMA,DASH,TRUE,FALSE,NULL,CHANCE,GAINS,LOSES,FROM,THIS,ON,IN,OF,WITH,SPAWNED,IMPOSE,RELEASE,HAS,RETURN,NEW,CAST_ARROW,QUEST_ADD,QUEST_SEPARATOR,STAR,ENTITY);
 }

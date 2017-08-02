@@ -15,7 +15,7 @@ attackToken-s
 	"mind" as MIND_DMG
 attackBrace-s are Braced
 	[,.] as ATTACK_FILE with WILD as attack_file_name 
-	[\n\t,.] as ATTACK_DESCRIPTION with WILD as description
+	[\n\t,;;] as ATTACK_DESCRIPTION with WILD as description
 attackImport-s are Import
 	[><<\"entities/behaviours/skills/attacks/\",attack_file_name,\".atks\">>\n] as IMPORT_ATTACK from (NEWLINE|COMMENTS|attack_declaration)*; with ATTACK_FILE ATKS
 attack_declaration

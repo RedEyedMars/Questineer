@@ -1,12 +1,12 @@
 bloodLoss
-	Has bled, reducing @Con by 1.
+	Has bled, reducing @Con by 1;;
 	- CON
 	loss 20% chance if event->host->con > 15
 		 15% chance if event->host->con > 10
 		 10% chance if event->host->con > 5
 		 5%  chance
 bleeding
-	Take @Con damage each tick, a higher @Con will stem the bleeding sooner.
+	Take @Con damage each tick, a higher @Con will stem the bleeding sooner;;
 	* gains bloodLoss
 	loss 80% chance if event->host->con > 15
 		 60% chance if event->host->con > 10

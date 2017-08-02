@@ -26,11 +26,15 @@ public class Rulenames extends ParseList {
 	public static final RegexParser trait_declaration = new RegexParser("trait_declaration","rulenames","trait_declaration");
 	public static final RegexParser trait_element = new RegexParser("trait_element","rulenames","trait_element");
 	public static final RegexParser activity_declaration = new RegexParser("activity_declaration","rulenames","activity_declaration");
+	public static final RegexParser activity_element = new RegexParser("activity_element","rulenames","activity_element");
 	public static final RegexParser attack_declaration = new RegexParser("attack_declaration","rulenames","attack_declaration");
 	public static final RegexParser attack_element = new RegexParser("attack_element","rulenames","attack_element");
 	public static final RegexParser support_declaration = new RegexParser("support_declaration","rulenames","support_declaration");
 	public static final RegexParser support_element = new RegexParser("support_element","rulenames","support_element");
-	public static final RegexParser quest_declaration = new RegexParser("quest_declaration","rulenames","quest_declaration");
+	public static final RegexParser quest_type_declaration = new RegexParser("quest_type_declaration","rulenames","quest_type_declaration");
+	public static final RegexParser quest_type_element = new RegexParser("quest_type_element","rulenames","quest_type_element");
+	public static final RegexParser quest_destination = new RegexParser("quest_destination","rulenames","quest_destination");
+	public static final RegexParser quest_tile_description = new RegexParser("quest_tile_description","rulenames","quest_tile_description");
 	public static final RegexParser skill_declaration = new RegexParser("skill_declaration","rulenames","skill_declaration");
 	public static final RegexParser skill_element = new RegexParser("skill_element","rulenames","skill_element");
 	public static final RegexParser association_declaration = new RegexParser("association_declaration","rulenames","association_declaration");
@@ -54,7 +58,10 @@ public class Rulenames extends ParseList {
 	public static final RegexParser body_element = new RegexParser("body_element","rulenames","body_element");
 	public static final RegexParser acquisition = new RegexParser("acquisition","rulenames","acquisition");
 	public static final RegexParser imposition = new RegexParser("imposition","rulenames","imposition");
+	public static final RegexParser quest_addition = new RegexParser("quest_addition","rulenames","quest_addition");
 	public static final RegexParser if_statement = new RegexParser("if_statement","rulenames","if_statement");
+	public static final RegexParser for_statement = new RegexParser("for_statement","rulenames","for_statement");
+	public static final RegexParser while_statement = new RegexParser("while_statement","rulenames","while_statement");
 	public static final RegexParser boolean_statement = new RegexParser("boolean_statement","rulenames","boolean_statement");
 	public static final RegexParser boolean_element = new RegexParser("boolean_element","rulenames","boolean_element");
 	public static final RegexParser has_chance = new RegexParser("has_chance","rulenames","has_chance");
@@ -67,6 +74,7 @@ public class Rulenames extends ParseList {
 	public static final RegexParser variable_declaration = new RegexParser("variable_declaration","rulenames","variable_declaration");
 	public static final RegexParser variable_header = new RegexParser("variable_header","rulenames","variable_header");
 	public static final RegexParser variable_call = new RegexParser("variable_call","rulenames","variable_call");
+	public static final RegexParser variable_call_element = new RegexParser("variable_call_element","rulenames","variable_call_element");
 	public static final RegexParser variable_group = new RegexParser("variable_group","rulenames","variable_group");
 	public static final RegexParser method = new RegexParser("method","rulenames","method");
 	public static final RegexParser type_name = new RegexParser("type_name","rulenames","type_name");
@@ -75,5 +83,5 @@ public class Rulenames extends ParseList {
 	public static final RegexParser animation = new RegexParser("animation","rulenames","animation");
 
 	public static final ChoiceParser parser = new ChoiceParser(
-				base,import_any,aspect_declaration,item_declaration,item_parameter,affinity_declaration,condition_declaration,condition_element,trait_declaration,trait_element,activity_declaration,attack_declaration,attack_element,support_declaration,support_element,quest_declaration,skill_declaration,skill_element,association_declaration,association_element,association_start,association_join,association_event,reason_declaration,statRange,entity_declaration,entity_definition,map_header,map_connection,map_declaration,tile_declaration,tile_element,event_declaration,num,range,operator,body_element,acquisition,imposition,if_statement,boolean_statement,boolean_element,has_chance,spawn_statement,has_statement,requirement,requirement_element,return_statement,statement,variable_declaration,variable_header,variable_call,variable_group,method,type_name,image_declaration,image_id,animation);
+				base,import_any,aspect_declaration,item_declaration,item_parameter,affinity_declaration,condition_declaration,condition_element,trait_declaration,trait_element,activity_declaration,activity_element,attack_declaration,attack_element,support_declaration,support_element,quest_type_declaration,quest_type_element,quest_destination,quest_tile_description,skill_declaration,skill_element,association_declaration,association_element,association_start,association_join,association_event,reason_declaration,statRange,entity_declaration,entity_definition,map_header,map_connection,map_declaration,tile_declaration,tile_element,event_declaration,num,range,operator,body_element,acquisition,imposition,quest_addition,if_statement,for_statement,while_statement,boolean_statement,boolean_element,has_chance,spawn_statement,has_statement,requirement,requirement_element,return_statement,statement,variable_declaration,variable_header,variable_call,variable_call_element,variable_group,method,type_name,image_declaration,image_id,animation);
 }

@@ -14,7 +14,7 @@ skillToken-s
 	"?" as REQUIRE
 skillBrace-s are Braced
 	[,.] as SKILL_FILE with WILD as skill_file_name 
-	[\n\t,.] as SKILL_DESCRIPTION with WILD as description
+	[\n\t,;;] as SKILL_DESCRIPTION with WILD as description
 skillImport-s are Import
 	[><<\"entities/behaviours/skills/\",skill_file_name,\".skls\">>\n] as IMPORT_SKILL from (NEWLINE|COMMENTS|skill_declaration)*; with SKILL_FILE SKLS
 skill_declaration

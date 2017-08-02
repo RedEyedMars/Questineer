@@ -401,15 +401,8 @@ public class MainFlow extends FlowController  {
 			new StringEntry("Activity").get(builder);
 			new StringEntry("").get(builder);
 		}
-	}, Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("String"))), /*Name*/new ExternalStatement(new StringEntry("name")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("String"))), /*Name*/new ExternalStatement(new StringEntry("description")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Map"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Path")),/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Set"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Path"))))))), /*Name*/new ExternalStatement(new StringEntry("pathStoppers")), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("HashMap"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Path")),/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Set"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Path"))))))),new ExternalStatement.Parameters()))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Entity"))), /*Name*/new ExternalStatement(new StringEntry("towardEntity")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Tile"))), /*Name*/new ExternalStatement(new StringEntry("towardTile")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))), /*Name*/new ExternalStatement(new StringEntry("distanceToTarget")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0f"))))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Boolean"))), /*Name*/new ExternalStatement(new StringEntry("isChasing")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("false")))))}), Arrays.asList(new ExternalMethodEntry[]{new ExternalMethodEntry(0, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("setTarget")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Entity"))), /*Name*/new ExternalStatement(new StringEntry("target"))),
-/*PARAMS*/				new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))), /*Name*/new ExternalStatement(new StringEntry("distance")))}), /*Body*/new ExternalStatement.Body(
-	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("towardEntity")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("target")))))),
-/*BODY*/				
-	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("distanceToTarget")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("distance")))))))),new ExternalMethodEntry(0, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("setTarget")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Tile"))), /*Name*/new ExternalStatement(new StringEntry("target"))),
-/*PARAMS*/				new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))), /*Name*/new ExternalStatement(new StringEntry("distance")))}), /*Body*/new ExternalStatement.Body(
-	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("towardTile")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("target")))))),
-/*BODY*/				
-	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("distanceToTarget")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("distance")))))))),new ExternalMethodEntry(0, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("rememberIncomingPath")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Path"))), /*Name*/new ExternalStatement(new StringEntry("in"))),
+	}, Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("String"))), /*Name*/new ExternalStatement(new StringEntry("name")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("String"))), /*Name*/new ExternalStatement(new StringEntry("description")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Map"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Path")),/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Set"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Path"))))))), /*Name*/new ExternalStatement(new StringEntry("pathStoppers")), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("HashMap"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Path")),/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Set"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Path"))))))),new ExternalStatement.Parameters()))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Entity"))), /*Name*/new ExternalStatement(new StringEntry("targetEntity")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Boolean"))), /*Name*/new ExternalStatement(new StringEntry("failed")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("false")))))}), Arrays.asList(new ExternalMethodEntry[]{new ExternalMethodEntry(0, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Boolean"))), /*Exac*/new ExternalStatement(new StringEntry("hasTarget")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Optr*/new ExternalStatement("!=", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("targetEntity")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))))),new ExternalMethodEntry(0, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("rememberIncomingPath")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Path"))), /*Name*/new ExternalStatement(new StringEntry("in"))),
 /*PARAMS*/				new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Path"))), /*Name*/new ExternalStatement(new StringEntry("to")))}), /*Body*/new ExternalStatement.Body(
 	/*Cond*/new ExternalStatement.Conditional(
 			"if ", 
@@ -429,91 +422,61 @@ public class MainFlow extends FlowController  {
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
 			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("in"))))))), /*Enty*/new ExternalStatement(new StringEntry("add"))),
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("to"))))))))))),new ExternalMethodEntry(0, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("step")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Entity"))), /*Name*/new ExternalStatement(new StringEntry("host")))}), /*Body*/new ExternalStatement.Body(
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("to"))))))))))),new ExternalMethodEntry(0, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Entity"))), /*Exac*/new ExternalStatement(new StringEntry("getTarget")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Entity"))), /*Name*/new ExternalStatement(new StringEntry("host"))),
+/*PARAMS*/				new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("EntityCriteria"))), /*Name*/new ExternalStatement(new StringEntry("targetCriteria")))}), /*Body*/new ExternalStatement.Body(
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("host"))), /*Enty*/new ExternalStatement(new StringEntry("getLocation"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters())), /*Enty*/new ExternalStatement(new StringEntry("getClosestEntity"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("targetCriteria"))))))))))),new ExternalMethodEntry(0, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Tile"))), /*Exac*/new ExternalStatement(new StringEntry("getDestination")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Entity"))), /*Name*/new ExternalStatement(new StringEntry("host")))}), /*Body*/new ExternalStatement.Body(
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))))),new ExternalMethodEntry(0, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Boolean"))), /*Exac*/new ExternalStatement(new StringEntry("hasSucceeded")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Entity"))), /*Name*/new ExternalStatement(new StringEntry("host")))}), /*Body*/new ExternalStatement.Body(
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("false"))))))),new ExternalMethodEntry(0, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Boolean"))), /*Exac*/new ExternalStatement(new StringEntry("hasFailed")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Entity"))), /*Name*/new ExternalStatement(new StringEntry("host")))}), /*Body*/new ExternalStatement.Body(
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("failed"))))))),new ExternalMethodEntry(0, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("List"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Usable"))))), /*Exac*/new ExternalStatement(new StringEntry("getUsables")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))))),new ExternalMethodEntry(0, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("add")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Usable"))), /*Name*/new ExternalStatement(new StringEntry("newUsable")))}), /*Body*/new ExternalStatement.Body()),new ExternalMethodEntry(0, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("remove")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Usable"))), /*Name*/new ExternalStatement(new StringEntry("newUsable")))}), /*Body*/new ExternalStatement.Body()),new ExternalMethodEntry(0, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("on")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Tick"))))), /*Name*/new ExternalStatement(new StringEntry("event")))}), /*Body*/new ExternalStatement.Body(
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Entity"))), /*Name*/new ExternalStatement(new StringEntry("host")), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("event"))), /*Enty*/new ExternalStatement(new StringEntry("getHost"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))))),
+/*BODY*/				
 	/*Cond*/new ExternalStatement.Conditional(
 			"if ", 
-			/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("isChasing")))),
+			/*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("hasSucceeded")),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("host"))))))),
 			/*Body*/new ExternalStatement.Body(
-		/*Cond*/new ExternalStatement.Conditional(
-			"if ", 
-			/*Optr*/new ExternalStatement("!=", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("towardEntity")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null")))),
-			/*Body*/new ExternalStatement.Body(
-			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("host"))), /*Enty*/new ExternalStatement(new StringEntry("getLocation"))),
-			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters())), /*Enty*/new ExternalStatement(new StringEntry("step"))),
-			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("host"))), /*Enty*/new ExternalStatement(new StringEntry("getWalkingSpeed"))),
-			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters()))),/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("towardEntity"))), /*Enty*/new ExternalStatement(new StringEntry("getLocation"))),
-			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters())))))))),
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("on")),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Success"))))),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("host")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("this"))))))))))),
 /*BODY*/				
-			/*Cond*/new ExternalStatement.Conditional(
-			"if ", 
-			/*Optr*/new ExternalStatement("<", /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("host"))), /*Enty*/new ExternalStatement(new StringEntry("getLocation"))),
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("host"))), /*Enty*/new ExternalStatement(new StringEntry("stop"))),
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters())), /*Enty*/new ExternalStatement(new StringEntry("getDistanceTo"))),
-			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("towardEntity"))), /*Enty*/new ExternalStatement(new StringEntry("getLocation"))),
-			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters()))))))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("distanceToTarget")))),
-			/*Body*/new ExternalStatement.Body(
-				/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("isChasing")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("false")))))),
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("this"))))))))))),
 /*BODY*/				
-				/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("towardEntity")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null")))))))))),
-/*BODY*/				
-		/*Cond*/new ExternalStatement.Conditional(
+	/*Cond*/new ExternalStatement.Conditional(
 			"else if ", 
-			/*Optr*/new ExternalStatement("!=", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("towardTile")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null")))),
+			/*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("hasFailed")),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("host"))))))),
 			/*Body*/new ExternalStatement.Body(
-			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("host"))), /*Enty*/new ExternalStatement(new StringEntry("getLocation"))),
-			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters())), /*Enty*/new ExternalStatement(new StringEntry("step"))),
-			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("host"))), /*Enty*/new ExternalStatement(new StringEntry("getWalkingSpeed"))),
-			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters()))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("towardTile"))))))))),
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("on")),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Fail"))))),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("host")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("this"))))))))))),
 /*BODY*/				
-			/*Cond*/new ExternalStatement.Conditional(
-			"if ", 
-			/*Optr*/new ExternalStatement("<", /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("host"))), /*Enty*/new ExternalStatement(new StringEntry("getLocation"))),
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("host"))), /*Enty*/new ExternalStatement(new StringEntry("stop"))),
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters())), /*Enty*/new ExternalStatement(new StringEntry("getDistanceTo"))),
-			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("towardTile")))))))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("distanceToTarget")))),
-			/*Body*/new ExternalStatement.Body(
-				/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("isChasing")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("false")))))),
-/*BODY*/				
-				/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("towardTile")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null")))))))))))),
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("this"))))))))))),
 /*BODY*/				
 	/*Cond*/new ExternalStatement.Conditional(
-			"else ", null,
+			"else if ", 
+			/*Optr*/new ExternalStatement("==", /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("step")),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("host"))))))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("false")))),
 			/*Body*/new ExternalStatement.Body(
-		/*Cond*/new ExternalStatement.Conditional(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("on")),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Idle"))))),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("host")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("this"))))))))))))))),new ExternalMethodEntry(0, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Boolean"))), /*Exac*/new ExternalStatement(new StringEntry("step")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Entity"))), /*Name*/new ExternalStatement(new StringEntry("host")))}), /*Body*/new ExternalStatement.Body(
+	/*Cond*/new ExternalStatement.Conditional(
 			"if ", 
 			/*Optr*/new ExternalStatement("==", /*Optr*/new ExternalStatement("||", /*Optr*/new ExternalStatement("==", /*Optr*/new ExternalStatement("||", /*Optr*/new ExternalStatement("==", /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
 			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("host"))), /*Enty*/new ExternalStatement(new StringEntry("getFocusSkill"))),
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
 			 		new ExternalStatement.Parameters()))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null")))), /*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("usables"))), /*Enty*/new ExternalStatement(new StringEntry("containsKey"))),
+			 	new ExternalStatement(".", /*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("getUsables")),new ExternalStatement.Parameters()), /*Enty*/new ExternalStatement(new StringEntry("contains"))),
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
 			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Call*/new ExternalStatement("",
 			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("host"))), /*Enty*/new ExternalStatement(new StringEntry("getFocusSkill"))),
-			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters())), /*Enty*/new ExternalStatement(new StringEntry("getId"))),
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
 			 		new ExternalStatement.Parameters()))))))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("false")))), /*Call*/new ExternalStatement("",
 			 	new ExternalStatement(".", /*Call*/new ExternalStatement("",
@@ -523,11 +486,11 @@ public class MainFlow extends FlowController  {
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
 			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("host")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("this")))))))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("false")))),
 			/*Body*/new ExternalStatement.Body(
-			/*Cond*/new ExternalStatement.Conditional(
+		/*Cond*/new ExternalStatement.Conditional(
 			"for ", 
-			/*Optr*/new ExternalStatement(": ", new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Usable"))), /*Name*/new ExternalStatement(new StringEntry("usable"))), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("usables"))))),
+			/*Optr*/new ExternalStatement(": ", new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Usable"))), /*Name*/new ExternalStatement(new StringEntry("usable"))), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("getUsables")),new ExternalStatement.Parameters()))),
 			/*Body*/new ExternalStatement.Body(
-				/*Cond*/new ExternalStatement.Conditional(
+			/*Cond*/new ExternalStatement.Conditional(
 			"if ", 
 			/*Optr*/new ExternalStatement("&&", /*Optr*/new ExternalStatement("!=", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("usable")))), /*Call*/new ExternalStatement("",
 			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("host"))), /*Enty*/new ExternalStatement(new StringEntry("getFocusSkill"))),
@@ -537,71 +500,55 @@ public class MainFlow extends FlowController  {
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
 			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("host")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("this")))))))),
 			/*Body*/new ExternalStatement.Body(
-					/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Exac*/new ExternalStatement(new StringEntry(""))))))),
+				/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("true"))))))))))),
 /*BODY*/				
-			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("isChasing")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("true")))))),
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("false"))))))),new ExternalMethodEntry(0, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("on")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Idle"))))), /*Name*/new ExternalStatement(new StringEntry("event")))}), /*Body*/new ExternalStatement.Body(
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("List"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Entity"))))), /*Name*/new ExternalStatement(new StringEntry("entitiesToTarget")), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("event"))), /*Enty*/new ExternalStatement(new StringEntry("getHost"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters())), /*Enty*/new ExternalStatement(new StringEntry("getLocation"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters())), /*Enty*/new ExternalStatement(new StringEntry("getEntitiesWithin"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("20f")))))))))),
 /*BODY*/				
-			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))), /*Name*/new ExternalStatement(new StringEntry("distance")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float")))), /*Enty*/new ExternalStatement(new StringEntry("MAX_VALUE")))))),
-/*BODY*/				
-			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Entity"))), /*Name*/new ExternalStatement(new StringEntry("targetEntity")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null")))))),
-/*BODY*/				
-			/*Cond*/new ExternalStatement.Conditional(
+	/*Cond*/new ExternalStatement.Conditional(
 			"for ", 
-			/*Optr*/new ExternalStatement(": ", new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Usable"))), /*Name*/new ExternalStatement(new StringEntry("usable"))), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("usables"))))),
+			/*Optr*/new ExternalStatement(": ", new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Entity"))), /*Name*/new ExternalStatement(new StringEntry("candidate"))), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("entitiesToTarget"))))),
 			/*Body*/new ExternalStatement.Body(
-				/*Cond*/new ExternalStatement.Conditional(
+		/*Cond*/new ExternalStatement.Conditional(
+			"for ", 
+			/*Optr*/new ExternalStatement(": ", new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Usable"))), /*Name*/new ExternalStatement(new StringEntry("usable"))), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("getUsables")),new ExternalStatement.Parameters()))),
+			/*Body*/new ExternalStatement.Body(
+			/*Cond*/new ExternalStatement.Conditional(
 			"if ", 
 			/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("usable"))), /*Enty*/new ExternalStatement(new StringEntry("canChase"))),
-			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters()))),
-			/*Body*/new ExternalStatement.Body(
-					/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))), /*Name*/new ExternalStatement(new StringEntry("range")), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("usable"))), /*Enty*/new ExternalStatement(new StringEntry("getRange"))),
-			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("host")))))))))),
-/*BODY*/				
-					/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Entity"))), /*Name*/new ExternalStatement(new StringEntry("potentialEntity")), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
 			 	new ExternalStatement(".", /*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("host"))), /*Enty*/new ExternalStatement(new StringEntry("getLocation"))),
-			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters())), /*Enty*/new ExternalStatement(new StringEntry("getClosestEntity"))),
-			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
 			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("usable"))), /*Enty*/new ExternalStatement(new StringEntry("getTargetCriteria"))),
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters()))))))))),
-/*BODY*/				
-					/*Cond*/new ExternalStatement.Conditional(
-			"if ", 
-			/*Optr*/new ExternalStatement("<", /*Optr*/new ExternalStatement("&&", /*Optr*/new ExternalStatement("!=", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("potentialEntity")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null")))), /*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("potentialEntity"))), /*Enty*/new ExternalStatement(new StringEntry("getLocation"))),
+			 		new ExternalStatement.Parameters())), /*Enty*/new ExternalStatement(new StringEntry("satisfies"))),
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters())), /*Enty*/new ExternalStatement(new StringEntry("getDistanceTo"))),
-			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("host"))), /*Enty*/new ExternalStatement(new StringEntry("getLocation"))),
-			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters()))))))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("distance")))),
-			/*Body*/new ExternalStatement.Body(
-						/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("distance")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("range")))))),
-/*BODY*/				
-						/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("targetEntity")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("potentialEntity")))))))))))),
-/*BODY*/				
-			/*Cond*/new ExternalStatement.Conditional(
-			"if ", 
-			/*Optr*/new ExternalStatement("!=", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("targetEntity")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null")))),
-			/*Body*/new ExternalStatement.Body(
-				/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("setTarget")),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("targetEntity")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("distance")))))))))),
-/*BODY*/				
-			/*Cond*/new ExternalStatement.Conditional(
-			"else ", null,
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("candidate")))))))),
 			/*Body*/new ExternalStatement.Body(
 				/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("host"))), /*Enty*/new ExternalStatement(new StringEntry("stepNextActivity"))),
+			 	new ExternalStatement(".", /*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("event"))), /*Enty*/new ExternalStatement(new StringEntry("getHost"))),
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters())))))))))))),new ExternalMethodEntry(0, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Activity")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Id"))))), /*Exac*/new ExternalStatement(new StringEntry("getId")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+			 		new ExternalStatement.Parameters())), /*Enty*/new ExternalStatement(new StringEntry("start"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Activities")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("ChasingEntity"))))),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("25")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("candidate")))),/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("usable"))), /*Enty*/new ExternalStatement(new StringEntry("getRange"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("event"))), /*Enty*/new ExternalStatement(new StringEntry("getHost"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))))))))))))))),
+/*BODY*/				
+				/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Exac*/new ExternalStatement(new StringEntry(""))))))))),
+/*BODY*/				
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("failed")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("true")))))))),new ExternalMethodEntry(0, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Activity")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Id"))))), /*Exac*/new ExternalStatement(new StringEntry("getId")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
 	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null")))))))}), Arrays.asList(new ExternalClassEntry[]{ActivityClass.IdClass,ActivityClass.FactoryClass}));
 	}
 }
@@ -610,7 +557,11 @@ public class MainFlow extends FlowController  {
 
 	
 public void setup(final ParseContext data) {
-	EntityClass.addGainLoss(UsableClass,ActivityClass);
+	createCriteria(ActivityClass);
+	EventsClass.addToEventMethod("load",ActivityClass,/*Body*/new ExternalStatement.Body());
+	EventsClass.addToEventMethod("idle",ActivityClass,/*Body*/new ExternalStatement.Body());
+	EventsClass.addToEventMethod("success",ActivityClass,/*Body*/new ExternalStatement.Body());
+	EventsClass.addToEventMethod("fail",ActivityClass,/*Body*/new ExternalStatement.Body());
 }
 	
 public void declaration(final IToken declarationToken) {
@@ -627,11 +578,21 @@ ActivitiesClass.addSubClass(new ExternalClassEntry(){public void __INIT__(){supe
 			new StringEntry(activityName).get(builder);
 			new StringEntry("").get(builder);
 		}
-	}, Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Activity")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Id"))))), /*Name*/new ExternalStatement(new StringEntry("id")), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Activity")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Id"))))),new ExternalStatement.Parameters())))}), Arrays.asList(new ExternalMethodEntry[]{new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("String"))), /*Exac*/new ExternalStatement(new StringEntry("getName")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+	}, Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Activity")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Id"))))), /*Name*/new ExternalStatement(new StringEntry("id")), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Activity")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Id"))))),new ExternalStatement.Parameters()))),new ExternalVariableEntry(true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("List"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Usable"))))), /*Name*/new ExternalStatement(new StringEntry("allUsables")), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("ArrayList"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Usable"))))),new ExternalStatement.Parameters()))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Entity"))), /*Name*/new ExternalStatement(new StringEntry("host")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null")))))}), Arrays.asList(new ExternalMethodEntry[]{new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("String"))), /*Exac*/new ExternalStatement(new StringEntry("getName")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
 		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Quot*/new ExternalStatement(new QuoteEntry(activityName.toString()))))))),new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("String"))), /*Exac*/new ExternalStatement(new StringEntry("getDescription")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
-		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Quot*/new ExternalStatement(new QuoteEntry(description.toString()))))))),new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Activity")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Id"))))), /*Exac*/new ExternalStatement(new StringEntry("getId")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Quot*/new ExternalStatement(new QuoteEntry(description.toString()))))))),new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("List"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Usable"))))), /*Exac*/new ExternalStatement(new StringEntry("getUsables")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("allUsables"))))))),new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Boolean"))), /*Exac*/new ExternalStatement(new StringEntry("hasSucceeded")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Entity"))), /*Name*/new ExternalStatement(new StringEntry("host")))}), /*Body*/new ExternalStatement.Body()),new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Boolean"))), /*Exac*/new ExternalStatement(new StringEntry("hasFailed")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Entity"))), /*Name*/new ExternalStatement(new StringEntry("host")))}), /*Body*/new ExternalStatement.Body()),new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Activity")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Id"))))), /*Exac*/new ExternalStatement(new StringEntry("getId")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
 		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("id")))))))}), Arrays.asList(new ExternalClassEntry[]{})) ;}});
-	EntityClass.addGainLoss(UsableClass,ActivitiesClass.getSubClass(activityName.toString()));
+	for(final IToken element:declarationToken.getAllSafely("variable_header")) {
+			addVariableHeader(element,ActivitiesClass.getSubClass(activityName.toString()));
+	}
+	for(final IToken element:declarationToken.getAllSafely("variable_declaration")) {
+			final ExternalVariableEntry variable = addVariableHeader(element.get("variable_header"),ActivitiesClass.getSubClass(activityName.toString()));
+			variable.setIsWeak(true);
+			if (element.get("statement") != null) {
+			variable.setAssignment(getStatement(element.get("statement"),ActivitiesClass.getSubClass(activityName.toString()).getContext()));
+			}
+	}
 	ActivitiesClass.getMethod("create").prependToBody(/*Body*/new ExternalStatement.Body(
 		/*Cond*/new ExternalStatement.Conditional(
 			"if ", 
@@ -641,16 +602,60 @@ ActivitiesClass.addSubClass(new ExternalClassEntry(){public void __INIT__(){supe
 			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Quot*/new ExternalStatement(new QuoteEntry(activityName.toString())))))))),
 			/*Body*/new ExternalStatement.Body(
 			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Activities")), /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(activityName.toString())))))),new ExternalStatement.Parameters())))))));
-EntityClass.addVariable(new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Activities")), /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(activityName.toString())))))), /*Enty*/new ExternalStatement(new StringEntry(activityName+"Activity".toString()))));
 	for(final IToken element:declarationToken.getAllSafely("className")) {
 			final String methodName = "gain["+element.toString()+",Source]";
 			final String variableName = element.toString().toLowerCase();
 			EntityClass.getMethod(methodName.toString()).appendToBody(/*Body*/new ExternalStatement.Body(
-		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(activityName+"Activity".toString()))), /*Enty*/new ExternalStatement(new StringEntry("gain"))),
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement(".", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Activities")), /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(activityName.toString())))))))), /*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("allUsables"))), /*Enty*/new ExternalStatement(new StringEntry("add"))),
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(variableName.toString())))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("source")))))))))));
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(variableName.toString())))))))))));
 	}
+	for(final IToken element:declarationToken.getAllSafely("endState")) {
+			if (element.get("SUCCEED") != null) {
+			final ExternalContext successContext = ActivitiesClass.getSubClass(activityName.toString()).getMethod("hasSucceeded[Entity]").getContext();
+			ActivitiesClass.getSubClass(activityName.toString()).getMethod("hasSucceeded[Entity]").appendToBody(/*Body*/new ExternalStatement.Body(
+		/*Cond*/new ExternalStatement.Conditional(
+			"if ", 
+			/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*InCl*/new ExternalStatement(getBooleanStatement(element.get("boolean_statement"),successContext)))),
+			/*Body*/new ExternalStatement.Body(
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("true")))))))));
+			}
+			else  {
+			final ExternalContext failContext = ActivitiesClass.getSubClass(activityName.toString()).getMethod("hasFailed[Entity]").getContext();
+			ActivitiesClass.getSubClass(activityName.toString()).getMethod("hasFailed[Entity]").appendToBody(/*Body*/new ExternalStatement.Body(
+		/*Cond*/new ExternalStatement.Conditional(
+			"if ", 
+			/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*InCl*/new ExternalStatement(getBooleanStatement(element.get("boolean_statement"),failContext)))),
+			/*Body*/new ExternalStatement.Body(
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("true")))))))));
+			}
+	}
+	for(final IToken element:declarationToken.getAllSafely("getTarget")) {
+ActivitiesClass.getSubClass(activityName.toString()).addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Entity"))), /*Exac*/new ExternalStatement(new StringEntry("getTarget")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Entity"))), /*Name*/new ExternalStatement(new StringEntry("host"))),
+/*PARAMS*/				new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("EntityCriteria"))), /*Name*/new ExternalStatement(new StringEntry("targetCriteria")))}), /*Body*/new ExternalStatement.Body()));
+			final ExternalContext getTargetContext = ActivitiesClass.getSubClass(activityName.toString()).getMethod("getTarget[Entity,EntityCriteria]").getContext();
+			for(final IToken atom:element.getAllSafely("body_element")) {
+				ActivitiesClass.getSubClass(activityName.toString()).getMethod("getTarget[Entity,EntityCriteria]").appendToBody(getBodyElement(atom,getTargetContext));
+			}
+	}
+	for(final IToken element:declarationToken.getAllSafely("getDestination")) {
+ActivitiesClass.getSubClass(activityName.toString()).addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Entity"))), /*Exac*/new ExternalStatement(new StringEntry("getDestination")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Entity"))), /*Name*/new ExternalStatement(new StringEntry("host")))}), /*Body*/new ExternalStatement.Body()));
+			final ExternalContext getTargetContext = ActivitiesClass.getSubClass(activityName.toString()).getMethod("getDestination[Entity]").getContext();
+			for(final IToken atom:element.getAllSafely("body_element")) {
+				ActivitiesClass.getSubClass(activityName.toString()).getMethod("getDestination[Entity]").appendToBody(getBodyElement(atom,getTargetContext));
+			}
+	}
+	for(final IToken element:declarationToken.getAllSafely("event")) {
+			final ExternalContext eventContext = EventsClass.getEventContext(element.get("event_names").toString(),ActivitiesClass.getSubClass(activityName.toString()));
+			EventsClass.addToEventMethod(element.get("event_names").toString(),ActivitiesClass.getSubClass(activityName.toString()),getBodyElements(element,eventContext));
+	}
+	ActivitiesClass.getSubClass(activityName.toString()).getMethod("*").appendToBody(/*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("on")),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Load"))))),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("host")))))))))))));
+	ActivitiesClass.getSubClass(activityName.toString()).getMethod("hasSucceeded[Entity]").appendToBody(/*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("false")))))));
+	ActivitiesClass.getSubClass(activityName.toString()).getMethod("hasFailed[Entity]").appendToBody(/*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("false")))))));
 }
 
 
@@ -852,7 +857,7 @@ AttacksClass.addSubClass(new ExternalClassEntry(){public void __INIT__(){super._
 		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*InCl*/new ExternalStatement(description)))))),new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Attack")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Damage"))))), /*Exac*/new ExternalStatement(new StringEntry("getDamage")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Entity"))), /*Name*/new ExternalStatement(new StringEntry("attacker"))),
 /*PARAMS*/				new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Entity"))), /*Name*/new ExternalStatement(new StringEntry("defender")))}), /*Body*/new ExternalStatement.Body(
 		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Attack")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Damage"))))), /*Name*/new ExternalStatement(new StringEntry("damage")), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Attack")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Damage"))))),new ExternalStatement.Parameters()))))))}), Arrays.asList(new ExternalClassEntry[]{})) ;}});
-	final ExternalContext damageContext = AttacksClass.getSubClass(attackName.toString()).getMethod("getDamage").getCurrentContext();
+	final ExternalContext damageContext = AttacksClass.getSubClass(attackName.toString()).getMethod("getDamage").getContext();
 	Boolean isFirst = true;
 	for(IToken.Key __element__KEY:declarationToken.keySet()) {
 		if(__element__KEY.getName().equals("cooldown")){ final IToken element = declarationToken.get(__element__KEY);
@@ -1076,7 +1081,7 @@ SupportsClass.addSubClass(new ExternalClassEntry(){public void __INIT__(){super.
 		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*InCl*/new ExternalStatement(description)))))),new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("use")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Entity"))), /*Name*/new ExternalStatement(new StringEntry("user"))),
 /*PARAMS*/				new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Entity"))), /*Name*/new ExternalStatement(new StringEntry("victim")))}), /*Body*/new ExternalStatement.Body())}), Arrays.asList(new ExternalClassEntry[]{})) ;}});
 	Boolean isFirst = true;
-	final ExternalContext useContext = SupportsClass.getSubClass(supportName.toString()).getMethod("use[Entity,Entity]").getCurrentContext();
+	final ExternalContext useContext = SupportsClass.getSubClass(supportName.toString()).getMethod("use[Entity,Entity]").getContext();
 	for(IToken.Key __element__KEY:declarationToken.keySet()) {
 		if(__element__KEY.getName().equals("cooldown")){ final IToken element = declarationToken.get(__element__KEY);
 SupportsClass.getSubClass(supportName.toString()).getMethod("*").appendToBody(new ExternalStatement.Body(
@@ -1279,6 +1284,35 @@ SupportsClass.getSubClass(supportName.toString()).getMethod("use[Entity,Entity]"
 		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("false"))))))),
 /*BODY*/				
 	/*Cond*/new ExternalStatement.Conditional(
+			"if ", 
+			/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("activity"))), /*Enty*/new ExternalStatement(new StringEntry("hasTarget"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))),
+			/*Body*/new ExternalStatement.Body(
+		/*Cond*/new ExternalStatement.Conditional(
+			"if ", 
+			/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("targetCriteria"))), /*Enty*/new ExternalStatement(new StringEntry("satisfies"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("activity"))), /*Enty*/new ExternalStatement(new StringEntry("getTargetEntity"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))))))),
+			/*Body*/new ExternalStatement.Body(
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("use")),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("user")))),/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("activity"))), /*Enty*/new ExternalStatement(new StringEntry("getTargetEntity"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))))))),
+/*BODY*/				
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("true"))))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("false"))))))),
+/*BODY*/				
+	/*Cond*/new ExternalStatement.Conditional(
+			"else ", null,
+			/*Body*/new ExternalStatement.Body(
+		/*Cond*/new ExternalStatement.Conditional(
 			"for ", 
 			/*Optr*/new ExternalStatement(": ", new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Entity"))), /*Name*/new ExternalStatement(new StringEntry("potential"))), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
 			 	new ExternalStatement(".", /*Call*/new ExternalStatement("",
@@ -1286,14 +1320,7 @@ SupportsClass.getSubClass(supportName.toString()).getMethod("use[Entity,Entity]"
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
 			 		new ExternalStatement.Parameters())), /*Enty*/new ExternalStatement(new StringEntry("getEntitiesWithin"))),
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("getRange")),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("user")))))))))))),
-			/*Body*/new ExternalStatement.Body(
-		/*Cond*/new ExternalStatement.Conditional(
-			"if ", 
-			/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("targetCriteria"))), /*Enty*/new ExternalStatement(new StringEntry("satisfies"))),
-			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("potential")))))))),
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("getRange")),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("user"))))))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("targetCriteria"))))))))),
 			/*Body*/new ExternalStatement.Body(
 			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("use")),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("user")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("potential")))))))),
 /*BODY*/				
@@ -1352,7 +1379,7 @@ SkillsClass.getSubClass(skillName.toString()).addSubClass(new ExternalClassEntry
 		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("true")))))))}), Arrays.asList(new ExternalClassEntry[]{})) ;}});
 	SkillsClass.getSubClass(skillName.toString()).getMethod("*").appendToBody(/*Body*/new ExternalStatement.Body(
 		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("targetCriteria")), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Skills")), /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(skillName.toString()))))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("TargetCriteria"))))),new ExternalStatement.Parameters()))))));
-	final ExternalContext useContext = SkillsClass.getSubClass(skillName.toString()).getMethod("use").getCurrentContext();
+	final ExternalContext useContext = SkillsClass.getSubClass(skillName.toString()).getMethod("use").getContext();
 	Boolean isFirst = true;
 	for(IToken.Key __element__KEY:declarationToken.keySet()) {
 		if(__element__KEY.getName().equals("variable_header")){ final IToken element = declarationToken.get(__element__KEY);
@@ -1360,7 +1387,7 @@ SkillsClass.getSubClass(skillName.toString()).addSubClass(new ExternalClassEntry
 		}
 		if(__element__KEY.getName().equals("require")){ final IToken element = declarationToken.get(__element__KEY);
 			for(final IToken atom:element.getAllSafely("boolean_statement")) {
-				final ExternalContext canUseContext = SkillsClass.getSubClass(skillName.toString()).getSubClass("TargetCriteria").getMethod("satisfies").getCurrentContext();
+				final ExternalContext canUseContext = SkillsClass.getSubClass(skillName.toString()).getSubClass("TargetCriteria").getMethod("satisfies").getContext();
 				SkillsClass.getSubClass(skillName.toString()).getSubClass("TargetCriteria").getMethod("satisfies").prependToBody(/*InCl*/new ExternalStatement(
 		/*Cond*/new ExternalStatement.Conditional(
 			"if ", 
@@ -1551,302 +1578,181 @@ public ExternalStatement getId(final String name) {
 			new StringEntry("Quest").get(builder);
 			new StringEntry("").get(builder);
 		}
-	}, Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("UNSTARTED")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("-1"))))),new ExternalVariableEntry(true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("IN_PROGRESS")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0"))))),new ExternalVariableEntry(true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("SUCCESS")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("1"))))),new ExternalVariableEntry(true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("FAIL")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("2"))))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("List"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Path"))))), /*Name*/new ExternalStatement(new StringEntry("destinations")), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("ArrayList"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Path"))))),new ExternalStatement.Parameters()))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("List"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Path"))))), /*Name*/new ExternalStatement(new StringEntry("failedDestinations")), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("ArrayList"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Path"))))),new ExternalStatement.Parameters()))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("List"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Way"))))), /*Name*/new ExternalStatement(new StringEntry("currentWays")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Way"))), /*Name*/new ExternalStatement(new StringEntry("currentWay")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Path"))), /*Name*/new ExternalStatement(new StringEntry("currentProgress")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Path"))), /*Name*/new ExternalStatement(new StringEntry("currentFulfillment")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("status")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("UNSTARTED")))))}), Arrays.asList(new ExternalMethodEntry[]{new ExternalMethodEntry(0, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Quest")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Id"))))), /*Exac*/new ExternalStatement(new StringEntry("getId")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+	}, Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("UNSTARTED")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("-1"))))),new ExternalVariableEntry(true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("IN_PROGRESS")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0"))))),new ExternalVariableEntry(true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("SUCCESS")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("1"))))),new ExternalVariableEntry(true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("FAIL")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("2"))))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("status")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("UNSTARTED"))))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Activity"))), /*Name*/new ExternalStatement(new StringEntry("currentActivity")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("currentActivityIndex")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("-1"))))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("List"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Activity"))))), /*Name*/new ExternalStatement(new StringEntry("activities")), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("ArrayList"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Activity"))))),new ExternalStatement.Parameters())))}), Arrays.asList(new ExternalMethodEntry[]{new ExternalMethodEntry(0, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Quest")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Id"))))), /*Exac*/new ExternalStatement(new StringEntry("getId")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
 	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))))),new ExternalMethodEntry(0, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Boolean"))), /*Exac*/new ExternalStatement(new StringEntry("canChase")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
 	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("false"))))))),new ExternalMethodEntry(0, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))), /*Exac*/new ExternalStatement(new StringEntry("getRange")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Entity"))), /*Name*/new ExternalStatement(new StringEntry("user")))}), /*Body*/new ExternalStatement.Body(
 	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0f"))))))),new ExternalMethodEntry(0, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("EntityCriteria"))), /*Exac*/new ExternalStatement(new StringEntry("getTargetCriteria")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
-	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Quest")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("TargetCriteria"))))),new ExternalStatement.Parameters()))))),new ExternalMethodEntry(0, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("generateDestinations")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Entity"))), /*Name*/new ExternalStatement(new StringEntry("quester")))}), /*Body*/new ExternalStatement.Body()),new ExternalMethodEntry(0, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Boolean"))), /*Exac*/new ExternalStatement(new StringEntry("fulfill")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Entity"))), /*Name*/new ExternalStatement(new StringEntry("quester"))),
-/*PARAMS*/				new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Path"))), /*Name*/new ExternalStatement(new StringEntry("destinationReached")))}), /*Body*/new ExternalStatement.Body(
-	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("true"))))))),new ExternalMethodEntry(0, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Boolean"))), /*Exac*/new ExternalStatement(new StringEntry("use")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Entity"))), /*Name*/new ExternalStatement(new StringEntry("quester"))),
-/*PARAMS*/				new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Activity"))), /*Name*/new ExternalStatement(new StringEntry("activity")))}), /*Body*/new ExternalStatement.Body(
-	/*Cond*/new ExternalStatement.Conditional(
-			"if ", 
-			/*Optr*/new ExternalStatement("==", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("status")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("UNSTARTED")))),
-			/*Body*/new ExternalStatement.Body(
-		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("generateDestinations")),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("quester")))))))),
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Quest")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("TargetCriteria"))))),new ExternalStatement.Parameters()))))),new ExternalMethodEntry(0, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("add")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Activity"))), /*Name*/new ExternalStatement(new StringEntry("newActivity")))}), /*Body*/new ExternalStatement.Body(
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("activities"))), /*Enty*/new ExternalStatement(new StringEntry("add"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("newActivity"))))))))),
 /*BODY*/				
-		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("status")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("IN_PROGRESS")))))),
-/*BODY*/				
-		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("true"))))))),
-/*BODY*/				
-	/*Cond*/new ExternalStatement.Conditional(
-			"else if ", 
-			/*Optr*/new ExternalStatement("!=", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("status")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("IN_PROGRESS")))),
-			/*Body*/new ExternalStatement.Body(
-		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("false"))))))),
-/*BODY*/				
-	/*Cond*/new ExternalStatement.Conditional(
-			"else if ", 
-			/*Optr*/new ExternalStatement("!=", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("currentFulfillment")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null")))),
-			/*Body*/new ExternalStatement.Body(
-		/*Cond*/new ExternalStatement.Conditional(
-			"if ", 
-			/*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("fulfill")),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("quester")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("currentFulfillment"))))))),
-			/*Body*/new ExternalStatement.Body(
-			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("currentFulfillment")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null")))))))),
-/*BODY*/				
-		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("true"))))))),
-/*BODY*/				
-	/*Cond*/new ExternalStatement.Conditional(
-			"else if ", 
-			/*Optr*/new ExternalStatement("&&!", /*Optr*/new ExternalStatement("!=", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("currentProgress")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null")))), /*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("currentProgress"))), /*Enty*/new ExternalStatement(new StringEntry("isWithin"))),
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("newActivity"))), /*Enty*/new ExternalStatement(new StringEntry("add"))),
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
 			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("quester"))), /*Enty*/new ExternalStatement(new StringEntry("getLocation"))),
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(".", /*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Quest"))),new ExternalStatement.Parameters()), /*Enty*/new ExternalStatement(new StringEntry("Listeners"))), /*Enty*/new ExternalStatement(new StringEntry("Success"))),
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters()))))))),
-			/*Body*/new ExternalStatement.Body(
-		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("quester"))), /*Enty*/new ExternalStatement(new StringEntry("getLocation"))),
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("this")))),/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("activities"))), /*Enty*/new ExternalStatement(new StringEntry("size"))),
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters())), /*Enty*/new ExternalStatement(new StringEntry("step"))),
+			 		new ExternalStatement.Parameters())))))))))))),
+/*BODY*/				
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("newActivity"))), /*Enty*/new ExternalStatement(new StringEntry("add"))),
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
 			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("quester"))), /*Enty*/new ExternalStatement(new StringEntry("getWalkingSpeed"))),
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(".", /*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Quest"))),new ExternalStatement.Parameters()), /*Enty*/new ExternalStatement(new StringEntry("Listeners"))), /*Enty*/new ExternalStatement(new StringEntry("Fail"))),
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters()))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("currentProgress"))))))))),
-/*BODY*/				
-		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("true"))))))),
-/*BODY*/				
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("this"))))))))))))))),new ExternalMethodEntry(0, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("advanceTo")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("newIndex")))}), /*Body*/new ExternalStatement.Body(
 	/*Cond*/new ExternalStatement.Conditional(
-			"else if ", 
-			/*Optr*/new ExternalStatement("&&!", /*Optr*/new ExternalStatement("==", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("currentWay")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null")))), /*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("destinations"))), /*Enty*/new ExternalStatement(new StringEntry("isEmpty"))),
+			"if ", 
+			/*Optr*/new ExternalStatement("<", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("newIndex")))), /*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("activities"))), /*Enty*/new ExternalStatement(new StringEntry("size"))),
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
 			 		new ExternalStatement.Parameters()))),
 			/*Body*/new ExternalStatement.Body(
-		/*Cond*/new ExternalStatement.Conditional(
-			"if ", 
-			/*Optr*/new ExternalStatement("&&!", /*Optr*/new ExternalStatement("!=", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("currentWays")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null")))), /*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("currentWays"))), /*Enty*/new ExternalStatement(new StringEntry("isEmpty"))),
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("currentActivity")), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("activities"))), /*Enty*/new ExternalStatement(new StringEntry("get"))),
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters()))),
-			/*Body*/new ExternalStatement.Body(
-			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("currentWay")), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("currentWays"))), /*Enty*/new ExternalStatement(new StringEntry("remove"))),
-			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0")))))))))),
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("newIndex")))))))))),
 /*BODY*/				
-			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("true"))))))),
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("currentActivityIndex")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("newIndex")))))))),
 /*BODY*/				
-		/*Cond*/new ExternalStatement.Conditional(
+	/*Cond*/new ExternalStatement.Conditional(
 			"else ", null,
 			/*Body*/new ExternalStatement.Body(
-			/*Cond*/new ExternalStatement.Conditional(
-			"if ", 
-			/*Optr*/new ExternalStatement("==", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("currentProgress")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null")))),
-			/*Body*/new ExternalStatement.Body(
-				/*Cond*/new ExternalStatement.Conditional(
-			"if ", 
-			/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("quester"))), /*Enty*/new ExternalStatement(new StringEntry("getLocation"))),
-			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters())), /*Enty*/new ExternalStatement(new StringEntry("getTile"))),
-			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters())), /*Name*/new ExternalStatement(new StringEntry("isPath"))),
-			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters()))),
-			/*Body*/new ExternalStatement.Body(
-					/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("currentProgress")), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("(Path)quester"))), /*Enty*/new ExternalStatement(new StringEntry("getLocation"))),
-			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters())), /*Enty*/new ExternalStatement(new StringEntry("getTile"))),
-			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters()))))))),
-/*BODY*/				
-				/*Cond*/new ExternalStatement.Conditional(
-			"else ", null,
-			/*Body*/new ExternalStatement.Body(
-					/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("currentProgress")), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("quester"))), /*Enty*/new ExternalStatement(new StringEntry("getLocation"))),
-			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters())), /*Enty*/new ExternalStatement(new StringEntry("getTile"))),
-			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters())), /*Enty*/new ExternalStatement(new StringEntry("getClosestPath"))),
-			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters()))))),
-/*BODY*/				
-					/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("true"))))))))),
-/*BODY*/				
-			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("currentWays")), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("currentProgress"))), /*Enty*/new ExternalStatement(new StringEntry("getWaysTo"))),
-			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("destinations"))), /*Enty*/new ExternalStatement(new StringEntry("get"))),
-			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0")))))))),/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("activity"))), /*Enty*/new ExternalStatement(new StringEntry("getPathStoppers"))),
-			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters()))))))))),
-/*BODY*/				
-			/*Cond*/new ExternalStatement.Conditional(
-			"while ", 
-			/*Optr*/new ExternalStatement("&&!", /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("currentWays"))), /*Enty*/new ExternalStatement(new StringEntry("isEmpty"))),
-			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters()))), /*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("destinations"))), /*Enty*/new ExternalStatement(new StringEntry("isEmpty"))),
-			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters()))),
-			/*Body*/new ExternalStatement.Body(
-				/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("failedDestinations"))), /*Enty*/new ExternalStatement(new StringEntry("add"))),
-			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("destinations"))), /*Enty*/new ExternalStatement(new StringEntry("remove"))),
-			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0"))))))))))))),
-/*BODY*/				
-				/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("currentWays")), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("currentProgress"))), /*Enty*/new ExternalStatement(new StringEntry("getWaysTo"))),
-			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("destinations"))), /*Enty*/new ExternalStatement(new StringEntry("get"))),
-			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0")))))))),/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("activity"))), /*Enty*/new ExternalStatement(new StringEntry("getPathStoppers"))),
-			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters()))))))))))),
-/*BODY*/				
-			/*Cond*/new ExternalStatement.Conditional(
-			"if ", 
-			/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("currentWays"))), /*Enty*/new ExternalStatement(new StringEntry("isEmpty"))),
-			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters()))),
-			/*Body*/new ExternalStatement.Body(
-				/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("List"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Path"))))), /*Name*/new ExternalStatement(new StringEntry("deadDestinations")), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("ArrayList"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Path"))))),new ExternalStatement.Parameters())))),
-/*BODY*/				
-				/*Cond*/new ExternalStatement.Conditional(
-			"while ", 
-			/*Optr*/new ExternalStatement("&&!", /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("currentWays"))), /*Enty*/new ExternalStatement(new StringEntry("isEmpty"))),
-			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters()))), /*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("failedDestinations"))), /*Enty*/new ExternalStatement(new StringEntry("isEmpty"))),
-			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters()))),
-			/*Body*/new ExternalStatement.Body(
-					/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("destinations"))), /*Enty*/new ExternalStatement(new StringEntry("add"))),
-			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("failedDestinations"))), /*Enty*/new ExternalStatement(new StringEntry("remove"))),
-			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0"))))))))))))),
-/*BODY*/				
-					/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("currentWays")), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("currentProgress"))), /*Enty*/new ExternalStatement(new StringEntry("getWaysTo"))),
-			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("destinations"))), /*Enty*/new ExternalStatement(new StringEntry("get"))),
-			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0")))))))),/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("activity"))), /*Enty*/new ExternalStatement(new StringEntry("getPathStoppers"))),
-			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters()))))))))),
-/*BODY*/				
-					/*Cond*/new ExternalStatement.Conditional(
-			"if ", 
-			/*Optr*/new ExternalStatement("==", /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("currentWays"))), /*Enty*/new ExternalStatement(new StringEntry("isEmpty"))),
-			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters()))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("false")))),
-			/*Body*/new ExternalStatement.Body(
-						/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("currentWay")), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("currentWays"))), /*Enty*/new ExternalStatement(new StringEntry("remove"))),
-			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0")))))))))),
-/*BODY*/				
-						/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("true"))))))),
-/*BODY*/				
-					/*Cond*/new ExternalStatement.Conditional(
-			"else ", null,
-			/*Body*/new ExternalStatement.Body(
-						/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("deadDestinations"))), /*Enty*/new ExternalStatement(new StringEntry("add"))),
-			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("destinations"))), /*Enty*/new ExternalStatement(new StringEntry("remove"))),
-			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0"))))))))))))))))),
-/*BODY*/				
-				/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("failedDestinations"))), /*Enty*/new ExternalStatement(new StringEntry("addAll"))),
-			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("deadDestinations"))))))))),
-/*BODY*/				
-				/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("false"))))))),
-/*BODY*/				
-			/*Cond*/new ExternalStatement.Conditional(
-			"else ", null,
-			/*Body*/new ExternalStatement.Body(
-				/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("currentWay")), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("currentWays"))), /*Enty*/new ExternalStatement(new StringEntry("remove"))),
-			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0")))))))))),
-/*BODY*/				
-				/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("true"))))))))))),
-/*BODY*/				
-	/*Cond*/new ExternalStatement.Conditional(
-			"else if ", 
-			/*Optr*/new ExternalStatement("&&", /*Optr*/new ExternalStatement("==", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("currentWay")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null")))), /*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("destinations"))), /*Enty*/new ExternalStatement(new StringEntry("isEmpty"))),
-			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters()))),
-			/*Body*/new ExternalStatement.Body(
-		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("generateDestinations")),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("quester")))))))),
-/*BODY*/				
-		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("use")),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("quester")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("activity")))))))))),
-/*BODY*/				
-	/*Cond*/new ExternalStatement.Conditional(
-			"else if ", 
-			/*Optr*/new ExternalStatement("!=", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("currentWay")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null")))),
-			/*Body*/new ExternalStatement.Body(
-		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("currentProgress")), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("currentProgress"))), /*Enty*/new ExternalStatement(new StringEntry("step"))),
-			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("quester")))),/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("currentWay"))), /*Enty*/new ExternalStatement(new StringEntry("remove"))),
-			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0")))))))))))))),
-/*BODY*/				
-		/*Cond*/new ExternalStatement.Conditional(
-			"if ", 
-			/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("currentWay"))), /*Enty*/new ExternalStatement(new StringEntry("isEmpty"))),
-			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters()))),
-			/*Body*/new ExternalStatement.Body(
-			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("currentWay")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null")))))))),
-/*BODY*/				
-		/*Cond*/new ExternalStatement.Conditional(
-			"for ", 
-			/*Optr*/new ExternalStatement(": ", new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Path"))), /*Name*/new ExternalStatement(new StringEntry("destination"))), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("destinations"))))),
-			/*Body*/new ExternalStatement.Body(
-			/*Cond*/new ExternalStatement.Conditional(
-			"if ", 
-			/*Optr*/new ExternalStatement("==", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("currentProgress")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("destination")))),
-			/*Body*/new ExternalStatement.Body(
-				/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("currentFulfillment")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("destination")))))),
-/*BODY*/				
-				/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("true"))))))))),
-/*BODY*/				
-		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("true"))))))),
-/*BODY*/				
-	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("false")))))))}), Arrays.asList(new ExternalClassEntry[]{QuestClass.IdClass,QuestClass.TargetCriteriaClass}));
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("status")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("SUCCESS"))))))))))}), Arrays.asList(new ExternalClassEntry[]{QuestClass.IdClass,QuestClass.TargetCriteriaClass}));
 	}
 }
 	protected Quests QuestsClass = new Quests();
 	public class Quests extends ExternalClassEntry {
 
+	
+public void setup(final ParseContext data) {
+	EventsClass.addToEventMethod("startQuest",QuestClass,/*Body*/new ExternalStatement.Body(
+		/*Cond*/new ExternalStatement.Conditional(
+			"if ", 
+			/*Optr*/new ExternalStatement("==", /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("activities"))), /*Enty*/new ExternalStatement(new StringEntry("isEmpty"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("false")))),
+			/*Body*/new ExternalStatement.Body(
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("currentActivity")), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("activities"))), /*Enty*/new ExternalStatement(new StringEntry("get"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0")))))))))),
+/*BODY*/				
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("currentActivityIndex")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0")))))),
+/*BODY*/				
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("status")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("IN_PROGRESS")))))))),
+/*BODY*/				
+		/*Cond*/new ExternalStatement.Conditional(
+			"else ", null,
+			/*Body*/new ExternalStatement.Body(
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("status")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("FAIL"))))))))));
+}
+	
+public void typeDeclaration(final IToken declarationToken) {
+	final String questName = declarationToken.get("questName").toString();
+	final String description = declarationToken.get("description").toString();
+QuestsClass.addSubClass(new ExternalClassEntry(){public void __INIT__(){super.__SETUP__(null, 
+		new Entry(){
+			public void get(StringBuilder __BUILDER__){
+			}
+		},new StringEntry(questName), "class ", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Quest")), new ArrayList<Entry>(Arrays.asList(new Entry[]{})), 
+		new Entry(){
+		public void get(StringBuilder builder){
+			builder.append("static class ");
+			new StringEntry(questName).get(builder);
+			new StringEntry("").get(builder);
+		}
+	}, Arrays.asList(new ExternalVariableEntry[]{}), Arrays.asList(new ExternalMethodEntry[]{new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("generateDestinations")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Entity"))), /*Name*/new ExternalStatement(new StringEntry("quester")))}), /*Body*/new ExternalStatement.Body()),new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Boolean"))), /*Exac*/new ExternalStatement(new StringEntry("fulfill")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Entity"))), /*Name*/new ExternalStatement(new StringEntry("quester"))),
+/*PARAMS*/				new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Path"))), /*Name*/new ExternalStatement(new StringEntry("destinationReached")))}), /*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("true")))))))}), Arrays.asList(new ExternalClassEntry[]{})) ;}});
+	final ExternalStatement tileClauses = new ExternalStatement();
+	tileClauses.set("&&");
+	Integer tileCount = 0;
+	for(final IToken element:declarationToken.getAllSafely("quest_destination")) {
+			final ExternalStatement tileClause = new ExternalStatement();
+			tileClause.brace();
+			tileClause.set("||");
+QuestsClass.getSubClass(questName.toString()).addVariable(new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Set"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Path"))))), /*Enty*/new ExternalStatement(new StringEntry("visited"+tileCount.toString())), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("HashSet"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Path"))))),new ExternalStatement.Parameters()))));
+QuestsClass.getSubClass(questName.toString()).addVariable(new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Set"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Path"))))), /*Enty*/new ExternalStatement(new StringEntry("toVisit"+tileCount.toString())), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("HashSet"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Path"))))),new ExternalStatement.Parameters()))));
+			for(final IToken atom:element.getAllSafely("quest_tile_description")) {
+				final String tileName = atom.get("tileName").toString().replace(" ","");
+				final String mapName = atom.get("mapName").toString().replace(" ","");
+				final String negatedOperator = negateOperator(atom.get("ORDINAL").toString());
+				final ExternalStatement tileNameClause = new ExternalStatement();
+				tileNameClause.set(negatedOperator);
+				tileNameClause.add(/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry("visited"+tileCount.toString()))), /*Enty*/new ExternalStatement(new StringEntry("size"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))));
+				tileNameClause.add(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(atom.get("INTEGER").toString())))));
+				tileClause.add(tileNameClause);
+				QuestsClass.getMethod("fulfill").prependToBody(/*Body*/new ExternalStatement.Body(
+		/*Cond*/new ExternalStatement.Conditional(
+			"if ", 
+			/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry("toVisit"+tileCount.toString()))), /*Enty*/new ExternalStatement(new StringEntry("contains"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("destinationReached")))))))),
+			/*Body*/new ExternalStatement.Body(
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry("visited"+tileCount.toString()))), /*Enty*/new ExternalStatement(new StringEntry("add"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("destinationReached")))))))))))));
+				QuestsClass.getMethod("generateDestinations").prependToBody(/*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry("toVisited"+tileCount.toString()))), /*Enty*/new ExternalStatement(new StringEntry("add"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("quester"))), /*Enty*/new ExternalStatement(new StringEntry("getLocation"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters())), /*Enty*/new ExternalStatement(new StringEntry("getEnvironment"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Optr*/new ExternalStatement(".", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Environments")), /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(mapName.toString())))))))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("id"))))))), /*Enty*/new ExternalStatement(new StringEntry("getPathFromId"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("quester"))), /*Enty*/new ExternalStatement(new StringEntry("getLocation"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))),/*Optr*/new ExternalStatement(".", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Tiles")), /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(mapName+tileName.toString())))))))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("id")))))))))))))));
+			}
+			tileClauses.add(tileClause);
+			tileCount += 1;
+	}
+	if (tileClauses.size() > 0 ) {
+		QuestsClass.getMethod("fulfill").prependToBody(/*Body*/new ExternalStatement.Body(
+		/*Cond*/new ExternalStatement.Conditional(
+			"if ", 
+			/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*InCl*/new ExternalStatement(tileClauses))),
+			/*Body*/new ExternalStatement.Body(
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("false")))))))));
+	}
+	for(final IToken element:declarationToken.getAllSafely("event")) {
+			final ExternalStatement.Body eventBody = new ExternalStatement.Body();
+			String eventName = element.get("event_names").toString();
+			if (eventName == "start" || eventName == "load") {
+			eventName = "startQuest";
+			}
+			final ExternalContext eventContext = EventsClass.addToEventMethod(eventName,QuestsClass.getSubClass(questName.toString()),/*Body*/new ExternalStatement.Body());
+			for(final IToken atom:element.getAllSafely("body_element")) {
+				eventBody.add(getBodyElement(atom,eventContext));
+			}
+			eventBody.add(/*InCl*/new ExternalStatement(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("super"))), /*Enty*/new ExternalStatement(new StringEntry("on"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("event")))))))))));
+			EventsClass.addToEventMethod(eventName,QuestsClass.getSubClass(questName.toString()),eventBody);
+	}
+	QuestsClass.getSubClass(questName.toString()).getMethod("fulfill").prependToBody(/*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("true")))))));
+}
 
 
 
@@ -3517,6 +3423,7 @@ public void setup(final ParseContext data) {
 	EntityClass.addGainLoss(AttackClass,EntityClass);
 	EntityClass.addGainLoss(SupportClass,EntityClass);
 	EntityClass.addGainLoss(QuestClass,EntityClass);
+	EntityClass.addGainLoss(ActivityClass,EntityClass);
 	createList(ItemClass);
 	createListMap(SourceClass,IntClass);
 	createMap(EntityClass,RelationshipClass.getSubClass("Reason"));
@@ -3919,7 +3826,7 @@ outputClass.addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalS
 	createListMap(SourceClass,inputClass);
 	final String sources = "Sources";
 	final String inputName = "_" + inputClass.getName();
-outputClass.addVariable(new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("ListMaps")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry(sources)))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry(inputName))))), /*Enty*/new ExternalStatement(new StringEntry(asList.toString()))));
+outputClass.addVariable(new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("ListMaps")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry(sources)))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry(inputName))))), /*Enty*/new ExternalStatement(new StringEntry(asList.toString()))));
 }
 
 
@@ -4077,7 +3984,7 @@ outputClass.addVariable(new ExternalVariableEntry(false, /*TypeName*/new Externa
 			new StringEntry("Entity").get(builder);
 			new StringEntry("").get(builder);
 		}
-	}, Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("String"))), /*Name*/new ExternalStatement(new StringEntry("name")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))), /*Name*/new ExternalStatement(new StringEntry("weightHeld")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0f"))))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))), /*Name*/new ExternalStatement(new StringEntry("walkingSpeed")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0.2f"))))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Tile"))), /*Name*/new ExternalStatement(new StringEntry("spawn")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("ItemList"))), /*Name*/new ExternalStatement(new StringEntry("equippedItems")), /*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("ItemList"))),new ExternalStatement.Parameters())),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Skill"))), /*Name*/new ExternalStatement(new StringEntry("focusSkill")), /*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Skill"))),new ExternalStatement.Parameters())),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Environment")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Location"))))), /*Name*/new ExternalStatement(new StringEntry("location")), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Environment")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Location"))))),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("-1001")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("-1001")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("1001f")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("1001f")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("this")))))))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("EntityMap")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("_Reason"))))), /*Name*/new ExternalStatement(new StringEntry("relationships")), /*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("EntityMap")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("_Reason"))))),new ExternalStatement.Parameters())),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Activity"))), /*Name*/new ExternalStatement(new StringEntry("currentActivity")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("currentActivityIndex")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("-1"))))),new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("List"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Activity"))))), /*Name*/new ExternalStatement(new StringEntry("activityList")), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("ArrayList"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Activity"))))),new ExternalStatement.Parameters())))}), Arrays.asList(new ExternalMethodEntry[]{new ExternalMethodEntry(0, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))), /*Exac*/new ExternalStatement(new StringEntry("getItemDamage")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+	}, Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("ALIVE")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0"))))),new ExternalVariableEntry(true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("DEAD")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("1"))))),new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("String"))), /*Name*/new ExternalStatement(new StringEntry("name")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("status")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("ALIVE"))))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))), /*Name*/new ExternalStatement(new StringEntry("weightHeld")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0f"))))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))), /*Name*/new ExternalStatement(new StringEntry("walkingSpeed")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0.2f"))))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Tile"))), /*Name*/new ExternalStatement(new StringEntry("spawn")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("ItemList"))), /*Name*/new ExternalStatement(new StringEntry("equippedItems")), /*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("ItemList"))),new ExternalStatement.Parameters())),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Skill"))), /*Name*/new ExternalStatement(new StringEntry("focusSkill")), /*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Skill"))),new ExternalStatement.Parameters())),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Environment")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Location"))))), /*Name*/new ExternalStatement(new StringEntry("location")), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Environment")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Location"))))),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("-1001")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("-1001")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("1001f")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("1001f")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("this")))))))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("EntityMap")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("_Reason"))))), /*Name*/new ExternalStatement(new StringEntry("relationships")), /*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("EntityMap")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("_Reason"))))),new ExternalStatement.Parameters())),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Activity"))), /*Name*/new ExternalStatement(new StringEntry("currentActivity")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("currentActivityIndex")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("-1"))))),new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("List"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Activity"))))), /*Name*/new ExternalStatement(new StringEntry("activityList")), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("ArrayList"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Activity"))))),new ExternalStatement.Parameters())))}), Arrays.asList(new ExternalMethodEntry[]{new ExternalMethodEntry(0, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))), /*Exac*/new ExternalStatement(new StringEntry("getItemDamage")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
 	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))), /*Name*/new ExternalStatement(new StringEntry("sum")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0f")))))),
 /*BODY*/				
 	/*Cond*/new ExternalStatement.Conditional(
@@ -4181,9 +4088,9 @@ outputClass.addVariable(new ExternalVariableEntry(false, /*TypeName*/new Externa
 			/*Optr*/new ExternalStatement("!=", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("currentActivity")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null")))),
 			/*Body*/new ExternalStatement.Body(
 		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("currentActivity"))), /*Enty*/new ExternalStatement(new StringEntry("step"))),
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("currentActivity"))), /*Enty*/new ExternalStatement(new StringEntry("on"))),
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("this"))))))))))),
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Tick"))))),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("this")))))))))))))),
 /*BODY*/				
 	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("on")),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Tick"))))),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("this"))))))))))))),new ExternalMethodEntry(0, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("join")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Entity"))), /*Name*/new ExternalStatement(new StringEntry("recruiter"))),
 /*PARAMS*/				new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Association"))), /*Name*/new ExternalStatement(new StringEntry("newAssociation")))}), /*Body*/new ExternalStatement.Body(
@@ -4194,7 +4101,17 @@ outputClass.addVariable(new ExternalVariableEntry(false, /*TypeName*/new Externa
 /*BODY*/				
 	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("gain")),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("newAssociation")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("recruiter")))))))),
 /*BODY*/				
-	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("on")),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Joined"))))),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("recruiter")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("this"))))))))))))),new ExternalMethodEntry(0, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("stepNextActivity")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("on")),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Joined"))))),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("recruiter")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("this"))))))))))))),new ExternalMethodEntry(0, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("start")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Activity"))), /*Name*/new ExternalStatement(new StringEntry("newActivity")))}), /*Body*/new ExternalStatement.Body(
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("activityList"))), /*Enty*/new ExternalStatement(new StringEntry("add"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("newActivity"))))))))),
+/*BODY*/				
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("+=", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("currentActivityIndex")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("1"))))))),new ExternalMethodEntry(0, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("stop")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Activity"))), /*Name*/new ExternalStatement(new StringEntry("oldActivity")))}), /*Body*/new ExternalStatement.Body(
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("activityList"))), /*Enty*/new ExternalStatement(new StringEntry("remove"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("oldActivity"))))))))))),new ExternalMethodEntry(0, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("stepNextActivity")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
 	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("+=", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("currentActivityIndex")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("1"))))),
 /*BODY*/				
 	/*Cond*/new ExternalStatement.Conditional(
@@ -4227,7 +4144,8 @@ outputClass.addVariable(new ExternalVariableEntry(false, /*TypeName*/new Externa
 			/*Body*/new ExternalStatement.Body(
 		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("currentActivity")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null")))))),
 /*BODY*/				
-		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("currentActivityIndex")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("-1"))))))))))}), Arrays.asList(new ExternalClassEntry[]{EntityClass.FactoryClass,EntityClass.ModifierClass,EntityClass.MultiModifierClass,EntityClass.StatClass}));
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("currentActivityIndex")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("-1")))))))))),new ExternalMethodEntry(0, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Boolean"))), /*Exac*/new ExternalStatement(new StringEntry("isDead")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Optr*/new ExternalStatement("==", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("status")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("DEAD")))))))}), Arrays.asList(new ExternalClassEntry[]{EntityClass.FactoryClass,EntityClass.ModifierClass,EntityClass.MultiModifierClass,EntityClass.StatClass}));
 	}
 }
 	protected Tiles TilesClass = new Tiles();
@@ -4375,7 +4293,7 @@ TileClass.addVariable(new ExternalVariableEntry(false, true, /*TypeName*/new Ext
 			new StringEntry("Tile").get(builder);
 			new StringEntry("").get(builder);
 		}
-	}, Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))), /*Name*/new ExternalStatement(new StringEntry("width")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("1f"))))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))), /*Name*/new ExternalStatement(new StringEntry("height")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("1f"))))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("numberOfAliveGeneratedEntities")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0"))))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("limit")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("5"))))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Boolean"))), /*Name*/new ExternalStatement(new StringEntry("isPath")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("false")))))}), Arrays.asList(new ExternalMethodEntry[]{new ExternalMethodEntry(0, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Boolean"))), /*Name*/new ExternalStatement(new StringEntry("isPath")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+	}, Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))), /*Name*/new ExternalStatement(new StringEntry("width")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("1f"))))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))), /*Name*/new ExternalStatement(new StringEntry("height")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("1f"))))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("numberOfAliveGeneratedEntities")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0"))))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("limit")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("5"))))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Boolean"))), /*Name*/new ExternalStatement(new StringEntry("isPath")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("false"))))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Area"))), /*Name*/new ExternalStatement(new StringEntry("area")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null")))))}), Arrays.asList(new ExternalMethodEntry[]{new ExternalMethodEntry(0, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Boolean"))), /*Name*/new ExternalStatement(new StringEntry("isPath")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
 	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("false"))))))),new ExternalMethodEntry(0, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Boolean"))), /*Exac*/new ExternalStatement(new StringEntry("isWithin")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Environment")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Position"))))), /*Name*/new ExternalStatement(new StringEntry("otherPosition")))}), /*Body*/new ExternalStatement.Body(
 	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
 			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("super"))), /*Enty*/new ExternalStatement(new StringEntry("isWithin"))),
@@ -4841,6 +4759,49 @@ TileClass.addVariable(new ExternalVariableEntry(false, true, /*TypeName*/new Ext
 
 
 
+	protected Stepper StepperClass = new Stepper();
+	public class Stepper extends ExternalClassEntry {
+
+
+
+
+	public void __INIT__(){
+		super.__SETUP__(
+		null, 
+		new Entry(){
+			public void get(StringBuilder __BUILDER__){
+			}
+		}, new StringEntry("Stepper"), "class ", null, new ArrayList<Entry>(Arrays.asList(new Entry[]{})), 
+		new Entry(){
+		public void get(StringBuilder builder){
+			builder.append(" class ");
+			new StringEntry("Stepper").get(builder);
+			new StringEntry("").get(builder);
+		}
+	}, Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("i")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0")))))}), Arrays.asList(new ExternalMethodEntry[]{new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("step")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Entity"))), /*Name*/new ExternalStatement(new StringEntry("stepper")))}), /*Body*/new ExternalStatement.Body(
+		/*Cond*/new ExternalStatement.Conditional(
+			"if ", 
+			/*Optr*/new ExternalStatement("-", /*Optr*/new ExternalStatement(">=", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("i")))), /*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("size")),new ExternalStatement.Parameters())), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("1 ")))),
+			/*Body*/new ExternalStatement.Body(
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("false"))))))),
+/*BODY*/				
+		/*Cond*/new ExternalStatement.Conditional(
+			"else ", null,
+			/*Body*/new ExternalStatement.Body(
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Path"))), /*Name*/new ExternalStatement(new StringEntry("newPath")), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("get")),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("i")))))), /*Enty*/new ExternalStatement(new StringEntry("step"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("stepper")))),/*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("get")),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("1"))))))))))))),
+/*BODY*/				
+			/*Cond*/new ExternalStatement.Conditional(
+			"if ", 
+			/*Optr*/new ExternalStatement("!=", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("newPath")))), /*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("get")),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("i"))))))),
+			/*Body*/new ExternalStatement.Body(
+				/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("+=", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("i")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("1"))))))),
+/*BODY*/				
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("true")))))))))}), Arrays.asList(new ExternalClassEntry[]{}));
+	}
+}
 
 	public void __INIT__(){
 		super.__SETUP__(
@@ -4949,7 +4910,7 @@ TileClass.addVariable(new ExternalVariableEntry(false, true, /*TypeName*/new Ext
 	/*Cond*/new ExternalStatement.Conditional(
 			"else ", null,
 			/*Body*/new ExternalStatement.Body(
-		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("(int)(double)distance")))))))))}), Arrays.asList(new ExternalClassEntry[]{}));
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("(int)(double)distance")))))))))}), Arrays.asList(new ExternalClassEntry[]{WayClass.StepperClass}));
 	}
 }
 	protected Environment EnvironmentClass = new Environment();
@@ -4959,6 +4920,7 @@ TileClass.addVariable(new ExternalVariableEntry(false, true, /*TypeName*/new Ext
 public void setup(final ParseContext data) {
 	final ExternalClassEntry factoryHelper = EnvironmentClass.getSubClass("FactoryHelper");
 EnvironmentClass.addVariable(new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("List"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry(factoryHelper.getFullName()))))), /*Name*/new ExternalStatement(new StringEntry("helpers")), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("ArrayList"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry(factoryHelper.getFullName()))))),new ExternalStatement.Parameters()))));
+	createList(TileClass);
 }
 	
 public void declaration(final IToken declarationToken) {
@@ -5125,13 +5087,15 @@ EnvironmentsClass.getSubClass(mapName).addSubClass(new ExternalClassEntry(){publ
 /*PARAMS*/				new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("zoneX"))),
 /*PARAMS*/				new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("zoneY"))),
 /*PARAMS*/				new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))), /*Name*/new ExternalStatement(new StringEntry("locationX"))),
-/*PARAMS*/				new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))), /*Name*/new ExternalStatement(new StringEntry("locationY")))}), /*Body*/new ExternalStatement.Body())}), Arrays.asList(new ExternalClassEntry[]{})) ;}});
+/*PARAMS*/				new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))), /*Name*/new ExternalStatement(new StringEntry("locationY")))}), /*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Area"))), /*Name*/new ExternalStatement(new StringEntry("newArea")), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Area"))),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("zoneX")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("zoneY")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("locationX")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("locationY")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("client")))))))))))}), Arrays.asList(new ExternalClassEntry[]{})) ;}});
 			final ExternalClassEntry mapElementClass = EnvironmentsClass.getSubClass(mapName).getSubClass(mapElementName);
 			EnvironmentsClass.getSubClass(mapName).getMethod("*").prependToBody(/*InCl*/new ExternalStatement(
 		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
 			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("helpers"))), /*Enty*/new ExternalStatement(new StringEntry("add"))),
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
 			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry(mapElementClass.getFullName()))),new ExternalStatement.Parameters())))))))));
+			Integer maxX = 0;
 			Integer yIndex = 0;
 			final Map<Integer,Map<Integer,String>> knownPaths = new HashMap<Integer,Map<Integer,String>>();
 			for(final IToken atom:element.getAllSafely("line")) {
@@ -5144,6 +5108,11 @@ EnvironmentsClass.getSubClass(mapName).addSubClass(new ExternalClassEntry(){publ
 					if (pathSymbol.containsKey(quark.toString())) {
 					mapElementClass.getMethod("populate").appendToBody(/*Body*/new ExternalStatement.Body(
 		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Path"))), /*Enty*/new ExternalStatement(new StringEntry(subTileName.toString())), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Tiles")), /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(tileSymbol.get(tileJustName).toString())))))),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("zoneX")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("zoneY")))),/*Optr*/new ExternalStatement("+", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("locationX")))), /*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(xValue.toString())))),/*Optr*/new ExternalStatement("+", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("locationY")))), /*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(yValue.toString())))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("client"))))))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(subTileName.toString()))), /*Enty*/new ExternalStatement(new StringEntry("setArea"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("newArea"))))))))),
 /*BODY*/				
 		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
 			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("client"))), /*Enty*/new ExternalStatement(new StringEntry("addTile"))),
@@ -5178,14 +5147,39 @@ EnvironmentsClass.getSubClass(mapName).addSubClass(new ExternalClassEntry(){publ
 		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Tile"))), /*Enty*/new ExternalStatement(new StringEntry(subTileName.toString())), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Tiles")), /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(tileSymbol.get(tileJustName).toString())))))),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("zoneX")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("zoneY")))),/*Optr*/new ExternalStatement("+", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("locationX")))), /*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(xValue.toString())))),/*Optr*/new ExternalStatement("+", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("locationY")))), /*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(yValue.toString())))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("client"))))))))),
 /*BODY*/				
 		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(subTileName.toString()))), /*Enty*/new ExternalStatement(new StringEntry("setArea"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("newArea"))))))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
 			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("client"))), /*Enty*/new ExternalStatement(new StringEntry("addTile"))),
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
 			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(subTileName.toString())))))))))));
 					}
 					xIndex += 1;
+					if (xIndex > maxX) {
+					maxX = xIndex;
+					}
 				}
 				yIndex += 1;
 			}
+			final Integer maxXValue = maxX;
+			final Integer maxYValue = yIndex;
+			mapElementClass.getMethod("populate").appendToBody(/*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("newArea"))), /*Enty*/new ExternalStatement(new StringEntry("setWidth"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Enty*/new ExternalStatement(new StringEntry(maxXValue.toString())), /*Name*/new ExternalStatement(new StringEntry("f"))))))))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("newArea"))), /*Enty*/new ExternalStatement(new StringEntry("setHeight"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Enty*/new ExternalStatement(new StringEntry(maxYValue.toString())), /*Name*/new ExternalStatement(new StringEntry("f"))))))))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("client"))), /*Enty*/new ExternalStatement(new StringEntry("addArea"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("newArea")))))))))));
 	}
 	EnvironmentsClass.getSubClass(mapName).getMethod("*").prependToBody(/*Body*/new ExternalStatement.Body(
 		/*Cond*/new ExternalStatement.Conditional(
@@ -5379,6 +5373,29 @@ EnvironmentsClass.getSubClass(mapName).addSubClass(new ExternalClassEntry(){publ
 			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("parent"))), /*Enty*/new ExternalStatement(new StringEntry("getEntitiesWithin"))),
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
 			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("this")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("within"))))))))))),new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("List"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Entity"))))), /*Exac*/new ExternalStatement(new StringEntry("getEntitiesWithin")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))), /*Name*/new ExternalStatement(new StringEntry("within"))),
+/*PARAMS*/				new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("EntityCriteria"))), /*Name*/new ExternalStatement(new StringEntry("targetCriteria")))}), /*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("List"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Entity"))))), /*Name*/new ExternalStatement(new StringEntry("result")), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("ArrayList"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Entity"))))),new ExternalStatement.Parameters())))),
+/*BODY*/				
+		/*Cond*/new ExternalStatement.Conditional(
+			"for ", 
+			/*Optr*/new ExternalStatement(":", new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Entity"))), /*Name*/new ExternalStatement(new StringEntry("candidate"))), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("parent"))), /*Enty*/new ExternalStatement(new StringEntry("getEntitiesWithin"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("this")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("within"))))))))),
+			/*Body*/new ExternalStatement.Body(
+			/*Cond*/new ExternalStatement.Conditional(
+			"if ", 
+			/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("targetCriteria"))), /*Enty*/new ExternalStatement(new StringEntry("satisfies"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("candidate")))))))),
+			/*Body*/new ExternalStatement.Body(
+				/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("result"))), /*Enty*/new ExternalStatement(new StringEntry("add"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("candidate"))))))))))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("result"))))))),new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("List"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Entity"))))), /*Exac*/new ExternalStatement(new StringEntry("getEntitiesWithin")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))), /*Name*/new ExternalStatement(new StringEntry("within"))),
 /*PARAMS*/				new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Double"))), /*Name*/new ExternalStatement(new StringEntry("angleLeft"))),
 /*PARAMS*/				new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Double"))), /*Name*/new ExternalStatement(new StringEntry("angleRight")))}), /*Body*/new ExternalStatement.Body(
 		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
@@ -5429,7 +5446,52 @@ EnvironmentsClass.getSubClass(mapName).addSubClass(new ExternalClassEntry(){publ
 		/*Cond*/new ExternalStatement.Conditional(
 			"else ", null,
 			/*Body*/new ExternalStatement.Body(
-			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))))))),new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("step")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))), /*Name*/new ExternalStatement(new StringEntry("speed"))),
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))))))),new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("TileList"))), /*Exac*/new ExternalStatement(new StringEntry("getTilesWithin")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))), /*Name*/new ExternalStatement(new StringEntry("range"))),
+/*PARAMS*/				new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Tile")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Id"))))), /*Name*/new ExternalStatement(new StringEntry("id")))}), /*Body*/new ExternalStatement.Body(
+		/*Cond*/new ExternalStatement.Conditional(
+			"if ", 
+			/*Optr*/new ExternalStatement("!=", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("parent")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null")))),
+			/*Body*/new ExternalStatement.Body(
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("parent"))), /*Enty*/new ExternalStatement(new StringEntry("getTilesWithin"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("this")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("range")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("id"))))))))))),
+/*BODY*/				
+		/*Cond*/new ExternalStatement.Conditional(
+			"else ", null,
+			/*Body*/new ExternalStatement.Body(
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))))))),new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Tile"))), /*Exac*/new ExternalStatement(new StringEntry("getClosestTile")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Tile")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Id"))))), /*Name*/new ExternalStatement(new StringEntry("id")))}), /*Body*/new ExternalStatement.Body(
+		/*Cond*/new ExternalStatement.Conditional(
+			"if ", 
+			/*Optr*/new ExternalStatement("!=", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("parent")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null")))),
+			/*Body*/new ExternalStatement.Body(
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("TileList"))), /*Name*/new ExternalStatement(new StringEntry("result")), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("parent"))), /*Enty*/new ExternalStatement(new StringEntry("getTilesWithin"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("this")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("50f")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("id")))))))))),
+/*BODY*/				
+			/*Cond*/new ExternalStatement.Conditional(
+			"if ", 
+			/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("result"))), /*Enty*/new ExternalStatement(new StringEntry("isEmpty"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))),
+			/*Body*/new ExternalStatement.Body(
+				/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))))),
+/*BODY*/				
+			/*Cond*/new ExternalStatement.Conditional(
+			"else ", null,
+			/*Body*/new ExternalStatement.Body(
+				/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("result"))), /*Enty*/new ExternalStatement(new StringEntry("get"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0"))))))))))))),
+/*BODY*/				
+		/*Cond*/new ExternalStatement.Conditional(
+			"else ", null,
+			/*Body*/new ExternalStatement.Body(
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))))))),new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Path"))), /*Exac*/new ExternalStatement(new StringEntry("getUnexploredPath")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))))),new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("step")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))), /*Name*/new ExternalStatement(new StringEntry("speed"))),
 /*PARAMS*/				new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Environment")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Position"))))), /*Name*/new ExternalStatement(new StringEntry("toward")))}), /*Body*/new ExternalStatement.Body(
 		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Double"))), /*Name*/new ExternalStatement(new StringEntry("direction")), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("getDirectionTo")),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("toward"))))))))),
 /*BODY*/				
@@ -5734,11 +5796,11 @@ EnvironmentsClass.getSubClass(mapName).addSubClass(new ExternalClassEntry(){publ
 			new StringEntry("Environment").get(builder);
 			new StringEntry("").get(builder);
 		}
-	}, Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("String"))), /*Name*/new ExternalStatement(new StringEntry("name")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Map"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer")),/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Map"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer")),/*TypeName*/new ExternalStatement.TypeName(new StringEntry("List"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Entity"))))))))), /*Name*/new ExternalStatement(new StringEntry("entityZones")), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("HashMap"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer")),/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Map"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer")),/*TypeName*/new ExternalStatement.TypeName(new StringEntry("List"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Entity"))))))))),new ExternalStatement.Parameters()))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Map"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer")),/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Map"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer")),/*TypeName*/new ExternalStatement.TypeName(new StringEntry("List"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Tile"))))))))), /*Name*/new ExternalStatement(new StringEntry("tileZones")), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("HashMap"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer")),/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Map"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer")),/*TypeName*/new ExternalStatement.TypeName(new StringEntry("List"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Tile"))))))))),new ExternalStatement.Parameters()))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("List"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Tile"))))), /*Name*/new ExternalStatement(new StringEntry("tiles")), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("ArrayList"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Tile"))))),new ExternalStatement.Parameters()))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("List"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Path"))))), /*Name*/new ExternalStatement(new StringEntry("paths")), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("ArrayList"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Path"))))),new ExternalStatement.Parameters())))}), Arrays.asList(new ExternalMethodEntry[]{new ExternalMethodEntry(0, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("List"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Tile"))))), /*Exac*/new ExternalStatement(new StringEntry("getTiles")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Environment")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Position"))))), /*Name*/new ExternalStatement(new StringEntry("position")))}), /*Body*/new ExternalStatement.Body(
+	}, Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("String"))), /*Name*/new ExternalStatement(new StringEntry("name")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Map"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer")),/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Map"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer")),/*TypeName*/new ExternalStatement.TypeName(new StringEntry("List"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Entity"))))))))), /*Name*/new ExternalStatement(new StringEntry("entityZones")), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("HashMap"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer")),/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Map"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer")),/*TypeName*/new ExternalStatement.TypeName(new StringEntry("List"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Entity"))))))))),new ExternalStatement.Parameters()))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Map"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer")),/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Map"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer")),/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Set"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Area"))))))))), /*Name*/new ExternalStatement(new StringEntry("tileAreas")), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("HashMap"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer")),/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Map"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer")),/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Set"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Area"))))))))),new ExternalStatement.Parameters()))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("List"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Tile"))))), /*Name*/new ExternalStatement(new StringEntry("tiles")), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("ArrayList"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Tile"))))),new ExternalStatement.Parameters()))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("List"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Path"))))), /*Name*/new ExternalStatement(new StringEntry("paths")), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("ArrayList"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Path"))))),new ExternalStatement.Parameters())))}), Arrays.asList(new ExternalMethodEntry[]{new ExternalMethodEntry(0, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Set"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Area"))))), /*Exac*/new ExternalStatement(new StringEntry("getAreas")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Environment")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Position"))))), /*Name*/new ExternalStatement(new StringEntry("position")))}), /*Body*/new ExternalStatement.Body(
 	/*Cond*/new ExternalStatement.Conditional(
 			"if ", 
 			/*Optr*/new ExternalStatement("==", /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("tileZones"))), /*Enty*/new ExternalStatement(new StringEntry("containsKey"))),
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("tileAreas"))), /*Enty*/new ExternalStatement(new StringEntry("containsKey"))),
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
 			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
 			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("position"))), /*Enty*/new ExternalStatement(new StringEntry("getZoneX"))),
@@ -5746,18 +5808,18 @@ EnvironmentsClass.getSubClass(mapName).addSubClass(new ExternalClassEntry(){publ
 			 		new ExternalStatement.Parameters()))))))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("false")))),
 			/*Body*/new ExternalStatement.Body(
 		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("tileZones"))), /*Enty*/new ExternalStatement(new StringEntry("put"))),
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("tileAreas"))), /*Enty*/new ExternalStatement(new StringEntry("put"))),
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
 			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
 			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("position"))), /*Enty*/new ExternalStatement(new StringEntry("getZoneX"))),
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters()))),/*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("HashMap"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer")),/*TypeName*/new ExternalStatement.TypeName(new StringEntry("List"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Tile"))))))),new ExternalStatement.Parameters()))))))))),
+			 		new ExternalStatement.Parameters()))),/*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("HashMap"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer")),/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Set"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Area"))))))),new ExternalStatement.Parameters()))))))))),
 /*BODY*/				
 	/*Cond*/new ExternalStatement.Conditional(
 			"if ", 
 			/*Optr*/new ExternalStatement("==", /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
 			 	new ExternalStatement(".", /*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("tileZones"))), /*Enty*/new ExternalStatement(new StringEntry("get"))),
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("tileAreas"))), /*Enty*/new ExternalStatement(new StringEntry("get"))),
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
 			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
 			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("position"))), /*Enty*/new ExternalStatement(new StringEntry("getZoneX"))),
@@ -5771,7 +5833,7 @@ EnvironmentsClass.getSubClass(mapName).addSubClass(new ExternalClassEntry(){publ
 			/*Body*/new ExternalStatement.Body(
 		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
 			 	new ExternalStatement(".", /*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("tileZones"))), /*Enty*/new ExternalStatement(new StringEntry("get"))),
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("tileAreas"))), /*Enty*/new ExternalStatement(new StringEntry("get"))),
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
 			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
 			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("position"))), /*Enty*/new ExternalStatement(new StringEntry("getZoneX"))),
@@ -5781,11 +5843,11 @@ EnvironmentsClass.getSubClass(mapName).addSubClass(new ExternalClassEntry(){publ
 			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
 			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("position"))), /*Enty*/new ExternalStatement(new StringEntry("getZoneY"))),
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters()))),/*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("ArrayList"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Tile"))))),new ExternalStatement.Parameters()))))))))),
+			 		new ExternalStatement.Parameters()))),/*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("HashSet"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Area"))))),new ExternalStatement.Parameters()))))))))),
 /*BODY*/				
 	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
 			 	new ExternalStatement(".", /*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("tileZones"))), /*Enty*/new ExternalStatement(new StringEntry("get"))),
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("tileAreas"))), /*Enty*/new ExternalStatement(new StringEntry("get"))),
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
 			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
 			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("position"))), /*Enty*/new ExternalStatement(new StringEntry("getZoneX"))),
@@ -5796,23 +5858,53 @@ EnvironmentsClass.getSubClass(mapName).addSubClass(new ExternalClassEntry(){publ
 			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("position"))), /*Enty*/new ExternalStatement(new StringEntry("getZoneY"))),
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
 			 		new ExternalStatement.Parameters())))))))))),new ExternalMethodEntry(0, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Tile"))), /*Exac*/new ExternalStatement(new StringEntry("getTile")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Environment")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Position"))))), /*Name*/new ExternalStatement(new StringEntry("position")))}), /*Body*/new ExternalStatement.Body(
-	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("List"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Tile"))))), /*Name*/new ExternalStatement(new StringEntry("tiles")), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("getTiles")),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("position"))))))))),
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Set"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Area"))))), /*Name*/new ExternalStatement(new StringEntry("areas")), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("getAreas")),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("position"))))))))),
 /*BODY*/				
 	/*Cond*/new ExternalStatement.Conditional(
 			"for ", 
-			/*Optr*/new ExternalStatement(":", new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Tile"))), /*Name*/new ExternalStatement(new StringEntry("tile"))), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("tiles"))))),
+			/*Optr*/new ExternalStatement(": ", new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Area"))), /*Name*/new ExternalStatement(new StringEntry("area"))), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("areas"))))),
 			/*Body*/new ExternalStatement.Body(
 		/*Cond*/new ExternalStatement.Conditional(
 			"if ", 
 			/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("tile"))), /*Enty*/new ExternalStatement(new StringEntry("isWithin"))),
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("area"))), /*Enty*/new ExternalStatement(new StringEntry("isWithin"))),
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
 			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("position")))))))),
 			/*Body*/new ExternalStatement.Body(
-			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("tile"))))))))),
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("area"))), /*Enty*/new ExternalStatement(new StringEntry("getTile"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("position"))))))))))))),
 /*BODY*/				
-	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))))),new ExternalMethodEntry(0, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Path"))), /*Exac*/new ExternalStatement(new StringEntry("getClosestPath")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Environment")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Position"))))), /*Name*/new ExternalStatement(new StringEntry("position")))}), /*Body*/new ExternalStatement.Body(
-	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("List"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Tile"))))), /*Name*/new ExternalStatement(new StringEntry("tiles")), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("getTiles")),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("position"))))))))),
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))))),new ExternalMethodEntry(0, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("TileList"))), /*Exac*/new ExternalStatement(new StringEntry("getTilesWithin")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Environment")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Position"))))), /*Name*/new ExternalStatement(new StringEntry("position"))),
+/*PARAMS*/				new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))), /*Name*/new ExternalStatement(new StringEntry("range"))),
+/*PARAMS*/				new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Tile")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Id"))))), /*Name*/new ExternalStatement(new StringEntry("tileId")))}), /*Body*/new ExternalStatement.Body(
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Set"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Area"))))), /*Name*/new ExternalStatement(new StringEntry("areas")), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("getAreas")),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("position"))))))))),
+/*BODY*/				
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("TileList"))), /*Name*/new ExternalStatement(new StringEntry("result")), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("TileList"))),new ExternalStatement.Parameters())))),
+/*BODY*/				
+	/*Cond*/new ExternalStatement.Conditional(
+			"for ", 
+			/*Optr*/new ExternalStatement(": ", new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Area"))), /*Name*/new ExternalStatement(new StringEntry("area"))), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("areas"))))),
+			/*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("result"))), /*Enty*/new ExternalStatement(new StringEntry("addAll"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("area"))), /*Enty*/new ExternalStatement(new StringEntry("getTilesWithin"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("position")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("range")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("tileId"))))))))))))))),
+/*BODY*/				
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("result"))))))),new ExternalMethodEntry(0, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Path"))), /*Exac*/new ExternalStatement(new StringEntry("getClosestPath")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Environment")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Position"))))), /*Name*/new ExternalStatement(new StringEntry("position")))}), /*Body*/new ExternalStatement.Body(
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Tile"))), /*Name*/new ExternalStatement(new StringEntry("tile")), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("getTile")),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("position"))))))))),
+/*BODY*/				
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("List"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Tile"))))), /*Name*/new ExternalStatement(new StringEntry("tiles")), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("tile"))), /*Enty*/new ExternalStatement(new StringEntry("getArea"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters())), /*Enty*/new ExternalStatement(new StringEntry("getTiles"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))))),
 /*BODY*/				
 	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Double"))), /*Name*/new ExternalStatement(new StringEntry("distance")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Double")))), /*Enty*/new ExternalStatement(new StringEntry("MAX_VALUE")))))),
 /*BODY*/				
@@ -5820,17 +5912,17 @@ EnvironmentsClass.getSubClass(mapName).addSubClass(new ExternalClassEntry(){publ
 /*BODY*/				
 	/*Cond*/new ExternalStatement.Conditional(
 			"for ", 
-			/*Optr*/new ExternalStatement(":", new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Tile"))), /*Name*/new ExternalStatement(new StringEntry("tile"))), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("tiles"))))),
+			/*Optr*/new ExternalStatement(": ", new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Tile"))), /*Name*/new ExternalStatement(new StringEntry("potentialTile"))), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("tiles"))))),
 			/*Body*/new ExternalStatement.Body(
 		/*Cond*/new ExternalStatement.Conditional(
 			"if ", 
 			/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("tile"))), /*Name*/new ExternalStatement(new StringEntry("isPath"))),
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("potentialTile"))), /*Name*/new ExternalStatement(new StringEntry("isPath"))),
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
 			 		new ExternalStatement.Parameters()))),
 			/*Body*/new ExternalStatement.Body(
 			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Double"))), /*Name*/new ExternalStatement(new StringEntry("potentialDistance")), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("tile"))), /*Enty*/new ExternalStatement(new StringEntry("getDistanceTo"))),
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("potentialTile"))), /*Enty*/new ExternalStatement(new StringEntry("getDistanceTo"))),
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
 			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("position")))))))))),
 /*BODY*/				
@@ -5840,18 +5932,17 @@ EnvironmentsClass.getSubClass(mapName).addSubClass(new ExternalClassEntry(){publ
 			/*Body*/new ExternalStatement.Body(
 				/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("distance")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("potentialDistance")))))),
 /*BODY*/				
-				/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("potentialPath")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("(Path)tile")))))))))))),
+				/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("potentialPath")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("(Path)potentialTile")))))))))))),
 /*BODY*/				
 	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("potentialPath"))))))),new ExternalMethodEntry(0, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("addTile")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Tile"))), /*Name*/new ExternalStatement(new StringEntry("newTile")))}), /*Body*/new ExternalStatement.Body(
 	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
 			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("tiles"))), /*Enty*/new ExternalStatement(new StringEntry("add"))),
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("newTile"))))))))),
-/*BODY*/				
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("newTile"))))))))))),new ExternalMethodEntry(0, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("addArea")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Area"))), /*Name*/new ExternalStatement(new StringEntry("newArea")))}), /*Body*/new ExternalStatement.Body(
 	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("getTiles")),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("newTile")))))), /*Enty*/new ExternalStatement(new StringEntry("add"))),
+			 	new ExternalStatement(".", /*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("getAreas")),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("newArea")))))), /*Enty*/new ExternalStatement(new StringEntry("add"))),
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("newTile"))))))))))),new ExternalMethodEntry(0, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("List"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Entity"))))), /*Exac*/new ExternalStatement(new StringEntry("getZone")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("zoneX"))),
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("newArea"))))))))))),new ExternalMethodEntry(0, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("List"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Entity"))))), /*Exac*/new ExternalStatement(new StringEntry("getZone")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("zoneX"))),
 /*PARAMS*/				new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("zoneY")))}), /*Body*/new ExternalStatement.Body(
 	/*Cond*/new ExternalStatement.Conditional(
 			"if ", 
@@ -6293,6 +6384,90 @@ EnvironmentsClass.getSubClass(mapName).addSubClass(new ExternalClassEntry(){publ
 				/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("+=", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("index")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("1")))))))))))))}), Arrays.asList(new ExternalClassEntry[]{EnvironmentClass.PositionClass,EnvironmentClass.LocationClass,EnvironmentClass.FactoryHelperClass,EnvironmentClass.FactoryClass}));
 	}
 }
+	protected Area AreaClass = new Area();
+	public class Area extends ExternalClassEntry {
+
+
+
+
+	public void __INIT__(){
+		super.__SETUP__(
+		new Entry(){
+			public void get(StringBuilder __BUILDER__){/*Enty*/new ExternalStatement(new StringEntry(packageName.toString())).get(__BUILDER__);
+				__BUILDER__.append(".");
+				/*Name*/new ExternalStatement(new StringEntry("environments")).get(__BUILDER__);
+			}
+		}, 
+		new Entry(){
+			public void get(StringBuilder __BUILDER__){
+			}
+		}, new StringEntry("Area"), "class ", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Environment")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Position")))), new ArrayList<Entry>(Arrays.asList(new Entry[]{})), 
+		new Entry(){
+		public void get(StringBuilder builder){
+			builder.append(" class ");
+			new StringEntry("Area").get(builder);
+			new StringEntry("").get(builder);
+		}
+	}, Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))), /*Name*/new ExternalStatement(new StringEntry("width")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("10f"))))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))), /*Name*/new ExternalStatement(new StringEntry("height")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("10f"))))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("List"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Tile"))))), /*Name*/new ExternalStatement(new StringEntry("tiles")), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("ArrayList"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Tile"))))),new ExternalStatement.Parameters())))}), Arrays.asList(new ExternalMethodEntry[]{new ExternalMethodEntry(0, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Boolean"))), /*Exac*/new ExternalStatement(new StringEntry("add")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Tile"))), /*Name*/new ExternalStatement(new StringEntry("newTile")))}), /*Body*/new ExternalStatement.Body(
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("newTile"))), /*Enty*/new ExternalStatement(new StringEntry("setArea"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("this"))))))))),
+/*BODY*/				
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("tiles"))), /*Enty*/new ExternalStatement(new StringEntry("add"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("newTile"))))))))))),new ExternalMethodEntry(0, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Tile"))), /*Exac*/new ExternalStatement(new StringEntry("getTile")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Environment")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Position"))))), /*Name*/new ExternalStatement(new StringEntry("position")))}), /*Body*/new ExternalStatement.Body(
+	/*Cond*/new ExternalStatement.Conditional(
+			"for ", 
+			/*Optr*/new ExternalStatement(":", new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Tile"))), /*Name*/new ExternalStatement(new StringEntry("tile"))), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("tiles"))))),
+			/*Body*/new ExternalStatement.Body(
+		/*Cond*/new ExternalStatement.Conditional(
+			"if ", 
+			/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("tile"))), /*Enty*/new ExternalStatement(new StringEntry("isWithin"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("position")))))))),
+			/*Body*/new ExternalStatement.Body(
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("tile"))))))))),
+/*BODY*/				
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))))),new ExternalMethodEntry(0, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("List"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Tile"))))), /*Exac*/new ExternalStatement(new StringEntry("getTilesWithin")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Environment")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Position"))))), /*Name*/new ExternalStatement(new StringEntry("position"))),
+/*PARAMS*/				new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))), /*Name*/new ExternalStatement(new StringEntry("range"))),
+/*PARAMS*/				new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Tile")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Id"))))), /*Name*/new ExternalStatement(new StringEntry("tileId")))}), /*Body*/new ExternalStatement.Body(
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("List"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Tile"))))), /*Name*/new ExternalStatement(new StringEntry("result")), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("ArrayList"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Tile"))))),new ExternalStatement.Parameters())))),
+/*BODY*/				
+	/*Cond*/new ExternalStatement.Conditional(
+			"if ", 
+			/*Optr*/new ExternalStatement(">=", /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("getDistanceTo")),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("position"))))))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("range")))),
+			/*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("result"))))))),
+/*BODY*/				
+	/*Cond*/new ExternalStatement.Conditional(
+			"for ", 
+			/*Optr*/new ExternalStatement(":", new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Tile"))), /*Name*/new ExternalStatement(new StringEntry("tile"))), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("tiles"))))),
+			/*Body*/new ExternalStatement.Body(
+		/*Cond*/new ExternalStatement.Conditional(
+			"if ", 
+			/*Optr*/new ExternalStatement("<", /*Optr*/new ExternalStatement("&&", /*Optr*/new ExternalStatement("==", /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("tile"))), /*Enty*/new ExternalStatement(new StringEntry("getId"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("tileId")))), /*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("position"))), /*Enty*/new ExternalStatement(new StringEntry("getDistanceTo"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("tile")))))))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("range")))),
+			/*Body*/new ExternalStatement.Body(
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("result"))), /*Enty*/new ExternalStatement(new StringEntry("add"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("tile"))))))))))))),
+/*BODY*/				
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("result"))))))),new ExternalMethodEntry(0, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Boolean"))), /*Exac*/new ExternalStatement(new StringEntry("isWithin")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Environment")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Position"))))), /*Name*/new ExternalStatement(new StringEntry("otherPosition")))}), /*Body*/new ExternalStatement.Body(
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("super"))), /*Enty*/new ExternalStatement(new StringEntry("isWithin"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("otherPosition")))),/*Optr*/new ExternalStatement("/", /*Optr*/new ExternalStatement("+", /*Optr*/new ExternalStatement("/", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("width")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("4f ")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("height")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("4f")))),/*Optr*/new ExternalStatement("*", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("Math"))), /*Enty*/new ExternalStatement(new StringEntry("PI")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("2.0")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0.0")))))))))))}), Arrays.asList(new ExternalClassEntry[]{}));
+	}
+}
 	protected Environments EnvironmentsClass = new Environments();
 	public class Environments extends ExternalClassEntry {
 
@@ -6376,6 +6551,22 @@ public void addParameter(final String eventName,final ExternalMethodEntry method
 	method.addParameter(new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry(eventName))), /*Name*/new ExternalStatement(new StringEntry("event"))));
 }
 	
+public ExternalContext getEventContext(final String eName,final ExternalClassEntry inputClass) {
+	final ExternalMethodEntry newMethod = new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Name*/new ExternalStatement(new StringEntry("on")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry(Generator.camelize(eName)))))), /*Name*/new ExternalStatement(new StringEntry("event")))}), /*Body*/new ExternalStatement.Body());
+	final String newMethodName = newMethod.getName();
+	if (inputClass.getMethod(newMethodName) == null) {
+inputClass.addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Name*/new ExternalStatement(new StringEntry("on")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry(Generator.camelize(eName)))))), /*Name*/new ExternalStatement(new StringEntry("event")))}), /*Body*/new ExternalStatement.Body()));
+inputClass.addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Name*/new ExternalStatement(new StringEntry("add")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry(Generator.camelize(eName))))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Listener"))))), /*Name*/new ExternalStatement(new StringEntry("newListener")))}), /*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Enty*/new ExternalStatement(new StringEntry(eName.toString())), /*Name*/new ExternalStatement(new StringEntry("Listeners"))))), /*Enty*/new ExternalStatement(new StringEntry("add"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("newListener"))))))))))));
+		createList(ListenableClass);
+inputClass.addVariable(new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("ListenableList"))), /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Enty*/new ExternalStatement(new StringEntry(eName.toString())), /*Name*/new ExternalStatement(new StringEntry("Listeners"))))));
+	}
+	return inputClass.getMethod(newMethodName).getContext();
+}
+	
 public ExternalContext addToEventMethod(final String eName,final ExternalClassEntry inputClass,final ExternalStatement.Body body) {
 	final ExternalMethodEntry newMethod = new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Name*/new ExternalStatement(new StringEntry("on")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry(Generator.camelize(eName)))))), /*Name*/new ExternalStatement(new StringEntry("event")))}), /*Body*/new ExternalStatement.Body());
 	final String newMethodName = newMethod.getName();
@@ -6391,7 +6582,7 @@ inputClass.addVariable(new ExternalVariableEntry(false, true, /*TypeName*/new Ex
 	}
 	final ExternalMethodEntry establishedMethod = inputClass.getMethod(newMethodName);
 	establishedMethod.appendToBody(body);
-	return establishedMethod.getCurrentContext();
+	return establishedMethod.getContext();
 }
 	
 public void addEventMethods(final ExternalClassEntry inputClass,final Map<String,ExternalStatement.Body> bodiesToAdd) {
@@ -6481,6 +6672,14 @@ public void addEventMethodsExclusive(final ExternalClassEntry inputClass,final M
 	System.err.println("No filename provided!");
 		}
 	}
+	public ExternalStatement.Body getBodyElements(final IToken elementsToken,final ExternalContext context) {
+		final ExternalStatement.Body result = new ExternalStatement.Body();
+		result.setParentContext(context);
+		for(final IToken element:elementsToken.getAllSafely("body_element")) {
+				result.add(getBodyElement(element,result.getContext()));
+		}
+		return result;
+	}
 	public ExternalStatement getBodyElement(final IToken elementToken,final ExternalContext context) {
 		for(IToken.Key __element__KEY:elementToken.keySet()) {
 			if(__element__KEY.getName().equals("statement")){ final IToken element = elementToken.get(__element__KEY);
@@ -6506,6 +6705,9 @@ public void addEventMethodsExclusive(final ExternalClassEntry inputClass,final M
 			if(__element__KEY.getName().equals("if_statement")){ final IToken element = elementToken.get(__element__KEY);
 				return getIfStatement(element,context);
 			}
+			if(__element__KEY.getName().equals("for_statement")){ final IToken element = elementToken.get(__element__KEY);
+				return getForStatement(element,context);
+			}
 		}
 		return null;
 	}
@@ -6524,13 +6726,14 @@ public void addEventMethodsExclusive(final ExternalClassEntry inputClass,final M
 		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(typeName.toString())))), /*Enty*/new ExternalStatement(new StringEntry(variableDeclarationToken.get("variable_header").get("variableName").toString())), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null")))))));
 		}
 	}
-	public void addVariableHeader(final IToken variableHeaderToken,final ExternalClassEntry inputClass) {
+	public ExternalVariableEntry addVariableHeader(final IToken variableHeaderToken,final ExternalClassEntry inputClass) {
 		final String typeName = getTypeName(variableHeaderToken.get("type_name"));
 		final ExternalContext type = inputClass.getContext().getClassContext(typeName);
 		if (type == null) {
 			throw new RuntimeException(Generator.completeTokenErrorMessage(variableHeaderToken) + "Could not find type:"+typeName+"!");
 		}
 inputClass.addVariable(new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(typeName.toString())))), /*Enty*/new ExternalStatement(new StringEntry(variableHeaderToken.get("variableName").toString()))));
+		return inputClass.getVariable(variableHeaderToken.get("variableName").toString());
 	}
 	public ExternalStatement getIfStatement(final IToken ifStatementToken,final ExternalContext context) {
 		final ExternalStatement header = new ExternalStatement();
@@ -6589,6 +6792,25 @@ inputClass.addVariable(new ExternalVariableEntry(false, /*TypeName*/new External
 		else  {
 			return null;
 		}
+	}
+	public ExternalStatement getForStatement(final IToken forStatementToken,final ExternalContext context) {
+		if (forStatementToken.get("fromList") != null) {
+			final IToken variableHeaderToken = forStatementToken.get("fromList").get("variable_header");
+			final String typeName = getTypeName(variableHeaderToken.get("type_name"));
+			final ExternalContext type = context.getClassContext(typeName);
+			if (type == null) {
+				throw new RuntimeException(Generator.completeTokenErrorMessage(variableHeaderToken) + "Could not find type:"+typeName+"!");
+			}
+			context.add(new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(typeName.toString())))), /*Enty*/new ExternalStatement(new StringEntry(variableHeaderToken.get("variableName").toString()))));
+			final ExternalStatement right = getStatement(forStatementToken.get("fromList").get("statement"),context);
+			final ExternalStatement.Body body = getBodyElements(forStatementToken,context);
+			return /*InCl*/new ExternalStatement(
+		/*Cond*/new ExternalStatement.Conditional(
+			"for ", 
+			/*Optr*/new ExternalStatement(": ", new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(typeName.toString())))), /*Enty*/new ExternalStatement(new StringEntry(variableHeaderToken.get("variableName").toString()))), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*InCl*/new ExternalStatement(right)))),
+			/*InCl*/new ExternalStatement(body)));
+		}
+		return null;
 	}
 	public ExternalStatement getBooleanStatement(final IToken booleanStatement,final ExternalContext context) {
 		return getBooleanStatement(booleanStatement,false,context);
@@ -6775,10 +6997,23 @@ inputClass.addVariable(new ExternalVariableEntry(false, /*TypeName*/new External
 			if(__element__KEY.getName().equals("variable_group")){ final IToken element = variableCallToken.get(__element__KEY);
 				ret.add(getIdFromName(element));
 			}
+			if(__element__KEY.getName().equals("access_static")){ final IToken element = variableCallToken.get(__element__KEY);
+				final String typeName = getTypeName(element.get("type_name"));
+				final ExternalContext typeContext = currentContext.getClassContext(typeName);
+				if (typeContext == null) {
+				throw new RuntimeException("Could not find "+typeName.toString()+" type in context!");
+				}
+				final String variableName = element.get("variableName").toString();
+				currentContext = typeContext.link(variableName);
+				if (currentContext == null) {
+				throw new RuntimeException("Could not find "+variableName.toString()+" variable in context!");
+				}
+				ret.add(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(typeName.toString()))), /*Enty*/new ExternalStatement(new StringEntry(variableName.toString())))));
+			}
 			if(__element__KEY.getName().equals("variableName")){ final IToken element = variableCallToken.get(__element__KEY);
 				currentContext = currentContext.link(element.toString());
 				if (currentContext == null) {
-				throw new RuntimeException("Could not find \"+element+\" variable in context!");
+				throw new RuntimeException("Could not find "+element.toString()+" variable in context!");
 				}
 				if (ret.size() == 0 ) {
 				ret.add(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(element.toString())))));
@@ -6964,7 +7199,11 @@ inputClass.addVariable(new ExternalVariableEntry(false, /*TypeName*/new External
 		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("super")),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
 			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Arrays")))), /*Enty*/new ExternalStatement(new StringEntry("asList"))),
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("elements"))))))))))))))}), Arrays.asList(new ExternalClassEntry[]{})) ;}};
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("elements")))))))))))))),new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("sort")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Comparator"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry(listClass.getFullName()))))), /*Name*/new ExternalStatement(new StringEntry("comparator")))}), /*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("Collections"))), /*Enty*/new ExternalStatement(new StringEntry("sort"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("this")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("comparator")))))))))))}), Arrays.asList(new ExternalClassEntry[]{})) ;}};
 			listNameClass.__INIT__();
 			final StringBuilder __BUILDER__;
 			final File __DIRECTORY__;
@@ -7366,10 +7605,6 @@ keyNameClass.addSubClass(new ExternalClassEntry(){public void __INIT__(){super._
 					SupportsClass.declaration(element);
 				}
 		}
-		for(final IToken import_quests:import_any.getAllSafely("IMPORT_QUEST")) {
-				for(final IToken element:import_quests.getAllSafely("quest_declaration")) {
-				}
-		}
 		for(final IToken import_association:import_any.getAllSafely("IMPORT_ASSOCIATION")) {
 				for(final IToken element:import_association.getAllSafely("association_declaration")) {
 					AssociationsClass.declaration(element);
@@ -7377,6 +7612,11 @@ keyNameClass.addSubClass(new ExternalClassEntry(){public void __INIT__(){super._
 		}
 		for(final IToken import_map:import_any.getAllSafely("IMPORT_MAP")) {
 				EnvironmentClass.declaration(import_map);
+		}
+		for(final IToken import_quests:import_any.getAllSafely("IMPORT_QUEST")) {
+				for(final IToken element:import_quests.getAllSafely("quest_declaration")) {
+					QuestsClass.typeDeclaration(element);
+				}
 		}
 	}
 	public String getTypeName(final IToken nameToken) {
@@ -7803,6 +8043,13 @@ keyNameClass.addSubClass(new ExternalClassEntry(){public void __INIT__(){super._
 				/*Name*/new ExternalStatement(new StringEntry("environments")).get(__BUILDER__);
 	__DIRECTORY__ = new File(__ROOT_DIRECTORY__, __BUILDER__.toString().replace(".","/"));
 	__DIRECTORY__.mkdirs();
+	addFile(__DIRECTORY__,Generator.camelize("Area")+".java", AreaClass);
+				__BUILDER__ = new StringBuilder();
+	/*Enty*/new ExternalStatement(new StringEntry(packageName.toString())).get(__BUILDER__);
+				__BUILDER__.append(".");
+				/*Name*/new ExternalStatement(new StringEntry("environments")).get(__BUILDER__);
+	__DIRECTORY__ = new File(__ROOT_DIRECTORY__, __BUILDER__.toString().replace(".","/"));
+	__DIRECTORY__.mkdirs();
 	addFile(__DIRECTORY__,Generator.camelize("Environments")+".java", EnvironmentsClass);
 				__BUILDER__ = new StringBuilder();
 	/*Enty*/new ExternalStatement(new StringEntry(packageName.toString())).get(__BUILDER__);
@@ -7865,6 +8112,7 @@ keyNameClass.addSubClass(new ExternalClassEntry(){public void __INIT__(){super._
 		PathClass.__INIT__();
 		WayClass.__INIT__();
 		EnvironmentClass.__INIT__();
+		AreaClass.__INIT__();
 		EnvironmentsClass.__INIT__();
 		EventsClass.__INIT__();
 		EventClass.__INIT__();

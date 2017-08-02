@@ -20,6 +20,8 @@ public class ActivityDeclaration extends ConcreteRule {
 					new AddTokenToListParser(
 						AssociationTokens.NAME,"activityName","activitynames"),
 					new OptionalParser(
+							GeneralBraces.METHOD_PARAMETERS),
+					new OptionalParser(
 							
 								new ChainParser(
 									new AddTokenParser(
@@ -30,7 +32,9 @@ public class ActivityDeclaration extends ConcreteRule {
 													ActivityTokens.COMMA,
 													new AddTokenParser(
 														AssociationTokens.NAME,"className"))))),
-					ActivityBraces.ACTIVITY_DESCRIPTION));
+					ActivityBraces.ACTIVITY_DESCRIPTION,
+					new ManyParser(
+							Rules.activity_element)));
 
 	}
 

@@ -1,11 +1,11 @@
 Wounded
-	More than a flesh wound.
+	More than a flesh wound;;
 	- DEX
 	- CON
 	- MND
 
 Maimed
-	Has impaired movement with one/more limbs.
+	Has impaired movement with one/more limbs;;
 	? Wounded
 	? CON > 7 
 	-- STR
@@ -13,25 +13,25 @@ Maimed
 	-  MND
 
 WoundHealed
-	Has been healed from a nasty wound.
+	Has been healed from a nasty wound;;
 	?  Wounded
 	?  CON > 6
 	+ CRM
 
 WoundScarred
-	A wound has left a jagged scar.
+	A wound has left a jagged scar;;
 	?! Hardy
 	?  Wounded
 	+ KNW
 	- CRM
 
 Cowardly
-	Has been hurt one too many times, is now too afraid to do heroic acts. 
+	Has been hurt one too many times, is now too afraid to do heroic acts;; 
 	?! Hardy
 	?  Wounded | Confused | WoundScarred
 	-- CRM
 Hardy
-	Has weathered some storms, can now be counted on to withstand hardships normally too taxing.
+	Has weathered some storms, can now be counted on to withstand hardships normally too taxing;;
 	?! Cowardly
 	?  WoundHealed | WoundScarred
 	?  CON > 10
@@ -39,12 +39,12 @@ Hardy
 	+ CRM
 
 HandyWithAKnife
-	Has mastered the use of small blades.
+	Has mastered the use of small blades;;
 	?! ButterFingers
 	?  DEX > 13
 	+ CRM
 
 ButterFingers
-	Has some slippy fingers.
+	Has some slippy fingers;;
 	- CRM
 	- DEX

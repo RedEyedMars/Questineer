@@ -20,7 +20,7 @@ public class ConditionBraces extends ParseList {
 								AssociationTokens.WILD,"condition_file_name"),"CONDITION_FILE","conditionBraces",",.");
 	public static final BracedParser CONDITION_DESCRIPTION = new BracedParser(
 							new AddTokenParser(
-								AssociationTokens.WILD,"description"),"CONDITION_DESCRIPTION","conditionBraces","\n\t,.");
+								AssociationTokens.WILD,"description"),"CONDITION_DESCRIPTION","conditionBraces","\n\t,;;");
 
 	public static final ChoiceParser parser = new ChoiceParser(
 				CONDITION_FILE,CONDITION_DESCRIPTION);

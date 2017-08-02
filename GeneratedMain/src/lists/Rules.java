@@ -27,11 +27,15 @@ public class Rules extends ParseList {
 	public static final IRule trait_declaration = TraitDeclaration.parser;
 	public static final IRule trait_element = TraitElement.parser;
 	public static final IRule activity_declaration = ActivityDeclaration.parser;
+	public static final IRule activity_element = ActivityElement.parser;
 	public static final IRule attack_declaration = AttackDeclaration.parser;
 	public static final IRule attack_element = AttackElement.parser;
 	public static final IRule support_declaration = SupportDeclaration.parser;
 	public static final IRule support_element = SupportElement.parser;
-	public static final IRule quest_declaration = QuestDeclaration.parser;
+	public static final IRule quest_type_declaration = QuestTypeDeclaration.parser;
+	public static final IRule quest_type_element = QuestTypeElement.parser;
+	public static final IRule quest_destination = QuestDestination.parser;
+	public static final IRule quest_tile_description = QuestTileDescription.parser;
 	public static final IRule skill_declaration = SkillDeclaration.parser;
 	public static final IRule skill_element = SkillElement.parser;
 	public static final IRule association_declaration = AssociationDeclaration.parser;
@@ -55,7 +59,10 @@ public class Rules extends ParseList {
 	public static final IRule body_element = BodyElement.parser;
 	public static final IRule acquisition = Acquisition.parser;
 	public static final IRule imposition = Imposition.parser;
+	public static final IRule quest_addition = QuestAddition.parser;
 	public static final IRule if_statement = IfStatement.parser;
+	public static final IRule for_statement = ForStatement.parser;
+	public static final IRule while_statement = WhileStatement.parser;
 	public static final IRule boolean_statement = BooleanStatement.parser;
 	public static final IRule boolean_element = BooleanElement.parser;
 	public static final IRule has_chance = HasChance.parser;
@@ -68,6 +75,7 @@ public class Rules extends ParseList {
 	public static final IRule variable_declaration = VariableDeclaration.parser;
 	public static final IRule variable_header = VariableHeader.parser;
 	public static final IRule variable_call = VariableCall.parser;
+	public static final IRule variable_call_element = VariableCallElement.parser;
 	public static final IRule variable_group = VariableGroup.parser;
 	public static final IRule method = Method.parser;
 	public static final IRule type_name = TypeName.parser;
@@ -76,5 +84,5 @@ public class Rules extends ParseList {
 	public static final IRule animation = Animation.parser;
 
 	public static final ChoiceParser parser = new ChoiceParser(
-				base,import_any,aspect_declaration,item_declaration,item_parameter,affinity_declaration,condition_declaration,condition_element,trait_declaration,trait_element,activity_declaration,attack_declaration,attack_element,support_declaration,support_element,quest_declaration,skill_declaration,skill_element,association_declaration,association_element,association_start,association_join,association_event,reason_declaration,statRange,entity_declaration,entity_definition,map_header,map_connection,map_declaration,tile_declaration,tile_element,event_declaration,num,range,operator,body_element,acquisition,imposition,if_statement,boolean_statement,boolean_element,has_chance,spawn_statement,has_statement,requirement,requirement_element,return_statement,statement,variable_declaration,variable_header,variable_call,variable_group,method,type_name,image_declaration,image_id,animation);
+				base,import_any,aspect_declaration,item_declaration,item_parameter,affinity_declaration,condition_declaration,condition_element,trait_declaration,trait_element,activity_declaration,activity_element,attack_declaration,attack_element,support_declaration,support_element,quest_type_declaration,quest_type_element,quest_destination,quest_tile_description,skill_declaration,skill_element,association_declaration,association_element,association_start,association_join,association_event,reason_declaration,statRange,entity_declaration,entity_definition,map_header,map_connection,map_declaration,tile_declaration,tile_element,event_declaration,num,range,operator,body_element,acquisition,imposition,quest_addition,if_statement,for_statement,while_statement,boolean_statement,boolean_element,has_chance,spawn_statement,has_statement,requirement,requirement_element,return_statement,statement,variable_declaration,variable_header,variable_call,variable_call_element,variable_group,method,type_name,image_declaration,image_id,animation);
 }

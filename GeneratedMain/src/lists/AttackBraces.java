@@ -20,7 +20,7 @@ public class AttackBraces extends ParseList {
 								AssociationTokens.WILD,"attack_file_name"),"ATTACK_FILE","attackBraces",",.");
 	public static final BracedParser ATTACK_DESCRIPTION = new BracedParser(
 							new AddTokenParser(
-								AssociationTokens.WILD,"description"),"ATTACK_DESCRIPTION","attackBraces","\n\t,.");
+								AssociationTokens.WILD,"description"),"ATTACK_DESCRIPTION","attackBraces","\n\t,;;");
 
 	public static final ChoiceParser parser = new ChoiceParser(
 				ATTACK_FILE,ATTACK_DESCRIPTION);

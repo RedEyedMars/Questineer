@@ -21,7 +21,7 @@ mapBrace-s are Braced
 mapImport-s are Import
 	[><<\"environments/maps/\",map_file_name,\".maps\">>\n] as IMPORT_MAP from (NEWLINE|COMMENTS|map_header|map_connection|map_declaration)*; with MAP_FILE MAPS
 map_header
-	NAME as mapName IMPORT_TILE
+	NAME as mapName in map_names IMPORT_TILE
 map_connection
 	CONNECTION OPEN_PARA tile_symbol as path_symbol CLOSE_PARA ( NEWTAB ( PLUS+ tile_symbol ) as benign_symbol | NEWLINE+ )*
 map_declaration

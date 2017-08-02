@@ -20,7 +20,7 @@ public class AffinityBraces extends ParseList {
 								AssociationTokens.WILD,"affinity_file_name"),"AFFINITY_FILE","affinityBraces",",.");
 	public static final BracedParser AFFINITY_DESCRIPTION = new BracedParser(
 							new AddTokenParser(
-								AssociationTokens.WILD,"description"),"AFFINITY_DESCRIPTION","affinityBraces","\n\t,.");
+								AssociationTokens.WILD,"description"),"AFFINITY_DESCRIPTION","affinityBraces","\n\t,;;");
 
 	public static final ChoiceParser parser = new ChoiceParser(
 				AFFINITY_FILE,AFFINITY_DESCRIPTION);

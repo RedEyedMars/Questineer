@@ -22,7 +22,15 @@ public class ActivityTokens extends ParseList {
 	public static final ExactParser ATVS = new ExactParser("ATVS","activityTokens","atvs");
 	public static final ExactParser ACTIVITY = new ExactParser("ACTIVITY","activityTokens","activity");
 	public static final ExactParser COMMA = new ExactParser("COMMA","activityTokens",",");
+	public static final ExactParser GET = new ExactParser("GET","activityTokens","get");
+	public static final ExactParser TARGET = new ExactParser("TARGET","activityTokens","target");
+	public static final ExactParser DESTINATION = new ExactParser("DESTINATION","activityTokens","destination");
+	public static final ExactParser SUCCEED = new ExactParser("SUCCEED","activityTokens","succeed");
+	public static final ExactParser FAIL = new ExactParser("FAIL","activityTokens","fail");
+	public static final ExactParser PLUS = new ExactParser("PLUS","activityTokens","+");
+	public static final ExactParser LISTEN = new ExactParser("LISTEN","activityTokens","listen");
+	public static final ExactParser STEP = new ExactParser("STEP","activityTokens","step");
 
 	public static final ChoiceParser parser = new ChoiceParser(
-				NAME,WILD,NEWLINE,NEWTAB,ATVS,ACTIVITY,COMMA);
+				NAME,WILD,NEWLINE,NEWTAB,ATVS,ACTIVITY,COMMA,GET,TARGET,DESTINATION,SUCCEED,FAIL,PLUS,LISTEN,STEP);
 }

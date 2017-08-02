@@ -20,7 +20,7 @@ public class ItemBraces extends ParseList {
 								AssociationTokens.WILD,"item_file_name"),"ITEM_FILE","itemBraces",",.");
 	public static final BracedParser ITEM_DESCRIPTION = new BracedParser(
 							new AddTokenParser(
-								AssociationTokens.WILD,"description"),"ITEM_DESCRIPTION","itemBraces","\n\t,.");
+								AssociationTokens.WILD,"description"),"ITEM_DESCRIPTION","itemBraces","\n\t,;;");
 
 	public static final ChoiceParser parser = new ChoiceParser(
 				ITEM_FILE,ITEM_DESCRIPTION);

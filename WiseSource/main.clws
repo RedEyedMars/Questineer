@@ -126,11 +126,6 @@ import events/events.clws
 			Supports.declaration(element);
 		}
 	}
-	import_any : import_quests : IMPORT_QUEST {
-		import_quests : element : quest_declaration{
-#			Quests.declaration(element);#
-		}
-	}
 	import_any : import_association : IMPORT_ASSOCIATION {
 		import_association : element : association_declaration {
 			Associations.declaration(element);
@@ -138,6 +133,11 @@ import events/events.clws
 	}
 	import_any : import_map : IMPORT_MAP {
 		Environment.declaration(import_map);
+	}
+	import_any : import_quests : IMPORT_QUEST {
+		import_quests : element : quest_declaration{
+			Quests.typeDeclaration(element);
+		}
 	}
  }
 > String getTypeName(IToken nameToken){
