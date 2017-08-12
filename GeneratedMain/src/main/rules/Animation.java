@@ -22,7 +22,7 @@ public class Animation extends ConcreteRule {
 							new AddTokenParser(
 								
 								new ChainParser(
-									GeneralTokens.DASH,
+									PaymentTokens.DASH,
 									new OptionalParser(
 											new AddTokenParser(
 												GeneralTokens.INTEGER,"frames")),

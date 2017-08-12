@@ -1,4 +1,4 @@
-
+>types.payment
 >std.evts
 >std.atvs
 >std.afts
@@ -10,6 +10,7 @@
 >physical.trts
 >mind.trts
 >blades.itms
+>misc.itms
 
 >town.maps
 >forest.maps

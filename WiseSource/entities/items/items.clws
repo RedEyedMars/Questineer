@@ -17,6 +17,7 @@ class 'packageName'."entities"."items" Items {
 	Items += class 'packageName'."entities"."items" className Item {
 		  @Items->Id \id = new Items->Id();
 		}
+	Treasury.paymentTypeDec(className,className,className);
 	Items->\className->*.appendToBody({ "name" = ''itemToken->"itemName"''; });
 	Items->*"create".prependToBody({
 			if "itemName".equals(''className'') {

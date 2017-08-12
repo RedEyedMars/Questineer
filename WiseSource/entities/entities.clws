@@ -112,7 +112,7 @@ class 'packageName'."entities" Entity \Object Source Loaddable Tickable {
   ~Tile "spawn" = null;
   ~\ItemList "equippedItems";
   ~Skill focusSkill;
-  ~Environment->Location location = new Environment->Location(-1001,-1001,1001f,1001f,null,this);
+  ~Environment->Location location = new Environment->Location(-1001f,-1001f,null,this);
   ~\EntityMap->\_Reason "relationships";
   ~Activity currentActivity = null;
   ~Integer currentActivityIndex = -1;
@@ -145,9 +145,9 @@ class 'packageName'."entities" Entity \Object Source Loaddable Tickable {
 	"weightHeld" = "weightHeld" \+ "item".getWeight().use(this);
 	"item".on(new Events->\Unequip(this,"item"));
   }
-  void rememberIncomingPath(Path in, Path to){
+  void rememberIncomingNode(Node in, Node to){
     if currentActivity != null {
-      currentActivity.rememberIncomingPath(in,to);
+      currentActivity.rememberIncomingNode(in,to);
     }
   }
   void load(){

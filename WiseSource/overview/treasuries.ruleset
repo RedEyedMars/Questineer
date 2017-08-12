@@ -1,0 +1,17 @@
+#TREASURY
+##PAYMENT
+payment_long_type_name-s  are empty
+payment_short_type_name-s are empty
+paymentToken-s
+	[[a-zA-Z_][a-zA-Z0-9_]*] as NAME
+	[.*] as WILD
+	"payment" as PAYMENT
+	"-" as DASH
+	":" as COLON
+paymentBrace-s are Braced 
+	[,.] as PAYMENT_FILE with WILD as payment_file_name 
+paymentImport-s are Import
+	[><<\"overview/treasuries/\",payment_file_name,\".payment\">>\n] as IMPORT_PAYMENT_TYPE from (NEWLINE|COMMENTS|payment_type_declaration)*; with PAYMENT_FILE PAYMENT
+payment_type_declaration
+	NAME as typeName COLON NAME as shortForm in payment_short_type_names DASH NAME as longForm in payment_long_type_names
+	NAME as shortForm in payment_short_type_names DASH NAME as longForm in payment_long_type_names

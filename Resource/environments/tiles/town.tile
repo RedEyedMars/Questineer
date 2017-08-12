@@ -1,4 +1,4 @@
-Path < Path(P)
-Grass(g)
-Tree(T)
-Water(w)
+Underneath:	Grass
+Paths: Path
+Grass
+Path

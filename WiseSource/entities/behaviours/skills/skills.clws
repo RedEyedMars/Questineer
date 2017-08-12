@@ -80,6 +80,20 @@ class 'packageName'."entities"."behaviours"."skills" Skills {
   }
 > void setup(ParseContext data){
     \createCriteria(Entity);
+    \EntityCriteria += class Free / \EntityCriteria / {
+      Boolean satisfies(Entity candidate){
+        return true;
+      }
+    }
+    \EntityCriteria += class AngleTo / \EntityCriteria / {
+      Environment->Position to = null;
+      Double angleLeft = 0.0;
+      Double angleRight = 0.0;
+      Boolean satisfies(Entity candidate){
+        Double direction = candidate.getLocation().getDirectionTo(to);
+        return direction <= angleLeft & direction >= angleRight ;
+      }
+    }
     \createList(Entity);
   }
 > void declaration(IToken declarationToken){

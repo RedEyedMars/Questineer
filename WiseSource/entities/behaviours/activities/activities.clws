@@ -4,19 +4,27 @@ class 'packageName'."entities"."behaviours"."activities" Activity \Object Source
   interface Factory // {
     Activity create(){}
   }
+  class Listeners // {
+    class Fail / Events->\Fail->Listener / {
+      Activity host = null;
+      void listen(Events->\Fail event){
+        host.on(event);
+      }
+    }
+  }
   ~String name = null;
   ~String description = null;
-  ~Map<Path,Set<Path>> pathStoppers = new HashMap<Path,Set<Path>>();
+  ~Map<Node,Set<Node>> nodeStoppers = new HashMap<Node,Set<Node>>();
   ~Entity targetEntity = null;
   ~Boolean failed = false;
   Boolean hasTarget() {
     return targetEntity != null;
   }
-  void rememberIncomingPath(Path in, Path to){
-    if pathStoppers.containsKey(in){
-      pathStoppers.put(in, new HashSet<Path>());
+  void rememberIncomingNode(Node in, Node to){
+    if nodeStoppers.containsKey(in){
+      nodeStoppers.put(in, new HashSet<Node>());
     }
-    pathStoppers.get(in).add(to);
+    nodeStoppers.get(in).add(to);
   }
   Entity getTarget(Entity host, \EntityCriteria targetCriteria){
     return host.getLocation().getClosestEntity(targetCriteria);
@@ -32,6 +40,16 @@ class 'packageName'."entities"."behaviours"."activities" Activity \Object Source
   }
   List<Usable> getUsables(){
     return null;
+  }
+  Usable pick(){
+    if \getUsables().isEmpty() == false {
+      Double randomIndex = \Math.random();
+	  return \getUsables().get("((int)(double)randomIndex)" \* \getUsables().size());
+	}
+	else {
+	  failed = true;
+	  return null;
+	}
   }
   void add(Usable newUsable){
   }

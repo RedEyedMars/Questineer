@@ -1,20 +1,388 @@
 class 'packageName'."environments" Tiles {
-  @Tile create(String "tileName"){
+  @Tile create(String tileName){
     return null;
+  }
+> ~Integer costIndex = 0;
+> String declaration(IToken declarationToken, String mapName, Set<String> underneathTiles, Set<String> backgroundTiles, Set<String> nodeTiles){
+    if declarationToken->"underneath" != null{
+      declarationToken : element : underneath {
+        element : atom : tile_names {
+          underneathTiles.add('atom');
+        }
+      }
+      return null;
+    }
+    else if declarationToken->"background" != null{
+      declarationToken : element : background {
+        element : atom : tile_names {
+          backgroundTiles.add('atom');
+        }
+      }
+      return null;
+    }
+    else if declarationToken->"paths" != null {
+      declarationToken : element : paths {
+        element : atom : tile_names {
+          nodeTiles.add('atom');
+        }
+      }
+      return null;
+    }
+    String tileName = ^declarationToken->"tileName";
+    Class extendsClass;
+    if nodeTiles.contains(tileName) || declarationToken->"crawler" != null{
+      extendsClass = Node;
+    }
+    else {
+      extendsClass = Tile;
+    }
+    Tiles->'mapName' += class 'packageName'."environments" tileName extendsClass {
+    }
+    Tiles->*"create".prependToBody({
+      if "tileName".equals(''tileName'') {
+        return new Tiles->'mapName'->'tileName'(); 
+      }
+    });
+    Tiles->'mapName'->'tileName' += class 'packageName'."environments" Factory \Object Tile->Factory {
+      Tile create(){
+        return new Tiles->'mapName'->'tileName'();
+      }
+    }
+    Tiles->'mapName'->'tileName' += class Placer // Menu->Placable {
+      void place(Environment map, Float placeX, Float placeY){
+        map.addTile(new Tiles->'mapName'->'tileName'(placeX,placeY,map));
+      }
+    }
+    \createList(Treasury->Cost);
+	Tiles->'mapName'->'tileName' += class Generator / Tile->Generator / {
+      \CostList getCosts(){
+		\CostList costs = new \CostList();
+	  }
+	  Tile generateTile(Environment parent){
+	  }
+	}
+	Tiles->'mapName'->'tileName' += class Circle / Tiles->'mapName'->'tileName' / {
+	  Float radius = 1f;
+	  Boolean isWithin(Environment.Position otherPosition) {
+		return \super.isWithin(otherPosition,radius,Math.PI*2.0,0.0);
+	  }
+	  Environment->Position getPoint(Environment parent){
+        Float direction = "(float)(Math.PI*2.0*\Math.random())";
+        Float pX = "(float)(radius*Math.cos(direction))";
+        Float pY = "(float)(radius*Math.sin(direction))";
+	    return new Environment->Position(\getX() \+ dX,\getY() \+ dY,parent);
+	  }
+    }
+	declarationToken : element : rate {
+	  ~Float rarityValue = -1f;
+	  if element->"rarity"->"COMMON" != null {
+	    Tiles->'mapName'->'tileName'->Generator += Float getDefaultRate(){ return 100f; }
+	    rarityValue = 100f;
+	  }
+	  else if element->"rarity"->"UNCOMMON" != null  {
+	    Tiles->'mapName'->'tileName'->Generator += Float getDefaultRate(){ return 80f; }
+	    rarityValue = 80f;
+	  }
+	  else if element->"rarity"->"RARE" != null  {
+	    Tiles->'mapName'->'tileName'->Generator += Float getDefaultRate(){ return 60f; }
+	    rarityValue = 60f;
+	  }
+	  else if element->"rarity"->"EPIC" != null  {
+	    Tiles->'mapName'->'tileName'->Generator += Float getDefaultRate(){ return 40f; }
+	    rarityValue = 40f;
+	  }
+	  else if element->"rarity"->"LEGENDARY" != null  {
+	    Tiles->'mapName'->'tileName'->Generator += Float getDefaultRate(){ return 20f; }
+	    rarityValue = 20f;
+	  }
+	  element : atom : tile_cost {
+	    Tiles->'mapName'->'tileName'->Generator->*"getCosts".appendToBody({"costs".add(`\getTileCost(atom,mapName,tileName)`);});
+	  }
+    }
+	Tiles->'mapName'->'tileName'->Generator->*"getCosts".appendToBody({return "costs";});
+    if declarationToken->"crawler" == null {
+      Tiles->'mapName'->'tileName'->Generator->*"generateTile".appendToBody({
+        Environment->Position point = parent.getTile(Tiles->'underneathTiles.get(0)'.id).getPoint(parent);
+		return new Tiles->'mapName'->'tileName'(point.getX(),point.getY(), parent);
+		});
+    }
+    else {
+      declarationToken : element : crawler {
+        String directionValue = "direction)";
+        String openNodeValue = "(float)(openNode";
+        Tiles->'mapName'->'tileName'->Generator += ~List<Tiles\>'mapName'\>'tileName'> openNodes = new ArrayList<Tiles\>'mapName'\>'tileName'>()
+        Tiles->'mapName'->'tileName'->Generator->*"generateTile".appendToBody({
+          if openNodes.isEmpty() {
+            return null;
+          }
+          Tiles->'mapName'->'tileName' openNode = Range.select(openNodes);
+          Double direction = \Math.PI * 2.0 * \Math.random();
+          Double length = `\primeRange(element->"length")`.getRandom();
+          Tiles->'mapName'->'tileName' newNode = new Tiles->'mapName'->'tileName'(
+            'openNodeValue'.getX() \+ length \* \Math.cos('directionValue'),
+            'openNodeValue'.getY() \+ length \* \Math.sin('directionValue'),
+            parent);
+          newNode.connect(openNode);
+          openNodes.add(newNode);
+          if openNode.getNodes().size() >= openNode.getBranchLimit() {
+            openNodes.remove(openNode);
+          }
+          Float chance = Range.getRandomFloat();
+		});
+		~Float currentChance = 0f;
+		~Boolean isFirst = true;
+		element : atom : branch {
+		  atom : quark : branch_element {
+		    currentChance \+= Float.parseFloat('quark->"chance"') / 100f;
+		    Float chanceValue = currentChance;
+		    if isFirst {
+		      Tiles->'mapName'->'tileName'->Generator->*"generateTile".appendToBody({		        
+		        if "chance" < 'chanceValue' {
+		          "newNode".setBranchLimit('quark->"amount"');
+		        }
+		      });
+		      isFirst = false;
+		    }
+		    else {
+		      Tiles->'mapName'->'tileName'->Generator->*"generateTile".appendToBody({		        
+		        else if "chance" < 'chanceValue' {
+		          "newNode".setBranchLimit('quark->"amount"');
+		        }
+		      });
+		    }
+		  }
+		}
+        Tiles->'mapName'->'tileName'->Generator->*"generateTile".appendToBody({
+          chance = Range.getRandomFloat();
+        });
+		isFirst = true;
+		currentChance = 0f;
+		element : atom : generate_shape {
+		  if isFirst {
+		    if atom->"OTHERWISE" != null {
+		      atom : quark : shape {
+        	    Tiles->'mapName'->'tileName'->Generator->*"generateTile".appendToBody(
+        	      \getGenerateShape(quark,mapName,tileName));
+        	  }
+		    }
+		    else {
+		      currentChance \+= Float.parseFloat('atom->"chance"') / 100f;
+		      Float chanceValue = currentChance;
+		      Body shapeBody = new Body ();
+		      atom : quark : shape {
+		        shapeBody.add(\getGenerateShape(quark,mapName,tileName));
+		      }
+		      Tiles->'mapName'->'tileName'->Generator->*"generateTile".appendToBody({
+		        if "chance" < 'chanceValue' `shapeBody`
+		      });
+		      isFirst = false;
+		    }
+		  }
+		  else {
+		    if atom->"OTHERWISE" != null {
+		      Body shapeBody = new Body ();
+		      atom : quark : shape {
+		        shapeBody.add(\getGenerateShape(quark,mapName,tileName));
+		      }
+        	  Tiles->'mapName'->'tileName'->Generator->*"generateTile".appendToBody({
+		        else `shapeBody`
+		      });
+		    }
+		    else {
+		      currentChance \+= Float.parseFloat('atom->"chance"') / 100f;
+		      Float chanceValue = currentChance;
+		      Body shapeBody = new Body ();
+		      atom : quark : shape {
+		        shapeBody.add(\getGenerateShape(quark,mapName,tileName));
+		      }
+		      Tiles->'mapName'->'tileName'->Generator->*"generateTile".appendToBody({
+		        else if "chance" < 'chanceValue' `shapeBody`
+		      });
+		    }
+		  }
+		}
+        Tiles->'mapName'->'tileName'->Generator->*"generateTile".appendToBody({
+            return "newNode";
+          });
+      }
+    }
+    declarationToken : element : entity {            
+      Class entityFactory = Entities.declaration(element->"entity_declaration");
+      element : quanta : PLUS {
+        Tiles->'mapName'->'tileName'->*.prependToBody(|"onTickEntityFactories".add(new entityFactory());|);
+      }
+      element : quanta : MINUS {
+        Tiles->'mapName'->'tileName'->*.prependToBody(|"onLoadEntityFactories".add(new entityFactory());|);
+      }
+    }
+    return tileName;
+  }
+> Statement getGenerateShape(IToken shapeToken, String mapName, String tileName){
+    String shapeTileName = 'shapeToken->"tile_names"';
+    String shapeShapeName = 'shapeToken->"shape_type"';
+    Parameters parameters = new Parameters ();
+    shapeToken : element : LENGTH {
+      parameters.add(|"length"|);
+    }
+    : INTEGER {
+      parameters.add(|'element'|);
+    }
+    : FLOAT {
+      parameters.add(|'element'+"f"|);
+    }
+    return |"parent".addTile(new Tiles->'mapName'->'shapeTileName'->'shapeShapeName'(`parameters`)) ;|;
+  }
+  
+> Statement getTileCost(IToken tileCostToken, String mapName, String tileName){
+    String costName = "Cost" \+ costIndex;
+    costIndex \+= 1;
+    if tileCostToken->"FREE" != null {
+      Tiles->'mapName'->'tileName'->Generator += class costName / Treasury->Cost / {
+        Treasury->Reward getReward() {
+          return new Tiles->'mapName'->'tileName'->Generator->'costName'->Reward(); 
+        }
+        Boolean isFree(){
+          return true;
+        }
+      }
+      Tiles->'mapName'->'tileName'->Generator->'costName' += class Reward / Treasury->Reward / {
+        Boolean isPlacable(){
+          return true;
+        }
+        Menu->Placable getPlacable(){
+          return new Tiles->'mapName'->'tileName'->\Placer();
+        }
+      }
+      return |new Tiles->'mapName'->'tileName'->Generator->'costName'()|;
+    }
+    else {
+      String paymentType = Treasury.getTypeName(tileCostToken->"paymentType");
+      if tileCostToken->"payment" != null {
+        Tiles->'mapName'->'tileName'->Generator += class costName / Treasury->Cost / {
+          Integer getAmount(){
+            return 'tileCostToken->"payment"';
+          }
+          Treasury->PaymentType->Id getType(){
+            return Treasury->PaymentTypes->'paymentType'.id;
+          }
+          Treasury->Reward getReward() {
+            return new Tiles->'mapName'->'tileName'->Generator->'costName'->Reward(); 
+          }
+        }
+      }
+      else {
+        Tiles->'mapName'->'tileName'->Generator += class costName / Treasury->Cost / {
+          Treasury->PaymentType->Id getType(){
+            return Treasury->PaymentTypes->'paymentType'.id;
+          }
+          Treasury->Reward getReward() {
+            return new Tiles->'mapName'->'tileName'->Generator->'costName'->Reward(); 
+          }
+        }
+      }
+      if tileCostToken->"operator" == null {
+        Tiles->'mapName'->'tileName'->Generator->'costName' += class Reward / Treasury->Reward / {
+          Boolean isPlacable(){
+            return true;
+          }
+          Menu->Placable getPlacable(){
+            return new Tiles->'mapName'->'tileName'->\Placer();
+          }
+        }
+      }
+      else {
+        Tiles->'mapName'->'tileName'->Generator->'costName' += class Reward / Treasury->Reward / {
+          Boolean isPlacable(){
+            return true;
+          }
+          Menu->Placable getPlacable(){
+            return new Tiles->'mapName'->'tileName'->Generator->'costName'->Reward->RewardGenerator();
+          }
+        }
+        String rarityValue = 'tileCostToken->"amount"';
+        Double radius = Double.parseDouble('tileCostToken->"radius"');
+        Double tau = 2 \* \Math.PI;
+        Tiles->'mapName'->'tileName'->Generator->'costName'->Reward += class RewardGenerator / Tiles->'mapName'->'tileName'->Generator /{
+          Float getDefaultRate(){
+            return 'rarityValue+"f"';
+          }
+		  Tile generateTile(Environment parent){
+		    return new Tiles->'mapName'->'tileName'("(float)(x" \+ 'radius' * \Math.'"cos(" + tau' * \Math."random()))" ,
+		                      "(float)(y" \+ 'radius' * \Math.'"sin("+tau' * \Math."random()))" , parent);
+		  }
+        }
+      }
+      return |new Tiles->'mapName'->'tileName'->Generator->'costName'()|;
+    }
   }
 }
 class 'packageName'."environments" Tile Environment->Position Loaddable Tickable  {
+  class Id // {
+  }
+  
+  class Generator // Menu->Placable {
+    ~Float x = 0f;
+    ~Float y = 0f;
+    void place(Environment map, Float placeX, Float placeY){
+      map.addGenerator(this);
+      x = placeX;
+      y = placeY;
+    }
+    Float getWidth(){
+      return 0f;
+    }
+    Float getHeight(){
+      return 0f;
+    }
+    Float getDefaultRate(){
+      return 0f;
+    }
+    \CostList getCosts(){
+	  return null;
+    }
+	Tile generateTile(Environment parent){
+	  return null;
+	}
+	void generate(Environment parent){
+	  if parent.getGenerationRate() * \Math.random() <= \getDefaultRate() {
+	    Tile newTile = \generateTile(parent);
+	    if newTile != null {
+	      parent.addTile(newTile);
+	    }
+	  }
+	}
+  }
+  class Comparators // {
+    class Distance // {
+      class Ascending // Comparator<Tile> {
+        Environment->Position origin = null;
+        \int compare(Tile tile1, Tile tile2){
+          return "(int)(float)(origin.getDistanceTo(tile1) - origin.getDistanceTo(tile2))";
+        }
+      }
+      class Descending // Comparator<Tile> {
+        Environment->Position origin = null;
+        \int compare(Tile tile1, Tile tile2){
+          return "(int)(float)(origin.getDistanceTo(tile2) - origin.getDistanceTo(tile1))";
+        }
+      }
+    }
+  }
   ~Float "width" = 1f;
   ~Float "height" = 1f;
   ~Integer "numberOfAliveGeneratedEntities" = 0;
   ~Integer "limit" = 5;
-  ~Boolean isPath = false;
+  ~Boolean isNode = false;
   ~Area area = null;
-  Boolean isPath(){
+  
+  Tile->Id getId(){
+    return null;
+  }
+  Boolean isNode(){
     return false;
   }
-  Boolean isWithin(Environment->Position "otherPosition"){
-    return \super.isWithin("otherPosition", "width"/4f \+ "height"/4f, \Math.PI * 2.0, 0.0);
+  Boolean isWithin(Environment->Position otherPosition){
+    return \super.isWithin(otherPosition, width, height);
   }
   interface 'packageName'."environments" Factory {
     Tile create(){}
@@ -27,9 +395,9 @@ class 'packageName'."environments" Tile Environment->Position Loaddable Tickable
       }
     }
   }
-  Path getClosestPath(){
+  Node getClosestNode(){
     if "parent"!=null {
-      return "parent".getClosestPath(this);
+      return "parent".getClosestNode(this);
     }
     else {
       return null;
@@ -54,6 +422,9 @@ class 'packageName'."environments" Tile Environment->Position Loaddable Tickable
   Association get(Association->Id id, Association->Factory factory){
     return "associations".get(id,factory);
   }
+  Environment->Position getPoint(Environment parent){
+    return new Environment->Position(width*Range.getRandomFloat(), height*Range.getRandomFloat(), parent);
+  }
 > void setup(ParseContext data){
     Class entityFactory = Entity->Factory;
     Tile += ~List<entityFactory> "onTickEntityFactories" = new ArrayList<entityFactory>()
@@ -62,44 +433,63 @@ class 'packageName'."environments" Tile Environment->Position Loaddable Tickable
     Tile += ~\IdMap->\_Association "associations"
   }
 }
-class 'packageName'."environments" Path Tile{
-  ~Path "leftPath" = null;
-  ~Path "rightPath" = null;
-  ~Path "upPath" = null;
-  ~Path "downPath" = null;
+class 'packageName'."environments" Node Tile{
   
-  ~Boolean "isStop" = false;
-  Boolean isPath(){
-    return isPath;
+  ~List<Node> nodes = new ArrayList<Node>();
+  ~Node home = null;
+  ~Integer branchLimit = 0;
+  ~Boolean isStop = false;
+  Boolean isNode(){
+    return true;
   }
-  Path step(Entity stepper, Path next){
+  void connect(Node otherNode){
+    home = otherNode;
+    otherNode.nodes.add(this);
+    nodes.add(otherNode);
+  }
+  Node getUnexploredNode(){
+    if nodes.isEmpty() || nodes.size() == 1 {
+      return this;
+    }
+    else {
+      Set<Node> visited = new HashSet<Node>();
+      visited.add(this);
+      for Node node: nodes {
+         Node unexploredNode = node.getUnexploredNode(visited);
+         if unexploredNode != null {
+           return unexploredNode;
+         }
+      }
+      return null;
+    }
+  }
+  Node getUnexploredNode(Set<Node> visited){
+    if visited.add(this) {
+      if nodes.isEmpty() || nodes.size() == 1 {
+        return this;
+      }
+      else {
+        for Node node: nodes {
+          Node unexploredNode = node.getUnexploredNode(visited);
+          if unexploredNode != null {
+            return unexploredNode;
+          }
+        }
+        return null;
+      }
+    }
+    else {
+      return null;
+    }
+  }
+  
+  Node step(Entity stepper, Node next){
     Float speed = stepper.getWalkingSpeed();
-    ~Boolean moved = false;
-    if this.isWithin(stepper.getLocation()) {
-    if next == leftPath {
-      stepper.getLocation().move(-1f * speed, 0f);
-      moved = true;
-    }
-    else if next == rightPath {
-      "stepper".getLocation().move(1f * speed, 0f);
-      moved = true;
-    } 
-    else if next == upPath {
-      "stepper".getLocation().move(0f, 1f * speed);
-      moved = true;
-    }
-    else if next == downPath {
-      stepper.getLocation().move(0f, -1f * speed);
-      moved = true;
-    }
-    }
-    if moved == false{
-      Double direction = stepper.getLocation().getDirectionTo(next);
-      stepper.getLocation().move(\Math.cos(direction) * speed, \Math.sin(direction) * speed); 
-    }
+    Double direction = stepper.getLocation().getDirectionTo(next);
+    stepper.getLocation().move(\Math.cos(direction) * speed, \Math.sin(direction) * speed);
     if next.isWithin(stepper.getLocation()) {
       if next.isStopper() {
-        stepper.rememberIncomingPath(this,next);
+        stepper.rememberIncomingNode(this,next);
       }
       return next;
     }
@@ -107,132 +497,85 @@ class 'packageName'."environments" Path Tile{
       return this;
     }
   }
-  void setLeft(Path "newLeft"){
-    if "leftPath" != "newLeft" {
-      "leftPath" = "newLeft";
-      "newLeft".setRight(this);
-    }
-    \updateStatus();
-  }
-  void setRight(Path "newRight"){
-    if "rightPath" != "newRight" {
-      "rightPath" = "newRight";
-      "newRight".setLeft(this);
-    }
-    \updateStatus();
-  }
-  void setUp(Path "newUp"){
-    if "upPath" != "newUp" {
-      "upPath" = "newUp";
-      "newUp".setDown(this);
-   }
-   \updateStatus();
-  }
-  void setDown(Path "newDown"){
-    if "downPath" != "newDown" {
-      "downPath" = "newDown";
-      "newDown".setUp(this);
-    }
-    \updateStatus();
-  }
-  void \updateStatus(){
-    ~Integer "count" = 0;
-    if "leftPath" != null {
-      "count" \+= 1;
-    }
-    if "rightPath" != null {
-      "count" \+= 1;
-    }
-    if "upPath" != null {
-      "count" \+= 1;
-    }
-    if "downPath" != null {
-      "count" \+= 1;
-    }
-    "isStop" = "count" != 2; 
+  void add(Node node){
+    nodes.add(node);
+    isStop = nodes.size() > 2;
   }
   Boolean isStopper(){
-    return "isStop";
+    return isStop;
   }
-  List<Way> getWaysTo(Path goalPath, Map<Path,Set<Path>> stoppers){
+  Set<Way> getWaysTo(Node goalNode, Map<Node,Set<Node>> stoppers){
+    if this == goalNode {
+      Way resultWay = new Way();
+      resultWay.setGoal(goalNode);
+      resultWay.add(this);
+      \TreeSet<Way> result = new \TreeSet<Way>();
+      result.add(resultWay);
+      return result;
+    }
     \TreeSet<Way> ways = new \TreeSet<Way>();
     Way firstWay = new Way();
-    firstWay.setGoal(goalPath);
+    firstWay.setGoal(goalNode);
     firstWay.add(this);
     ways.add(firstWay);
     ~Integer count = 0;
-    List<Way> result = new ArrayList<Way>();
-    while count < 50 &&! ways.isEmpty() {
-      count \+= 1;
-      Way way = ways.pollFirst(); 
-      if way.at(goalPath){
-        result.add(way);
+    \TreeSet<Way> result = new \TreeSet<Way>();
+    Set<Node> visited = new HashSet<Node>();
+    for Node node: nodes {
+      Way resultWay = new Way();
+      resultWay.setGoal(goalNode);
+      resultWay.add(this);
+      node.getWaysTo(goalNode, 50, resultWay, result, visited, stoppers);
+    }
+    return result;
+  }
+  void getWaysTo(Node goalNode, Integer depth, Way currentWay, \TreeSet<Way> result, Set<Node> visited, Map<Node,Set<Node>> stoppers){
+    if depth>0 && visited.add(this) {
+      Way resultWay = new Way(currentWay);
+      resultWay.add(this);
+      if this == goalNode {
+        result.add(resultWay);
       }
       else {
-        Path currentPath = way.get(way.size() - 1);
-        Set<Path> currentStopper = new HashSet<Path>();
-        if stoppers.containsKey(currentPath) {
-          currentStopper = stoppers.get(currentPath);
-        }
-        if currentPath.leftPath != null && currentStopper.contains(currentPath.leftPath){
-          Way newWay = new Way(way);
-          if newWay.add(currentPath.leftPath) {
-            ways.add(newWay);
-          }
-        }
-        if currentPath.rightPath != null && currentStopper.contains(currentPath.rightPath) {
-          Way newWay = new Way(way);
-          if newWay.add(currentPath.rightPath) {
-            ways.add(newWay);
-          }
-        }
-        if currentPath.upPath != null && currentStopper.contains(currentPath.upPath) {
-          Way newWay = new Way(way);
-          if newWay.add(currentPath.upPath) {
-            ways.add(newWay);
-          }
-        }
-        if currentPath.downPath != null && currentStopper.contains(currentPath.downPath) {
-          Way newWay = new Way(way);
-          if newWay.add(currentPath.downPath) {
-            ways.add(newWay);
+        for Node node: nodes {
+          if stoppers.containsKey(this) && stoppers.get(this).contains(node) == false {
+            node.getWaysTo(goalNode,depth \- 1, resultWay, result, visited, stoppers);
           }
         }
       }
     }
-    return result;
   }
 }
-class 'packageName'."environments" Way ArrayList<Path> \Comparable<Way>{
+class 'packageName'."environments" Way ArrayList<Node> \Comparable<Way>{
 	~class Stepper // {
 	  Integer i = 0;
-	  void step(Entity stepper){
+	  Boolean step(Entity stepper){
 	    if i >= \size() \- 1 {
 	      return false;
 	    }
 	    else {
-	      Path newPath = \get(i).step(stepper,\get(1));
-	      if newPath != \get(i) {
+	      Node newNode = \get(i).step(stepper,\get(1));
+	      if newNode != \get(i) {
 	        i \+= 1;
 	      }
 	      return true;
 	    }
 	  }
 	}
-    HashSet<Path> "checkSet";
-    Path "goal";
+    HashSet<Node> "checkSet";
+    Node "goal";
     Double "distanceToGoal" = 0.0;
     Way *(Way "parentWay"){
       "goal" = "parentWay".getGoal();
-      for Path "path":"parentWay" {
-        \add("path");
+      for Node "node":"parentWay" {
+        \add("node");
       }
       "distanceToGoal" = "goal".getDistanceTo(\get(\size() - 1)); 
     }
-    void setGoal(Path "newGoal"){
+    void setGoal(Node "newGoal"){
       "goal" = "newGoal";
     }
-    Boolean at(Path "destination"){
+    Boolean at(Node "destination"){
       if \isEmpty() {
         return false;
       }
@@ -243,10 +586,10 @@ class 'packageName'."environments" Way ArrayList<Path> \Comparable<Way>{
        return \get(\size() - 1) == "destination";
      }
    }
-   \boolean add(Path "newPath"){
-      if "checkSet".add("newPath") {
-        "distanceToGoal" = "goal".getDistanceTo("newPath"); 
-        return \super.add("newPath");
+   \boolean add(Node "newNode"){
+      if "checkSet".add("newNode") {
+        "distanceToGoal" = "goal".getDistanceTo("newNode"); 
+        return \super.add("newNode");
       }
       else {
         return false;
@@ -259,7 +602,7 @@ class 'packageName'."environments" Way ArrayList<Path> \Comparable<Way>{
           return 0;
         }
         else {
-          return 1;
+          return "otherWay".size() - \size();
         }
       }
       else {

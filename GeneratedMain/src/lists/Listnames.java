@@ -20,6 +20,7 @@ public class Listnames extends ParseList {
 	public static final RegexParser aspectToken = new RegexParser("aspectToken","listnames","aspectTokens\b");
 	public static final RegexParser aspectBrace = new RegexParser("aspectBrace","listnames","aspectBraces\b");
 	public static final RegexParser aspectImport = new RegexParser("aspectImport","listnames","aspectImports\b");
+	public static final RegexParser item_names = new RegexParser("item_names","listnames","item_names\b");
 	public static final RegexParser itemToken = new RegexParser("itemToken","listnames","itemTokens\b");
 	public static final RegexParser itemBrace = new RegexParser("itemBrace","listnames","itemBraces\b");
 	public static final RegexParser itemImport = new RegexParser("itemImport","listnames","itemImports\b");
@@ -75,6 +76,11 @@ public class Listnames extends ParseList {
 	public static final RegexParser tileToken = new RegexParser("tileToken","listnames","tileTokens\b");
 	public static final RegexParser tileBrace = new RegexParser("tileBrace","listnames","tileBraces\b");
 	public static final RegexParser tileImport = new RegexParser("tileImport","listnames","tileImports\b");
+	public static final RegexParser payment_long_type_name = new RegexParser("payment_long_type_name","listnames","payment_long_type_names\b");
+	public static final RegexParser payment_short_type_name = new RegexParser("payment_short_type_name","listnames","payment_short_type_names\b");
+	public static final RegexParser paymentToken = new RegexParser("paymentToken","listnames","paymentTokens\b");
+	public static final RegexParser paymentBrace = new RegexParser("paymentBrace","listnames","paymentBraces\b");
+	public static final RegexParser paymentImport = new RegexParser("paymentImport","listnames","paymentImports\b");
 	public static final RegexParser event_name = new RegexParser("event_name","listnames","event_names\b");
 	public static final RegexParser eventToken = new RegexParser("eventToken","listnames","eventTokens\b");
 	public static final RegexParser eventBrace = new RegexParser("eventBrace","listnames","eventBraces\b");
@@ -88,5 +94,5 @@ public class Listnames extends ParseList {
 	public static final RegexParser imageImport = new RegexParser("imageImport","listnames","imageImports\b");
 
 	public static final ChoiceParser parser = new ChoiceParser(
-				comment,aspect_name,aspectToken,aspectBrace,aspectImport,itemToken,itemBrace,itemImport,affinity_name,affinityToken,affinityBrace,affinityImport,condition_name,conditionToken,conditionBrace,conditionImport,trait_name,traitToken,traitBrace,traitImport,activityname,activityToken,activityBrace,activityImport,attack_name,attackToken,attackBrace,attackImport,support_name,supportToken,supportBrace,supportImport,questToken,questBrace,questImport,skill_name,skillToken,skillBrace,skillImport,association_name,associationToken,associationBrace,associationImport,reason_name,reasonToken,reasonBrace,reasonAltBrace,reasonImport,hero_stat,entityToken,entityBrace,map_name,mapToken,mapBrace,mapImport,tile_name,tile_symbol,tileToken,tileBrace,tileImport,event_name,eventToken,eventBrace,eventImport,generalToken,generalBrace,generalAltBrace,image_name,imageToken,imageBrace,imageImport);
+				comment,aspect_name,aspectToken,aspectBrace,aspectImport,item_names,itemToken,itemBrace,itemImport,affinity_name,affinityToken,affinityBrace,affinityImport,condition_name,conditionToken,conditionBrace,conditionImport,trait_name,traitToken,traitBrace,traitImport,activityname,activityToken,activityBrace,activityImport,attack_name,attackToken,attackBrace,attackImport,support_name,supportToken,supportBrace,supportImport,questToken,questBrace,questImport,skill_name,skillToken,skillBrace,skillImport,association_name,associationToken,associationBrace,associationImport,reason_name,reasonToken,reasonBrace,reasonAltBrace,reasonImport,hero_stat,entityToken,entityBrace,map_name,mapToken,mapBrace,mapImport,tile_name,tile_symbol,tileToken,tileBrace,tileImport,payment_long_type_name,payment_short_type_name,paymentToken,paymentBrace,paymentImport,event_name,eventToken,eventBrace,eventImport,generalToken,generalBrace,generalAltBrace,image_name,imageToken,imageBrace,imageImport);
 }

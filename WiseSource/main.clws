@@ -9,6 +9,7 @@
 < HashMap 		: \java.\util;
 < Set 			: \java.\util;
 < HashSet 		: \java.\util;
+< Comparator	: \java.\util;
 < File			: \java.\io;
 < Entry			: \com.\rem.\parser.\generation;
 < ListEntry		: \com.\rem.\parser.\generation;
@@ -25,6 +26,8 @@
 #import images/image.clws#
 
 import general/general.clws
+import overview/menus.clws
+import overview/treasuries.clws
 import entities/entities.clws
 import environments/environments.clws
 import events/events.clws
@@ -60,6 +63,8 @@ import events/events.clws
 	Skills.setup(data);
 	Activities.setup(data);
 	Relationship.setup(data);
+	Quests.setup(data);
+	Treasury.setup(data);
 	Environment.setup(data);
 	Tile.setup(data);
 	root : imports : import_any {
@@ -68,6 +73,11 @@ import events/events.clws
 	\output(data);
 }
 > void importAny(IToken import_any){
+    import_any : import_payment_types : IMPORT_PAYMENT_TYPE {
+		import_payment_types : element : payment_type_declaration {
+			Treasury.paymentTypeDec(element);
+		}
+	}
 	import_any : import_events : IMPORT_EVENT {
 		import_events : element : event_declaration {
 			Events.declaration(element);

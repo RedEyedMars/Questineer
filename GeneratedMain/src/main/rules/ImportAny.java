@@ -17,6 +17,7 @@ public class ImportAny extends ConcreteRule {
 	public void setup(){
 		set(
 			new ChoiceParser(
+					PaymentImports.IMPORT_PAYMENT_TYPE,
 					EventImports.IMPORT_EVENT,
 					ItemImports.IMPORT_ITEM,
 					ImageImports.IMPORT_IMAGE,

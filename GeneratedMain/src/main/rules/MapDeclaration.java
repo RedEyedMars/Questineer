@@ -23,7 +23,7 @@ public class MapDeclaration extends ConcreteRule {
 							new ManyParser(
 									new AddTokenParser(
 										AssociationTokens.NAME,"mapElementName")),
-					GeneralTokens.COLON,
+					PaymentTokens.COLON,
 					new ManyParser(
 							AssociationTokens.NEWLINE),
 					new AddTokenParser(

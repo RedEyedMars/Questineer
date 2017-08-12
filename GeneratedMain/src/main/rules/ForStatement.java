@@ -23,7 +23,7 @@ public class ForStatement extends ConcreteRule {
 						new ChainParser(
 							GeneralTokens.FOR,
 							Rules.variable_header,
-							GeneralTokens.COLON,
+							PaymentTokens.COLON,
 							Rules.statement,
 							new ManyParser(
 									AssociationTokens.NEWLINE)),"fromList"),

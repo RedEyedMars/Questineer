@@ -16,21 +16,41 @@ public class TileDeclaration extends ConcreteRule {
 	@Override
 	public void setup(){
 		set(
-				new ChainParser(
-					new AddTokenToListParser(
-						new MultipleParser(
-							AssociationTokens.NAME),"tileName","tile_names"),
-					new OptionalParser(
-							
-								new ChainParser(
-									TileTokens.EXTENDS,
-									TileTokens.PATH)),
-					TileTokens.OPEN_PARA,
-					new AddTokenToListParser(
-						AssociationTokens.NAME,"symbolName","tile_symbols"),
-					TileTokens.CLOSE_PARA,
-					new ManyParser(
-							Rules.tile_element)));
+			new ChoiceParser(
+					new AddTokenParser(
+						
+						new ChainParser(
+							TileTokens.BACKGROUND,
+							PaymentTokens.COLON,
+							new ListNameElementParser("tile_names"),
+							new ManyParser(
+									
+										new ChainParser(
+											ActivityTokens.COMMA,
+											new ListNameElementParser("tile_names")))),"background"),
+					new AddTokenParser(
+						
+						new ChainParser(
+							TileTokens.UNDERNEATH,
+							PaymentTokens.COLON,
+							new ListNameElementParser("tile_names"),
+							new ManyParser(
+									
+										new ChainParser(
+											ActivityTokens.COMMA,
+											new ListNameElementParser("tile_names")))),"underneath"),
+					new AddTokenParser(
+						
+						new ChainParser(
+							TileTokens.PATHS,
+							PaymentTokens.COLON,
+							new ListNameElementParser("tile_names"),
+							new ManyParser(
+									
+										new ChainParser(
+											ActivityTokens.COMMA,
+											new ListNameElementParser("tile_names")))),"paths"),
+					Rules.tile_definition));
 
 	}
 

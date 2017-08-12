@@ -1,0 +1,6 @@
+
+class 'packageName'."menus" Menu {
+  interface Placable // {
+    void place(Environment parent, Float x, Float y){}
+  }
+}

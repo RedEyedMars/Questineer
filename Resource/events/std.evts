@@ -40,6 +40,7 @@ joined
 
 startQuest
 	Quest quest
+	Entity host
 idle
 	Entity host
 	Activity idling

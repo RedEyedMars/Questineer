@@ -9,24 +9,13 @@ questing Quest
 	fail if failed | currentQuest!=null & currentQuest->status == Quest=>FAIL
 	step {
 	  if currentQuest == null {
-	    if !getUsable().isEmpty() {
-	      currentQuest = Quest<-getUsables().get(int<-(Math.random() * getUsables().size()))
-	    }
-	    else {
-	      failed = true
+	    currentQuest = Quest<-(pick())
+	    if currentQuest == null {
 	      return false
 	    }
 	  }
-	  if currentQuest.getStatus() == Quest=>UNSTARTED {
-	    currentQuest.on(new Events.StartQuest(currentQuest,host))
-	  }
-	  if currentQuest.getCurrentActivity() != null {
-	    currentQuest.getCurrentActivity().on(new Events.Tick(host))
-	    return true
-	  }
-	  else {
-	    return false
-	  }
+	  return currentQuest.use(host,null)
+	  
 	}
 hunt(EntityCriteria criteriaToTarget, Tile.Id huntingGrounds, Float range, Events.Die.Listener deathListener, ActivityCriteria toSucceed) Attack
 	Hunt monsters until told otherwise.;;
@@ -35,7 +24,7 @@ hunt(EntityCriteria criteriaToTarget, Tile.Id huntingGrounds, Float range, Event
 	succeed if toSucceed.satisfies(this)
 	load {
 	  TileList toAdd = event->host->location.getTilesWithin(250.0 , huntingGrounds)
-	  toAdd.sort(new Tiles.Comparators.DescendingDistance(event->host->location))
+	  toAdd.sort(new Tile.Comparators.Distance.Descending(event->host->location))
 	  toHuntLocations.addAll(toAdd)
 	}
 	step {
@@ -71,7 +60,7 @@ kill(Entity toKill) Attack
 	succeed if toKill.isDead()
 	load {
 	  setTargetEntity(toKill)
-	  on(new Events.Idle(this,event->host))
+	  on(new Events.Idle(event->host,this))
 	}
 	listen {
 	  if event.getId() == Events.Fail=>id & (Events.Collect<-event)->failed == chaseActivity {
@@ -79,7 +68,7 @@ kill(Entity toKill) Attack
 	  }
 	}
 	idle {
-	  Float longestRange = -1
+	  Float longestRange = -1.0
 	  for Usable usable : getUsables() {
 	    Float potentialRange = usable.getRange(event->host)
 	    if usable.getTargetCriteria().satisfies(toKill) {
@@ -90,8 +79,7 @@ kill(Entity toKill) Attack
 	  }
 	  if longestRange >= 0 {
 	    chaseActivity = new Activities.ChasingEntity(25,toKill,longestRange)
-	    chaseActivity.add(new Activity.Listeners.Fail(this))
-	    event->host.add(0,chaseActivity)
+	    event->host.start(chaseActivity)
 	  }
 	}
 chasingEntity(Integer ticks, Entity toChase, Float successRange)
@@ -117,12 +105,12 @@ goto(Tile.Id gotoId)
 	succeed if hasReachedEnd & host->location.getDistanceTo(destination) <= 0.5
 	+ Tile destination = null
 	+ Way.Stepper stepper = null
-	+ Path closestPath = null
+	+ Node closestNode = null
 	+ Boolean hasExplored = false
 	+ Boolean hasReachedEnd = false
 	load {
 	  destination = event->host->location.getClosestTile(gotoId)
-	  closestPath = Path<-(event->host->location.getClosestPath())
+	  closestNode = Node<-(event->host->location.getClosestNode())
 	}
 	step {
 	  if stepper != null {
@@ -134,12 +122,12 @@ goto(Tile.Id gotoId)
 	    }
 	    return true
 	  }
-	  else if host->location.getTile() != closestPath {
-	    host->location.step(host->walkingSpeed,closestPath)
+	  else if host->location.getTile() != closestNode {
+	    host->location.step(host->walkingSpeed,closestNode)
 	  }
 	  else {
-	    Path destinationPath = destination.getClosestPath()
-	    WayList ways = closestPath.getWaysTo(destinationPath, this.getPathStoppers())
+	    Node destinationNode = destination.getClosestNode()
+	    WayList ways = closestNode.getWaysTo(destinationNode, this.getNodeStoppers())
 	    if ways.isEmpty() {
 	      return false
 	    }
@@ -162,10 +150,10 @@ Exploring(Integer ticks)
 	+ Tile destination = null
 	succeed if ticks <=0
 	load {
-	  destination = event->host->location.getUnexploredPath()
+	  destination = event->host->location.getUnexploredNode()
 	}
 	idle {
-	  destination = event->host->location.getUnexploredPath()
+	  destination = event->host->location.getUnexploredNode()
 	}
 	step {
 	  ticks -= 1

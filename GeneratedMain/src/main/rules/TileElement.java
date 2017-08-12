@@ -27,6 +27,54 @@ public class TileElement extends ConcreteRule {
 					new AddTokenParser(
 						
 						new ChainParser(
+							TileTokens.CONNECT,
+							new ListNameElementParser("tile_names"),
+							new OptionalParser(
+									
+										new ChainParser(
+											PaymentTokens.COLON,
+											Rules.tile_cost,
+											new ManyParser(
+													
+														new ChainParser(
+															EntityTokens.PIPE,
+															Rules.tile_cost))))),"connection")),
+				new ChainParser(
+					AssociationTokens.NEWTAB,
+					new AddTokenParser(
+						
+						new ChainParser(
+							new AddTokenParser(
+								
+							new ChoiceParser(
+									TileTokens.COMMON,
+									TileTokens.UNCOMMON,
+									TileTokens.RARE,
+									TileTokens.EPIC,
+									TileTokens.LEGENDARY),"rarity"),
+							new OptionalParser(
+									
+										new ChainParser(
+											PaymentTokens.COLON,
+											Rules.tile_cost,
+											new ManyParser(
+													
+														new ChainParser(
+															EntityTokens.PIPE,
+															Rules.tile_cost))))),"rate")),
+				new ChainParser(
+					AssociationTokens.NEWTAB,
+					new AddTokenParser(
+						
+						new ChainParser(
+							TileTokens.CRAWLER,
+							new MultipleParser(
+									Rules.crawler_element)),"crawler")),
+				new ChainParser(
+					AssociationTokens.NEWTAB,
+					new AddTokenParser(
+						
+						new ChainParser(
 							new MultipleParser(
 									
 									new ChoiceParser(

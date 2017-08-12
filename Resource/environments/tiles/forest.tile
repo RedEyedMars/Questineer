@@ -1,12 +1,47 @@
-Path < Path(P)
-Grass(g)
-Minor Chest(c)
-Major Chest(C)
-Treasure Chest(x)
-Legendary Chest(X)
-Tree(T)
-Water(w)
-Long Grass(G)
+Background: Tree
+Underneath: Grass
+Paths: Path, Bridge
+Grass
+Path
+	Crawler
+		Branch
+			1 - 20% 
+			2 - 10% 
+			3 - 30% 
+			4 - 20% 
+			5 - 10% 
+			6 - 10% 
+		Length 4.0-7.0 
+		[Grass Circle(length)] 10%
+		[Grass Circle(length)] 15% 
+		[Grass Court(2.0,length)] otherwise
+	Connect Path : 1FD
+Bridge
+Minor_Chest
+	Uncommon : 3FD +1% in 10R | 5G +5% in 10R
+Major_Chest
+Treasure_Chest
+Legendary_Chest
+Tree
+	Common : Seed +40% in 5R | TreeSeed +60% in 2R
+Lake
+	Rare : 25FD
+Water
+	Crawler
+		Branch
+			1 - 50% 
+			3 - 30% 
+			4 - 20%
+		Length 2.0-10.0 
+		[Lake Circle(length)] 10%
+		encounter {
+		  if event->tile.isPath() {
+			event->tile.transmute(Forest[Bridge])
+		  }
+		}
+	Uncommon : 10FD
+Long_Grass
+	Common : Free
 	+Praying Matris {
     	STR 5-7 | DEX 6-9 | CON 2-3 | KNW 1-2 | MND 1-2 | CRM 1
 	}
@@ -17,7 +52,8 @@ Long Grass(G)
     	  event->host.gain(new Skills.DefendMemberOf(event->host.get(Hive)))
     	}
 	}
-Lone Rock(R)
+Lone_Rock
+	Uncommon : DeadMeat +10% in 50R 
 	++Wolf {
 		wild
 		STR 7-9 | DEX 4-6 | CON 4-6 | KNW 1-2 | MND 3-4 | CRM 2
@@ -32,7 +68,8 @@ Lone Rock(R)
 		TerritorialAggression
 		STR 9-12 | DEX 5-7 | CON 6-8 | KNW 3-4 | MND 2-3 | CRM 2
 	}
-Bear Den(D)
+Bear_Den
+	Uncommon : Honey +20% in 25R | Berries +10% in 50R 
 	++Bear Cub {
 		wild
 		STR 4-6 | DEX 3-4 | CON 8-10 | KNW 1-2 | MND 3-4 | CRM 2
@@ -48,7 +85,8 @@ Bear Den(D)
 		  event->host.gain(new Skills.DefendMemberOf(event->host->spawn.get(Cubs, new Associations.Cubs.Factory())))
 		}
 	}
-Elder Stag Pedestal(E)
+Elder_Stag_Pedestal
+	Legendary
 	-Elder Stag {
 		ethereal
 		STR 20-25 | DEX 15-20 | CON 20-25 | KNW 25-30 | MND 10-15 | CRM 15-20

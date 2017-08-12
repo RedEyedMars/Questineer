@@ -2,8 +2,9 @@
 > Set<String> declaredCritSet = new HashSet<String>();
 > Set<String> declaredListSet = new HashSet<String>();
 > Set<String> declaredMapSet = new HashSet<String>();
-interface 'packageName'."misc"."interfaces" Listenable {
-  void listen(Event "event"){}
+> String TT = "<T>T";
+interface 'packageName'."misc"."interfaces" Listenable <TypeName> {
+  void listen('"TypeName"' "event"){}
 }
 interface 'packageName'."misc"."interfaces" Source {
 }
@@ -47,6 +48,15 @@ class 'packageName'."misc" Range {
   }
   Entity->Modifier getModifier(){
     return new Range->Modifier(\getRandom());
+  }
+  @$'TT' select(List<\T> collection){
+    if collection.isEmpty(){
+	  return null;
+	}
+	return "collection.get((int)(collection.size()*Math.random()))";
+  }
+  @Float getRandomFloat(){
+    return "(float)Math.random()";
   }
   class 'packageName'."misc" Modifier \Object Entity->Modifier{
 	Double "value" = 0.0;
@@ -297,6 +307,7 @@ class 'packageName'."misc" Criteria<TypeName> {
 		}
 		: braced {
 			Statement subStatement = \getStatement(element,context);
+			subStatement.brace();
 			ret.add(subStatement);
 		}
 	if ret.getSize() == 1 && negate {
@@ -312,8 +323,18 @@ class 'packageName'."misc" Criteria<TypeName> {
 	  : range {
 	    ret.add(|new Range('element->"left"','element->"right"')|);
 	  }
+	  : braced {
+		Statement subStatement = \getStatement(element,context);
+		subStatement.brace();
+		ret.add(subStatement);
+	  }
 	  : exact {
-		ret.add(|'element'|);
+	    if element->"FLOAT" != null {
+	      ret.add(|'element'+"f"|);
+	    }
+	    else {
+	      ret.add(|'element'|);
+	    }
 	  }
 	  : quote {
 	    ret.add(|''element''|);
@@ -321,7 +342,21 @@ class 'packageName'."misc" Criteria<TypeName> {
 	  : variable_group {
 	    ret.add(\getIdFromName(element));
 	  }
-	  
+	  : cast {
+	    String typeName = \getTypeName(element->"type_name");
+	    Context typeContext = currentContext.getClassContext(typeName);
+	    if typeContext == null {
+		    throw "Could not find "+'typeName'+" type in context!";
+		}
+		
+	    Statement castStatement = new Statement ();
+	    castStatement.add(|$'typeName'|);
+	    castStatement.brace();
+	    Statement fullStatement = new Statement();
+	    fullStatement.add(castStatement);
+	    fullStatement.add(\getStatement(element->"statement",context));
+		ret.add(fullStatement);
+	  }
 	  : access_static {
 	    String typeName = \getTypeName(element->"type_name");
 	    Context typeContext = currentContext.getClassContext(typeName);
@@ -452,7 +487,7 @@ class 'packageName'."misc" Criteria<TypeName> {
 
 > Statement primeRange(IToken rangeToken){
     ~String left = 'rangeToken->"left"';
-    ~String right = 'rangeToken->"left"';
+    ~String right = 'rangeToken->"right"';
     if rangeToken->"percent" != null {
       left  = \percentify(left);
       right = \percentify(right); 
@@ -470,9 +505,6 @@ class 'packageName'."misc" Criteria<TypeName> {
 	  class 'packageName'."misc"."lists" listName ArrayList<listClass> {
 	    'listName' *( listClass... "elements" ){
 	      \super(Arrays.asList("elements"));
-	    }
-	    void sort(\Comparator<listClass> comparator){
-	      \Collections.sort(this,comparator);
 	    }
 	  }
 	}

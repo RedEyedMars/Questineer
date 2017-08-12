@@ -2,164 +2,99 @@ import tiles.clws
 
 class 'packageName'."environments" Environment \Object Loaddable Tickable {
   String name = null;
-  ~Map<Integer, Map<Integer,List<Entity>>> entityZones = new HashMap<Integer,Map<Integer,List<Entity>>>();
-  ~Map<Integer, Map<Integer,Set<Area>>> tileAreas = new HashMap<Integer,Map<Integer,Set<Area>>>();
-  ~List<Tile> "tiles" = new ArrayList<Tile>();
-  ~List<Path> "paths" = new ArrayList<Path>();
-  Set<Area> getAreas(Environment->Position position){
-    if tileAreas.containsKey(position.getZoneX())==false {
-      tileAreas.put(position.getZoneX(), new HashMap<Integer, Set<Area>>());
-    }
-    if tileAreas.get(position.getZoneX()).containsKey(position.getZoneY()) ==  false {
-      tileAreas.get(position.getZoneX()).put(position.getZoneY(), new HashSet<Area>());
-    }
-    return tileAreas.get(position.getZoneX()).get(position.getZoneY());
+  ~Map<Integer, Map<Integer,Area>> areas = new HashMap<Integer,Map<Integer,Area>>();
+  ~List<Tile\>Generator> generators = new ArrayList<Tile\>Generator>();
+  @Float areaRadius = 10f;
+  @Integer areaMaxX = 100;
+  @Integer areaMaxY = 100;
+  @Float getWidth(){
+    return Environment.areaRadius * Environment.areaMaxX;
   }
-  Tile getTile(Environment->Position position){
-    Set<Area> areas = \getAreas(position);
-    for Area area : areas {
-      if area.isWithin(position) {
-        return area.getTile(position);
-      }
+  @Float getHeight(){
+    return Environment.areaRadius * Environment.areaMaxX;
+  }
+  Float getGenerationRate(){
+    return 1000f;
+  }
+  Area getAreaSafely(Integer x, Integer y){
+    if areas.containsKey(x) == false {
+      areas.put(x, new HashMap<Integer,Area>());
     }
-    return null;
+    if areas.get(x).containsKey(y) == false {
+      areas.get(x).put(y, new Area(x,y,this));
+    }
+    return areas.get(x).get(y);
+  }
+  Area getAreaSafely(Environment->Position position){
+    if areas.containsKey(position.getZoneX()) == false {
+      areas.put(position.getZoneX(), new HashMap<Integer,Area>());
+    }
+    if areas.get(position.getZoneX()).containsKey(position.getZoneY()) == false {
+      areas.get(position.getZoneX()).put(position.getZoneY(), new Area(position.getZoneX(), position.getZoneY(), this));
+    }
+    return areas.get(position.getZoneX()).get(position.getZoneY());
+  }
+  Area getArea(Environment->Position position){
+    return areas.get(position.getZoneX()).get(position.getZoneY());
   }
   \TileList getTilesWithin(Environment->Position position, Float range, Tile->Id tileId){
-    Set<Area> areas = \getAreas(position);
     \TileList result = new \TileList();
-    for Area area : areas {
-         result.addAll(area.getTilesWithin(position,range,tileId));
-    }
+    \getArea(position).collectTilesWithin(position,range,tileId, result, new HashSet<Area>());
     return result;
   }
-  Path getClosestPath(Environment->Position position){
-    Tile tile = \getTile(position);
-    List<Tile> tiles = tile.getArea().getTiles();
-    Double distance = Double.MAX_VALUE;
-    Path potentialPath = null;
-    for Tile potentialTile : tiles {
-      if potentialTile.isPath() {
-        Double potentialDistance = potentialTile.getDistanceTo(position);
-        if potentialDistance < distance {
-          distance = potentialDistance;
-          potentialPath = "(Path)potentialTile";
-        }
-      }
-    }
-    return potentialPath;
+  void addEntity(Entity newEntity){
+    newEntity.getLocation().setParent(this);
+    newEntity.getLocation().update();
+  }
+  
+  Node getClosestNode(Environment->Position position){
+    return \getArea(position).getClosestNode(position);
   }
   void addTile(Tile newTile){
-    tiles.add(newTile);
+    \getArea(newTile).add(newTile);
   }
-  void addArea(Area newArea){
-    \getAreas(newArea).add(newArea);
-  }
-  List<Entity> getZone(Integer "zoneX", Integer "zoneY"){
-    if true &&! entityZones.containsKey("zoneX") {
-      entityZones.put("zoneX", new HashMap<Integer, List<Entity>>());
-    }
-    if true &&! entityZones.get("zoneX").containsKey("zoneY") {
-      entityZones.get("zoneX").put("zoneY", new ArrayList<Entity>());
-    }
-    return entityZones.get("zoneX").get("zoneY");
-  }
-  void addEntity(Entity "entity"){
-    "entity".getLocation().setParent(this);
-    "entity".getLocation().update();
+  void addGenerator(Tile->Generator generator){
+    generators.add(generator);
   }
   Entity getClosestEntity(Environment->Position position, \EntityCriteria criteria){
-    Entity potentialEntity = null;
-    Double potentialDistance = Double.MAX_VALUE;
-    for Entity candidate : \getZone(position.getZoneX(),position.getZoneY()) {
-      Double distance = position.getDistanceTo(candidate.getLocation());
-      if distance < potentialDistance && criteria.satisfies(candidate) {
-        potentialEntity = candidate;
-        potentialDistance = distance;
-      }
-    }
-    return potentialEntity;
+    return \getArea(position).getClosestEntity(position,criteria);
   }
-  List<Entity> getEntitiesWithin(Environment->Position "position", Float "within"){
-    return \getEntitiesWithin("position","within",2.0*\Math.PI,0.0);
-  }
-  List<Entity> getEntitiesWithin(Environment->Position "position", Float "within", Double "angleLeft", Double "angleRight"){
-    List<Entity> "result" = new ArrayList<Entity>();
-    for Entity "candidate" : \getZone("position".getZoneX(),"position".getZoneY()) {
-      if "candidate".getLocation().isWithin("position","within","angleLeft","angleRight") {
-        "result".add("candidate");
-      }
-    }
-    for Entity "candidate" : \getZone("position".getZoneX()+1,"position".getZoneY()) {
-      if "candidate".getLocation().isWithin("position","within","angleLeft","angleRight"){
-        "result".add("candidate");
-      }
-    }
-    for Entity "candidate" : \getZone("position".getZoneX()+1,"position".getZoneY()+1) {
-      if "candidate".getLocation().isWithin("position","within","angleLeft","angleRight"){
-        "result".add("candidate");
-      }
-    }
-    for Entity "candidate" : \getZone("position".getZoneX(),"position".getZoneY()+1) {
-      if "candidate".getLocation().isWithin("position","within","angleLeft","angleRight"){
-        "result".add("candidate");
-      }
-    }
-    for Entity "candidate" : \getZone("position".getZoneX()-1,"position".getZoneY()+1) {
-      if "candidate".getLocation().isWithin("position","within","angleLeft","angleRight"){
-        "result".add("candidate");
-      }
-    }
-    for Entity "candidate" : \getZone("position".getZoneX()-1,"position".getZoneY()) {
-      if "candidate".getLocation().isWithin("position","within","angleLeft","angleRight"){
-        "result".add("candidate");
-      }
-    }
-    for Entity "candidate" : \getZone("position".getZoneX()-1,"position".getZoneY()-1) {
-      if "candidate".getLocation().isWithin("position","within","angleLeft","angleRight"){
-        "result".add("candidate");
-      }
-    }
-    for Entity "candidate" : \getZone("position".getZoneX(),"position".getZoneY()-1) {
-      if "candidate".getLocation().isWithin("position","within","angleLeft","angleRight"){
-        "result".add("candidate");
-      }
-    }
-    for Entity "candidate" : \getZone("position".getZoneX()+1,"position".getZoneY()-1) {
-      if "candidate".getLocation().isWithin("position","within","angleLeft","angleRight"){
-        "result".add("candidate");
-      }
-    }
-    return "result";
+  List<Entity> getEntitiesWithin(Environment->Position position, Float within){
+    return \getArea(position).\getEntitiesWithin(position,within);
   }
   class 'packageName'."environments" Position {
-    Integer "zoneX" = -1001;
-    Integer "zoneY" = -1001;
-    Float   "locationX" = 1001f;
-    Float   "locationY" = 1001f;
-    Environment "parent" = null;
+    Float x = -10000f;
+    Float y = -10000f;
+    Environment parent = null;
     
     Float getX(){
-      return "locationX" \+ "zoneX" * 1000f;
+      return x;
     }
     Float getY(){
-      return "locationY" \+ "zoneY" * 1000f;
+      return y;
+    }
+    Integer getZoneX(){
+      return "(int)(x/areaRadius)";
+    }
+    Integer getZoneY(){
+      return "(int)(y/areaRadius)";
     }
     void setParent(Environment newParent){
-      "parent" = newParent;
+      parent = newParent;
     }
-    Double getDistanceTo(Position "otherPosition"){
-      Float "xDirection" = "otherPosition".getX() - \getX() ;
-      Float "yDirection" = "otherPosition".getX() - \getY();
-      return \Math.sqrt(\Math.pow("xDirection",2.0)+\Math.pow("yDirection",2.0));
+    Double getDistanceTo(Position otherPosition){
+      Float xDirection = otherPosition.getX() - \getX() ;
+      Float yDirection = otherPosition.getX() - \getY();
+      return \Math.sqrt(xDirection \* xDirection \+ yDirection \* yDirection);
     }
-    Double getDirectionTo(Position "otherPosition"){
-      Float "xDirection" = "otherPosition".getX() - \getX() ;
-      Float "yDirection" = "otherPosition".getX() - \getY();
-      if "xDirection" == 0 {
-        if "yDirection" > 0 {
+    Double getDirectionTo(Position otherPosition){
+      Float xDirection = otherPosition.getX() - \getX() ;
+      Float yDirection = otherPosition.getX() - \getY();
+      if xDirection == 0 {
+        if yDirection > 0 {
           return \Math.PI / 2.0;
         }
-        else if "yDirection" < 0 {
+        else if yDirection < 0 {
           return \Math.PI * 3.0 / 2.0;
         }
         else {
@@ -167,254 +102,166 @@ class 'packageName'."environments" Environment \Object Loaddable Tickable {
         }
       }
       else {
-        return \Math.atan2("yDirection","xDirection");
+        return \Math.atan2(yDirection,xDirection);
       }
     }
     
-    Boolean isWithin(Environment->Position "otherPosition", Float "range", Double "angleLeft", Double "angleRight"){
-      Float "xDirection" = \getX() - "otherPosition".getX() ;
-      Float "yDirection" = \getY() - "otherPosition".getY();
-      Double "radius" = \Math.sqrt(\Math.pow("xDirection",2.0)+\Math.pow("yDirection",2.0));
-      if "xDirection" == 0 {
-        if "yDirection" < 0 {
-          return "radius" <= "range" && "angleLeft" >= \Math.PI * 3.0 / 2.0 && "angleRight" <= \Math.PI * 3.0 / 2.0;
+    Boolean isWithin(Environment->Position otherPosition, Float range, Double angleLeft, Double angleRight){
+      Float xDirection = \getX() - otherPosition.getX() ;
+      Float yDirection = \getY() - otherPosition.getY();
+      Double radius = \Math.sqrt(\Math.pow(xDirection,2.0)+\Math.pow(yDirection,2.0));
+      if xDirection == 0 {
+        if yDirection < 0 {
+          return radius <= range && angleLeft >= \Math.PI * 3.0 / 2.0 && angleRight <= \Math.PI * 3.0 / 2.0;
         } 
-        else if "yDirection" > 0 {
-          return "radius" <= "range" && "angleLeft" >= \Math.PI / 2.0 && "angleRight" <= \Math.PI / 2.0;
+        else if yDirection > 0 {
+          return radius <= range && angleLeft >= \Math.PI / 2.0 && angleRight <= \Math.PI / 2.0;
         }
         else {
           return true;
         }
       }
       else {
-        Double "angle" = \Math.atan2("yDirection" , "xDirection");
-        return "radius" <= "range" && "angleLeft" >= "angle" && "angleRight" <= "angle";
+        Double angle = \Math.atan2(yDirection , xDirection);
+        return radius <= range && angleLeft >= angle && angleRight <= angle;
       }
     }
   }
   class 'packageName'."environments" Location Environment->Position{
-    Entity "host" = null;
-    ~Float "facing" = 0f;
-    ~Boolean "zonified" = false;
-    ~Tile locationTile = null;
-    ~Boolean hasChanged = true;
-    Boolean isWithin(Environment->Location "otherLocation", Float "range", Double "angleLeft", Double "angleRight"){
-      Float "tFacing" = "otherLocation".getFacing();
-      return \super.isWithin("otherLocation", "range", "angleLeft" \+ "tFacing", "angleRight" \+ "tFacing");
+    Entity host = null;
+    ~Float radius = 0.25f;
+    ~Float facing = 0f;
+    ~Area area = null;
+    Boolean isWithin(Environment->Location otherLocation, Float range, Double angleLeft, Double angleRight){
+      Float tFacing = otherLocation.getFacing();
+      return \super.isWithin(otherLocation, range, angleLeft \+ tFacing, angleRight \+ tFacing);
     }
-    List<Entity> getEntitiesWithin(Float "within"){
-      return "parent".getEntitiesWithin(this,"within");
+    Boolean isWithin(Environment->Position otherPosition){
+      return \super.isWithin(otherPosition, radius, \Math.PI * 2.0, 0.0);
+    }
+    List<Entity> getEntitiesWithin(Float within){
+      return area.getEntitiesWithin(this,within);
     }
     List<Entity> getEntitiesWithin(Float within, \EntityCriteria targetCriteria){
-      List<Entity> result = new ArrayList<Entity>();
-      for Entity candidate:"parent".getEntitiesWithin(this,within) {
-        if targetCriteria.satisfies(candidate) {
-          result.add(candidate);
-        }
-      }
-      return result;
+      return area.getEntitiesWithin(this,within,targetCriteria);
     }
-    List<Entity> getEntitiesWithin(Float "within", Double "angleLeft", Double "angleRight"){
-      return "parent".getEntitiesWithin(this,"within", "angleLeft", "angleRight");
+    List<Entity> getEntitiesWithin(Float within, Double angleLeft, Double angleRight){
+      return area.getEntitiesWithin(this,within, angleLeft, angleRight);
     }
     Entity getClosestEntity(\EntityCriteria criteria){
-      if "parent"!=null {
-        return "parent".getClosestEntity(this,criteria);
-      }
-      else {
-        return null;
-      }
+      return area.getClosestEntity(this,criteria);
     }
-    Path getClosestPath(){
-      if "parent"!=null {
-        return "parent".getClosestPath(this);
-      }
-      else {
-        return null;
-      }
+    Node getClosestNode(){
+      return area.getClosestNode(this);
     }
     Tile getTile(){
-      if "parent"!=null {
-        if hasChanged {
-          locationTile = "parent".getTile(this);
-        }
-        return locationTile;
-      }
-      else {
-        return null;
-      }
+      return area.getTile(this);
     }
     \TileList getTilesWithin(Float range, Tile->Id id){
-      if "parent"!=null {
-        return "parent".getTilesWithin(this,range,id);
-      }
-      else {
-        return null;
-      }
+      \TileList result = new \TileList();
+      area.collectTilesWithin(this,range,id,result, new HashSet<Area>());
+      return result;
     }
     Tile getClosestTile(Tile->Id id){
-      if "parent"!=null {
-        \TileList result = "parent".getTilesWithin(this,50f,id);
-        if result.isEmpty() {
-          return null;
-        }
-        else {
-          return result.get(0);
-        }
-      }
-      else {
-        return null;
-      }
+      return area.getClosestTile(this,id);
     }
-    Path getUnexploredPath(){
-      return  null;
+    Node getUnexploredNode(){
+      return area.getUnexploredNode();
     }
     
     void step(Float speed, Environment->Position toward){
       Double direction = \getDirectionTo(toward);
+      facing = "(float)(double)direction";
       \move(\Math.cos(direction) * speed, \Math.sin(direction) * speed); 
     }
-    void move(Float "xDirection", Float "yDirection"){
-      "locationX" \+= "xDirection";
-      "locationY" \+= "yDirection";
-      hasChanged = true;
+    void move(Float xDirection, Float yDirection){
+      x \+= xDirection;
+      y \+= yDirection;
       \update();
     }
-    void move(Double "xDirection", Double "yDirection"){
-      "locationX" \+= "(float)(double)xDirection";
-      "locationY" \+= "(float)(double)yDirection";
-      hasChanged = true;
+    void move(Double xDirection, Double yDirection){
+      x \+= "(float)(double)xDirection";
+      y \+= "(float)(double)yDirection";
       \update();
     }
-    void moveTo(Float "xDirection", Float "yDirection"){
-      if "zonified" {
-        "parent".getZone("zoneX","zoneY").remove("host");
+    void moveTo(Float xDirection, Float yDirection){
+      x = xDirection;
+      y = yDirection;
+      Area oldArea = area;
+      Area newArea = parent.getArea(this);
+      if oldArea!=null && oldArea!= newArea {
+        oldArea.remove(host);
+        newArea.add(host);
+        area = newArea;
       }
-      "zoneX" = "(int)(float)xDirection" / 1000;
-      "zoneY" = "(int)(float)yDirection" / 1000;
-      "locationX" = "xDirection" - "zoneX" * 1000;
-      "locationY" = "yDirection" - "zoneY" * 1000;
-      "parent".getZone("zoneX","zoneY").add("host");
-      "zonified" = true;
-      hasChanged = true;
+      else if oldArea == null {
+        newArea.add(host);
+        area = newArea;
+      }
     }
-    void moveTo(Environment->Position "otherPosition"){
-      if "zonified" {
-        "parent".getZone("zoneX","zoneY").remove("host");
-      }
-      "zoneX" = "otherPosition"."zoneX";
-      "zoneY" = "otherPosition"."zoneY";
-      "locationX" = "otherPosition"."locationX";
-      "locationY" = "otherPosition"."locationY";
-      "parent" = "otherPosition"."parent";
-      "parent".getZone("zoneX","zoneY").add("host");
-      "zonified" = true;
-      hasChanged = true;
+    void moveTo(Environment->Position otherPosition){
+      x = otherPosition.x;
+      y = otherPosition.y;
+      \update();
     }
     void update(){
-      if "locationX" > 1000 {
-        if "zonified" {
-           "parent".getZone("zoneX","zoneY").remove("host");
-        }
-        if "locationY" > 1000 {
-        
-          "locationX" = -1000f;
-          "locationY" = -1000f;
-          "zoneX" \+= 1;
-          "zoneY" \+= 1;
-        }
-        else if "locationY" < 1000 {
-          "locationX" = -1000f;
-          "locationY" = 1000f;
-          "zoneX" \+= 1;
-          "zoneY" \-= 1;
-        }
-        else {
-          "locationX" = -1000f;
-          "zoneX" \+= 1;
-        }
+	  Area oldArea = area;
+      Area newArea = parent.getArea(this);
+      if oldArea!=null && oldArea != newArea {
+        oldArea.remove(host);
+        newArea.add(host);
+        area = newArea;
       }
-      else if "locationX" < 1000 {
-        if "locationY" > 1000 {
-          "locationX" = 1000f;
-          "locationY" = -1000f;
-          "zoneX" \-= 1;
-          "zoneY" \+= 1;
-        }
-        else if "locationY" < 1000 {
-          "locationX" = 1000f;
-          "locationY" = 1000f;
-          "zoneX" \-= 1;
-          "zoneY" \-= 1;
-        }
-        else {
-          "locationX" = 1000f;
-          "zoneX" \-= 1;
-        }
+      else if oldArea == null {
+        newArea.add(host);
+        area = newArea;
       }
-      else {
-        if "locationY" > 1000 {
-          if "zonified" {
-            "parent".getZone("zoneX","zoneY").remove("host");
-          }
-          "locationY" = -1000f;
-          "zoneY" \+= 1;
-        }
-        else if "locationY" < 1000 {
-          if "zonified" {
-            "parent".getZone("zoneX","zoneY").remove("host");
-          }
-          "locationY" = 1000f;
-          "zoneY" \-= 1;
-        }
-      }
-      "parent".getZone("zoneX","zoneY").add("host");
-      "zonified" = true;
     }
   }
   interface 'packageName'."environments" FactoryHelper {
-    void populate(Environment "client", Integer "zoneX", Integer "zoneY", Float "locationX", Float "locationY"){}
+    void populate(Environment client, Float x, Float y){}
   }
   interface 'packageName'."environments" Factory {
     Environment create(){}
   }
   void load(){
-    ~Integer "index" = 0;
-    while "index" < "tiles".size() {
-      "tiles".get("index").load();
-      "index" \+= 1;
+    for Integer i < areaMaxX {
+      areas.put(i, new HashMap<Integer,Area>());
+      for Integer j < areaMaxY {
+      	areas.get(i).put(j, new Area(i,j,this));
+      }
     }
-    for Integer "xZone" : entityZones.keySet() {
-      for Integer "yZone" : entityZones.keySet() {
-		List<Entity> "entityZone" = entityZones.get("xZone").get("yZone");
-		"index" = 0;
-        while "index" < "entityZone".size() {
-          "entityZone".get("index").load();
-          "index" \+= 1;
-        }
+    for Integer i < areaMaxX {
+      for Integer j < areaMaxY {
+      	Area client = areas.get(i).get(j);
+      	client.add(\getAreaSafely(i \+ 1,j     ));
+      	client.add(\getAreaSafely(i \+ 1,j \+ 1));
+      	client.add(\getAreaSafely(i     ,j \+ 1));
+      	client.add(\getAreaSafely(i \- 1,j \+ 1));
+      	client.add(\getAreaSafely(i \- 1,j     ));
+      	client.add(\getAreaSafely(i \- 1,j \- 1));
+      	client.add(\getAreaSafely(i     ,j \- 1));
+      	client.add(\getAreaSafely(i \+ 1,j \- 1));
+      }
+    }
+    for Integer i < areaMaxX {
+      for Integer j < areaMaxY {
+      	areas.get(i).get(j).load();
       }
     }
   }
-  void tick(Double "millisSinceLastFrame"){
-    ~Integer "index" = 0;
-    while "index" < "tiles".size() {
-      "tiles".get("index").tick("millisSinceLastFrame");
-      "index" \+= 1;
-    }
-    for Integer "xZone" : entityZones.keySet() {
-      for Integer "yZone" : entityZones.keySet() {
-		List<Entity> "entityZone" = entityZones.get("xZone").get("yZone");
-		"index" = 0;
-        while "index" < "entityZone".size() {
-          "entityZone".get("index").tick("millisSinceLastFrame");
-          "index" \+= 1;
-        }
+  void tick(Double millisSinceLastFrame){
+    for Integer i < areaMaxX {
+      for Integer j < areaMaxY {
+      	areas.get(i).get(j).tick(millisSinceLastFrame);
       }
     }
   }
 > void setup(ParseContext data){
     Class factoryHelper = Environment->FactoryHelper;
-    Environment += ~List<factoryHelper> "helpers" = new ArrayList<factoryHelper>()
+    Environment += ~List<factoryHelper> helpers = new ArrayList<factoryHelper>()
+    Class generatorHelper = Tile->Generator;
+    Environment += ~List<generatorHelper> defaultGenerators = new ArrayList<generatorHelper>()
     \createList(Tile);
   }
 > void declaration(IToken declarationToken){
@@ -431,125 +278,22 @@ class 'packageName'."environments" Environment \Object Loaddable Tickable {
       if "environmentName".equals(''mapName'') {
         return new Environments->'mapName'();
       }|);
-    Map<String, String> tileSymbol = new HashMap<String, String>();
-    Map<String, String> pathSymbol = new HashMap<String, String>();
+    Set<String> underneathTiles = new HashSet<String>();
+    Set<String> nodeTiles = new HashSet<String>();
+    Set<String> backgroundTiles = new HashSet<String>();
+    
+    Tiles += class mapName // {}
     declarationToken : element : map_header {
       element : atom : IMPORT_TILE {
         atom : quark : tile_declaration {
-          StringBuilder tileNameBuilder = new StringBuilder();
-          IToken tileNameToken = quark->"tileName";
-          tileNameToken : energy : NAME {
-            tileNameBuilder.append('energy'.trim());
-          }
-          String tileName = mapName+'tileNameBuilder'; 
-          Class extendsClass;
-          if quark->"PATH" != null {
-            extendsClass = Path;
-            pathSymbol.put('quark->"symbolName"',tileName);
-          }
-          else {
-            extendsClass = Tile;
-          }
-          tileSymbol.put('quark->"symbolName"',tileName);
-          Tiles += class 'packageName'."environments" tileName extendsClass {
-          }
-          Tiles->*"create".prependToBody({
-            if "tileName".equals(''tileName'') {
-              return new Tiles->\tileName(); 
-            }
-          });
-          Tiles->\tileName += class 'packageName'."environments" Factory \Object Tile->Factory {
-              Tile create(){
-                return new Tiles->'tileName'();
-              }
-            }
-          quark : energy : entity {            
-            Class entityFactory = Entities.declaration(energy->"entity_declaration");
-            energy : quanta : PLUS {
-              Tiles->'tileName'->*.prependToBody(|"onTickEntityFactories".add(new entityFactory());|);
-            }
-            energy : quanta : MINUS {
-              Tiles->'tileName'->*.prependToBody(|"onLoadEntityFactories".add(new entityFactory());|);
-            }
-          }
-          
-        }
-      }
-    }
-    ~Integer mapIndex = 1;
-    declarationToken : element : map_declaration {
-      String mapElementName;
-      if element->"mapElementName" != null {
-        StringBuilder mapElementNameBuilder = new StringBuilder();
-        element : atom : mapElementName {
-          mapElementNameBuilder.append('atom');
-        }
-        mapElementName = mapElementNameBuilder.toString();
-      }
-      else {
-        mapElementName = mapName + mapIndex;
-        mapIndex \+= 1;
-      }
-      Environments->\mapName += class 'packageName'."environments" mapElementName \Object FactoryHelper {
-        void populate(Environment "client", Integer "zoneX", Integer "zoneY", Float "locationX", Float "locationY"){
-          Area "newArea" = new Area("zoneX", "zoneY", "locationX", "locationY", "client");
-        }
-      } 
-      Class mapElementClass = Environments->\mapName->\mapElementName;
-      Environments->\mapName->*.prependToBody(|"helpers".add(new mapElementClass());|);
-      ~Integer maxX = 0;
-      ~Integer yIndex = 0;
-      Map<Integer, Map<Integer, String>> knownPaths = new HashMap<Integer, Map<Integer, String>>();
-      element : atom : line {
-        ~Integer xIndex = 0;
-        atom : quark : tile_symbols {
-          Integer xValue = xIndex;
-          Integer yValue = yIndex;
-          String subTileName = 'quark'+'xValue'+'yValue';
-          String tileJustName = 'quark';
-          if pathSymbol.containsKey('quark') {
-            mapElementClass.getMethod("populate").appendToBody({
-              Path 'subTileName' = new Tiles->'tileSymbol.get(tileJustName)'("zoneX","zoneY","locationX" \+ 'xValue',"locationY" \+ 'yValue' ,"client");
-              'subTileName'.setArea("newArea");
-              "client".addTile('subTileName');
-			  "client"."paths".add('subTileName');
-			});
-			if true &&! knownPaths.containsKey(xValue) {
-			  knownPaths.put(xValue, new HashMap<Integer, String>());
-			}
-			knownPaths.get(xValue).put(yValue,subTileName);
-			if knownPaths.get(xValue).containsKey(yValue - 1 ) {
-			  mapElementClass.getMethod("populate").appendToBody({
-                'subTileName'.setUp('knownPaths.get(xValue).get(yValue - 1)');
-			  });
-			}
-			if knownPaths.containsKey(xValue - 1) && knownPaths.get(xValue - 1).containsKey(yValue) {
-			  mapElementClass.getMethod("populate").appendToBody({
-                'subTileName'.setLeft('knownPaths.get(xValue - 1).get(yValue)');
-			  });
-			}
-          }
-          else {
-            mapElementClass.getMethod("populate").appendToBody({
-              Tile 'subTileName' = new Tiles->'tileSymbol.get(tileJustName)'("zoneX","zoneY","locationX" \+ 'xValue',"locationY" \+ 'yValue' ,"client");
-              'subTileName'.setArea("newArea");            
-              "client".addTile('subTileName');
+          String tileName = Tiles.declaration(quark, mapName,underneathTiles,nodeTiles,backgroundTiles);
+          if tileName!=null {
+            Environments->\mapName->*.prependToBody({
+              "defaultGenerators".add(new Tiles->'mapName'->'tileName'->Generator());
             });
           }
-          xIndex \+= 1;
-          if xIndex > maxX {
-            maxX = xIndex;
-          }
         }
-        yIndex \+= 1;
       }
-      Integer maxXValue = maxX;
-      Integer maxYValue = yIndex;
-      mapElementClass.getMethod("populate").appendToBody({
-         "newArea".setWidth('maxXValue'+"f");
-         "newArea".setHeight('maxYValue'+"f");
-         "client".addArea("newArea");
-            });
     }
     Environments->\mapName->*.prependToBody({
         if name == null {
@@ -559,36 +303,352 @@ class 'packageName'."environments" Environment \Object Loaddable Tickable {
   }
 }
 class 'packageName'."environments" Area Environment->Position {
-    ~Float "width" = 10f;
-    ~Float "height" = 10f;
+    ~Float "width" = Environment."areaRadius";
+    ~Float "height" = Environment."areaRadius";
     ~List<Tile> tiles = new ArrayList<Tile>();
-    Boolean add(Tile newTile){
-      newTile.setArea(this);
-      return tiles.add(newTile);
+    ~List<Node> nodes = new ArrayList<Node>();
+    ~List<Entity> entities = new ArrayList<Entity>();
+    ~List<Area> neighbours = new ArrayList<Area>();
+    ~List<Environment\>Position> corners = new ArrayList<Environment\>Position>();
+> void setup(ParseContext data){
+  }
+  class TopLeftCorner / Environment->Position / {
+    Area parentArea = null;
+    Float getX(){
+      return parentArea.getX();
     }
-    Tile getTile(Environment->Position position){
-      for Tile tile:tiles {
-        if tile.isWithin(position) {
-          return tile;
+    Float getY(){
+      return parentArea.getY()+parentArea.getHeight();
+    }
+  }
+  class TopRightCorner / Environment->Position / {
+    Area parentArea = null;
+    Float getX(){
+      return parentArea.getX()+parentArea.getWidth();
+    }
+    Float getY(){
+      return parentArea.getY() \+ parentArea.getHeight();
+    }
+  }
+  class BottomLeftCorner / Environment->Position / {
+    Area parentArea = null;
+    Float getX(){
+      return parentArea.getX();
+    }
+    Float getY(){
+      return parentArea.getY();
+    }
+  }
+  class BottomRightCorner / Environment->Position / {
+    Area parentArea = null;
+    Float getX(){
+      return parentArea.getX()+parentArea.getWidth();
+    }
+    Float getY(){
+      return parentArea.getY();
+    }
+  }
+  Area *(Integer zoneX, Integer zoneY, Environment parentEnvironment){
+    this(zoneX \* Environment.areaRadius, zoneY \* Environment.areaRadius, parentEnvironment);
+  }
+  void load(){
+    corners.add(new TopLeftCorner(this));
+    corners.add(new TopRightCorner(this));
+    corners.add(new BottomLeftCorner(this));
+    corners.add(new BottomRightCorner(this));
+    
+    for Tile tile: tiles {
+      tile.load();
+    }
+    for Node node: nodes {
+      node.load();
+    }
+    for Entity entity: entities {
+      entity.load();
+    }
+  }
+  void tick(Double millisSinceLastFrame){
+    for Tile tile: tiles {
+      tile.tick(millisSinceLastFrame);
+    }
+    for Entity entity: entities {
+      entity.tick(millisSinceLastFrame);
+    }
+  }
+  Boolean add(Entity entity){
+    return entities.add(entity);
+  }
+  Boolean add(Area neighbour){
+    return neighbours.add(neighbour);
+  }
+  Boolean add(Tile newTile){
+    newTile.setArea(this);
+    return tiles.add(newTile);
+  }
+  Boolean remove(Entity entity){
+    return entities.remove(entity);
+  }
+  Boolean remove(Area neighbour){
+    return neighbours.remove(neighbour);
+  }
+  Boolean remove(Tile newTile){
+    newTile.setArea(null);
+    return tiles.remove(newTile);
+  }
+  Node getUnexploredNode(){
+    if nodes.isEmpty() == false {
+      return nodes.get(0).getUnexploredNode();
+    }
+    else {
+      Set<Area> collected = new HashSet<Area>();
+      for Integer spreadIndex < Environment.areaMaxX {
+        for Area neighbour: neighbours {
+          Node unexploredNode = neighbour.collectUnexploredNode(spreadIndex,collected);
+          if unexploredNode != null {
+            return unexploredNode;
+          }
         }
       }
       return null;
     }
-    List<Tile> getTilesWithin(Environment->Position position, Float range, Tile->Id tileId){
-      List<Tile> result = new ArrayList<Tile>();
-      if \getDistanceTo(position) >= range {
-        return result;
+  }
+  Node collectUnexploredNode(Integer spreadIndex, Set<Area> visited){
+    if spreadIndex == 0 {
+      if visited.add(this) && nodes.isEmpty() == false {
+        return nodes.get(0).getUnexploredNode();
       }
-      for Tile tile:tiles {
-        if tile.getId() == tileId && position.getDistanceTo(tile) < range {
-          result.add(tile);
+      return null;
+    }
+    else {
+      for Area neighbour: neighbours {
+        Node unexploredNode = neighbour.collectUnexploredNode(spreadIndex \- 1,visited);
+        if unexploredNode != null {
+          return unexploredNode;
         }
       }
-      return result;
+      return null;
     }
-    Boolean isWithin(Environment->Position "otherPosition"){
-      return \super.isWithin("otherPosition", "width"/4f \+ "height"/4f, \Math.PI * 2.0, 0.0);
+  }
+  Entity getEntity(Environment->Position position){
+    for Entity entity:entities {
+      if entity.getLocation().isWithin(position) {
+        return entity;
+      }
     }
+    return null;
+  }
+  List<Entity> getEntitiesWithin(Environment->Position position, Float range){
+    List<Entity> result = new ArrayList<Entity>();
+    \collectEntitiesWithin(position,range,new \EntityCriteria->\Free(),result,new HashSet<Area>());
+    return result;
+  }
+  List<Entity> getEntitiesWithin(Environment->Position position, Float range, Double angleLeft, Double angleRight){
+    List<Entity> result = new ArrayList<Entity>();
+    \collectEntitiesWithin(position,range,new \EntityCriteria->\AngleTo(position,angleLeft,angleRight),result,new HashSet<Area>());
+    return result;
+  }
+  List<Entity> getEntitiesWithin(Environment->Position position, Float range, \EntityCriteria criteria){
+    List<Entity> result = new ArrayList<Entity>();
+    \collectEntitiesWithin(position,range,criteria,result,new HashSet<Area>());
+    return result;
+  }
+  void collectEntitiesWithin(Environment->Position position, Float range, \EntityCriteria criteria, List<Entity> result, Set<Area> alreadyChecked){
+    if \shortestDistanceTo(position) >= range | alreadyChecked.add(this) == false{
+      return void;
+    }
+    for Entity entity :entities {
+      if criteria.satisfies(entity) && position.getDistanceTo(entity.getLocation()) < range {
+        result.add(entity);
+      }
+    }    
+    for Area neighbour: neighbours {
+      neighbour.collectEntitiesWithin(position,range,criteria,result,alreadyChecked);
+    }
+    return void;
+  }
+  Tile getTile(Environment->Position position){
+    for Tile tile:tiles {
+      if tile.isWithin(position) {
+        return tile;
+      }
+    }
+    return null;
+  }
+  Entity getClosestEntity(Environment->Position position, \EntityCriteria criteria){
+    List<Entity> candidates = new ArrayList<Entity>();
+    Set<Area> collected = new HashSet<Area>();
+    Integer spreadIndex = 0;
+    while spreadIndex <= Environment.areaMaxX {
+      \collectEntities(spreadIndex,candidates, criteria, collected);
+      if candidates.isEmpty() == false {
+        return \getClosestEntity(candidates, position);
+      }
+      spreadIndex \+= 1;
+    }
+    return null;
+  }
+  Entity getClosestEntity(List<Entity> candidates, Environment->Position position){
+    Double distance = Double.MAX_VALUE;
+    Entity closestEntity= null;
+    for Entity candidate : candidates {
+      if candidate.getLocation().getDistanceTo(position) < distance {
+        closestEntity = candidate;
+        distance = candidate.getLocation().getDistanceTo(position); 
+      }
+    }
+    return closestEntity;
+  } 
+  void collectEntities(Integer spreadIndex, List<Entity> candidates, \EntityCriteria criteria, Set<Area> collected){
+    if collected.add(this) {
+      if spreadIndex == 0 {
+        for Entity candidate: entities {
+          if criteria.satisfies(candidate) {
+            candidates.add(candidate);
+          }
+        }
+        candidates.addAll(entities);
+      }
+      else {
+        for Area neighbour : neighbours {
+          neighbour.collectEntities(spreadIndex \- 1, candidates, criteria, collected);
+        }
+      }
+    }
+  }
+  Node getClosestNode(Environment->Position position){
+    List<Node> candidates = new ArrayList<Node>();
+    Set<Area> collected = new HashSet<Area>();
+    Integer spreadIndex = 0;
+    while spreadIndex <= Environment.areaMaxX {
+      \collectNodes(spreadIndex,candidates,collected);
+      if candidates.isEmpty() == false {
+        return \getClosestNode(candidates, position);
+      }
+      spreadIndex \+= 1;
+    }
+    return null;
+  }
+  Node getClosestNode(List<Node> candidates, Environment->Position position){
+    Double distance = Double.MAX_VALUE;
+    Node closestNode = null;
+    for Node candidate : candidates {
+      if candidate.getDistanceTo(position) < distance {
+        closestNode = candidate;
+        distance = candidate.getDistanceTo(position); 
+      }
+    }
+    return closestNode;
+  } 
+  void collectNodes(Integer spreadIndex, List<Node> candidates, Set<Area> collected){
+    if collected.add(this) {
+      if spreadIndex == 0 {
+        candidates.addAll(nodes);
+      }
+      else {
+        for Area neighbour : neighbours {
+          neighbour.collectNodes(spreadIndex \- 1, candidates, collected);
+        }
+      }
+    }
+  }
+  Tile getClosestTile(Environment->Position position, Tile->Id tileId){
+    List<Tile> candidates = new ArrayList<Tile>();
+    Set<Area> collected = new HashSet<Area>();
+    Integer spreadIndex = 0;
+    while spreadIndex <= Environment.areaMaxX {
+      \collectTiles(spreadIndex,candidates,tileId,collected);
+      if candidates.isEmpty() == false {
+        return \getClosestTile(candidates, position);
+      }
+      spreadIndex \+= 1;
+    }
+    return null;
+  }
+  Tile getClosestTile(List<Tile> candidates, Environment->Position position){
+    Double distance = Double.MAX_VALUE;
+    Tile closestTile = null;
+    for Tile candidate : candidates {
+      if candidate.getDistanceTo(position) < distance {
+        closestTile = candidate;
+        distance = candidate.getDistanceTo(position); 
+      }
+    }
+    return closestTile;
+  }
+  void collectTiles(Integer spreadIndex, List<Tile> candidates, Tile->Id tileId, Set<Area> collected){
+    if collected.add(this) {
+      if spreadIndex == 0 {
+        for Tile tile:tiles {
+          if tile.getId() == tileId {
+            candidates.add(tile);
+          }
+        }
+      }
+      else {
+        for Area neighbour : neighbours {
+          neighbour.collectTiles(spreadIndex \- 1, candidates, tileId, collected);
+        }
+      }
+    }
+  }
+  void collectTilesWithin(Environment->Position position, Float range, Tile->Id tileId, List<Tile> result, Set<Area> alreadyChecked){
+    if \shortestDistanceTo(position) >= range | alreadyChecked.add(this) == false {
+      return void;
+    }
+    for Tile tile:tiles {
+      if tile.getId() == tileId && position.getDistanceTo(tile) <= range {
+        result.add(tile);
+      }
+    }
+    for Area neighbour: neighbours {
+      neighbour.collectTilesWithin(position,range,tileId,result,alreadyChecked);
+    }
+  }
+  Double shortestDistanceTo(Environment->Position otherPosition){
+    Double topLeft = corners.get(0).getDistanceTo(otherPosition);
+    Double topRight = corners.get(1).getDistanceTo(otherPosition);
+    Double bottomLeft = corners.get(2).getDistanceTo(otherPosition);
+    Double bottomRight = corners.get(3).getDistanceTo(otherPosition);
+    if topLeft < topRight {
+      if topLeft < bottomLeft {
+        if topLeft < bottomRight {
+          return topLeft;
+        }
+        else {
+           return bottomRight;
+        }
+      }
+      else {
+        if bottomLeft < bottomRight {
+          return bottomLeft;
+        }
+        else {
+          return bottomRight;
+        }
+      }
+    }
+    else {
+      if topRight < bottomLeft {
+        if topRight < bottomRight {
+          return topRight;
+        }
+        else {
+          return bottomRight;
+        }
+      }
+      else {
+        if bottomLeft < bottomRight {
+          return bottomLeft;
+        }
+        else {
+          return bottomRight;
+        }
+      }
+    }
+  }
+  Boolean isWithin(Environment->Position otherPosition){
+    return \super.isWithin(otherPosition, "width"/4f \+ "height"/4f, \Math.PI * 2.0, 0.0);
+  }
 }
 class 'packageName'."environments" Environments {
   @Environment create(String "environmentName"){

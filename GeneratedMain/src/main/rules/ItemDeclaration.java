@@ -17,8 +17,8 @@ public class ItemDeclaration extends ConcreteRule {
 	public void setup(){
 		set(
 				new ChainParser(
-					new AddTokenParser(
-						AssociationTokens.NAME,"itemName"),
+					new AddTokenToListParser(
+						AssociationTokens.NAME,"itemName","item_names"),
 					new ManyParser(
 							Rules.item_parameter),
 					new ManyParser(

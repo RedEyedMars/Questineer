@@ -25,7 +25,7 @@ public class Range extends ConcreteRule {
 							
 							new ChoiceParser(
 									GeneralTokens.DOTDOT,
-									GeneralTokens.DASH),
+									PaymentTokens.DASH),
 							new AddTokenParser(
 								Rules.num,"right")),
 					new OptionalParser(

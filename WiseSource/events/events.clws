@@ -7,8 +7,8 @@ class 'packageName'."events" Events {
 	eventNameSet.add(eventName);
 	String cev = \^eventName;
     Events += class 'packageName'."events" cev Event {}
-    Events->\cev += class 'packageName'."events" Listener \Object Listenable {
-      void listen(Event "event"){}
+    Events->\cev += class 'packageName'."events" Listener \Object Listenable<Events\>'cev'> {
+      void listen(Events->'cev' event){}
     }
     declaration : element : parameter {
 	  element : atom : type_name {

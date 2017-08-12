@@ -1,6 +1,7 @@
 base is silent
 	( NEWLINE | COMMENTS | import_any )*
 import_any
+	IMPORT_PAYMENT_TYPE
 	IMPORT_EVENT
 	IMPORT_ITEM
 	IMPORT_IMAGE
@@ -35,6 +36,7 @@ import entities/relations/reasons/reasons
 import entities/entities
 import environments/environments
 import environments/tiles
+import overview/treasuries
 import events/events
 import general/general
 import images/images

@@ -29,7 +29,7 @@ public class EntityDefinition extends ConcreteRule {
 							new OptionalParser(
 									
 										new ChainParser(
-											GeneralTokens.DASH,
+											PaymentTokens.DASH,
 											new AddTokenParser(
 												GeneralTokens.INTEGER,"right")))),"statRange"),
 					new ManyParser(
@@ -43,7 +43,7 @@ public class EntityDefinition extends ConcreteRule {
 									new OptionalParser(
 											
 												new ChainParser(
-													GeneralTokens.DASH,
+													PaymentTokens.DASH,
 													new AddTokenParser(
 														GeneralTokens.INTEGER,"right")))),"statRange"))),
 					new AddTokenParser(
