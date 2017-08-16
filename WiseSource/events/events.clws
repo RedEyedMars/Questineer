@@ -28,7 +28,7 @@ class 'packageName'."events" Events {
 		'eName'+"Listeners".add("newListener");
 	  }
 	  \createList(Listenable);
-	  inputClass += ~\ListenableList 'eName'+"Listeners" 
+	  inputClass += ~Listenable->List 'eName'+"Listeners" = new Listenable->List()
 	}
 	return inputClass.getMethod(newMethodName).getContext();
   }
@@ -41,7 +41,7 @@ class 'packageName'."events" Events {
 		'eName'+"Listeners".add("newListener");
 	  }
 	  \createList(Listenable);
-	  inputClass += ~\ListenableList 'eName'+"Listeners" 
+	  inputClass += ~Listenable->List 'eName'+"Listeners" = new Listenable->List()
 	}
 	Method establishedMethod = inputClass.getMethod(newMethodName);
 	establishedMethod.appendToBody(body);

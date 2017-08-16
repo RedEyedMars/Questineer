@@ -27,8 +27,16 @@ public class CrawlerElement extends ConcreteRule {
 					ConditionTokens.NEWTABTAB,
 					TileTokens.BRANCH,
 					new AddTokenParser(
-						new MultipleParser(
-							Rules.branch_element),"branch")),
+						
+						new ChainParser(
+							new OptionalParser(
+									
+										new ChainParser(
+											new AddTokenParser(
+												GeneralTokens.INTEGER,"sides"),
+											TileTokens.SIDES)),
+							new MultipleParser(
+									Rules.branch_element)),"branch")),
 				new ChainParser(
 					ConditionTokens.NEWTABTAB,
 					new AddTokenParser(

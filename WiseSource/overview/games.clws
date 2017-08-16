@@ -1,0 +1,77 @@
+> String mainStringArgs = "String[]";
+class 'packageName'."game" Game \Thread {
+  @Boolean isRunning = true;
+  @Game game = null;
+  ~List<Environment> environments = new ArrayList<Environment>();
+  Game *('mainStringArgs' args){
+    environments.add(new Environments->\Forest());
+    environments.add(new Environments->\Town());
+    for Environment environment:environments {
+      environment.load();
+    }
+    \start();
+    new Game->Gui(this);
+    new Game->Terminal(this).start();
+  }
+  void run(){
+    Double lastTick = \System.currentTimeMillis()/1000.0;
+    Double thisTick = 0.0;
+    Game.game = this;
+    while Game.isRunning {
+      thisTick = \System.currentTimeMillis()/1000.0;
+      for Environment environment:environments {
+        environment.tick(thisTick-lastTick);
+      }
+      lastTick = thisTick;
+      if Game->Gui.gui != null {
+        Game->Gui.gui.repaint();
+      }
+    }
+    Game->Terminal.in.close();
+  }
+  class Terminal / \Thread / {
+    Game game = null;
+    @\Scanner in = new \Scanner(\System.in);
+    void run(){
+      while Game.isRunning {
+        #try {#
+          if in.nextLine().equals(''"exit"'') {
+            Game.isRunning = false;
+          }
+        #}#
+        #catch Exception e {
+        }#
+      }
+    }
+  }
+  @void main('mainStringArgs' args){
+    new Game(args);
+  }
+  class Gui / JFrame / {
+    ~Game game = null;
+    @Gui gui = null;
+    Gui *(Game initialParent){
+      \super(''"Questineer"'');
+      \setGame(initialParent);
+      \setSize(600,400);
+      \setVisible(true);
+      \setDefaultCloseOperation(this."EXIT_ON_CLOSE");
+      gui = this;
+    }
+    void paint(Graphics g){
+      List<Tile> tileList = game.getEnvironments().get(0).getTiles().get(Tiles->\Forest->\Path.id);
+      if tileList!=null  && tileList.isEmpty()==false {
+        for Integer i < tileList.size() {
+          Tile tile = tileList.get(i);
+          Tiles->\Forest->\Path path = "(Tiles.Forest.Path)tileList".get(i);
+          if path.getHome()!=null {
+			g.drawLine("(int)(path.getX()+100), (int)(path.getY()+100), (int)(path.getHome().getX()+100), (int)(path.getHome().getY()+100)");
+		  }
+		  else {
+			g.drawOval("(int)(path.getX()+100), (int)(path.getY()+100), 3, 3");
+		  }
+        }
+      }
+    }
+  }
+}

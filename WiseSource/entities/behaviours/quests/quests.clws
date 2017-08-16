@@ -28,7 +28,7 @@ class 'packageName'."entities"."behaviours"."quests" Quest Object Usable {
   ~Integer    status             = UNSTARTED;
   ~Activity currentActivity      = null;
   ~Integer currentActivityIndex  = -1;
-  ~List<Activity> activities      = new ArrayList<Activity>();
+  ~Activity->List activities      = new Activity->List();
   Quest->Id getId(){ return null; }
   Boolean canChase(){
     return false;

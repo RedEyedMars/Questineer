@@ -38,7 +38,7 @@ class 'packageName'."entities"."behaviours"."activities" Activity \Object Source
   Boolean hasFailed(Entity host){
     return failed;
   }
-  List<Usable> getUsables(){
+  Usable->List getUsables(){
     return null;
   }
   Usable pick(){
@@ -80,7 +80,7 @@ class 'packageName'."entities"."behaviours"."activities" Activity \Object Source
 	return false;
   }
   void on(Events->\Idle event){
-    List<Entity> entitiesToTarget = event.getHost().getLocation().getEntitiesWithin(20f);
+    Entity->List entitiesToTarget = event.getHost().getLocation().getEntitiesWithin(20f);
 	for Entity candidate : entitiesToTarget {
 	  for Usable usable : \getUsables() {
 	    if usable.getTargetCriteria().satisfies(candidate) {
@@ -113,7 +113,7 @@ class 'packageName'."entities"."behaviours"."activities" Activities {
     
     Activities += class activityName / Activity / {
       @Activity->Id id = new Activity->Id();
-      @List<Usable> allUsables = new ArrayList<Usable>();
+      @Usable->List allUsables = new Usable->List();
       ~Entity host = null;
       String getName(){
         return ''activityName'';
@@ -121,7 +121,7 @@ class 'packageName'."entities"."behaviours"."activities" Activities {
       String getDescription(){
         return ''description'';
       }
-      List<Usable> getUsables(){
+      Usable->List getUsables(){
         return allUsables;
       }
       Boolean hasSucceeded(Entity host){

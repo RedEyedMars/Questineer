@@ -3,7 +3,7 @@ class 'packageName'."environments" Tiles {
     return null;
   }
 > ~Integer costIndex = 0;
-> String declaration(IToken declarationToken, String mapName, Set<String> underneathTiles, Set<String> backgroundTiles, Set<String> nodeTiles){
+> String declaration(IToken declarationToken, String mapName, List<String> underneathTiles, List<String> backgroundTiles, List<String> nodeTiles){
     if declarationToken->"underneath" != null{
       declarationToken : element : underneath {
         element : atom : tile_names {
@@ -37,6 +37,10 @@ class 'packageName'."environments" Tiles {
       extendsClass = Tile;
     }
     Tiles->'mapName' += class 'packageName'."environments" tileName extendsClass {
+      @Tile->Id id = new Tile->Id();
+      Tile->Id getId(){
+        return id;
+      }
     }
     Tiles->*"create".prependToBody({
       if "tileName".equals(''tileName'') {
@@ -55,22 +59,72 @@ class 'packageName'."environments" Tiles {
     }
     \createList(Treasury->Cost);
 	Tiles->'mapName'->'tileName' += class Generator / Tile->Generator / {
-      \CostList getCosts(){
-		\CostList costs = new \CostList();
+      Treasury->Cost->List getCosts(){
+		Treasury->Cost->List costs = new Treasury->Cost->List();
 	  }
 	  Tile generateTile(Environment parent){
 	  }
 	}
 	Tiles->'mapName'->'tileName' += class Circle / Tiles->'mapName'->'tileName' / {
+	  Double direction = 0.0;
 	  Float radius = 1f;
-	  Boolean isWithin(Environment.Position otherPosition) {
-		return \super.isWithin(otherPosition,radius,Math.PI*2.0,0.0);
+	  Boolean isWithin(Environment->Position otherPosition) {
+		return \super.isWithin(otherPosition,radius,\Math.PI*2.0,0.0);
 	  }
 	  Environment->Position getPoint(Environment parent){
-        Float direction = "(float)(Math.PI*2.0*\Math.random())";
+        Float direction = "(float)(Math.PI*2.0*Math.random())";
         Float pX = "(float)(radius*Math.cos(direction))";
         Float pY = "(float)(radius*Math.sin(direction))";
-	    return new Environment->Position(\getX() \+ dX,\getY() \+ dY,parent);
+	    return new Environment->Position(\getX() \+ pX,\getY() \+ pY,parent);
+	  }
+    }
+    Tiles->'mapName'->'tileName' += class Court / Tiles->'mapName'->'tileName' / {
+      ~Double direction = 0.0;
+      Court *(Float initialX, Float initialY, Environment parent, Double initialDirection, Float initialWidth, Float initialHeight){
+        \super(initialX,initialY,parent);
+        \setWidth(initialWidth);
+        \setHeight(initialHeight);
+        direction = initialDirection;
+      }
+	  Boolean isWithin(Environment->Position otherPosition) {
+		return \super.isWithin(otherPosition,\getWidth(),\getHeight());
+	  }
+	  Environment->Position getPoint(Environment parent){
+	    Float totalHeight = \getHeight() \+ \getWidth();
+		Double random = \Math.random()*totalHeight;
+		if random <= height {
+		  Float aX = "(float)(getWidth()*Math.random()-getWidth()/2f)";
+		  Float aY = "(float)(getHeight()*Math.random())";
+		  Float pX = "(float)(aX*Math.cos(direction)-aY*Math.sin(direction))";
+		  Float pY = "(float)(aY*Math.cos(direction)+aX*Math.sin(direction))";
+		  return new Environment->Position(\getX() \+ pX, \getY() \+ pY, parent);
+		}
+		else {
+		  Float circleDirection =  "(float)(Math.PI*2.0*Math.random())";
+		  Float radius = \getWidth() / 2f;
+		  if circleDirection >= \Math.PI {
+			Float aX = "(float)(radius*Math.random()*Math.cos(circleDirection))";
+			Float aY = "(float)(radius*Math.random()*Math.sin(circleDirection))";
+			Float pX = "(float)(aX*Math.cos(direction)-aY*Math.sin(direction))";
+			Float pY = "(float)(aY*Math.cos(direction)+aX*Math.sin(direction))";
+			return new Environment->Position(\getX() \+ pX, \getY() \+ pY, parent);
+		  }
+		  else {
+			Float aX = "(float)(radius*Math.random()*Math.cos(circleDirection))";
+			Float aY = "(float)(radius*Math.random()*Math.sin(circleDirection))" \+ \getHeight();
+			Float pX = "(float)(aX*Math.cos(direction)-aY*Math.sin(direction))";
+			Float pY = "(float)(aY*Math.cos(direction)+aX*Math.sin(direction))";
+			return new Environment->Position(\getX() \+ pX, \getY() \+ pY, parent);
+		  }
+		}
+	  }
+    }
+    Tiles->'mapName'->'tileName' += class Square / Tiles->'mapName'->'tileName' / {
+	  Boolean isWithin(Environment->Position otherPosition) {
+		return \super.isWithin(otherPosition,width,height);
+	  }
+	  Environment->Position getPoint(Environment parent){
+        return new Environment->Position(\getX()+ \getWidth()*Range.getRandomFloat(), \getY()+ \getHeight()*Range.getRandomFloat(),parent);
 	  }
     }
 	declarationToken : element : rate {
@@ -102,27 +156,47 @@ class 'packageName'."environments" Tiles {
 	Tiles->'mapName'->'tileName'->Generator->*"getCosts".appendToBody({return "costs";});
     if declarationToken->"crawler" == null {
       Tiles->'mapName'->'tileName'->Generator->*"generateTile".appendToBody({
-        Environment->Position point = parent.getTile(Tiles->'underneathTiles.get(0)'.id).getPoint(parent);
-		return new Tiles->'mapName'->'tileName'(point.getX(),point.getY(), parent);
-		});
+        Tile underneathTile = parent.getTile(Tiles->'mapName'->'underneathTiles.get(0)'.id);
+        if underneathTile != null {
+          Environment->Position point = underneathTile.getPoint(parent);
+		  return new Tiles->'mapName'->'tileName'(point.getX(),point.getY(), parent);
+		}
+		else {
+		  return null;
+		}
+	  });
     }
     else {
       declarationToken : element : crawler {
         String directionValue = "direction)";
         String openNodeValue = "(float)(openNode";
-        Tiles->'mapName'->'tileName'->Generator += ~List<Tiles\>'mapName'\>'tileName'> openNodes = new ArrayList<Tiles\>'mapName'\>'tileName'>()
+        \createList(Tiles->'mapName'->'tileName');
+        Tiles->'mapName'->'tileName'->Generator += @Tiles->'mapName'->'tileName'->List openNodes = new Tiles->'mapName'->'tileName'->List()
         Tiles->'mapName'->'tileName'->Generator->*"generateTile".appendToBody({
           if openNodes.isEmpty() {
             return null;
           }
-          Tiles->'mapName'->'tileName' openNode = Range.select(openNodes);
-          Double direction = \Math.PI * 2.0 * \Math.random();
-          Double length = `\primeRange(element->"length")`.getRandom();
+          Tiles->'mapName'->'tileName' openNode = null;
+          while openNode == null {
+            openNode = Range.select(openNodes);
+            if openNode == null {
+              return null;
+            }
+            else {
+              if Tiles->'mapName'->'tileName'."directionsHandler".hasOpenDirection(openNode) == false {
+                openNodes.remove(openNode);
+                openNode = null;
+              }
+            }
+          }
+          Double direction = Tiles->'mapName'->'tileName'."directionsHandler".getOpenDirection(openNode);
+          
+          Float length = 5f;
           Tiles->'mapName'->'tileName' newNode = new Tiles->'mapName'->'tileName'(
-            'openNodeValue'.getX() \+ length \* \Math.cos('directionValue'),
-            'openNodeValue'.getY() \+ length \* \Math.sin('directionValue'),
+            'openNodeValue'.getX() \+ length \* Range.normalize(Math.cos('directionValue')),
+            'openNodeValue'.getY() \+ length \* Range.normalize(Math.sin('directionValue')),
             parent);
-          newNode.connect(openNode);
+          newNode.connect(openNode, direction);
           openNodes.add(newNode);
           if openNode.getNodes().size() >= openNode.getBranchLimit() {
             openNodes.remove(openNode);
@@ -132,6 +206,7 @@ class 'packageName'."environments" Tiles {
 		~Float currentChance = 0f;
 		~Boolean isFirst = true;
 		element : atom : branch {
+		  DirectionsHandler.addDirectionHandler(Tiles->'mapName'->'tileName',atom);
 		  atom : quark : branch_element {
 		    currentChance \+= Float.parseFloat('quark->"chance"') / 100f;
 		    Float chanceValue = currentChance;
@@ -218,9 +293,13 @@ class 'packageName'."environments" Tiles {
     return tileName;
   }
 > Statement getGenerateShape(IToken shapeToken, String mapName, String tileName){
+    Parameters parameters = new Parameters ();
+    parameters.add(|"newNode".getX()|);
+    parameters.add(|"newNode".getY()|);
+    parameters.add(|"parent"|);
+    parameters.add(|"direction"|);
     String shapeTileName = 'shapeToken->"tile_names"';
     String shapeShapeName = 'shapeToken->"shape_type"';
-    Parameters parameters = new Parameters ();
     shapeToken : element : LENGTH {
       parameters.add(|"length"|);
     }
@@ -232,7 +311,7 @@ class 'packageName'."environments" Tiles {
     }
     return |"parent".addTile(new Tiles->'mapName'->'shapeTileName'->'shapeShapeName'(`parameters`)) ;|;
   }
-  
+
 > Statement getTileCost(IToken tileCostToken, String mapName, String tileName){
     String costName = "Cost" \+ costIndex;
     costIndex \+= 1;
@@ -337,7 +416,7 @@ class 'packageName'."environments" Tile Environment->Position Loaddable Tickable
     Float getDefaultRate(){
       return 0f;
     }
-    \CostList getCosts(){
+    Treasury->Cost->List getCosts(){
 	  return null;
     }
 	Tile generateTile(Environment parent){
@@ -374,6 +453,8 @@ class 'packageName'."environments" Tile Environment->Position Loaddable Tickable
   ~Integer "limit" = 5;
   ~Boolean isNode = false;
   ~Area area = null;
+  ~Entity->Factory->List onTickEntityFactories = new Entity->Factory->List();
+  ~Entity->Factory->List onLoadEntityFactories = new Entity->Factory->List();
   
   Tile->Id getId(){
     return null;
@@ -408,12 +489,14 @@ class 'packageName'."environments" Tile Environment->Position Loaddable Tickable
   }
   void tick(Double millisSinceLastFrame){
     if \Math.random() > 0.05 && "numberOfAliveGeneratedEntities" < "limit" {
-      Double randomIndex = \Math.random() * "onTickEntityFactories".size();
-      Entity newEntity = "onTickEntityFactories".get("(int)(double)randomIndex").create();
-      newEntity.setSpawn(this);
-      newEntity.getLocation().moveTo(this);
-      newEntity.add(new Tile->Listener->Die(this));
-      "numberOfAliveGeneratedEntities" \+= 1;
+      Entity->Factory entityFactory = Range.select("onTickEntityFactories");
+      if entityFactory != null {
+        Entity newEntity = entityFactory.create();
+        newEntity.setSpawn(this);
+        newEntity.getLocation().moveTo(this);
+        newEntity.add(new Tile->Listener->Die(this));
+        "numberOfAliveGeneratedEntities" \+= 1;
+      }
     }
   }
   void decreaseAliveGeneratedEntities(){
@@ -426,26 +509,26 @@ class 'packageName'."environments" Tile Environment->Position Loaddable Tickable
     return new Environment->Position(width*Range.getRandomFloat(), height*Range.getRandomFloat(), parent);
   }
 > void setup(ParseContext data){
-    Class entityFactory = Entity->Factory;
-    Tile += ~List<entityFactory> "onTickEntityFactories" = new ArrayList<entityFactory>()
-    Tile += ~List<entityFactory> "onLoadEntityFactories" = new ArrayList<entityFactory>()
+    \createList(Entity->Factory);
     \createMap(Association->Id,Association);
     Tile += ~\IdMap->\_Association "associations"
   }
 }
 class 'packageName'."environments" Node Tile{
   
-  ~List<Node> nodes = new ArrayList<Node>();
+  ~Node->List nodes = new Node->List();
   ~Node home = null;
+  ~Double directionOfHome = null;
   ~Integer branchLimit = 0;
   ~Boolean isStop = false;
   Boolean isNode(){
     return true;
   }
-  void connect(Node otherNode){
+  void connect(Node otherNode, Double newHomeDirection){
     home = otherNode;
     otherNode.nodes.add(this);
     nodes.add(otherNode);
+    directionOfHome = newHomeDirection;
   }
   Node getUnexploredNode(){
     if nodes.isEmpty() || nodes.size() == 1 {

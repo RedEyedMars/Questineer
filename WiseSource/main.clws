@@ -1,4 +1,4 @@
-
+< Math			: \java.\lang;
 < StringBuilder : \java.\lang;
 < Iterator		: \java.\util;
 < List 			: \java.\util;
@@ -10,6 +10,7 @@
 < Set 			: \java.\util;
 < HashSet 		: \java.\util;
 < Comparator	: \java.\util;
+< Scanner   	: \java.\util;
 < File			: \java.\io;
 < Entry			: \com.\rem.\parser.\generation;
 < ListEntry		: \com.\rem.\parser.\generation;
@@ -22,10 +23,13 @@
 < HeroStats 	: \lists;
 < GeneralTokens	: \lists;
 < Listnames		: \lists;
+< JFrame		: \javax.\swing;
+< Graphics		: \java.\awt;
 
 #import images/image.clws#
 
 import general/general.clws
+import overview/games.clws
 import overview/menus.clws
 import overview/treasuries.clws
 import entities/entities.clws

@@ -34,6 +34,7 @@ tileToken-s
 	"Underneath" as UNDERNEATH
 	"Crawler" as CRAWLER
 	"Branch" as BRANCH
+	"Sides" as SIDES
 	"otherwise" as OTHERWISE
 	"encounter" as ENCOUNTER
 	"Small" as SMALL
@@ -71,7 +72,7 @@ tile_element is silent
 	NEWLINE+
 crawler_element is silent
 	NEWTABTAB TILE_LENGTH range as length
-	NEWTABTAB BRANCH branch_element+ as branch
+	NEWTABTAB BRANCH ((INTEGER as sides SIDES)? branch_element+ ) as branch
 	NEWTABTAB ( (ENCOUNTER) as eventName BODY ) as event
 	NEWTABTAB ( TILE_CRAWLER_TYPE (OTHERWISE | num as chance PERCENT) ) as generate_shape
 branch_element

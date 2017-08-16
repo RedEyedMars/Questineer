@@ -110,13 +110,13 @@ class 'packageName'."entities" Entity \Object Source Loaddable Tickable {
   ~Float "weightHeld" = 0f;
   ~Float "walkingSpeed" = 0.2f;
   ~Tile "spawn" = null;
-  ~\ItemList "equippedItems";
-  ~Skill focusSkill;
+  ~Item->List "equippedItems" = new Item->List();
+  ~Skill focusSkill = null;
   ~Environment->Location location = new Environment->Location(-1001f,-1001f,null,this);
   ~\EntityMap->\_Reason "relationships";
   ~Activity currentActivity = null;
   ~Integer currentActivityIndex = -1;
-  List<Activity> activityList = new ArrayList<Activity>();
+  ~Activity->List activityList = new Activity->List();
   
   Float getItemDamage(){
     Float "sum" = 0f;
@@ -208,6 +208,8 @@ class 'packageName'."entities" Entity \Object Source Loaddable Tickable {
     Entity.addGainLoss(Activity,Entity);
     
     \createList(Item);
+    \createList(Usable);
+    \createList(Activity);
     \createListMap(Source, Int);
     \createMap(Entity, Relationship->Reason);
     
@@ -250,7 +252,7 @@ class 'packageName'."entities" Entity \Object Source Loaddable Tickable {
 		    "percent" \-= "amount" / "inputEntity".'vName'."value";
 		  }
         }
-      Entity.addVariable(Entity->'statName' 'vName';);
+      Entity += ~Entity->'statName' 'vName' = new Entity->'statName'() 
       randomStatBody.add(|case 'allStatList.getSize()' {return 'vName';}|);
       allStatList.add(|'vName'|);
       Entity->'statName'.getContext().setEnder(|\getValue()|);
@@ -412,8 +414,7 @@ class 'packageName'."entities" Entity \Object Source Loaddable Tickable {
 	    }
 	  }
 	\createListMap(Source, inputClass);
-	String sources = "Sources";
 	String inputName = "_" + inputClass.getName();
-	outputClass += ~ListMaps->\sources->\inputName 'asList'
+	outputClass += ~ListMaps->\Sources->\inputName 'asList' = new ListMaps->\Sources->\inputName()
   }
 }

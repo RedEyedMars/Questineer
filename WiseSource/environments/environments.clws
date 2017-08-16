@@ -4,6 +4,7 @@ class 'packageName'."environments" Environment \Object Loaddable Tickable {
   String name = null;
   ~Map<Integer, Map<Integer,Area>> areas = new HashMap<Integer,Map<Integer,Area>>();
   ~List<Tile\>Generator> generators = new ArrayList<Tile\>Generator>();
+  ~Map<Tile\>Id, List<Tile>> tiles = new HashMap<Tile\>Id, List<Tile>>();
   @Float areaRadius = 10f;
   @Integer areaMaxX = 100;
   @Integer areaMaxY = 100;
@@ -37,8 +38,8 @@ class 'packageName'."environments" Environment \Object Loaddable Tickable {
   Area getArea(Environment->Position position){
     return areas.get(position.getZoneX()).get(position.getZoneY());
   }
-  \TileList getTilesWithin(Environment->Position position, Float range, Tile->Id tileId){
-    \TileList result = new \TileList();
+  \Tile->List getTilesWithin(Environment->Position position, Float range, Tile->Id tileId){
+    Tile->List result = new Tile->List();
     \getArea(position).collectTilesWithin(position,range,tileId, result, new HashSet<Area>());
     return result;
   }
@@ -50,7 +51,19 @@ class 'packageName'."environments" Environment \Object Loaddable Tickable {
   Node getClosestNode(Environment->Position position){
     return \getArea(position).getClosestNode(position);
   }
+  Tile getTile(Tile->Id findId){
+    if tiles.containsKey(findId) == false || tiles.get(findId).isEmpty() {
+      return null;
+    }
+    else {
+      return Range.select(tiles.get(findId));
+    }
+  }
   void addTile(Tile newTile){
+    if tiles.containsKey(newTile.getId()) == false {
+      tiles.put(newTile.getId(), new ArrayList<Tile>());
+    }
+    tiles.get(newTile.getId()).add(newTile);
     \getArea(newTile).add(newTile);
   }
   void addGenerator(Tile->Generator generator){
@@ -59,7 +72,7 @@ class 'packageName'."environments" Environment \Object Loaddable Tickable {
   Entity getClosestEntity(Environment->Position position, \EntityCriteria criteria){
     return \getArea(position).getClosestEntity(position,criteria);
   }
-  List<Entity> getEntitiesWithin(Environment->Position position, Float within){
+  Entity->List getEntitiesWithin(Environment->Position position, Float within){
     return \getArea(position).\getEntitiesWithin(position,within);
   }
   class 'packageName'."environments" Position {
@@ -106,6 +119,11 @@ class 'packageName'."environments" Environment \Object Loaddable Tickable {
       }
     }
     
+    Boolean isWithin(Environment->Position otherPosition, Float width, Float height){
+      Float dX = otherPosition.getX() \- x;
+      Float dY = otherPosition.getY() \- y;
+      return dX >= 0 && dX <= width && dY >= 0 && dY <= height;
+    }
     Boolean isWithin(Environment->Position otherPosition, Float range, Double angleLeft, Double angleRight){
       Float xDirection = \getX() - otherPosition.getX() ;
       Float yDirection = \getY() - otherPosition.getY();
@@ -139,13 +157,13 @@ class 'packageName'."environments" Environment \Object Loaddable Tickable {
     Boolean isWithin(Environment->Position otherPosition){
       return \super.isWithin(otherPosition, radius, \Math.PI * 2.0, 0.0);
     }
-    List<Entity> getEntitiesWithin(Float within){
+    Entity->List getEntitiesWithin(Float within){
       return area.getEntitiesWithin(this,within);
     }
-    List<Entity> getEntitiesWithin(Float within, \EntityCriteria targetCriteria){
+    Entity->List getEntitiesWithin(Float within, \EntityCriteria targetCriteria){
       return area.getEntitiesWithin(this,within,targetCriteria);
     }
-    List<Entity> getEntitiesWithin(Float within, Double angleLeft, Double angleRight){
+    Entity->List getEntitiesWithin(Float within, Double angleLeft, Double angleRight){
       return area.getEntitiesWithin(this,within, angleLeft, angleRight);
     }
     Entity getClosestEntity(\EntityCriteria criteria){
@@ -157,8 +175,8 @@ class 'packageName'."environments" Environment \Object Loaddable Tickable {
     Tile getTile(){
       return area.getTile(this);
     }
-    \TileList getTilesWithin(Float range, Tile->Id id){
-      \TileList result = new \TileList();
+    Tile->List getTilesWithin(Float range, Tile->Id id){
+      Tile->List result = new Tile->List();
       area.collectTilesWithin(this,range,id,result, new HashSet<Area>());
       return result;
     }
@@ -202,6 +220,7 @@ class 'packageName'."environments" Environment \Object Loaddable Tickable {
     void moveTo(Environment->Position otherPosition){
       x = otherPosition.x;
       y = otherPosition.y;
+      parent = otherPosition.getParent();
       \update();
     }
     void update(){
@@ -249,8 +268,16 @@ class 'packageName'."environments" Environment \Object Loaddable Tickable {
       	areas.get(i).get(j).load();
       }
     }
+    
   }
+  ~Integer ticks = 0;
   void tick(Double millisSinceLastFrame){
+    if ticks < 25000 {
+      for Tile->Generator generator: "defaultGenerators" {
+        generator.generate(this);
+      }
+      ticks \+= 1;
+    }
     for Integer i < areaMaxX {
       for Integer j < areaMaxY {
       	areas.get(i).get(j).tick(millisSinceLastFrame);
@@ -263,11 +290,15 @@ class 'packageName'."environments" Environment \Object Loaddable Tickable {
     Class generatorHelper = Tile->Generator;
     Environment += ~List<generatorHelper> defaultGenerators = new ArrayList<generatorHelper>()
     \createList(Tile);
+    \createList(Node);
   }
 > void declaration(IToken declarationToken){
     String mapName = 'declarationToken->"map_header"->"mapName"';
     
     Environments += class 'packageName'."environments" mapName Environment {
+      void load(){
+        super.load();
+      }
     }
     Environments->\mapName += class 'packageName'."environments" Factory \Object Environment->Factory {
         Environment create(){
@@ -278,23 +309,28 @@ class 'packageName'."environments" Environment \Object Loaddable Tickable {
       if "environmentName".equals(''mapName'') {
         return new Environments->'mapName'();
       }|);
-    Set<String> underneathTiles = new HashSet<String>();
-    Set<String> nodeTiles = new HashSet<String>();
-    Set<String> backgroundTiles = new HashSet<String>();
+    List<String> underneathTiles = new ArrayList<String>();
+    List<String> nodeTiles = new ArrayList<String>();
+    List<String> backgroundTiles = new ArrayList<String>();
     
     Tiles += class mapName // {}
     declarationToken : element : map_header {
       element : atom : IMPORT_TILE {
         atom : quark : tile_declaration {
-          String tileName = Tiles.declaration(quark, mapName,underneathTiles,nodeTiles,backgroundTiles);
+          String tileName = Tiles.declaration(quark, mapName,underneathTiles,backgroundTiles,nodeTiles);
           if tileName!=null {
-            Environments->\mapName->*.prependToBody({
+            Environments->\mapName->*"load".appendToBody({
               "defaultGenerators".add(new Tiles->'mapName'->'tileName'->Generator());
             });
           }
         }
       }
     }
+    Environments->\mapName->*"load".appendToBody({
+      Tiles->'mapName'->'nodeTiles.get(0)' seedNode = new Tiles->'mapName'->'nodeTiles.get(0)'(250f,250f,this);
+      \addTile(seedNode);
+      Tiles->'mapName'->'nodeTiles.get(0)'->Generator.openNodes.add(seedNode);
+    });
     Environments->\mapName->*.prependToBody({
         if name == null {
           name = ''mapName'';
@@ -307,7 +343,7 @@ class 'packageName'."environments" Area Environment->Position {
     ~Float "height" = Environment."areaRadius";
     ~List<Tile> tiles = new ArrayList<Tile>();
     ~List<Node> nodes = new ArrayList<Node>();
-    ~List<Entity> entities = new ArrayList<Entity>();
+    ~List<Entity> entities = new Entity->List();
     ~List<Area> neighbours = new ArrayList<Area>();
     ~List<Environment\>Position> corners = new ArrayList<Environment\>Position>();
 > void setup(ParseContext data){
@@ -437,22 +473,22 @@ class 'packageName'."environments" Area Environment->Position {
     }
     return null;
   }
-  List<Entity> getEntitiesWithin(Environment->Position position, Float range){
-    List<Entity> result = new ArrayList<Entity>();
+  Entity->List getEntitiesWithin(Environment->Position position, Float range){
+    Entity->List result = new Entity->List();
     \collectEntitiesWithin(position,range,new \EntityCriteria->\Free(),result,new HashSet<Area>());
     return result;
   }
-  List<Entity> getEntitiesWithin(Environment->Position position, Float range, Double angleLeft, Double angleRight){
-    List<Entity> result = new ArrayList<Entity>();
+  Entity->List getEntitiesWithin(Environment->Position position, Float range, Double angleLeft, Double angleRight){
+    Entity->List result = new Entity->List();
     \collectEntitiesWithin(position,range,new \EntityCriteria->\AngleTo(position,angleLeft,angleRight),result,new HashSet<Area>());
     return result;
   }
-  List<Entity> getEntitiesWithin(Environment->Position position, Float range, \EntityCriteria criteria){
-    List<Entity> result = new ArrayList<Entity>();
+  Entity->List getEntitiesWithin(Environment->Position position, Float range, \EntityCriteria criteria){
+    Entity->List result = new Entity->List();
     \collectEntitiesWithin(position,range,criteria,result,new HashSet<Area>());
     return result;
   }
-  void collectEntitiesWithin(Environment->Position position, Float range, \EntityCriteria criteria, List<Entity> result, Set<Area> alreadyChecked){
+  void collectEntitiesWithin(Environment->Position position, Float range, \EntityCriteria criteria, Entity->List result, Set<Area> alreadyChecked){
     if \shortestDistanceTo(position) >= range | alreadyChecked.add(this) == false{
       return void;
     }
@@ -475,7 +511,7 @@ class 'packageName'."environments" Area Environment->Position {
     return null;
   }
   Entity getClosestEntity(Environment->Position position, \EntityCriteria criteria){
-    List<Entity> candidates = new ArrayList<Entity>();
+    Entity->List candidates = new Entity->List();
     Set<Area> collected = new HashSet<Area>();
     Integer spreadIndex = 0;
     while spreadIndex <= Environment.areaMaxX {
@@ -487,7 +523,7 @@ class 'packageName'."environments" Area Environment->Position {
     }
     return null;
   }
-  Entity getClosestEntity(List<Entity> candidates, Environment->Position position){
+  Entity getClosestEntity(Entity->List candidates, Environment->Position position){
     Double distance = Double.MAX_VALUE;
     Entity closestEntity= null;
     for Entity candidate : candidates {
@@ -498,7 +534,7 @@ class 'packageName'."environments" Area Environment->Position {
     }
     return closestEntity;
   } 
-  void collectEntities(Integer spreadIndex, List<Entity> candidates, \EntityCriteria criteria, Set<Area> collected){
+  void collectEntities(Integer spreadIndex, Entity->List candidates, \EntityCriteria criteria, Set<Area> collected){
     if collected.add(this) {
       if spreadIndex == 0 {
         for Entity candidate: entities {
@@ -648,6 +684,180 @@ class 'packageName'."environments" Area Environment->Position {
   }
   Boolean isWithin(Environment->Position otherPosition){
     return \super.isWithin(otherPosition, "width"/4f \+ "height"/4f, \Math.PI * 2.0, 0.0);
+  }
+}
+class 'packageName'."environments"."misc" DirectionsHandler {
+  ~Map<Integer, Map<Integer, Set<Double>>> directions = new HashMap<Integer, Map<Integer, Set<Double>>>();
+  Boolean hasOpenDirection(Environment->Position position){
+    if directions.containsKey("(int)(position.getX()/5f)") == false {
+      return true;
+    }
+    else if directions.get("(int)(position.getX()/5f)").containsKey("(int)(position.getY()/5f)") == false {
+      return true;
+    }
+    return \hasAnyDirection("(int)(position.getX()/5f)", "(int)(position.getY()/5f)");
+  }
+  Boolean hasAnyDirection(Integer xZone, Integer yZone){
+    return true;
+  }
+  Double getOpenDirection(Node newNode){
+    
+    Integer xZone = "(int)(newNode.getX()/5f)";
+    Integer yZone = "(int)(newNode.getY()/5f)";
+    if directions.containsKey(xZone) == false {
+      directions.put(xZone, new HashMap<Integer, Set<Double>>());
+    }
+    if directions.get(xZone).containsKey(yZone) == false {
+      directions.get(xZone).put(yZone, new HashSet<Double>());
+      Double direction = \getRandomDirection(newNode);
+      \closeDirection(xZone,yZone,direction);
+      return direction;
+    }
+    return \getSafeDirection(xZone,yZone,newNode);
+  }
+  Double getRandomDirection(Node newNode){
+    return null;
+  }
+  Double getSafeDirection(Integer xZone, Integer yZone, Node newNode){
+    return null;
+  }
+  void closeDirection(Integer xZone, Integer yZone, Double direction){
+  }
+  Set<Double> getOpenDirections(Integer xZone, Integer yZone){
+    if directions.containsKey(xZone) == false {
+      directions.put(xZone, new HashMap<Integer, Set<Double>>());
+    }
+    if directions.get(xZone).containsKey(yZone) == false {
+      directions.get(xZone).put(yZone, new HashSet<Double>());
+    }
+    return directions.get(xZone).get(yZone);
+  }
+  
+  
+> Set<Integer> directionHandlersMade = new HashSet<Integer>(); 
+> void addDirectionHandler(Class inputTileClass, IToken branchToken){
+    if branchToken->"sides" == null { 
+      if directionHandlersMade.add(8) {
+        \setupDirectionHandler(8);
+      }
+      inputTileClass += @DirectionsHandler directionsHandler = new DirectionsHandler->\Sided8()
+    }
+    else {
+      Integer sides = Integer.parseInt('branchToken->"sides"');
+      if directionHandlersMade.add(sides) {
+        \setupDirectionHandler(sides);
+      }
+      String className = "Sided" \+ 'sides';
+      inputTileClass += @DirectionsHandler directionsHandler = new DirectionsHandler->'className'()
+    }
+  }
+> void setupDirectionHandler(Integer sides){
+    String className = "Sided" \+ sides;
+    Integer halfSides = sides/2;
+    DirectionsHandler += class className / DirectionsHandler / {
+      Double getRandomDirection(Node newNode){
+        if newNode.getHome() == null || Math.random() < 0.5 {
+          return "Math.PI*((int)("+'sides'+"*Math.random()))/"+'halfSides'+".0";
+        }
+        else {
+          return newNode.getDirectionOfHome(); 
+        }
+      }
+      Double getSafeDirection(Integer xZone, Integer yZone, Node newNode){
+        List<Double> possibleDirections = new ArrayList<Double>('sides');
+      }
+      void closeDirection(Integer xZone, Integer yZone, Double direction){
+      }
+      Boolean hasAnyDirection(Integer xZone, Integer yZone){
+        return directions.get(xZone).get(yZone).size() < 'sides';
+      }
+    }
+    Body homeBody = new Body ();
+    for Integer i < sides {
+      DirectionsHandler->'className'->*"getSafeDirection".appendToBody({
+        "possibleDirections".add(Math.PI*'i'/'halfSides');
+      });
+      homeBody.add(|"possibleDirections".add("newNode".getDirectionOfHome());|);
+      Body closeBody = new Body ();
+      Integer xZoneValue = \getXZone(i,sides);
+      Integer yZoneValue = \getYZone(i,sides);
+      for Integer j < sides {
+        if i >= halfSides && j == i\-halfSides{
+          j \+= 1;
+        }
+        ~Integer inverseJ = j\+halfSides;
+        if inverseJ >= sides {
+          inverseJ \-= sides;
+        }
+        Integer xZoneRelative = xZoneValue \+ \getXZone(inverseJ,sides);
+        Integer yZoneRelative = yZoneValue \+ \getYZone(inverseJ,sides);
+        Integer inverseJValue = inverseJ;
+        if xZoneRelative > 0 {
+          if yZoneRelative > 0 {
+            closeBody.add(|\getOpenDirections("xZone"\+'xZoneRelative',"yZone"\+'yZoneRelative').add(Math.PI*'j'/'halfSides');|);
+          }
+          else if yZoneRelative < 0 {
+            Integer yZoneRelativeReal = -1*yZoneRelative;
+            closeBody.add(|\getOpenDirections("xZone"\+'xZoneRelative',"yZone"\-'yZoneRelativeReal').add(Math.PI*'j'/'halfSides');|);
+          }
+          else {
+            closeBody.add(|\getOpenDirections("xZone"\+'xZoneRelative',"yZone").add(Math.PI*'j'/'halfSides');|);
+          }
+        }
+        else if xZoneRelative < 0 {
+          Integer xZoneRelativeReal = -1*xZoneRelative;
+          if yZoneRelative > 0 {
+            closeBody.add(|\getOpenDirections("xZone"\-'xZoneRelativeReal',"yZone"\+'yZoneRelative').add(Math.PI*'j'/'halfSides');|);
+          }
+          else if yZoneRelative < 0{
+            Integer yZoneRelativeReal = -1*yZoneRelative;
+            closeBody.add(|\getOpenDirections("xZone"\-'xZoneRelativeReal',"yZone"\-'yZoneRelativeReal').add(Math.PI*'j'/'halfSides');|);
+          }
+          else {
+            closeBody.add(|\getOpenDirections("xZone"\-'xZoneRelativeReal',"yZone").add(Math.PI*'j'/'halfSides');|);
+          }
+        }
+        else {
+          if yZoneRelative > 0 {
+            closeBody.add(|\getOpenDirections("xZone","yZone"\+'yZoneRelative').add(Math.PI*'j'/'halfSides');|);
+          }
+          else if yZoneRelative < 0{
+            Integer yZoneRelativeReal = -1*yZoneRelative;
+            closeBody.add(|\getOpenDirections("xZone","yZone"\-'yZoneRelativeReal').add(Math.PI*'j'/'halfSides');|);
+          }
+          else {
+            closeBody.add(|\getOpenDirections("xZone","yZone").add(Math.PI*'j'/'halfSides');|);
+          }
+        }
+        if i < halfSides && j\+1 == i\+halfSides {
+          j \+= 1;
+        }
+      }
+      DirectionsHandler->'className'->*"closeDirection".appendToBody({
+        if "direction" == Math.PI*'i'/'halfSides' `closeBody`
+      });
+    }
+    DirectionsHandler->'className'->*"getSafeDirection".appendToBody({
+      if "newNode".getDirectionOfHome()!=null `homeBody`
+      });
+    DirectionsHandler->'className'->*"getSafeDirection".appendToBody({
+      "possibleDirections".removeAll(directions.get("xZone").get("yZone"));
+      Double direction = Range.select("possibleDirections");
+      \closeDirection("xZone", "yZone", direction);
+      return direction;
+    });
+  }
+>  Integer getXZone(Integer subValue, Integer value){
+    Double result = Math.cos(2.0*Math.PI*subValue/value);
+    if result > 0.01 { return 1; }
+    else if result < -0.01 { return -1; }
+    else { return 0; }
+  }
+>  Integer getYZone(Integer subValue, Integer value){
+    Double result = Math.sin(2.0*Math.PI*subValue/value);
+    if result > 0.01 { return 1; }
+    else if result < -0.01 { return -1; }
+    else { return 0; }
   }
 }
 class 'packageName'."environments" Environments {

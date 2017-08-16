@@ -19,11 +19,11 @@ questing Quest
 	}
 hunt(EntityCriteria criteriaToTarget, Tile.Id huntingGrounds, Float range, Events.Die.Listener deathListener, ActivityCriteria toSucceed) Attack
 	Hunt monsters until told otherwise.;;
-	+ TileList toHuntLocations
-	+ TileList huntedLocations
+	+ Tile.List toHuntLocations
+	+ Tile.List huntedLocations
 	succeed if toSucceed.satisfies(this)
 	load {
-	  TileList toAdd = event->host->location.getTilesWithin(250.0 , huntingGrounds)
+	  Tile.List toAdd = event->host->location.getTilesWithin(250.0 , huntingGrounds)
 	  toAdd.sort(new Tile.Comparators.Distance.Descending(event->host->location))
 	  toHuntLocations.addAll(toAdd)
 	}
@@ -39,7 +39,7 @@ hunt(EntityCriteria criteriaToTarget, Tile.Id huntingGrounds, Float range, Event
 	    huntedLocations.add(toHunt)
 	  }
 	  else {
-	    TileList toAdd = host->location.getTilesWithin(250.0,huntingGrounds)
+	    Tile.List toAdd = host->location.getTilesWithin(250.0,huntingGrounds)
 	    toAdd.removeAll(huntedLocations)
 	    if !toAdd.isEmpty() {
 	      Tiles.sort(toAdd,new Tiles.Comparators.DescendingDistance(host->position))

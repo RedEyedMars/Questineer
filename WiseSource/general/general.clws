@@ -58,6 +58,17 @@ class 'packageName'."misc" Range {
   @Float getRandomFloat(){
     return "(float)Math.random()";
   }
+  @Integer normalize(Double value){
+    if value > 0.001 {
+      return 1;
+    }
+    else if value < -0.001 {
+      return -1;
+    }
+    else {
+      return 0;
+    }
+  }
   class 'packageName'."misc" Modifier \Object Entity->Modifier{
 	Double "value" = 0.0;
 	> String doubleCast = "(float)(double)";
@@ -500,10 +511,10 @@ class 'packageName'."misc" Criteria<TypeName> {
     return |\Math.random() <= 'value' |;
   }
 > void createList(Class listClass) {
-	String listName = listClass.getName()+ "List";
+	String listName = listClass.getFullName()+ "List";
 	if declaredListSet.add(listName) {
-	  class 'packageName'."misc"."lists" listName ArrayList<listClass> {
-	    'listName' *( listClass... "elements" ){
+	  listClass += class List / ArrayList<listClass> / {
+	    List *( listClass... "elements" ){
 	      \super(Arrays.asList("elements"));
 	    }
 	  }
