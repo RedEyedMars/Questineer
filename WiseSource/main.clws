@@ -1,31 +1,6 @@
-< Math			: \java.\lang;
-< StringBuilder : \java.\lang;
-< Iterator		: \java.\util;
-< List 			: \java.\util;
-< LinkedList	: \java.\util;
-< ArrayList		: \java.\util;
-< Arrays		: \java.\util;
-< Map 			: \java.\util;
-< HashMap 		: \java.\util;
-< Set 			: \java.\util;
-< HashSet 		: \java.\util;
-< Comparator	: \java.\util;
-< Scanner   	: \java.\util;
-< File			: \java.\io;
-< Entry			: \com.\rem.\parser.\generation;
-< ListEntry		: \com.\rem.\parser.\generation;
-< Generator		: \com.\rem.\parser.\generation;
-< IParser 		: \com.\rem.\parser.\parser;
-< IToken 		: \com.\rem.\parser.\token;
-< ParseContext 	: \com.\rem.\parser;
-< RegexParser	: \com.\rem.\parser.\parser;
-< Rules 		: \lists;
-< HeroStats 	: \lists;
-< GeneralTokens	: \lists;
-< Listnames		: \lists;
-< JFrame		: \javax.\swing;
-< Graphics		: \java.\awt;
+import headers.clws
 
+< HeroStats 	: \lists;
 #import images/image.clws#
 
 import general/general.clws
@@ -36,11 +11,6 @@ import entities/entities.clws
 import environments/environments.clws
 import events/events.clws
 
-> String packageName = "com.rem.qstnr";
-> IParser rootParser = Rules.base;
-> List listnames = Listnames.parser;
-> List rules = Rules.parser;
-> RegexParser lazyNameParser = GeneralTokens.NAME;
 > void assignListElementNames(ParseContext context, IToken root){
 		context.retainList(new HeroStats());
 	}

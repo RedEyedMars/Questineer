@@ -15,7 +15,7 @@ class 'packageName'."environments" Environment \Object Loaddable Tickable {
     return Environment.areaRadius * Environment.areaMaxX;
   }
   Float getGenerationRate(){
-    return 1000f;
+    return 500000f;
   }
   Area getAreaSafely(Integer x, Integer y){
     if areas.containsKey(x) == false {
@@ -322,15 +322,15 @@ class 'packageName'."environments" Environment \Object Loaddable Tickable {
             Environments->\mapName->*"load".appendToBody({
               "defaultGenerators".add(new Tiles->'mapName'->'tileName'->Generator());
             });
+            if nodeTiles.contains(tileName){
+              Environments->\mapName->*"load".appendToBody({
+                "defaultGenerators".add(new Tiles->'mapName'->'tileName'->\Crawler());
+              });
+            }
           }
         }
       }
     }
-    Environments->\mapName->*"load".appendToBody({
-      Tiles->'mapName'->'nodeTiles.get(0)' seedNode = new Tiles->'mapName'->'nodeTiles.get(0)'(250f,250f,this);
-      \addTile(seedNode);
-      Tiles->'mapName'->'nodeTiles.get(0)'->Generator.openNodes.add(seedNode);
-    });
     Environments->\mapName->*.prependToBody({
         if name == null {
           name = ''mapName'';

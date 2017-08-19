@@ -15,8 +15,11 @@ Path
 		[Grass Circle(length)] 10%
 		[Grass Circle(length)] 15% 
 		[Grass Court(2.0,length)] otherwise
-	Common : 1FD
+	 Seeded : 1FD
 Bridge
+	Crawler
+		Branch
+			0 - 100%
 Minor_Chest
 	Uncommon : 3FD +1% in 10R | 5G +5% in 10R
 Major_Chest

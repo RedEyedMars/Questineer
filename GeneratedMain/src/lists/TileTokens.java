@@ -42,6 +42,7 @@ public class TileTokens extends ParseList {
 	public static final ExactParser RARE = new ExactParser("RARE","tileTokens","Rare");
 	public static final ExactParser EPIC = new ExactParser("EPIC","tileTokens","Epic");
 	public static final ExactParser LEGENDARY = new ExactParser("LEGENDARY","tileTokens","Legendary");
+	public static final ExactParser SEEDED = new ExactParser("SEEDED","tileTokens","Seeded");
 	public static final ExactParser FREE = new ExactParser("FREE","tileTokens","Free");
 	public static final ExactParser TILE_AND = new ExactParser("TILE_AND","tileTokens","&");
 	public static final ExactParser UNDERNEATH = new ExactParser("UNDERNEATH","tileTokens","Underneath");
@@ -63,5 +64,5 @@ public class TileTokens extends ParseList {
 	public static final ExactParser SQUARE = new ExactParser("SQUARE","tileTokens","Square");
 
 	public static final ChoiceParser parser = new ChoiceParser(
-				NAME,WILD,NEWLINE,NEWTAB,NEWTABTAB,NEWTABTABTAB,DASH,TILE,PATH,PATHS,START,BACKGROUND,ARRR,DOT,PERCENT,PLUS,MINUS,EXTENDS,OPEN_PARA,CLOSE_PARA,PIPE,COLON,COMMON,UNCOMMON,RARE,EPIC,LEGENDARY,FREE,TILE_AND,UNDERNEATH,CRAWLER,BRANCH,SIDES,OTHERWISE,ENCOUNTER,SMALL,MEDIUM,LARGE,HUGE,ROOM,LENGTH,TILE_LENGTH,CONNECT,CIRCLE,COURT,SQUARE);
+				NAME,WILD,NEWLINE,NEWTAB,NEWTABTAB,NEWTABTABTAB,DASH,TILE,PATH,PATHS,START,BACKGROUND,ARRR,DOT,PERCENT,PLUS,MINUS,EXTENDS,OPEN_PARA,CLOSE_PARA,PIPE,COLON,COMMON,UNCOMMON,RARE,EPIC,LEGENDARY,SEEDED,FREE,TILE_AND,UNDERNEATH,CRAWLER,BRANCH,SIDES,OTHERWISE,ENCOUNTER,SMALL,MEDIUM,LARGE,HUGE,ROOM,LENGTH,TILE_LENGTH,CONNECT,CIRCLE,COURT,SQUARE);
 }

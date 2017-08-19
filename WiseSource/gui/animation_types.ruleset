@@ -1,0 +1,55 @@
+#ANIMATION TYPES
+animation_type_declaration
+	NAME as animationTypeName ANIMATION_TYPE_VARIABLES? ANIMATION_TYPE_BODY 
+animation_type_element
+	NEWLINE
+	COMMENTS
+	( NAME as variableName operator ( INTEGER | FLOAT | NAME | ANIMATION_TYPE_FRAME_DATA ) as value ( IF animation_type_boolean (continuation_operator animation_type_boolean)* )? ) as statement
+	animation_type_declaration
+animation_type_boolean
+	NAME as leftName boolean_operator ( INTEGER | FLOAT | NAME | ANIMATION_TYPE_FRAME_DATA ) as value
+animation_type_variable_declaration
+	NAME as typeName NAME as variableName ANIT_EQUALS ( INTEGER | FLOAT | QUOTE as quote ) as value 
+	NAME as variableName ANIT_EQUALS ( INTEGER | FLOAT | QUOTE as quote ) as value 
+continuation_operator
+	ANIT_AND
+	ANIT_OR
+operator
+	ANIT_EQUALS
+	ANIT_PLUSEQUALS
+boolean_operator
+	ANIT_ISEQUAL
+	ANIT_ISNOTEQUAL
+	ANIT_LESSTHAN
+	ANIT_GREATERTHAN
+	ANIT_LESSOREQUAL
+	ANIT_GREATEROREQUAL
+
+
+animationBrace-s are Braced
+	[,.] as ANIMATION_TYPE_FILE with WILD as animation_type_file_name
+	[(,)] as ANIMATION_TYPE_VARIABLES with animation_type_variable_declaration? ( COMMA animation_type_variable_declaration )*
+	[{,}] as ANIMATION_TYPE_BODY with animation_type_element*
+	[[,]] as ANIMATION_TYPE_FRAME_DATA with NAME as frameName
+	[\",\"] as QUOTE with WILD
+animationImports-s are Import
+	[><<\"gui/\",animation_type_file_name,\".animationTypes\">>\n] as IMPORT_ANIMATION_TYPE from (NEWLINE|COMMENTS|animation_type_declaration)*; with ANIMATION_TYPE_FILE ANIMATION_TYPES
+animationToken-s
+	[[a-zA-Z_][a-zA-Z0-9_]*] as NAME
+	[[-]?\\d+\\Q.\\E\\d+] as FLOAT
+	[[-]?\\d+] as INTEGER
+	[.*] as WILD
+	"\n" as NEWLINE
+	"," as COMMA
+	"if" as IF
+	"=" as ANIT_EQUALS
+	"+=" as ANIT_PLUSEQUALS
+	"&" as ANIT_AND
+	"|" as ANIT_OR
+	"animationTypes" as ANIMATION_TYPES
+	"==" as ANIT_ISEQUAL
+	"!=" as ANIT_ISNOTEQUAL
+	"<" as ANIT_LESSTHAN
+	">" as ANIT_GREATERTHAN
+	"<=" as ANIT_LESSOREQUAL
+	">=" as ANIT_GREATEROREQUAL

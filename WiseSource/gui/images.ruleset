@@ -9,14 +9,18 @@ imageToken-s
 	[[Xx]] as CROSS
 	"-" as DASH
 	">" as LESSTHAN
+	"=" as EQUALSIGN
 	"imgs" as IMGS
+	"png" as PNG
+image_type
+	PNG
 imageBrace-s are Braced
 	[,.] as IMAGE_FILE with WILD as image_file_name
 imageImport-s are Import
-	[><<image_file_name,\".imgs\">>\n] as IMPORT_IMAGE from blank:(NEWLINE|image_declaration)+; with (IMAGE_FILE IMGS)
+	[><<\"gui/images/\",image_file_name,\".imgs\">>\n] as IMPORT_IMAGE from (NEWLINE|image_declaration)+; with (IMAGE_FILE IMGS)
 image_declaration
-	NAME as imageName in image_names ( INTEGER as left CROSS INTEGER as right? ) EQUALSIGN IMAGE_FILE
+	NAME as imageName in image_names ( INTEGER as frameWidth CROSS INTEGER as frameHeight? ) EQUALSIGN IMAGE_FILE image_type
 image_id
-	image_name ( INTEGER as left (COMMA INTEGER as right)? )?
+	image_name ( INTEGER as frameWidth (COMMA INTEGER as frameHeight)? )?
 animation
 	image_id ( DASH INTEGER as frames? LESSTHAN ( image_name| INTEGER as left (COMMA INTEGER as right)?)) as delta*

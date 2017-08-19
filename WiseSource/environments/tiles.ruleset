@@ -29,6 +29,7 @@ tileToken-s
 	"Rare" as RARE
 	"Epic" as EPIC
 	"Legendary" as LEGENDARY
+	"Seeded" as SEEDED
 	"Free" as FREE
 	"&" as TILE_AND
 	"Underneath" as UNDERNEATH
@@ -66,7 +67,7 @@ tile_definition is silent
 tile_element is silent
 	NEWLINE* COMMENTS
 	NEWTAB ( CONNECT tile_name (COLON tile_cost ( PIPE tile_cost)*)? ) as connection
-	NEWTAB ( (COMMON|UNCOMMON|RARE|EPIC|LEGENDARY) as rarity (COLON tile_cost ( PIPE tile_cost)*)? ) as rate
+	NEWTAB ( (COMMON|UNCOMMON|RARE|EPIC|LEGENDARY|SEEDED) as rarity (COLON tile_cost ( PIPE tile_cost)*)? ) as rate
 	NEWTAB ( CRAWLER crawler_element+ ) as crawler
 	NEWTAB ( (PLUS|MINUS)+ entity_declaration ) as entity
 	NEWLINE+

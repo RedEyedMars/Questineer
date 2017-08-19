@@ -5,16 +5,18 @@ import com.rem.parser.generation.classwise.*;
 import clent.*;
 import java.util.*;
 import java.io.*;
-import com.rem.parser.ParseContext;
-import com.rem.parser.token.IToken;
-import lists.HeroStats;
-import java.lang.StringBuilder;
 import com.rem.parser.parser.IParser;
 import lists.Rules;
 import java.util.List;
 import lists.Listnames;
 import com.rem.parser.parser.RegexParser;
 import lists.GeneralTokens;
+import com.rem.parser.token.IToken;
+import java.util.Set;
+import java.util.HashSet;
+import com.rem.parser.ParseContext;
+import lists.HeroStats;
+import java.lang.StringBuilder;
 public class MainFlow extends FlowController  {
 	//Externals
 
@@ -5189,7 +5191,18 @@ TilesClass.getSubClass(mapName.toString()).getSubClass(tileName.toString()).addS
 			 		new ExternalStatement.Parameters()))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("parent"))))))))))}), Arrays.asList(new ExternalClassEntry[]{})) ;}});
 	for(final IToken element:declarationToken.getAllSafely("rate")) {
 			Float rarityValue = -1f;
-			if (element.get("rarity").get("COMMON") != null) {
+			if (element.get("rarity").get("SEEDED") != null) {
+			EnvironmentsClass.getSubClass(mapName).getMethod("load").appendToBody(/*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Tiles")), /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(mapName.toString()))))), /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(tileName.toString())))))), /*Name*/new ExternalStatement(new StringEntry("seedNode")), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Tiles")), /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(mapName.toString()))))), /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(tileName.toString())))))),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("250f")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("250f")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("this"))))))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("addTile")),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("seedNode")))))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Tiles")), /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(mapName.toString()))))), /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(tileName.toString()))))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Crawler")))))), /*Enty*/new ExternalStatement(new StringEntry("openNodes"))), /*Enty*/new ExternalStatement(new StringEntry("add"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("seedNode")))))))))));
+			}
+			else if (element.get("rarity").get("COMMON") != null) {
 TilesClass.getSubClass(mapName.toString()).getSubClass(tileName.toString()).getSubClass("Generator").addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))), /*Exac*/new ExternalStatement(new StringEntry("getDefaultRate")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
 		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("100f"))))))));
 			rarityValue = 100f;
@@ -5224,8 +5237,7 @@ TilesClass.getSubClass(mapName.toString()).getSubClass(tileName.toString()).getS
 	}
 	TilesClass.getSubClass(mapName.toString()).getSubClass(tileName.toString()).getSubClass("Generator").getMethod("getCosts").appendToBody(/*Body*/new ExternalStatement.Body(
 		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("costs")))))));
-	if (declarationToken.get("crawler") == null) {
-		TilesClass.getSubClass(mapName.toString()).getSubClass(tileName.toString()).getSubClass("Generator").getMethod("generateTile").appendToBody(/*Body*/new ExternalStatement.Body(
+	TilesClass.getSubClass(mapName.toString()).getSubClass(tileName.toString()).getSubClass("Generator").getMethod("generateTile").appendToBody(/*Body*/new ExternalStatement.Body(
 		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Tile"))), /*Name*/new ExternalStatement(new StringEntry("underneathTile")), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
 			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("parent"))), /*Enty*/new ExternalStatement(new StringEntry("getTile"))),
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
@@ -5252,14 +5264,23 @@ TilesClass.getSubClass(mapName.toString()).getSubClass(tileName.toString()).getS
 			"else ", null,
 			/*Body*/new ExternalStatement.Body(
 			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null")))))))));
-	}
-	else  {
-		for(final IToken element:declarationToken.getAllSafely("crawler")) {
-				final String directionValue = "direction)";
-				final String openNodeValue = "(float)(openNode";
-				createList(TilesClass.getSubClass(mapName.toString()).getSubClass(tileName.toString()));
-TilesClass.getSubClass(mapName.toString()).getSubClass(tileName.toString()).getSubClass("Generator").addVariable(new ExternalVariableEntry(true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Tiles")), /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(mapName.toString()))))), /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(tileName.toString()))))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("List"))))), /*Name*/new ExternalStatement(new StringEntry("openNodes")), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Tiles")), /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(mapName.toString()))))), /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(tileName.toString()))))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("List"))))),new ExternalStatement.Parameters()))));
-				TilesClass.getSubClass(mapName.toString()).getSubClass(tileName.toString()).getSubClass("Generator").getMethod("generateTile").appendToBody(/*Body*/new ExternalStatement.Body(
+	for(final IToken element:declarationToken.getAllSafely("crawler")) {
+			final String directionValue = "direction)";
+			final String openNodeValue = "(float)(openNode";
+			createList(TilesClass.getSubClass(mapName.toString()).getSubClass(tileName.toString()));
+TilesClass.getSubClass(mapName.toString()).getSubClass(tileName.toString()).addSubClass(new ExternalClassEntry(){public void __INIT__(){super.__SETUP__(null, 
+		new Entry(){
+			public void get(StringBuilder __BUILDER__){
+			}
+		},new StringEntry("Crawler"), "class ", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Tile")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Generator")))), new ArrayList<Entry>(Arrays.asList(new Entry[]{})), 
+		new Entry(){
+		public void get(StringBuilder builder){
+			builder.append("static class ");
+			new StringEntry("Crawler").get(builder);
+			new StringEntry("").get(builder);
+		}
+	}, Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Tiles")), /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(mapName.toString()))))), /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(tileName.toString()))))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("List"))))), /*Name*/new ExternalStatement(new StringEntry("openNodes")), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Tiles")), /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(mapName.toString()))))), /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(tileName.toString()))))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("List"))))),new ExternalStatement.Parameters())))}), Arrays.asList(new ExternalMethodEntry[]{new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))), /*Exac*/new ExternalStatement(new StringEntry("getDefaultRate")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("10000f"))))))),new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Tile"))), /*Exac*/new ExternalStatement(new StringEntry("generateTile")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Environment"))), /*Name*/new ExternalStatement(new StringEntry("parent")))}), /*Body*/new ExternalStatement.Body(
 		/*Cond*/new ExternalStatement.Conditional(
 			"if ", 
 			/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
@@ -5361,16 +5382,16 @@ TilesClass.getSubClass(mapName.toString()).getSubClass(tileName.toString()).getS
 		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))), /*Name*/new ExternalStatement(new StringEntry("chance")), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
 			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Range")))), /*Enty*/new ExternalStatement(new StringEntry("getRandomFloat"))),
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters())))))));
-				Float currentChance = 0f;
-				Boolean isFirst = true;
-				for(final IToken atom:element.getAllSafely("branch")) {
-					DirectionsHandlerClass.addDirectionHandler(TilesClass.getSubClass(mapName.toString()).getSubClass(tileName.toString()),atom);
-					for(final IToken quark:atom.getAllSafely("branch_element")) {
-						currentChance += Float.parseFloat(quark.get("chance").toString()) / 100f;
-						final Float chanceValue = currentChance;
-						if (isFirst) {
-						TilesClass.getSubClass(mapName.toString()).getSubClass(tileName.toString()).getSubClass("Generator").getMethod("generateTile").appendToBody(/*Body*/new ExternalStatement.Body(
+			 		new ExternalStatement.Parameters())))))))}), Arrays.asList(new ExternalClassEntry[]{})) ;}});
+			Float currentChance = 0f;
+			Boolean isFirst = true;
+			for(final IToken atom:element.getAllSafely("branch")) {
+				DirectionsHandlerClass.addDirectionHandler(TilesClass.getSubClass(mapName.toString()).getSubClass(tileName.toString()),atom);
+				for(final IToken quark:atom.getAllSafely("branch_element")) {
+					currentChance += Float.parseFloat(quark.get("chance").toString()) / 100f;
+					final Float chanceValue = currentChance;
+					if (isFirst) {
+					TilesClass.getSubClass(mapName.toString()).getSubClass(tileName.toString()).getSubClass("Crawler").getMethod("generateTile").appendToBody(/*Body*/new ExternalStatement.Body(
 		/*Cond*/new ExternalStatement.Conditional(
 			"if ", 
 			/*Optr*/new ExternalStatement("<", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("chance")))), /*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(chanceValue.toString())))),
@@ -5379,10 +5400,10 @@ TilesClass.getSubClass(mapName.toString()).getSubClass(tileName.toString()).getS
 			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("newNode"))), /*Enty*/new ExternalStatement(new StringEntry("setBranchLimit"))),
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
 			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(quark.get("amount").toString())))))))))))));
-						isFirst = false;
-						}
-						else  {
-						TilesClass.getSubClass(mapName.toString()).getSubClass(tileName.toString()).getSubClass("Generator").getMethod("generateTile").appendToBody(/*Body*/new ExternalStatement.Body(
+					isFirst = false;
+					}
+					else  {
+					TilesClass.getSubClass(mapName.toString()).getSubClass(tileName.toString()).getSubClass("Crawler").getMethod("generateTile").appendToBody(/*Body*/new ExternalStatement.Body(
 		/*Cond*/new ExternalStatement.Conditional(
 			"else if ", 
 			/*Optr*/new ExternalStatement("<", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("chance")))), /*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(chanceValue.toString())))),
@@ -5391,67 +5412,66 @@ TilesClass.getSubClass(mapName.toString()).getSubClass(tileName.toString()).getS
 			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("newNode"))), /*Enty*/new ExternalStatement(new StringEntry("setBranchLimit"))),
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
 			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(quark.get("amount").toString())))))))))))));
-						}
 					}
 				}
-				TilesClass.getSubClass(mapName.toString()).getSubClass(tileName.toString()).getSubClass("Generator").getMethod("generateTile").appendToBody(/*Body*/new ExternalStatement.Body(
+			}
+			TilesClass.getSubClass(mapName.toString()).getSubClass(tileName.toString()).getSubClass("Crawler").getMethod("generateTile").appendToBody(/*Body*/new ExternalStatement.Body(
 		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("chance")), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
 			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Range")))), /*Enty*/new ExternalStatement(new StringEntry("getRandomFloat"))),
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
 			 		new ExternalStatement.Parameters())))))));
-				isFirst = true;
-				currentChance = 0f;
-				for(final IToken atom:element.getAllSafely("generate_shape")) {
-					if (isFirst) {
-					if (atom.get("OTHERWISE") != null) {
-						for(final IToken quark:atom.getAllSafely("shape")) {
-								TilesClass.getSubClass(mapName.toString()).getSubClass(tileName.toString()).getSubClass("Generator").getMethod("generateTile").appendToBody(getGenerateShape(quark,mapName,tileName));
-						}
+			isFirst = true;
+			currentChance = 0f;
+			for(final IToken atom:element.getAllSafely("generate_shape")) {
+				if (isFirst) {
+				if (atom.get("OTHERWISE") != null) {
+					for(final IToken quark:atom.getAllSafely("shape")) {
+							TilesClass.getSubClass(mapName.toString()).getSubClass(tileName.toString()).getSubClass("Crawler").getMethod("generateTile").appendToBody(getGenerateShape(quark,mapName,tileName));
 					}
-					else  {
-						currentChance += Float.parseFloat(atom.get("chance").toString()) / 100f;
-						final Float chanceValue = currentChance;
-						final ExternalStatement.Body shapeBody = new ExternalStatement.Body();
-						for(final IToken quark:atom.getAllSafely("shape")) {
-								shapeBody.add(getGenerateShape(quark,mapName,tileName));
-						}
-						TilesClass.getSubClass(mapName.toString()).getSubClass(tileName.toString()).getSubClass("Generator").getMethod("generateTile").appendToBody(/*Body*/new ExternalStatement.Body(
+				}
+				else  {
+					currentChance += Float.parseFloat(atom.get("chance").toString()) / 100f;
+					final Float chanceValue = currentChance;
+					final ExternalStatement.Body shapeBody = new ExternalStatement.Body();
+					for(final IToken quark:atom.getAllSafely("shape")) {
+							shapeBody.add(getGenerateShape(quark,mapName,tileName));
+					}
+					TilesClass.getSubClass(mapName.toString()).getSubClass(tileName.toString()).getSubClass("Crawler").getMethod("generateTile").appendToBody(/*Body*/new ExternalStatement.Body(
 		/*Cond*/new ExternalStatement.Conditional(
 			"if ", 
 			/*Optr*/new ExternalStatement("<", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("chance")))), /*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(chanceValue.toString())))),
 			/*InCl*/new ExternalStatement(shapeBody))));
-						isFirst = false;
+					isFirst = false;
+				}
+				}
+				else  {
+				if (atom.get("OTHERWISE") != null) {
+					final ExternalStatement.Body shapeBody = new ExternalStatement.Body();
+					for(final IToken quark:atom.getAllSafely("shape")) {
+							shapeBody.add(getGenerateShape(quark,mapName,tileName));
 					}
-					}
-					else  {
-					if (atom.get("OTHERWISE") != null) {
-						final ExternalStatement.Body shapeBody = new ExternalStatement.Body();
-						for(final IToken quark:atom.getAllSafely("shape")) {
-								shapeBody.add(getGenerateShape(quark,mapName,tileName));
-						}
-						TilesClass.getSubClass(mapName.toString()).getSubClass(tileName.toString()).getSubClass("Generator").getMethod("generateTile").appendToBody(/*Body*/new ExternalStatement.Body(
+					TilesClass.getSubClass(mapName.toString()).getSubClass(tileName.toString()).getSubClass("Crawler").getMethod("generateTile").appendToBody(/*Body*/new ExternalStatement.Body(
 		/*Cond*/new ExternalStatement.Conditional(
 			"else ", null,
 			/*InCl*/new ExternalStatement(shapeBody))));
+				}
+				else  {
+					currentChance += Float.parseFloat(atom.get("chance").toString()) / 100f;
+					final Float chanceValue = currentChance;
+					final ExternalStatement.Body shapeBody = new ExternalStatement.Body();
+					for(final IToken quark:atom.getAllSafely("shape")) {
+							shapeBody.add(getGenerateShape(quark,mapName,tileName));
 					}
-					else  {
-						currentChance += Float.parseFloat(atom.get("chance").toString()) / 100f;
-						final Float chanceValue = currentChance;
-						final ExternalStatement.Body shapeBody = new ExternalStatement.Body();
-						for(final IToken quark:atom.getAllSafely("shape")) {
-								shapeBody.add(getGenerateShape(quark,mapName,tileName));
-						}
-						TilesClass.getSubClass(mapName.toString()).getSubClass(tileName.toString()).getSubClass("Generator").getMethod("generateTile").appendToBody(/*Body*/new ExternalStatement.Body(
+					TilesClass.getSubClass(mapName.toString()).getSubClass(tileName.toString()).getSubClass("Crawler").getMethod("generateTile").appendToBody(/*Body*/new ExternalStatement.Body(
 		/*Cond*/new ExternalStatement.Conditional(
 			"else if ", 
 			/*Optr*/new ExternalStatement("<", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("chance")))), /*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(chanceValue.toString())))),
 			/*InCl*/new ExternalStatement(shapeBody))));
-					}
-					}
 				}
-				TilesClass.getSubClass(mapName.toString()).getSubClass(tileName.toString()).getSubClass("Generator").getMethod("generateTile").appendToBody(/*Body*/new ExternalStatement.Body(
+				}
+			}
+			TilesClass.getSubClass(mapName.toString()).getSubClass(tileName.toString()).getSubClass("Crawler").getMethod("generateTile").appendToBody(/*Body*/new ExternalStatement.Body(
 		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("newNode")))))));
-		}
 	}
 	for(final IToken element:declarationToken.getAllSafely("entity")) {
 			final ExternalClassEntry entityFactory = EntitiesClass.declaration(element.get("entity_declaration"));
@@ -6576,19 +6596,17 @@ TilesClass.addSubClass(new ExternalClassEntry(){public void __INIT__(){super.__S
 			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("defaultGenerators"))), /*Enty*/new ExternalStatement(new StringEntry("add"))),
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
 			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Tiles")), /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(mapName.toString()))))), /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(tileName.toString()))))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Generator"))))),new ExternalStatement.Parameters())))))))));
+					if (nodeTiles.contains(tileName)) {
+						EnvironmentsClass.getSubClass(mapName).getMethod("load").appendToBody(/*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("defaultGenerators"))), /*Enty*/new ExternalStatement(new StringEntry("add"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Tiles")), /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(mapName.toString()))))), /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(tileName.toString()))))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Crawler"))))),new ExternalStatement.Parameters())))))))));
+					}
 					}
 				}
 			}
 	}
-	EnvironmentsClass.getSubClass(mapName).getMethod("load").appendToBody(/*Body*/new ExternalStatement.Body(
-		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Tiles")), /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(mapName.toString()))))), /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(nodeTiles.get(0).toString())))))), /*Name*/new ExternalStatement(new StringEntry("seedNode")), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Tiles")), /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(mapName.toString()))))), /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(nodeTiles.get(0).toString())))))),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("250f")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("250f")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("this"))))))))),
-/*BODY*/				
-		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("addTile")),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("seedNode")))))))),
-/*BODY*/				
-		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Tiles")), /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(mapName.toString()))))), /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(nodeTiles.get(0).toString()))))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Generator")))))), /*Enty*/new ExternalStatement(new StringEntry("openNodes"))), /*Enty*/new ExternalStatement(new StringEntry("add"))),
-			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("seedNode")))))))))));
 	EnvironmentsClass.getSubClass(mapName).getMethod("*").prependToBody(/*Body*/new ExternalStatement.Body(
 		/*Cond*/new ExternalStatement.Conditional(
 			"if ", 
@@ -7019,7 +7037,7 @@ TilesClass.addSubClass(new ExternalClassEntry(){public void __INIT__(){super.__S
 	}, Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("String"))), /*Name*/new ExternalStatement(new StringEntry("name")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Map"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer")),/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Map"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer")),/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Area"))))))), /*Name*/new ExternalStatement(new StringEntry("areas")), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("HashMap"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer")),/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Map"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer")),/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Area"))))))),new ExternalStatement.Parameters()))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("List"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Tile")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Generator"))))))), /*Name*/new ExternalStatement(new StringEntry("generators")), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("ArrayList"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Tile")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Generator"))))))),new ExternalStatement.Parameters()))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Map"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Tile")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Id")))),/*TypeName*/new ExternalStatement.TypeName(new StringEntry("List"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Tile"))))))), /*Name*/new ExternalStatement(new StringEntry("tiles")), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("HashMap"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Tile")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Id")))),/*TypeName*/new ExternalStatement.TypeName(new StringEntry("List"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Tile"))))))),new ExternalStatement.Parameters()))),new ExternalVariableEntry(true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))), /*Name*/new ExternalStatement(new StringEntry("areaRadius")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("10f"))))),new ExternalVariableEntry(true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("areaMaxX")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("100"))))),new ExternalVariableEntry(true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("areaMaxY")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("100"))))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("ticks")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0")))))}), Arrays.asList(new ExternalMethodEntry[]{new ExternalMethodEntry(0, true,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))), /*Exac*/new ExternalStatement(new StringEntry("getWidth")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
 	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Optr*/new ExternalStatement("*", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Environment")))), /*Enty*/new ExternalStatement(new StringEntry("areaRadius")))), /*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Environment")))), /*Enty*/new ExternalStatement(new StringEntry("areaMaxX"))))))),new ExternalMethodEntry(0, true,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))), /*Exac*/new ExternalStatement(new StringEntry("getHeight")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
 	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Optr*/new ExternalStatement("*", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Environment")))), /*Enty*/new ExternalStatement(new StringEntry("areaRadius")))), /*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Environment")))), /*Enty*/new ExternalStatement(new StringEntry("areaMaxX"))))))),new ExternalMethodEntry(0, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))), /*Exac*/new ExternalStatement(new StringEntry("getGenerationRate")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
-	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("1000f"))))))),new ExternalMethodEntry(0, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Area"))), /*Exac*/new ExternalStatement(new StringEntry("getAreaSafely")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("x"))),
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("500000f"))))))),new ExternalMethodEntry(0, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Area"))), /*Exac*/new ExternalStatement(new StringEntry("getAreaSafely")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("x"))),
 /*PARAMS*/				new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("y")))}), /*Body*/new ExternalStatement.Body(
 	/*Cond*/new ExternalStatement.Conditional(
 			"if ", 
@@ -8781,16 +8799,16 @@ public void addEventMethodsExclusive(final ExternalClassEntry inputClass,final M
 	}
 }
 	//Internals
-	protected final Set<String> declaredCritSet = new HashSet<String>();
-	protected final Set<String> declaredListSet = new HashSet<String>();
-	protected final Set<String> declaredMapSet = new HashSet<String>();
-	protected final String TT = "<T>T";
-	protected final String mainStringArgs = "String[]";
 	protected final String packageName = "com.rem.qstnr";
 	protected final IParser rootParser = Rules.base;
 	protected final List listnames = Listnames.parser;
 	protected final List rules = Rules.parser;
 	protected final RegexParser lazyNameParser = GeneralTokens.NAME;
+	protected final Set<String> declaredCritSet = new HashSet<String>();
+	protected final Set<String> declaredListSet = new HashSet<String>();
+	protected final Set<String> declaredMapSet = new HashSet<String>();
+	protected final String TT = "<T>T";
+	protected final String mainStringArgs = "String[]";
 
 	public static void main(final String[] args) {
 		if(args.length==1) {
@@ -8799,6 +8817,21 @@ public void addEventMethodsExclusive(final ExternalClassEntry inputClass,final M
 		else {
 	System.err.println("No filename provided!");
 		}
+	}
+	public String getPackageName() {
+		return packageName;
+	}
+	public IParser getRootParser() {
+		return rootParser;
+	}
+	public List getListnames() {
+		return listnames;
+	}
+	public List getRules() {
+		return rules;
+	}
+	public RegexParser getLazyNameParser() {
+		return lazyNameParser;
 	}
 	public ExternalStatement.Body getBodyElements(final IToken elementsToken,final ExternalContext context) {
 		final ExternalStatement.Body result = new ExternalStatement.Body();
@@ -9775,21 +9808,6 @@ keyNameClass.addSubClass(new ExternalClassEntry(){public void __INIT__(){super._
 		}
 		return nameBuilder.toString();
 	}
-	public String getPackageName() {
-		return packageName;
-	}
-	public IParser getRootParser() {
-		return rootParser;
-	}
-	public List getListnames() {
-		return listnames;
-	}
-	public List getRules() {
-		return rules;
-	}
-	public RegexParser getLazyNameParser() {
-		return lazyNameParser;
-	}
 	public Generator[] getGenerators() {
 		final MainFlow self = this;
 		return new Generator[]{
@@ -10247,7 +10265,34 @@ keyNameClass.addSubClass(new ExternalClassEntry(){public void __INIT__(){super._
 	}
 	private String __ROOT_DIRECTORY__ = ".";
 	public void setup(String rootDirectory){
-		__ROOT_DIRECTORY__ = rootDirectory;ListenableClass.__INIT__();
+		__ROOT_DIRECTORY__ = rootDirectory;ExternalClassEntry.suppliment("Math", "java.lang");
+		ExternalClassEntry.suppliment("StringBuilder", "java.lang");
+		ExternalClassEntry.suppliment("Iterator", "java.util");
+		ExternalClassEntry.suppliment("List", "java.util");
+		ExternalClassEntry.suppliment("LinkedList", "java.util");
+		ExternalClassEntry.suppliment("ArrayList", "java.util");
+		ExternalClassEntry.suppliment("Arrays", "java.util");
+		ExternalClassEntry.suppliment("Map", "java.util");
+		ExternalClassEntry.suppliment("HashMap", "java.util");
+		ExternalClassEntry.suppliment("Set", "java.util");
+		ExternalClassEntry.suppliment("HashSet", "java.util");
+		ExternalClassEntry.suppliment("Comparator", "java.util");
+		ExternalClassEntry.suppliment("Scanner", "java.util");
+		ExternalClassEntry.suppliment("File", "java.io");
+		ExternalClassEntry.suppliment("Entry", "com.rem.parser.generation");
+		ExternalClassEntry.suppliment("ListEntry", "com.rem.parser.generation");
+		ExternalClassEntry.suppliment("Generator", "com.rem.parser.generation");
+		ExternalClassEntry.suppliment("IParser", "com.rem.parser.parser");
+		ExternalClassEntry.suppliment("IToken", "com.rem.parser.token");
+		ExternalClassEntry.suppliment("ParseContext", "com.rem.parser");
+		ExternalClassEntry.suppliment("RegexParser", "com.rem.parser.parser");
+		ExternalClassEntry.suppliment("Rules", "lists");
+		ExternalClassEntry.suppliment("HeroStats", "lists");
+		ExternalClassEntry.suppliment("GeneralTokens", "lists");
+		ExternalClassEntry.suppliment("Listnames", "lists");
+		ExternalClassEntry.suppliment("JFrame", "javax.swing");
+		ExternalClassEntry.suppliment("Graphics", "java.awt");
+		ListenableClass.__INIT__();
 		SourceClass.__INIT__();
 		LoaddableClass.__INIT__();
 		TickableClass.__INIT__();
@@ -10294,33 +10339,6 @@ keyNameClass.addSubClass(new ExternalClassEntry(){public void __INIT__(){super._
 		EnvironmentsClass.__INIT__();
 		EventsClass.__INIT__();
 		EventClass.__INIT__();
-		ExternalClassEntry.suppliment("Math", "java.lang");
-		ExternalClassEntry.suppliment("StringBuilder", "java.lang");
-		ExternalClassEntry.suppliment("Iterator", "java.util");
-		ExternalClassEntry.suppliment("List", "java.util");
-		ExternalClassEntry.suppliment("LinkedList", "java.util");
-		ExternalClassEntry.suppliment("ArrayList", "java.util");
-		ExternalClassEntry.suppliment("Arrays", "java.util");
-		ExternalClassEntry.suppliment("Map", "java.util");
-		ExternalClassEntry.suppliment("HashMap", "java.util");
-		ExternalClassEntry.suppliment("Set", "java.util");
-		ExternalClassEntry.suppliment("HashSet", "java.util");
-		ExternalClassEntry.suppliment("Comparator", "java.util");
-		ExternalClassEntry.suppliment("Scanner", "java.util");
-		ExternalClassEntry.suppliment("File", "java.io");
-		ExternalClassEntry.suppliment("Entry", "com.rem.parser.generation");
-		ExternalClassEntry.suppliment("ListEntry", "com.rem.parser.generation");
-		ExternalClassEntry.suppliment("Generator", "com.rem.parser.generation");
-		ExternalClassEntry.suppliment("IParser", "com.rem.parser.parser");
-		ExternalClassEntry.suppliment("IToken", "com.rem.parser.token");
-		ExternalClassEntry.suppliment("ParseContext", "com.rem.parser");
-		ExternalClassEntry.suppliment("RegexParser", "com.rem.parser.parser");
-		ExternalClassEntry.suppliment("Rules", "lists");
-		ExternalClassEntry.suppliment("HeroStats", "lists");
-		ExternalClassEntry.suppliment("GeneralTokens", "lists");
-		ExternalClassEntry.suppliment("Listnames", "lists");
-		ExternalClassEntry.suppliment("JFrame", "javax.swing");
-		ExternalClassEntry.suppliment("Graphics", "java.awt");
 	}
 	public void output(ParseContext data){
 		ExternalImportEntry.solidify();

@@ -1,0 +1,56 @@
+Progression{
+	X{
+		x += 1
+		x = 0 if x == [width]
+	} 
+	Y{
+		y += 1
+		y = 0 if y == [height]
+	}
+	Bounded(Integer startX = 0, Integer startY = 0, Integer endX = 0, Integer endY = 0){
+		X{
+			x += 1
+			y += 1 if x == endX
+			x = startX if x == endX
+			y = startY if y == endY
+		}
+		Y{
+			y += 1
+			x += 1 if y == endY
+			y = startY if y == endY
+			x = startX if x == endX
+		}
+	}
+}
+Cycle(Integer direction = 1){
+	X{
+		x += direction
+		direction = -1 if x == [width]
+		direction = 1 if x == 0
+	}
+	Y{
+		y += direction
+		direction = -1 if y == [height]
+		direction = 1 if y == 0
+	}
+	Bounded(Integer startX = 0, Integer startY = 0, Integer endX = 0, Integer endY = 0){
+		X{
+			x += direction
+			y += direction if direction == 1 & x == endX | direction == -1 & x == startX 
+			x = startX if direction == 1 & x == endX & y < endY
+			x = endX if direction == -1 & x == startX & y > startY
+			 
+			direction = -1 if direction == 1 & x == endX & y == endY
+			direction = 1 if direction == -1 & x == startX & y == startY
+		}
+		Y{
+			y += direction
+			x += direction if direction == 1 & y == endY | direction == -1 & y == startY 
+			y = startY if direction == 1 & y == endY & x < endX
+			y = endY if direction == -1 & y == startY & x > startX
+			 
+			direction = -1 if direction == 1 & y == endY & x == endX
+			direction = 1 if direction == -1 & y == startY & x == startX
+		}
+	}
+}

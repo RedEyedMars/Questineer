@@ -129,7 +129,14 @@ class 'packageName'."environments" Tiles {
     }
 	declarationToken : element : rate {
 	  ~Float rarityValue = -1f;
-	  if element->"rarity"->"COMMON" != null {
+	  if element->"rarity"->"SEEDED" != null {
+        Environments->\mapName->*"load".appendToBody({
+          Tiles->'mapName'->'tileName' seedNode = new Tiles->'mapName'->'tileName'(250f,250f,this);
+          \addTile(seedNode);
+          Tiles->'mapName'->'tileName'->Crawler.openNodes.add(seedNode);
+        });
+	  }
+	  else if element->"rarity"->"COMMON" != null {
 	    Tiles->'mapName'->'tileName'->Generator += Float getDefaultRate(){ return 100f; }
 	    rarityValue = 100f;
 	  }
@@ -154,55 +161,55 @@ class 'packageName'."environments" Tiles {
 	  }
     }
 	Tiles->'mapName'->'tileName'->Generator->*"getCosts".appendToBody({return "costs";});
-    if declarationToken->"crawler" == null {
-      Tiles->'mapName'->'tileName'->Generator->*"generateTile".appendToBody({
-        Tile underneathTile = parent.getTile(Tiles->'mapName'->'underneathTiles.get(0)'.id);
-        if underneathTile != null {
-          Environment->Position point = underneathTile.getPoint(parent);
-		  return new Tiles->'mapName'->'tileName'(point.getX(),point.getY(), parent);
-		}
-		else {
-		  return null;
-		}
-	  });
-    }
-    else {
-      declarationToken : element : crawler {
+    Tiles->'mapName'->'tileName'->Generator->*"generateTile".appendToBody({
+      Tile underneathTile = parent.getTile(Tiles->'mapName'->'underneathTiles.get(0)'.id);
+      if underneathTile != null {
+        Environment->Position point = underneathTile.getPoint(parent);
+	    return new Tiles->'mapName'->'tileName'(point.getX(),point.getY(), parent);
+	  }
+	  else {
+	    return null;
+	  }
+	});
+    declarationToken : element : crawler {
         String directionValue = "direction)";
         String openNodeValue = "(float)(openNode";
         \createList(Tiles->'mapName'->'tileName');
-        Tiles->'mapName'->'tileName'->Generator += @Tiles->'mapName'->'tileName'->List openNodes = new Tiles->'mapName'->'tileName'->List()
-        Tiles->'mapName'->'tileName'->Generator->*"generateTile".appendToBody({
-          if openNodes.isEmpty() {
-            return null;
+        Tiles->'mapName'->'tileName' += class Crawler / Tile->Generator / {
+          @Tiles->'mapName'->'tileName'->List openNodes = new Tiles->'mapName'->'tileName'->List();
+          Float getDefaultRate(){
+            return 10000f;
           }
-          Tiles->'mapName'->'tileName' openNode = null;
-          while openNode == null {
-            openNode = Range.select(openNodes);
-            if openNode == null {
-              return null;
-            }
-            else {
-              if Tiles->'mapName'->'tileName'."directionsHandler".hasOpenDirection(openNode) == false {
-                openNodes.remove(openNode);
-                openNode = null;
+          Tile generateTile(Environment parent){
+            if openNodes.isEmpty() {  return null;  }
+            Tiles->'mapName'->'tileName' openNode = null;
+            while openNode == null {
+              openNode = Range.select(openNodes);
+              if openNode == null {
+                return null;
+              }
+              else {
+                if Tiles->'mapName'->'tileName'."directionsHandler".hasOpenDirection(openNode) == false {
+                  openNodes.remove(openNode);
+                  openNode = null;
+                }
               }
             }
-          }
-          Double direction = Tiles->'mapName'->'tileName'."directionsHandler".getOpenDirection(openNode);
+            Double direction = Tiles->'mapName'->'tileName'."directionsHandler".getOpenDirection(openNode);
           
-          Float length = 5f;
-          Tiles->'mapName'->'tileName' newNode = new Tiles->'mapName'->'tileName'(
-            'openNodeValue'.getX() \+ length \* Range.normalize(Math.cos('directionValue')),
-            'openNodeValue'.getY() \+ length \* Range.normalize(Math.sin('directionValue')),
-            parent);
-          newNode.connect(openNode, direction);
-          openNodes.add(newNode);
-          if openNode.getNodes().size() >= openNode.getBranchLimit() {
-            openNodes.remove(openNode);
-          }
-          Float chance = Range.getRandomFloat();
-		});
+            Float length = 5f;
+            Tiles->'mapName'->'tileName' newNode = new Tiles->'mapName'->'tileName'(
+              'openNodeValue'.getX() \+ length \* Range.normalize(Math.cos('directionValue')),
+              'openNodeValue'.getY() \+ length \* Range.normalize(Math.sin('directionValue')),
+              parent);
+            newNode.connect(openNode, direction);
+            openNodes.add(newNode);
+            if openNode.getNodes().size() >= openNode.getBranchLimit() {
+              openNodes.remove(openNode);
+            }
+            Float chance = Range.getRandomFloat();
+	      }
+	    }
 		~Float currentChance = 0f;
 		~Boolean isFirst = true;
 		element : atom : branch {
@@ -211,7 +218,7 @@ class 'packageName'."environments" Tiles {
 		    currentChance \+= Float.parseFloat('quark->"chance"') / 100f;
 		    Float chanceValue = currentChance;
 		    if isFirst {
-		      Tiles->'mapName'->'tileName'->Generator->*"generateTile".appendToBody({		        
+		      Tiles->'mapName'->'tileName'->Crawler->*"generateTile".appendToBody({		        
 		        if "chance" < 'chanceValue' {
 		          "newNode".setBranchLimit('quark->"amount"');
 		        }
@@ -219,7 +226,7 @@ class 'packageName'."environments" Tiles {
 		      isFirst = false;
 		    }
 		    else {
-		      Tiles->'mapName'->'tileName'->Generator->*"generateTile".appendToBody({		        
+		      Tiles->'mapName'->'tileName'->Crawler->*"generateTile".appendToBody({		        
 		        else if "chance" < 'chanceValue' {
 		          "newNode".setBranchLimit('quark->"amount"');
 		        }
@@ -227,8 +234,8 @@ class 'packageName'."environments" Tiles {
 		    }
 		  }
 		}
-        Tiles->'mapName'->'tileName'->Generator->*"generateTile".appendToBody({
-          chance = Range.getRandomFloat();
+        Tiles->'mapName'->'tileName'->Crawler->*"generateTile".appendToBody({
+          "chance" = Range.getRandomFloat();
         });
 		isFirst = true;
 		currentChance = 0f;
@@ -236,7 +243,7 @@ class 'packageName'."environments" Tiles {
 		  if isFirst {
 		    if atom->"OTHERWISE" != null {
 		      atom : quark : shape {
-        	    Tiles->'mapName'->'tileName'->Generator->*"generateTile".appendToBody(
+        	    Tiles->'mapName'->'tileName'->Crawler->*"generateTile".appendToBody(
         	      \getGenerateShape(quark,mapName,tileName));
         	  }
 		    }
@@ -247,7 +254,7 @@ class 'packageName'."environments" Tiles {
 		      atom : quark : shape {
 		        shapeBody.add(\getGenerateShape(quark,mapName,tileName));
 		      }
-		      Tiles->'mapName'->'tileName'->Generator->*"generateTile".appendToBody({
+		      Tiles->'mapName'->'tileName'->Crawler->*"generateTile".appendToBody({
 		        if "chance" < 'chanceValue' `shapeBody`
 		      });
 		      isFirst = false;
@@ -259,7 +266,7 @@ class 'packageName'."environments" Tiles {
 		      atom : quark : shape {
 		        shapeBody.add(\getGenerateShape(quark,mapName,tileName));
 		      }
-        	  Tiles->'mapName'->'tileName'->Generator->*"generateTile".appendToBody({
+        	  Tiles->'mapName'->'tileName'->Crawler->*"generateTile".appendToBody({
 		        else `shapeBody`
 		      });
 		    }
@@ -270,16 +277,15 @@ class 'packageName'."environments" Tiles {
 		      atom : quark : shape {
 		        shapeBody.add(\getGenerateShape(quark,mapName,tileName));
 		      }
-		      Tiles->'mapName'->'tileName'->Generator->*"generateTile".appendToBody({
+		      Tiles->'mapName'->'tileName'->Crawler->*"generateTile".appendToBody({
 		        else if "chance" < 'chanceValue' `shapeBody`
 		      });
 		    }
 		  }
 		}
-        Tiles->'mapName'->'tileName'->Generator->*"generateTile".appendToBody({
+        Tiles->'mapName'->'tileName'->Crawler->*"generateTile".appendToBody({
             return "newNode";
           });
-      }
     }
     declarationToken : element : entity {            
       Class entityFactory = Entities.declaration(element->"entity_declaration");

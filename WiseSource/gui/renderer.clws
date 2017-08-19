@@ -1,0 +1,78 @@
+
+class 'packageName'."gui" Renderer {
+  class Layer / Thread / {
+    @Integer UNSTARTED = -1;
+    @Integer WAITING_FOR_EVENT = 0;
+    @Integer PROCESSING_EVENTS = 1;
+    List<Gui\>Drawable> layer = new ArrayList<Gui\>Drawable>();
+    class ControlEvent // {
+      void act(){}
+    }
+    ~class Addition / ControlEvent / {
+      Gui->Drawable toAdd = null;
+      void act(){
+        layer.add(toAdd);
+      }
+    }
+    ~class Removal / ControlEvent / {
+      Gui->Drawable toRemove = null;
+      void act(){
+        layer.remove(toRemove);
+      }
+    }
+    ~List<ControlEvent> events = new ArrayList<ControlEvent>();
+    ~Integer status = UNSTARTED;
+    void add(Gui->Drawable toAdd){
+      synchronized events {
+        events.add(new Layer->Addition(toAdd));
+        if status == WAITING_FOR_EVENT {
+          events.notifyAll();
+        }
+      }
+    }
+    void remove(Gui->Drawable toRemove){
+      synchronized events {
+        events.add(new Layer->Removal(toRemove));
+        if status == WAITING_FOR_EVENT {
+          events.notifyAll();
+        }
+      }
+    } 
+    void run(){
+      try {
+        while Gui.isRunning {
+          status = WAITING_FOR_EVENT;
+          while events.isEmpty() {
+            synchronized events {
+              events.wait();
+            }
+          }
+          status = PROCESSING_EVENTS;
+          while events.isEmpty()==false {
+            synchronized events {
+              for ControlEvent event: events {
+                synchronized layer {
+                  event.act();
+                }
+              }
+            }
+          }
+        }
+      }
+      print catch * {}
+    }
+    void render(){
+      synchronized layer {
+        for Gui->Drawable drawable: layer {
+          drawable.draw();
+        }
+      }
+    }
+  }
+  ~List<Renderer\>Layer> layers = new ArrayList<Renderer\>Layer>();
+  void render(){
+    for Renderer->Layer layer: layers {
+      layer.render();
+    }
+  }
+}

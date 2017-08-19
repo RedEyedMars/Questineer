@@ -39,4 +39,4 @@ import environments/tiles
 import overview/treasuries
 import events/events
 import general/general
-import images/images
+import gui/images/images

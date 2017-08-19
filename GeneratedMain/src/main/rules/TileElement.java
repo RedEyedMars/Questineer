@@ -51,7 +51,8 @@ public class TileElement extends ConcreteRule {
 									TileTokens.UNCOMMON,
 									TileTokens.RARE,
 									TileTokens.EPIC,
-									TileTokens.LEGENDARY),"rarity"),
+									TileTokens.LEGENDARY,
+									TileTokens.SEEDED),"rarity"),
 							new OptionalParser(
 									
 										new ChainParser(

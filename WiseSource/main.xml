@@ -27,7 +27,17 @@
         <java jar="../rclwg.jar" fork="true">
             <arg line="${dir.srcs}/main.clws" />
         </java>
-    </target>    
+    </target>
+    <target name="make_gui_ruleset">
+        <java jar="../rrlg.jar" fork="true">
+            <arg line="${dir.srcs}/gui/gui.ruleset" />
+        </java>
+    </target>
+    <target name="make_gui_gen">
+        <java jar="../rclwg.jar" fork="true">
+            <arg line="${dir.srcs}/gui.clws" />
+        </java>
+    </target>      
     <target name="make_items">
        <antcall target="make_item_ruleset"/>
        <antcall target="make_item_gen"/>
