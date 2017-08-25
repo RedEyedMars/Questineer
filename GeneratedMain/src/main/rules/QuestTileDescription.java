@@ -20,7 +20,7 @@ public class QuestTileDescription extends ConcreteRule {
 					new ListNameElementParser("map_names"),
 					QuestBraces.TILE_NAME_SELECT,
 					GeneralTokens.ORDINAL,
-					GeneralTokens.INTEGER));
+					AnimationTokens.INTEGER));
 
 	}
 

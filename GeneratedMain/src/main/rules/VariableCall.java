@@ -28,7 +28,7 @@ public class VariableCall extends ConcreteRule {
 									new AddTokenParser(
 										AssociationTokens.NAME,"variableName")),
 								new ChainParser(
-									GeneralTokens.DOT,
+									DrawableTokens.DOT,
 									Rules.method)))),
 					new AddTokenParser(
 						
@@ -36,8 +36,8 @@ public class VariableCall extends ConcreteRule {
 							GeneralTokens.TRUE,
 							GeneralTokens.FALSE,
 							GeneralTokens.NULL,
-							GeneralTokens.FLOAT,
-							GeneralTokens.INTEGER),"exact"),
+							AnimationTokens.FLOAT,
+							AnimationTokens.INTEGER),"exact"),
 				new ChainParser(
 					Rules.variable_call_element,
 					new ManyParser(
@@ -48,7 +48,7 @@ public class VariableCall extends ConcreteRule {
 									new AddTokenParser(
 										AssociationTokens.NAME,"variableName")),
 								new ChainParser(
-									GeneralTokens.DOT,
+									DrawableTokens.DOT,
 									Rules.method))))));
 
 	}

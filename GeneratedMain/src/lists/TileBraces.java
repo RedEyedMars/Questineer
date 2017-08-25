@@ -28,7 +28,7 @@ public class TileBraces extends ParseList {
 							new ManyParser(
 									
 										new ChainParser(
-											ActivityTokens.COMMA,
+											AnimationTokens.COMMA,
 											
 											new ChoiceParser(
 													TileTokens.LENGTH,
@@ -45,7 +45,7 @@ public class TileBraces extends ParseList {
 							new ManyParser(
 									
 										new ChainParser(
-											ActivityTokens.COMMA,
+											AnimationTokens.COMMA,
 											new AddTokenParser(
 												
 												new ChainParser(

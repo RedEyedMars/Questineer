@@ -10,6 +10,7 @@ import overview/treasuries.clws
 import entities/entities.clws
 import environments/environments.clws
 import events/events.clws
+import gui/loaders.clws
 
 > void assignListElementNames(ParseContext context, IToken root){
 		context.retainList(new HeroStats());
@@ -29,7 +30,7 @@ import events/events.clws
 			}
 		}
 	}
-	
+	\setupGui();
 	Conditions.setup(data);
 	Aspects.setup(data);
 	Items.setup(data);
@@ -43,6 +44,7 @@ import events/events.clws
 	Tile.setup(data);
 	root : imports : import_any {
 		\importAny(imports);
+		Gui.importAny(imports);
 	}
 	\output(data);
 }

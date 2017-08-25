@@ -19,12 +19,12 @@ public class ImageImports extends ParseList {
 							
 								new ChainParser(
 									ImageBraces.IMAGE_FILE,
-									ImageTokens.IMGS),"IMPORT_IMAGE","imageImports","><<image_file_name,\".imgs\">>\n",new NamedParserContainer(
+									ImageTokens.IMGS),"IMPORT_IMAGE","imageImports","><<\"gui/images/\",image_file_name,\".imgs\">>\n",
 							new MultipleParser(
 									
 									new ChoiceParser(
 											AssociationTokens.NEWLINE,
-											Rules.image_declaration)),"blank"));
+											Rules.image_declaration)));
 
 	public static final ChoiceParser parser = new ChoiceParser(
 				IMPORT_IMAGE);

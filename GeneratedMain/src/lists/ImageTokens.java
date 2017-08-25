@@ -22,8 +22,10 @@ public class ImageTokens extends ParseList {
 	public static final RegexParser CROSS = new RegexParser("CROSS","imageTokens","[Xx]");
 	public static final ExactParser DASH = new ExactParser("DASH","imageTokens","-");
 	public static final ExactParser LESSTHAN = new ExactParser("LESSTHAN","imageTokens",">");
+	public static final ExactParser EQUALSIGN = new ExactParser("EQUALSIGN","imageTokens","=");
 	public static final ExactParser IMGS = new ExactParser("IMGS","imageTokens","imgs");
+	public static final ExactParser PNG = new ExactParser("PNG","imageTokens","png");
 
 	public static final ChoiceParser parser = new ChoiceParser(
-				NAME,WILD,NEWLINE,COMMA,CROSS,DASH,LESSTHAN,IMGS);
+				NAME,WILD,NEWLINE,COMMA,CROSS,DASH,LESSTHAN,EQUALSIGN,IMGS,PNG);
 }

@@ -30,7 +30,7 @@ public class RequirementElement extends ConcreteRule {
 									new AddTokenParser(
 										AssociationTokens.NAME,"variableName")),
 							GeneralTokens.ORDINAL,
-							GeneralTokens.INTEGER),"require_stat"),
+							AnimationTokens.INTEGER),"require_stat"),
 					new AddTokenParser(
 						
 						new ChainParser(
@@ -43,7 +43,7 @@ public class RequirementElement extends ConcreteRule {
 										AssociationTokens.NAME,"variableName")),
 							TraitTokens.EXP,
 							GeneralTokens.ORDINAL,
-							GeneralTokens.INTEGER),"require_exp"),
+							AnimationTokens.INTEGER),"require_exp"),
 					new AddTokenParser(
 						
 						new ChainParser(
@@ -83,7 +83,7 @@ public class RequirementElement extends ConcreteRule {
 									ConditionTokens.NOT),
 							new ListNameElementParser("hero_stats"),
 							GeneralTokens.ORDINAL,
-							GeneralTokens.INTEGER),"require_stat"),
+							AnimationTokens.INTEGER),"require_stat"),
 					new AddTokenParser(
 						
 						new ChainParser(
@@ -92,7 +92,7 @@ public class RequirementElement extends ConcreteRule {
 							new ListNameElementParser("attack_names"),
 							TraitTokens.EXP,
 							GeneralTokens.ORDINAL,
-							GeneralTokens.INTEGER),"require_exp"),
+							AnimationTokens.INTEGER),"require_exp"),
 					new AddTokenParser(
 						
 						new ChainParser(

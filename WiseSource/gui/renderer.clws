@@ -37,7 +37,7 @@ class 'packageName'."gui" Renderer {
           events.notifyAll();
         }
       }
-    } 
+    }
     void run(){
       try {
         while Gui.isRunning {
@@ -50,10 +50,8 @@ class 'packageName'."gui" Renderer {
           status = PROCESSING_EVENTS;
           while events.isEmpty()==false {
             synchronized events {
-              for ControlEvent event: events {
-                synchronized layer {
-                  event.act();
-                }
+              synchronized layer {
+                events.remove(0).act();
               }
             }
           }
@@ -61,18 +59,184 @@ class 'packageName'."gui" Renderer {
       }
       print catch * {}
     }
+    void end(){
+      if status == WAITING_FOR_EVENT {
+        synchronized events {
+          events.notifyAll();
+        }
+      }
+      Keyboard.destroy();
+      Display.destroy();
+    }
+    void load(){
+      \start();
+    }
     void render(){
       synchronized layer {
         for Gui->Drawable drawable: layer {
-          drawable.draw();
+          drawable.render();
+        }
+      }
+    }
+    void animate(){
+      for Integer i < layer.size() {
+        layer.get(i).animate();
+      }
+    }
+  }
+  ~class Animator / Thread / {
+    ~Integer animationTicks = 0;
+    void run() {
+      while Gui.isRunning {
+        synchronized this {
+          while animationTicks < 1 {
+            try {
+              \wait();
+            }
+            print catch Interrupted {}
+          }
+          animationTicks -= 1;
+        }
+        `animateLayersBody`;
+      }
+    }
+    void animate(){
+      synchronized this {
+        animationTicks \+= 1;
+        \notifyAll();
+      }
+    }
+    void end(){
+      if animationTicks < 1 {
+        synchronized this {
+          animationTicks \+= 1;
+          \notifyAll();
         }
       }
     }
   }
-  ~List<Renderer\>Layer> layers = new ArrayList<Renderer\>Layer>();
+> Statement renderLayersBody = new Statement (|baseLayer.render();|);
+> Statement animateLayersBody = new Statement (|baseLayer.animate();|);
+> Statement loadLayersBody = new Statement (|baseLayer.load();|);
+> void addLayer(String layerName){
+    String realLayerName = layerName \+ "Layer";
+    renderLayersBody.add(|'realLayerName'.render();|);
+    animateLayersBody.add(|'realLayerName'.animate();|);
+    loadLayersBody.add(|'realLayerName'.load();|);
+    Renderer->*"end".appendToBody({'realLayerName'.end();});
+    Renderer += @Renderer->Layer 'realLayerName' = new Renderer->Layer()
+  }
+  ~Renderer->Animator animator = null;
+  ~Float viewX = 0f;
+  ~Float viewY = 0f;
+  ~Float viewZ = 0f;
+  ~Float aspectRatio = 0f;
+  Integer viewportX = 0;
+  Integer viewportY = 0;
+  Integer viewportWidth = 0;
+  Integer viewportHeight = 0;
+  ~\Long ticksPerSecond = "0L";
+  ~\Long animationInterval = "60L";
+  ~\Long previousAnimationTime = "0L";
+  ~\Long lastFrameTime = "0L";
+  ~Double secondsSinceLastFrame = "0.0";
+  ~Double avgSecsPerFrame = "0.01";
+  ~Integer frameCount = "0";
+  @Renderer->Layer baseLayer = new Renderer->Layer();
   void render(){
-    for Renderer->Layer layer: layers {
-      layer.render();
+	GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+	GL11.glMatrixMode(GL11.GL_MODELVIEW);
+	GL11.glLoadIdentity();
+    GLU.gluLookAt(0f, 0f, 1f,
+			0f, 0f, 0f,
+			0f, 1f, 0f);
+	
+	GL11.glTranslatef(-0.7521f \+ viewX, -0.565f \+ viewY, -1.107f \+ viewZ);
+	GL11.glScalef(1.504f, 1.12875f, 1f);
+	
+	if \System.currentTimeMillis() \- previousAnimationTime > animationInterval {
+		previousAnimationTime = \System.currentTimeMillis();
+		animator.animate();
+	}
+	GL11.glEnableClientState(GL11.GL_VERTEX_ARRAY);
+	GL11.glEnableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
+	GL11.glFrontFace(GL11.GL_CW);
+
+	GL11.glPushMatrix();
+    `renderLayersBody`;
+    GL11.glPopMatrix();
+	GL11.glDisableClientState(GL11.GL_VERTEX_ARRAY);
+	GL11.glDisableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
+	
+	frameCount \+= 1;
+    if Sys.getTime() \- lastFrameTime > ticksPerSecond {
+      #Log.log("==============> FramesPerSec=" + (frameCount/1) + " timeinsecs=" + getTimeInSeconds() + " timeinmillis=" + getTimeInMillis());#
+      frameCount = 0;
+    }
+  }
+  void load(DisplayMode displayMode){
+    try {
+	  ticksPerSecond=Sys.getTimerResolution();
+      if aspectRatio == 0f {
+        aspectRatio = "(float)displayMode.getWidth() / (float)displayMode.getHeight()";
+      }
+      
+      viewportHeight = displayMode.getHeight();                        
+      viewportWidth = "(int) (displayMode.getHeight() * aspectRatio)";
+      if viewportWidth > displayMode.getWidth() {
+        viewportWidth = displayMode.getWidth();
+        viewportHeight = "(int) (displayMode.getWidth() / aspectRatio )";
+      }
+      viewportX = "(int) ((displayMode.getWidth()-viewportWidth) / 2)";
+      viewportY = "(int) ((displayMode.getHeight()-viewportHeight) / 2)";
+    
+      GL11.glEnable(GL11.GL_DEPTH_TEST);
+      GL11.glDepthFunc(GL11.GL_LEQUAL);
+      
+      GL11.glClearColor(0f, 0f, 0f, 1f);
+      GL11.glEnable(GL11.GL_NORMALIZE);
+      GL11.glEnable(GL11.GL_CULL_FACE);
+      GL11.glEnable(GL11.GL_TEXTURE_2D);
+      GL11.glEnable(GL11.GL_BLEND);
+
+      GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+      GL11.glEnable(GL11.GL_ALPHA_TEST);
+      GL11.glAlphaFunc(GL11.GL_GREATER, 0f);
+
+      GL11.glLightModeli(GL12.GL_LIGHT_MODEL_COLOR_CONTROL, GL12.GL_SEPARATE_SPECULAR_COLOR );
+
+      #GL11.glHint(GL11.GL_PERSPECTIVE_CORRECTION_HINT, GL11.GL_NICEST);#
+      GL11.glViewport(viewportX, viewportY, viewportWidth, viewportHeight);
+      \setPerspective();
+      GL11.glMatrixMode(GL11.GL_MODELVIEW);
+      GL11.glLoadIdentity();
+      
+      \updateTimer();
+      Display.update();
+      animator = new Renderer->Animator();
+      `loadLayersBody`;
+    }
+    print catch * {
+      \System.err.println(''"Renderer Load Failed"'');
+    }
+  }
+  void end(){
+    animator.end();
+    baseLayer.end();
+  }
+  void setPerspective(){
+    GL11.glMatrixMode(GL11.GL_PROJECTION);
+    GL11.glLoadIdentity();
+    GLU.gluPerspective(40f, aspectRatio, 1f, 1000f);
+    GL11.glMatrixMode(GL11.GL_MODELVIEW);
+  }
+  void updateTimer() {
+    Double numToAvg = 50.0;
+    secondsSinceLastFrame = `"(double)(Sys.getTime() - lastFrameTime) / (double)ticksPerSecond"`;
+    lastFrameTime = Sys.getTime();
+    if secondsSinceLastFrame < 1 {
+      avgSecsPerFrame = avgSecsPerFrame * numToAvg \+ secondsSinceLastFrame;
+      avgSecsPerFrame /= numToAvg \+ 1.0;
     }
   }
 }

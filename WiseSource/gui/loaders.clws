@@ -1,0 +1,642 @@
+
+import renderer.clws
+
+import images.clws
+
+
+< BufferedImage : \java.\awt.\image;
+< ImageIO : \javax.\imageio;
+< ByteOrder : \java.\nio;
+< ByteBuffer : \java.\nio;
+< FloatBuffer : \java.\nio;
+< IntBuffer : \java.\nio;
+< GL11        : \org.\lwjgl.\opengl;
+< GL12        : \org.\lwjgl.\opengl;
+< GLU        : \org.\lwjgl.\util.\glu;
+< PixelGrabber : \java.\awt.\image;
+< DisplayMode : \org.\lwjgl.\opengl;
+< Display : \org.\lwjgl.\opengl;
+< Keyboard : \org.\lwjgl.\input ;
+< Mouse : \org.\lwjgl.\input ;
+< Cursor : \org.\lwjgl.\input ;
+< Sys : \org.\lwjgl ;
+< PixelFormat : \org.\lwjgl.\opengl;
+
+
+> Integer INT_SIZE = 4;
+
+class 'packageName'."gui"."images" Images {}
+class 'packageName'."gui"."images" Colours {}
+class 'packageName'."gui"."images" Drawables {}
+class 'packageName'."gui"."images" ImageLoader {
+> Map<Class , Parameters > animationCreationParameters = new HashMap< Class , Parameters >();
+> Map<Class , Parameters > animationCreationArguments = new HashMap< Class , Parameters >();
+  FloatBuffer placeHolder = null;
+  void load(){
+  }
+> void declaration(IToken input, Class enclosingClass){
+    String animationTypeName = ^input->"animationTypeName";
+    if enclosingClass == Gui->Image->AnimationType {
+      enclosingClass += ~class animationTypeName / Gui->Image->AnimationType/{
+        void animate(){ }
+      }
+    }
+    else {
+      enclosingClass += ~class animationTypeName /Gui->Image->AnimationType/{
+        void animate(){ }
+      }
+    }
+    Parameters parameters = new Parameters ();
+    Parameters arguments = new Parameters ();
+    input : variable : animation_type_variable_declaration {
+      variable : element : value {
+        arguments.add(|'variable->"variableName"'|);
+        element : value : INTEGER {
+          enclosingClass->'animationTypeName' += Integer 'variable->"variableName"' = 'value'
+          parameters.add(Integer 'variable->"variableName"' = 'value';);
+        }
+        variable : value : FLOAT {
+          enclosingClass->'animationTypeName' += Float 'variable->"variableName"' = 'value'+"f"
+          parameters.add(Integer 'variable->"variableName"' = 'value';);
+        }
+        variable : value : quote {
+          enclosingClass->'animationTypeName' += String 'variable->"variableName"' = ''value''
+          parameters.add(Integer 'variable->"variableName"' = 'value';);
+        }
+      }
+    }
+    animationCreationParameters.put(enclosingClass->'animationTypeName' , parameters);
+    animationCreationArguments.put(enclosingClass->'animationTypeName' , arguments);
+    ~Class creationClass = enclosingClass->'animationTypeName';
+    ~String creationName = "";
+    Parameters previousParameters = new Parameters ();
+    Parameters previousArguments = new Parameters ();
+    ~String previousCreationName = null;
+    while creationClass.getEnclosingClass() != Gui->Image->AnimationType {
+      creationName = 'creationClass.getName()'\+ creationName;
+      String createMethodName = "create"\+'creationName';
+      Class upperClass = creationClass.getEnclosingClass();
+      Parameters realParameters = new Parameters ();
+      realParameters.addAll(animationCreationParameters.get(creationClass));
+      realParameters.addAll(previousParameters);
+      Statement creation = new Statement ();
+      creation.add(|new creationClass(`animationCreationArguments.get(creationClass)`)|);
+      if previousCreationName != null {
+        creation.set(".");
+        String currentPreviousCreationName = previousCreationName;
+        Parameters currentPreviousArguements = new Parameters();
+        currentPreviousArguements.addAll(previousArguments);
+        creation.add(|'currentPreviousCreationName'(`currentPreviousArguements`)|);
+      }
+      previousCreationName = createMethodName;
+      upperClass += enclosingClass->'animationTypeName' 'createMethodName' `realParameters` {
+        return `creation`;
+      }
+      previousParameters.addAll(animationCreationParameters.get(creationClass));
+      previousArguments.addAll(animationCreationArguments.get(creationClass));
+      creationClass = upperClass;
+    }
+    creationName = 'creationClass.getName()'\+ creationName;
+    String createMethodName = "create"\+'creationName';
+    Parameters realParameters = new Parameters ();
+    realParameters.addAll(animationCreationParameters.get(creationClass));
+    realParameters.addAll(previousParameters);
+    Statement creation = new Statement ();
+    creation.add(|new creationClass(`animationCreationArguments.get(creationClass)`)|);
+    if previousCreationName != null {
+      creation.set(".");
+      String currentPreviousCreationName = previousCreationName;
+      Parameters currentPreviousArguements = new Parameters();
+      currentPreviousArguements.addAll(previousArguments);
+      creation.add(|'currentPreviousCreationName'(`currentPreviousArguements`)|);
+    }
+    Gui->Image->AnimationType += enclosingClass->'animationTypeName' 'createMethodName' `realParameters` {
+      return `creation`;
+    }
+    input : element : animation_type_element {
+      element : atom : animation_type_declaration {
+        ImageLoader.declaration(atom,enclosingClass->'animationTypeName');
+      }
+      element : atom : statement {
+        Statement statement = new Statement ();
+        statement.add(|'atom->"variableName"'|);
+        statement.set('atom->"anit_operator"');
+        statement.add(|'atom->"value"'|);
+        if atom->"animation_type_boolean" != null {
+          Statement header = new Statement ();
+          atom : quark : animation_type_boolean {
+            Statement headerElement = new Statement();
+            headerElement.add(|'quark->"leftName"'|);
+            headerElement.set('quark->"anit_boolean_operator"');
+            quark : energy : value {
+              energy : quanta : INTEGER {
+                headerElement.add(|'quanta'|);
+              }
+              : FLOAT {
+                headerElement.add(|'quanta'+"f"|);
+              }
+              : NAME {
+                headerElement.add(|'quanta'|);
+              }
+              : frameName {
+                String methodName = "get" \+ ^quanta;
+                headerElement.add(|"frames".'methodName'()|);
+              }
+            }
+            header.add(headerElement);
+          }
+          : anit_continuation_operator {
+            if 'quark' == "&" {
+              header.set("&&");
+            }
+            else if 'quark' == "|" {
+              header.set("||");
+            }
+          }
+          enclosingClass->'animationTypeName'->*"animate".appendToBody({if `header` {`statement`;}});
+        }
+        else {
+          enclosingClass->'animationTypeName'->*"animate".appendToBody({`statement`;});
+        }
+      }
+    }
+  }
+> Set<String> declaredImageLoaders = new HashSet<String>();
+> void declareImageLoader(String imageName, String imageFileName, Integer imageWidth, Integer imageHeight){
+    String imageLoaderName = imageName\+"DataLoader";
+    String imageLoaderClassName = "ImageData"\+'imageWidth'\+"x"\+'imageHeight'\+"Loader";
+    ImageLoader->*"load".prependToBody({
+      'imageLoaderName'.start();
+    });
+    ImageLoader->*"load".prependToBody({'imageLoaderClassName' 'imageLoaderName' = new 'imageLoaderClassName'(''imageFileName'');});
+    ImageLoader->*"load".appendToBody({
+      'imageLoaderName'.attachTextures(Images->'imageName');
+    });
+    if declaredImageLoaders.add(imageLoaderClassName) == false {
+      return void;
+    }
+    Integer totalSize = imageWidth * imageHeight;
+    Integer totalByteSize = imageWidth * imageHeight * 4;
+    ImageLoader += class imageLoaderClassName / Thread / {
+      String fileName = null;
+      ~ByteBuffer pixelBuffer = null;
+      ~Boolean failed = false;
+      void run(){
+        BufferedImage bufferedImage = null;
+    	try { bufferedImage = ImageIO.read(new File(fileName));	}
+    	print catch * { failed = true;  return void;	}
+        'pintArrayType' pixels = "new int["+'totalSize'+"]";
+        PixelGrabber pixelGrabber = new PixelGrabber(bufferedImage, 0, 0, 'imageWidth', 'imageHeight', pixels, 0, 'imageWidth');
+        try { pixelGrabber.grabPixels(); }
+        catch * { \System.err.println(''"Pixel Grabbing interrupted!"''); failed = true; return void; }
+        #if (flipVertically) {
+            jpixels = flipPixels(jpixels, imgw, imgh);
+        }#
+        'byteArrayType' bytes = "new byte["+'totalByteSize'+"]";
+        \int p = 0;
+        \int r = 0;
+        \int g = 0;
+        \int b = 0;
+        \int a = 0;
+        \int j = 0;
+        for Integer i < 'totalSize' {
+          p = "pixels[i]"; a = "(p >> 24) & 0xFF"; r = "(p >> 16) & 0xFF";  g = "(p >> 8) & 0xFF"; b = "(p >> 0) & 0xFF";
+          "bytes[j+0] = (byte)r";  "bytes[j+1] = (byte)g";  "bytes[j+2] = (byte)b"; "bytes[j+3] = (byte)a";
+          j += 4;
+        }
+        pixelBuffer = ByteBuffer.allocateDirect('totalByteSize').order(ByteOrder.nativeOrder());
+        pixelBuffer.put(bytes).flip();
+      }
+      void attachTextures(Gui->Image imageObject){
+        try {
+          \super.join();
+        }
+        print catch Interrupted {}
+        \int texture = 0;
+        if failed == true {
+    	  imageObject.setTexture(0);
+          return void;
+		}
+        IntBuffer textureHandle = ByteBuffer.allocateDirect('INT_SIZE').order(ByteOrder.nativeOrder()).asIntBuffer();
+        GL11.glGenTextures(textureHandle);
+        texture = textureHandle.get(0);
+        GL11.glPushAttrib(GL11.GL_TEXTURE_BIT);
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D,texture);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_REPEAT);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_REPEAT);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
+        GL11.glTexImage2D(GL11.GL_TEXTURE_2D,
+          0, 						
+          GL11.GL_RGBA8,			
+          'imageWidth', 'imageHeight', 					
+          0,						
+          GL11.GL_RGBA, 			
+          GL11.GL_UNSIGNED_BYTE,	
+          pixelBuffer);
+        GL11.glPopAttrib();
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture);
+    	Integer result = GLU.gluBuild2DMipmaps(GL11.GL_TEXTURE_2D, GL11.GL_RGBA8,
+    		'imageWidth', 'imageHeight',
+    		GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, pixelBuffer);
+    	if result != 0 {
+    	  \System.err.println(''"GLApp.makeTextureMipMap(): Error occured while building mip map, result="'' \+ result \+ ''" error="'' \+ GLU.gluErrorString(result) );
+    	}
+    	GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
+    	GL11.glTexEnvf(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_MODULATE);
+    	
+    	imageObject.setTexture(texture);
+    	
+      }
+    }
+  }
+}
+
+> String floatArrayType = "Float[]";
+> String intArrayType = "Integer[]";
+> String pintArrayType = "int[]";
+> String byteArrayType = "byte[]";
+> String floatBufferArray = "FloatBuffer[][]";
+class 'packageName'."gui" Gui {
+  FloatBuffer placeHolder = null;
+  @Boolean isRunning = true;
+  ImageLoader imageLoader = null;
+  InputHandler inputHandler = null;
+  @Game game = null;
+  @Renderer renderer = null;
+  void load(){
+    \initializeDisplay();
+    inputHandler = new InputHandler();
+    inputHandler.load(\displayMode);
+    imageLoader = new ImageLoader();
+    imageLoader.load();
+    renderer = new Renderer();
+    renderer.load(\displayMode);
+    game = new Game();
+    game.load();
+  }
+  interface Renderable // {
+    void render(){}
+    void animate(){}
+  }
+
+  class Image // Renderable {
+    String imageFileName = null;
+    Gui->Image->Dimensions pixels = null;
+    Gui->Image->Dimensions frames = null;
+    ~Integer texture = -1;
+    ~'floatBufferArray' textureBuffer = null;
+    void animate(){}
+    void render(){
+      GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture);
+      GL11.glTexCoordPointer(2, 0, "textureBuffer[0][0]");
+    }
+    class Dimensions // {
+      Integer width = -1;
+      Integer height = -1;
+    }
+    Gui->Image->Crop getCrop(Integer frameX, Integer frameY){
+      return new Gui->Image->Crop(frameX, frameY);
+    }
+    ~class Crop // Renderable {
+      Integer frameX = 0;
+      Integer frameY = 0;
+      void animate(){}
+      void render(){
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture);
+        GL11.glTexCoordPointer(2, 0, "textureBuffer[frameX][frameY]");
+      }
+      void setFrameX(Integer newX){ frameX = newX; }
+      void setFrameY(Integer newY){ frameY = newY; }
+    }
+    ~class AnimationType / / Renderable {
+      Integer x = 0;
+      Integer y = 0;
+      Integer frameX = 0;
+      Integer frameY = 0;
+      void animate(){ }      
+      void render(){
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture);
+        GL11.glTexCoordPointer(2, 0, "textureBuffer[frameX][frameY]");
+      }
+      void setFrameX(Integer newX){ frameX = newX; }
+      void setFrameY(Integer newY){ frameY = newY; }
+      void tick(Double millisSinceLastFrame){
+        \animate();
+        \setFrameX(x);
+        \setFrameY(y);
+      }
+    }
+>   Map<String,Set<String>> declaredTextureBuffers = new HashMap<String,Set<String>>();
+
+>   void declaration(IToken input){
+      try {
+        String imageName = 'input->"imageName"';
+        String imageFileName = "../Resource/gui/images/"\+'input->"image_file_name"'\+"."\+'input->"image_type"';
+        BufferedImage bimg = ImageIO.read(new File(imageFileName));
+        Integer pWidth = bimg.getWidth();
+        Integer pHeight = bimg.getHeight();
+        Images += @Gui->Image 'imageName' = new Gui->Image(''imageFileName'',new Gui->Image->Dimensions('pWidth','pHeight'),new Gui->Image->Dimensions('input->"frameWidth"','input->"frameHeight"'))
+        if declaredTextureBuffers.containsKey('input->"frameWidth"')==false || declaredTextureBuffers.get('input->"frameWidth"').contains('input->"frameHeight"')==false {
+          \declareTextureBuffer('input->"frameWidth"','input->"frameHeight"');
+        }
+        String textureBufferMethodLoaderClassName = "TextureBuffer"\+'input->"frameWidth"'\+"x"\+'input->"frameHeight"'\+"Loader";
+        ImageLoader->'textureBufferMethodLoaderClassName'->*"run".appendToBody({
+          Images->'imageName'.setTextureBuffer(textureBuffer);
+        });
+        String imageLoaderClassName = "ImageData"\+'pWidth'\+"x"\+'pHeight'\+"Loader";
+        ImageLoader.declareImageLoader(imageName,imageFileName,pWidth,pHeight);
+      }
+      print catch  IO {}
+    }
+>   void declareTextureBuffer(String frameWidth, String frameHeight){
+      Float width = Float.parseFloat(frameWidth);
+      Float height = Float.parseFloat(frameHeight);
+      Integer widthI = Integer.parseInt(frameWidth);
+      Integer heightI = Integer.parseInt(frameHeight);
+	  Float xFactor = 0.02f/width;
+	  Float yFactor = 0.02f/height;
+      String textureBufferMethodLoaderClassName = "TextureBuffer"\+'frameWidth'\+"x"\+'frameHeight'\+"Loader";
+      String textureBufferMethodLoaderName = "loadTextureBuffer"\+'frameWidth'\+"x"\+'frameHeight'+"Loader";
+      String textureBufferName = "textureBuffer"\+'frameWidth'\+"x"\+'frameHeight';
+	  if declaredTextureBuffers.isEmpty() {
+	    ImageLoader += Map<Integer,Map<Integer,'floatBufferArray'>> textureBuffers = new HashMap<Integer,Map<Integer,'floatBufferArray'>>()
+      }
+      ImageLoader->*"load".prependToBody({
+	    'textureBufferMethodLoaderName'.start();
+      });
+      ImageLoader->*"load".appendToBody({
+        try {
+	      'textureBufferMethodLoaderName'.join();
+	    }
+	    print catch Interrupted {} 
+      });
+      ImageLoader += Thread 'textureBufferMethodLoaderName' = new ImageLoader->'textureBufferMethodLoaderClassName'()
+      ImageLoader += ~class textureBufferMethodLoaderClassName / Thread / {
+        void run(){
+	      'floatBufferArray' textureBuffer = "new FloatBuffer["+'frameWidth'+"]["+'frameHeight'+"]";
+	      ByteBuffer "byteBuffer" = null;
+        }
+      }
+      for Integer x < widthI {
+	    for Integer y < heightI {
+		  String currentTextureBuffer = "textureBuffer["\+'x'\+"]["\+'y'\+"]";
+		  StringBuilder floatArrayValues = new StringBuilder();
+		  floatArrayValues.append("new float[]{");
+		  floatArrayValues.append(x\/width\+xFactor);
+		  floatArrayValues.append("f,");
+		  floatArrayValues.append(y\/height\+1\/height\-yFactor);
+		  floatArrayValues.append("f,");
+	      floatArrayValues.append(x\/width\+xFactor);
+		  floatArrayValues.append("f,");
+		  floatArrayValues.append(y\/height\+yFactor);
+		  floatArrayValues.append("f,");
+		  floatArrayValues.append(x\/width\+1\/width-xFactor);
+		  floatArrayValues.append("f,");
+		  floatArrayValues.append(y\/height\+1\/height\-yFactor);
+		  floatArrayValues.append("f,");
+		  floatArrayValues.append(x\/width\+1\/width\-xFactor);
+		  floatArrayValues.append("f,");
+		  floatArrayValues.append(y\/height\+yFactor);
+		  floatArrayValues.append("f}"); 
+		  ImageLoader->'textureBufferMethodLoaderClassName'->*"run".appendToBody({
+		    "byteBuffer" = ByteBuffer.allocateDirect(2*4*4);
+            "byteBuffer".order(ByteOrder.nativeOrder());
+		    'currentTextureBuffer' = \byteBuffer.asFloatBuffer();
+		    'currentTextureBuffer'.put('floatArrayValues');
+            'currentTextureBuffer'.position(0);
+          });
+  	    }
+      }
+      if declaredTextureBuffers.containsKey(frameWidth)==false {
+        declaredTextureBuffers.put(frameWidth, new HashSet<String>());
+        ImageLoader->'textureBufferMethodLoaderClassName'->*"run".appendToBody({
+          synchronized "textureBuffers" {
+            "textureBuffers".put('widthI', new HashMap<Integer,'floatBufferArray'>);
+          }
+        });
+      }
+      declaredTextureBuffers.get(frameWidth).add(frameHeight);
+	  ImageLoader->'textureBufferMethodLoaderClassName'->*"run".appendToBody({
+        synchronized "textureBuffers" {
+	      "textureBuffers".get('widthI').put('heightI', "textureBuffer");
+	    }
+      });
+    }
+  }
+  class Colour // {
+    Float getRedF(){ return null; }
+    Float getGreenF(){ return null; }
+    Float getBlueF(){ return null; }
+    Integer getRedI(){ return null; }
+    Integer getGreenI(){ return null; }
+    Integer getBlueI(){ return null; }
+    $'floatArrayType' asFloatArray(){return null;}
+    $'intArrayType' asIntegerArray(){return null;}
+    void render(){}
+    void endRender(){}
+>   void declaration(IToken input){
+      String colourName = ^input->"colourName";
+      Colours += class colourName / Gui->Colour / {
+      }
+      input : element : asInt {
+        Integer redInt = Integer.parseInt('element->"red"');
+        Integer greenInt = Integer.parseInt('element->"green"');
+        Integer blueInt = Integer.parseInt('element->"blue"');
+        Float redFloat = Float.parseFloat('element->"red"')/256f;
+        Float greenFloat = Float.parseFloat('element->"green"')/256f;
+        Float blueFloat = Float.parseFloat('element->"blue"')/256f;
+        
+        Colours->'colourName' += 'floatArrayType' asFloatArray(){return "new Float[]{"+'redFloat'+"f,"+'greenFloat'+"f,"+'blueFloat'+"f}";}
+        Colours->'colourName' += 'intArrayType' asIntArray() {return "new Integer[]{"+'redInt'+","+'greenInt'+","+'blueInt'+"}"; }
+        
+        Colours->'colourName' += Integer getRedI(){return 'redInt';}
+        Colours->'colourName' += Integer getGreenI() {return 'greenInt';}
+        Colours->'colourName' += Integer getBlueI(){return 'blueInt';}
+        Colours->'colourName' += Float getRedF() {return 'redFloat'+"f";}
+        Colours->'colourName' += Float getGreenF() {return 'greenFloat'+"f";}
+        Colours->'colourName' += Float getBlueF(){return 'blueFloat'+"f";}
+        Colours->'colourName' += void render(){
+          GL11.glDisable(GL11.GL_TEXTURE_2D);
+		  GL11.glDisable(GL11.GL_LIGHTING);
+		  GL11.glColor3f('redFloat'+"f", 'greenFloat'+"f", 'blueFloat'+"f");
+		  GL11.glBegin(GL11.GL_TRIANGLE_STRIPS);
+		}
+		Colours->'colourName' += void endRender(){
+		  GL11.glEnd();
+		  GL11.glEnable(GL11.GL_TEXTURE_2D);
+		  GL11.glEnable(GL11.GL_LIGHTING);
+		}
+      }
+      : asFloat {
+        Float redFloat = Float.parseFloat('element->"red"');
+        Float greenFloat = Float.parseFloat('element->"green"');
+        Float blueFloat = Float.parseFloat('element->"blue"');
+        
+        Float redIntValue = redFloat*256f;
+        Float greenIntValue = greenFloat*256f;
+        Float blueIntValue = blueFloat*256f;
+        Integer redInt = redIntValue.intValue();
+        Integer greenInt = greenIntValue.intValue();
+        Integer blueInt = blueIntValue.intValue();
+        
+        Colours->'colourName' += 'floatArrayType' asFloatArray(){return "new Float[]{"+'redFloat'+"f,"+'greenFloat'+"f,"+'blueFloat'+"f}";}
+        Colours->'colourName' += 'intArrayType' asIntArray() {return "new Integer[]{"+'redInt'+","+'greenInt'+","+'blueInt'+"}"; }
+        
+        Colours->'colourName' += Integer getRedI(){return 'redInt';}
+        Colours->'colourName' += Integer getGreenI() {return 'greenInt';}
+        Colours->'colourName' += Integer getBlueI(){return 'blueInt';}
+        Colours->'colourName' += Float getRedF() {return 'redFloat'+"f";}
+        Colours->'colourName' += Float getGreenF() {return 'greenFloat'+"f";}
+        Colours->'colourName' += Float getBlueF(){return 'blueFloat'+"f";}
+      }
+    }
+  }
+  class Drawable // {
+    ~FloatBuffer vertexBuffer = null;
+    ~Float visualX = 0f;
+    ~Float visualY = 0f;
+    ~Float visualWidth = 1f;
+    ~Float visualHeight = 1f;
+    ~Float visualAngle = 0f;
+    void render(){
+      
+		GL11.glPushMatrix();
+		GL11.glTranslatef(visualX, visualY, 0.0f);
+		if visualAngle != 0f{
+			GL11.glTranslatef(visualWidth/2f, visualHeight/2f, 0.0f);
+			GL11.glRotatef(visualAngle, 0, 0, 1);	
+			GL11.glTranslatef(visualWidth \/ -2f, visualHeight \/ -2f, 0.0f);
+		}
+		GL11.glScalef(visualWidth, visualHeight, 1f);
+		GL11.glVertexPointer(3, 0, vertexBuffer);
+    }
+    void animate(){
+    }
+    void load(){
+    }
+>   void declaration(IToken input){
+      String drawableName = 'input->"drawableName"';
+      String drawableClassName = ^input->"drawableName";
+      Gui->Drawable += class drawableClassName / Drawable / {
+        void load(){
+        }
+        Gui->Drawable->'drawableClassName' image(Gui->Image image){
+          Gui->Drawable->'drawableClassName' newImage = new Gui->Drawable->'drawableClassName'->Image(image);
+          newImage.setVertexBuffer("vertexBuffer");
+          return newImage;
+        }
+        Gui->Drawable->'drawableClassName' colour(Gui->Colour colour){
+          Gui->Drawable->'drawableClassName' newColour = new Gui->Drawable->'drawableClassName'->Colour(colour);
+          newColour.setVertexBuffer("vertexBuffer");
+          return newColour;
+        }
+      }
+      Drawables += @Gui->Drawable->'drawableClassName' 'drawableName' = new Gui->Drawable->'drawableClassName'()  
+      ImageLoader->*"load".prependToBody({ \Drawables.'drawableName'.load(); });
+      
+      StringBuilder vertexArray = new StringBuilder();
+      ~Float gridWidth = -1f;
+      ~Float gridHeight = -1f;
+      ~Boolean buildingWidth = true;
+      input : element : drawable_grid_element {
+        if element->"endLine" != null {
+          gridHeight \+= 1f;
+          buildingWidth = false;
+        }
+        else if buildingWidth {
+          gridWidth \+= 1f;
+        }
+      }
+      ~Float gridX = 0f;
+      ~Float gridY = 0f;
+      ~Integer numberOfElements = 0;
+      Map<Integer,Float> gridXMap = new HashMap<Integer,Float>();
+      Map<Integer,Float> gridYMap = new HashMap<Integer,Float>();
+      input : element : drawable_grid_element {
+        if element->"point" != null {
+          gridXMap.put(Integer.parseInt('element->"point"'), gridX / gridWidth );
+          gridYMap.put(Integer.parseInt('element->"point"'), 1f \- gridY / gridHeight );
+          numberOfElements \+= 1;
+        }
+        if element->"endLine" != null {
+          gridY \+= 1f;
+          gridX = 0f;
+        }
+        else {
+          gridX \+= 1f;
+        }
+      }
+      vertexArray.append("float[] vertices = new float[]{");
+      ~String comma = "";
+      for Integer i < numberOfElements {
+        vertexArray.append(comma);
+        vertexArray.append(gridXMap.get(i\+1));
+        vertexArray.append("f,");
+        vertexArray.append(gridYMap.get(i\+1));
+        vertexArray.append("f,0f");
+        comma = ",";
+      }
+      vertexArray.append("}");
+      Integer sizeOfByteBuffer = numberOfElements * 4 * 3;
+      Gui->Drawable->'drawableClassName'->*"load".appendToBody({
+        'vertexArray';
+		ByteBuffer byteBuffer = ByteBuffer.allocateDirect('sizeOfByteBuffer');
+		byteBuffer.order(ByteOrder.nativeOrder());
+		"vertexBuffer" = byteBuffer.asFloatBuffer();
+		"vertexBuffer".clear();
+		"vertexBuffer".put("vertices");
+		"vertexBuffer".position(0);
+      });
+      Integer numberOfElementsValue = numberOfElements;
+      Gui->Drawable->'drawableClassName' += class Image / 'drawableClassName' / {
+        Gui->Renderable image = null;
+        void render(){
+          image.render();
+          \super.render();
+          GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, 'numberOfElementsValue');
+		  GL11.glPopMatrix();
+        }
+        void animate(){
+          image.animate();
+        }
+      }
+      Gui->Drawable->'drawableClassName' += class Colour / 'drawableClassName' / {
+        Gui->Colour colour = null;
+        void render(){
+          colour.render();
+        }
+      }
+      Gui->Drawable->'drawableClassName'->Colour->*"render".appendToBody({
+        colour.endRender();
+      });
+    }
+  }
+> void importAny(IToken import_any){
+	import_any : import_colours : IMPORT_COLOUR {
+      import_colours : element : colour_declaration {
+		Colour.declaration(element);
+	  }
+	}
+	import_any : import_animation_types : IMPORT_ANIMATION_TYPE {
+	  import_animation_types : element : animation_type_declaration {
+		ImageLoader.declaration(element,Gui->Image->AnimationType);
+	  }
+	}
+	import_any : import_images : IMPORT_IMAGE {
+	  import_images : element : image_declaration {
+		Image.declaration(element);
+	  }
+	}
+	import_any : import_draws : IMPORT_DRAWABLE {
+	  import_draws : element : drawable_declaration {
+		Drawable.declaration(element);
+	  }
+	}
+	import_any : import_layers : IMPORT_LAYER {
+	  import_layers : element : layer_declaration {
+		Renderer.addLayer('element->"layerName"');
+	  }
+	}
+  }
+}

@@ -17,6 +17,11 @@ import_any
 	IMPORT_MAP
 	IMPORT_REASON
 	IMPORT_ASSOCIATION
+	IMPORT_COLOUR
+	IMPORT_ANIMATION_TYPE
+	IMPORT_IMAGE
+	IMPORT_DRAWABLE
+	IMPORT_LAYER
 comment-s are Braced
 	[#,#] as COMMENTS with WILD as comment
 
@@ -39,4 +44,4 @@ import environments/tiles
 import overview/treasuries
 import events/events
 import general/general
-import gui/images/images
+import gui/gui_headers

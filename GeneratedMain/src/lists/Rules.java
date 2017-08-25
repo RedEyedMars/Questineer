@@ -85,10 +85,22 @@ public class Rules extends ParseList {
 	public static final IRule variable_group = VariableGroup.parser;
 	public static final IRule method = Method.parser;
 	public static final IRule type_name = TypeName.parser;
+	public static final IRule animation_type_declaration = AnimationTypeDeclaration.parser;
+	public static final IRule animation_type_element = AnimationTypeElement.parser;
+	public static final IRule animation_type_boolean = AnimationTypeBoolean.parser;
+	public static final IRule animation_type_variable_declaration = AnimationTypeVariableDeclaration.parser;
+	public static final IRule anit_continuation_operator = AnitContinuationOperator.parser;
+	public static final IRule anit_operator = AnitOperator.parser;
+	public static final IRule anit_boolean_operator = AnitBooleanOperator.parser;
+	public static final IRule image_type = ImageType.parser;
 	public static final IRule image_declaration = ImageDeclaration.parser;
 	public static final IRule image_id = ImageId.parser;
 	public static final IRule animation = Animation.parser;
+	public static final IRule drawable_declaration = DrawableDeclaration.parser;
+	public static final IRule drawable_grid_element = DrawableGridElement.parser;
+	public static final IRule colour_declaration = ColourDeclaration.parser;
+	public static final IRule layer_declaration = LayerDeclaration.parser;
 
 	public static final ChoiceParser parser = new ChoiceParser(
-				base,import_any,aspect_declaration,item_declaration,item_parameter,affinity_declaration,condition_declaration,condition_element,trait_declaration,trait_element,activity_declaration,activity_element,attack_declaration,attack_element,support_declaration,support_element,quest_type_declaration,quest_type_element,quest_destination,quest_tile_description,skill_declaration,skill_element,association_declaration,association_element,association_start,association_join,association_event,reason_declaration,statRange,entity_declaration,entity_definition,map_header,map_connection,map_declaration,shape_type,tile_declaration,tile_definition,tile_element,crawler_element,branch_element,tile_cost,payment_type_declaration,event_declaration,num,range,operator,body_element,acquisition,imposition,quest_addition,if_statement,for_statement,while_statement,boolean_statement,boolean_element,has_chance,spawn_statement,has_statement,requirement,requirement_element,return_statement,statement,variable_declaration,variable_header,variable_call,variable_call_element,variable_group,method,type_name,image_declaration,image_id,animation);
+				base,import_any,aspect_declaration,item_declaration,item_parameter,affinity_declaration,condition_declaration,condition_element,trait_declaration,trait_element,activity_declaration,activity_element,attack_declaration,attack_element,support_declaration,support_element,quest_type_declaration,quest_type_element,quest_destination,quest_tile_description,skill_declaration,skill_element,association_declaration,association_element,association_start,association_join,association_event,reason_declaration,statRange,entity_declaration,entity_definition,map_header,map_connection,map_declaration,shape_type,tile_declaration,tile_definition,tile_element,crawler_element,branch_element,tile_cost,payment_type_declaration,event_declaration,num,range,operator,body_element,acquisition,imposition,quest_addition,if_statement,for_statement,while_statement,boolean_statement,boolean_element,has_chance,spawn_statement,has_statement,requirement,requirement_element,return_statement,statement,variable_declaration,variable_header,variable_call,variable_call_element,variable_group,method,type_name,animation_type_declaration,animation_type_element,animation_type_boolean,animation_type_variable_declaration,anit_continuation_operator,anit_operator,anit_boolean_operator,image_type,image_declaration,image_id,animation,drawable_declaration,drawable_grid_element,colour_declaration,layer_declaration);
 }

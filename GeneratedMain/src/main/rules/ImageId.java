@@ -22,13 +22,13 @@ public class ImageId extends ConcreteRule {
 							
 								new ChainParser(
 									new AddTokenParser(
-										GeneralTokens.INTEGER,"left"),
+										AnimationTokens.INTEGER,"frameWidth"),
 									new OptionalParser(
 											
 												new ChainParser(
-													ActivityTokens.COMMA,
+													AnimationTokens.COMMA,
 													new AddTokenParser(
-														GeneralTokens.INTEGER,"right")))))));
+														AnimationTokens.INTEGER,"frameHeight")))))));
 
 	}
 

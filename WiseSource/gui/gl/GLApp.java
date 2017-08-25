@@ -64,11 +64,6 @@ public class GLApp {
     public static boolean fullScreen = false;            // full screen or floating window
 	public static boolean showMessages = true;           // if true, show debug messages, if false show only error messages (see msg() err())
     public static float aspectRatio = 0;                 // aspect ratio of OpenGL context (if 0, default to displayWidth/displayHeight)
-
-    // Display settings (settings in glapp.cfg will override these)
-    // initDisplay() will pick a Display that best matches displayWidth,
-    // displayHeight, displayColorBits, displayFrequency.  If these values
-    // are -1, initDisplay() will use the desktop screen settings.
     public static int displayWidth = -1;
     public static int displayHeight = -1;
     public static int displayColorBits = -1;
@@ -76,24 +71,31 @@ public class GLApp {
     public static int depthBufferBits = 24;             // bits per pixel in the depth buffer
     public static int viewportX, viewportY;             // viewport position (will default to 0,0)
     public static int viewportW, viewportH;             // viewport size (will default to screen width, height)
-    //private static int orthoWidth = 0;
-    //private static int orthoHeight = 0;
-
-    // DisplayMode chosen by initDisplay()
-    // DM and displayMode are the same thing.
     public static DisplayMode DM, origDM;               // hold display mode we set, and the display mode when app first executes
     public static DisplayMode displayMode;              // hold display mode we set (same as DM)
-
-    // Application variables
-    // These are set internally but can be read by the
-    // subclass application.
-    public static Properties settings=new Properties(); // holds settings from file GLApp.cfg (see loadSettings())
     public static boolean finished;                     // App will exit when finished is true (when finishedKey is hit: see run())
     public static int cursorX, cursorY;                 // mouse position (see handleEvents())
     public static double lastFrameTime = 0;             // ticks since last frame was drawn (see run() and updateTimer())
     public static double secondsSinceLastFrame = 0;     // seconds elapsed since last frame was drawn (see updateTimer())
     public static long ticksPerSecond = 0;              // used to calc time in millis
     public static int frameCount = 0;                   // count frames per sec (just to track performance)
+
+	static double avgSecsPerFrame=.01;       // to smooth out motion, keep a moving average of frame render times
+    // Display settings (settings in glapp.cfg will override these)
+    // initDisplay() will pick a Display that best matches displayWidth,
+    // displayHeight, displayColorBits, displayFrequency.  If these values
+    // are -1, initDisplay() will use the desktop screen settings.
+    //private static int orthoWidth = 0;
+    //private static int orthoHeight = 0;
+
+    // DisplayMode chosen by initDisplay()
+    // DM and displayMode are the same thing.
+
+    // Application variables
+    // These are set internally but can be read by the
+    // subclass application.
+    public static Properties settings=new Properties(); // holds settings from file GLApp.cfg (see loadSettings())
+
 
     // For copying screen image to a texture
     public static int screenTextureSize = 1024;         // how large should texture be to hold screen (see makeTextureForScreen())
@@ -119,11 +121,9 @@ public class GLApp {
     public static FloatBuffer mtlshininess = allocFloats(4);   // size of the reflection highlight
 
     // Misc.
-    public static float rotation = 0f;       // to rotate cubes (just to put something on screen)
     public static final float PIOVER180 = 0.0174532925f;   // A constant used in navigation: PI/180
 	public static final float PIUNDER180 = 57.2957795130f;   // A constant used in navigation: 180/PI;
 	static Hashtable<String,String> OpenGLextensions;       // will be populated by extensionExists()
-	static double avgSecsPerFrame=.01;       // to smooth out motion, keep a moving average of frame render times
 
     /**
      * Runs the application.  Calls init() function to setup OpenGL,

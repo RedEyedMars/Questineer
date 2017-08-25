@@ -34,7 +34,7 @@ public class GeneralBraces extends ParseList {
 							new ManyParser(
 									
 										new ChainParser(
-											ActivityTokens.COMMA,
+											AnimationTokens.COMMA,
 											new ManyParser(
 													AssociationTokens.NEWLINE),
 											Rules.statement))),"METHOD_ARGUMENTS","generalBraces","(,)");
@@ -46,7 +46,7 @@ public class GeneralBraces extends ParseList {
 											new ManyParser(
 													
 														new ChainParser(
-															ActivityTokens.COMMA,
+															AnimationTokens.COMMA,
 															Rules.variable_header)))),"METHOD_PARAMETERS","generalBraces","(,)");
 	public static final BracedParser BRACED_STATEMENT = new BracedParser(
 							Rules.statement,"BRACED_STATEMENT","generalBraces","(,)");

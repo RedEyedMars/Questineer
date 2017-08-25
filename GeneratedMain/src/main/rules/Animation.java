@@ -25,20 +25,20 @@ public class Animation extends ConcreteRule {
 									PaymentTokens.DASH,
 									new OptionalParser(
 											new AddTokenParser(
-												GeneralTokens.INTEGER,"frames")),
+												AnimationTokens.INTEGER,"frames")),
 									ImageTokens.LESSTHAN,
 									
 									new ChoiceParser(
 											new ListNameElementParser("image_names"),
 										new ChainParser(
 											new AddTokenParser(
-												GeneralTokens.INTEGER,"left"),
+												AnimationTokens.INTEGER,"left"),
 											new OptionalParser(
 													
 														new ChainParser(
-															ActivityTokens.COMMA,
+															AnimationTokens.COMMA,
 															new AddTokenParser(
-																GeneralTokens.INTEGER,"right")))))),"delta"))));
+																AnimationTokens.INTEGER,"right")))))),"delta"))));
 
 	}
 

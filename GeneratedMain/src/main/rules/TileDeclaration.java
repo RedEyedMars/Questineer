@@ -26,7 +26,7 @@ public class TileDeclaration extends ConcreteRule {
 							new ManyParser(
 									
 										new ChainParser(
-											ActivityTokens.COMMA,
+											AnimationTokens.COMMA,
 											new ListNameElementParser("tile_names")))),"background"),
 					new AddTokenParser(
 						
@@ -37,7 +37,7 @@ public class TileDeclaration extends ConcreteRule {
 							new ManyParser(
 									
 										new ChainParser(
-											ActivityTokens.COMMA,
+											AnimationTokens.COMMA,
 											new ListNameElementParser("tile_names")))),"underneath"),
 					new AddTokenParser(
 						
@@ -48,7 +48,7 @@ public class TileDeclaration extends ConcreteRule {
 							new ManyParser(
 									
 										new ChainParser(
-											ActivityTokens.COMMA,
+											AnimationTokens.COMMA,
 											new ListNameElementParser("tile_names")))),"paths"),
 					Rules.tile_definition));
 

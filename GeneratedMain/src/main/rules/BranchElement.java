@@ -19,7 +19,7 @@ public class BranchElement extends ConcreteRule {
 				new ChainParser(
 					TileTokens.NEWTABTABTAB,
 					new AddTokenParser(
-						GeneralTokens.INTEGER,"amount"),
+						AnimationTokens.INTEGER,"amount"),
 					PaymentTokens.DASH,
 					new AddTokenParser(
 						Rules.num,"chance"),

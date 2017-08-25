@@ -21,7 +21,7 @@ public class TileCost extends ConcreteRule {
 				new ChainParser(
 					new OptionalParser(
 							new AddTokenParser(
-								GeneralTokens.INTEGER,"payment")),
+								AnimationTokens.INTEGER,"payment")),
 					new AddTokenParser(
 						
 					new ChoiceParser(
@@ -48,7 +48,7 @@ public class TileCost extends ConcreteRule {
 				new ChainParser(
 					new OptionalParser(
 							new AddTokenParser(
-								GeneralTokens.INTEGER,"payment")),
+								AnimationTokens.INTEGER,"payment")),
 					new AddTokenParser(
 						
 					new ChoiceParser(

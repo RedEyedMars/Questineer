@@ -18,8 +18,8 @@ public class Num extends ConcreteRule {
 		isSilent(true);
 		set(
 			new ChoiceParser(
-					GeneralTokens.FLOAT,
-					GeneralTokens.INTEGER));
+					AnimationTokens.FLOAT,
+					AnimationTokens.INTEGER));
 
 	}
 

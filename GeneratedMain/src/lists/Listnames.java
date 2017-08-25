@@ -88,11 +88,23 @@ public class Listnames extends ParseList {
 	public static final RegexParser generalToken = new RegexParser("generalToken","listnames","generalTokens\b");
 	public static final RegexParser generalBrace = new RegexParser("generalBrace","listnames","generalBraces\b");
 	public static final RegexParser generalAltBrace = new RegexParser("generalAltBrace","listnames","generalAltBraces\b");
+	public static final RegexParser animationBrace = new RegexParser("animationBrace","listnames","animationBraces\b");
+	public static final RegexParser animationImports = new RegexParser("animationImports","listnames","animationImportss\b");
+	public static final RegexParser animationToken = new RegexParser("animationToken","listnames","animationTokens\b");
 	public static final RegexParser image_name = new RegexParser("image_name","listnames","image_names\b");
 	public static final RegexParser imageToken = new RegexParser("imageToken","listnames","imageTokens\b");
 	public static final RegexParser imageBrace = new RegexParser("imageBrace","listnames","imageBraces\b");
 	public static final RegexParser imageImport = new RegexParser("imageImport","listnames","imageImports\b");
+	public static final RegexParser drawableBrace = new RegexParser("drawableBrace","listnames","drawableBraces\b");
+	public static final RegexParser drawableImports = new RegexParser("drawableImports","listnames","drawableImportss\b");
+	public static final RegexParser drawableToken = new RegexParser("drawableToken","listnames","drawableTokens\b");
+	public static final RegexParser colourToken = new RegexParser("colourToken","listnames","colourTokens\b");
+	public static final RegexParser colourBrace = new RegexParser("colourBrace","listnames","colourBraces\b");
+	public static final RegexParser colourImporter = new RegexParser("colourImporter","listnames","colourImporters\b");
+	public static final RegexParser layerToken = new RegexParser("layerToken","listnames","layerTokens\b");
+	public static final RegexParser layerBrace = new RegexParser("layerBrace","listnames","layerBraces\b");
+	public static final RegexParser layerImporter = new RegexParser("layerImporter","listnames","layerImporters\b");
 
 	public static final ChoiceParser parser = new ChoiceParser(
-				comment,aspect_name,aspectToken,aspectBrace,aspectImport,item_names,itemToken,itemBrace,itemImport,affinity_name,affinityToken,affinityBrace,affinityImport,condition_name,conditionToken,conditionBrace,conditionImport,trait_name,traitToken,traitBrace,traitImport,activityname,activityToken,activityBrace,activityImport,attack_name,attackToken,attackBrace,attackImport,support_name,supportToken,supportBrace,supportImport,questToken,questBrace,questImport,skill_name,skillToken,skillBrace,skillImport,association_name,associationToken,associationBrace,associationImport,reason_name,reasonToken,reasonBrace,reasonAltBrace,reasonImport,hero_stat,entityToken,entityBrace,map_name,mapToken,mapBrace,mapImport,tile_name,tile_symbol,tileToken,tileBrace,tileImport,payment_long_type_name,payment_short_type_name,paymentToken,paymentBrace,paymentImport,event_name,eventToken,eventBrace,eventImport,generalToken,generalBrace,generalAltBrace,image_name,imageToken,imageBrace,imageImport);
+				comment,aspect_name,aspectToken,aspectBrace,aspectImport,item_names,itemToken,itemBrace,itemImport,affinity_name,affinityToken,affinityBrace,affinityImport,condition_name,conditionToken,conditionBrace,conditionImport,trait_name,traitToken,traitBrace,traitImport,activityname,activityToken,activityBrace,activityImport,attack_name,attackToken,attackBrace,attackImport,support_name,supportToken,supportBrace,supportImport,questToken,questBrace,questImport,skill_name,skillToken,skillBrace,skillImport,association_name,associationToken,associationBrace,associationImport,reason_name,reasonToken,reasonBrace,reasonAltBrace,reasonImport,hero_stat,entityToken,entityBrace,map_name,mapToken,mapBrace,mapImport,tile_name,tile_symbol,tileToken,tileBrace,tileImport,payment_long_type_name,payment_short_type_name,paymentToken,paymentBrace,paymentImport,event_name,eventToken,eventBrace,eventImport,generalToken,generalBrace,generalAltBrace,animationBrace,animationImports,animationToken,image_name,imageToken,imageBrace,imageImport,drawableBrace,drawableImports,drawableToken,colourToken,colourBrace,colourImporter,layerToken,layerBrace,layerImporter);
 }

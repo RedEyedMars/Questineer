@@ -32,7 +32,12 @@ public class ImportAny extends ConcreteRule {
 					QuestImports.IMPORT_QUEST,
 					MapImports.IMPORT_MAP,
 					ReasonImports.IMPORT_REASON,
-					AssociationImports.IMPORT_ASSOCIATION));
+					AssociationImports.IMPORT_ASSOCIATION,
+					ColourImporters.IMPORT_COLOUR,
+					AnimationImportss.IMPORT_ANIMATION_TYPE,
+					ImageImports.IMPORT_IMAGE,
+					DrawableImportss.IMPORT_DRAWABLE,
+					LayerImporters.IMPORT_LAYER));
 
 	}
 

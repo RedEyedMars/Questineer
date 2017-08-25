@@ -25,13 +25,13 @@ public class EntityDefinition extends ConcreteRule {
 						new ChainParser(
 							new ListNameElementParser("hero_stats"),
 							new AddTokenParser(
-								GeneralTokens.INTEGER,"left"),
+								AnimationTokens.INTEGER,"left"),
 							new OptionalParser(
 									
 										new ChainParser(
 											PaymentTokens.DASH,
 											new AddTokenParser(
-												GeneralTokens.INTEGER,"right")))),"statRange"),
+												AnimationTokens.INTEGER,"right")))),"statRange"),
 					new ManyParser(
 							new AddTokenParser(
 								
@@ -39,13 +39,13 @@ public class EntityDefinition extends ConcreteRule {
 									EntityTokens.PIPE,
 									new ListNameElementParser("hero_stats"),
 									new AddTokenParser(
-										GeneralTokens.INTEGER,"left"),
+										AnimationTokens.INTEGER,"left"),
 									new OptionalParser(
 											
 												new ChainParser(
 													PaymentTokens.DASH,
 													new AddTokenParser(
-														GeneralTokens.INTEGER,"right")))),"statRange"))),
+														AnimationTokens.INTEGER,"right")))),"statRange"))),
 					new AddTokenParser(
 						
 						new ChainParser(

@@ -56,21 +56,7 @@ public abstract class GraphicRenderer {
 		return this.loaded;
 	}
 	public void display(){
-
-		skipFrame = false;
-		while(!changeEvents.isEmpty()){
-			synchronized(changeEvents){
-				changeEvents.removeFirst().act();
-			}
-		}
-
-		render();
 	}
-
-	protected abstract void render();
-	protected abstract void bindTexture(GraphicElement d);
-	protected abstract void createFont(String texName, String fontName, int fontStyle,int size, float[] foreGroundColour, float[] backgroundColour);
-
 	public void drawTexture(GraphicElement d){
 		if(!texMap.containsKey(d.getTextureName())){
 			System.err.println(d.getTextureName()+" not a recognized texture name");

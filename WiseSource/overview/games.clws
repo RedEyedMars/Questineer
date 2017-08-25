@@ -1,56 +1,30 @@
 > String mainStringArgs = "String[]";
-class 'packageName'."game" Game \Thread {
-  @Boolean isRunning = true;
-  @Game game = null;
+class 'packageName'."game" Game {
   ~List<Environment> environments = new ArrayList<Environment>();
-  Game *('mainStringArgs' args){
+  ~Double lastTick = \System.currentTimeMillis()/1000.0;
+  ~Double thisTick = lastTick;
+  @void main('mainStringArgs' args){
+    new Gui();
+  }
+  void load(){
     environments.add(new Environments->\Forest());
     environments.add(new Environments->\Town());
     for Environment environment:environments {
       environment.load();
     }
-    \start();
-    new Game->Gui(this);
-    new Game->Terminal(this).start();
+    Gui.renderer.baseLayer.add(Drawables.square.image(Images.particles));
   }
-  void run(){
-    Double lastTick = \System.currentTimeMillis()/1000.0;
-    Double thisTick = 0.0;
-    Game.game = this;
-    while Game.isRunning {
-      thisTick = \System.currentTimeMillis()/1000.0;
-      for Environment environment:environments {
-        environment.tick(thisTick-lastTick);
-      }
-      lastTick = thisTick;
-      if Game->Gui.gui != null {
-        Game->Gui.gui.repaint();
-      }
+  void update(){
+    thisTick = \System.currentTimeMillis()/1000.0;
+    for Environment environment:environments {
+      environment.tick(thisTick-lastTick);
     }
-    Game->Terminal.in.close();
+    lastTick = thisTick;
   }
-  class Terminal / \Thread / {
-    Game game = null;
-    @\Scanner in = new \Scanner(\System.in);
-    void run(){
-      while Game.isRunning {
-        #try {#
-          if in.nextLine().equals(''"exit"'') {
-            Game.isRunning = false;
-          }
-        #}#
-        #catch Exception e {
-        }#
-      }
-    }
-  }
-  @void main('mainStringArgs' args){
-    new Game(args);
-  }
-  class Gui / JFrame / {
+  class TestGui / JFrame / {
     ~Game game = null;
-    @Gui gui = null;
-    Gui *(Game initialParent){
+    @TestGui gui = null;
+    TestGui *(Game initialParent){
       \super(''"Questineer"'');
       \setGame(initialParent);
       \setSize(600,400);

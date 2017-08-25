@@ -1,0 +1,19 @@
+#DRAWABLES
+drawable_declaration
+	NAME as drawableName NEWLINE drawable_grid_element+
+drawable_grid_element
+	INTEGER as point
+	NEWLINE as endLine
+	DOT as space
+
+drawableBrace-s are Braced
+	[,.] as DRAWABLE_FILE with WILD as drawable_file_name
+drawableImports-s are Import
+	[><<\"gui/\",drawable_file_name,\".dwbs\">>\n] as IMPORT_DRAWABLE from (NEWLINE|COMMENTS|drawable_declaration)*; with DRAWABLE_FILE DWBS
+drawableToken-s
+	[[a-zA-Z_][a-zA-Z0-9_]*] as NAME
+	[[-]?\\d+] as INTEGER
+	[.*] as WILD
+	"dwbs" as DWBS
+	"\n" as NEWLINE
+	"." as DOT

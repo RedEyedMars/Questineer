@@ -5,18 +5,53 @@ import com.rem.parser.generation.classwise.*;
 import clent.*;
 import java.util.*;
 import java.io.*;
-import com.rem.parser.parser.IParser;
-import lists.Rules;
+import java.nio.*;
+import java.lang.Math;
+import java.lang.StringBuilder;
+import java.lang.Thread;
+import java.lang.Runnable;
+import java.util.Iterator;
 import java.util.List;
-import lists.Listnames;
-import com.rem.parser.parser.RegexParser;
-import lists.GeneralTokens;
-import com.rem.parser.token.IToken;
+import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.Set;
 import java.util.HashSet;
+import java.util.Comparator;
+import java.util.Scanner;
+import java.io.File;
+import com.rem.parser.generation.Entry;
+import com.rem.parser.generation.ListEntry;
+import com.rem.parser.generation.Generator;
+import com.rem.parser.parser.IParser;
+import com.rem.parser.token.IToken;
 import com.rem.parser.ParseContext;
+import com.rem.parser.parser.RegexParser;
+import lists.Rules;
+import lists.GeneralTokens;
+import lists.Listnames;
+import javax.swing.JFrame;
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
+import java.nio.ByteOrder;
+import java.nio.ByteBuffer;
+import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
+import org.lwjgl.util.glu.GLU;
+import java.awt.image.PixelGrabber;
+import org.lwjgl.opengl.DisplayMode;
+import org.lwjgl.opengl.Display;
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
+import org.lwjgl.input.Cursor;
+import org.lwjgl.Sys;
+import org.lwjgl.opengl.PixelFormat;
 import lists.HeroStats;
-import java.lang.StringBuilder;
 public class MainFlow extends FlowController  {
 	//Externals
 
@@ -363,8 +398,8 @@ public class MainFlow extends FlowController  {
 
 
 
-	protected Terminal TerminalClass = new Terminal();
-	public class Terminal extends ExternalClassEntry {
+	protected TestGui TestGuiClass = new TestGui();
+	public class TestGui extends ExternalClassEntry {
 
 
 
@@ -375,51 +410,14 @@ public class MainFlow extends FlowController  {
 		new Entry(){
 			public void get(StringBuilder __BUILDER__){
 			}
-		}, new StringEntry("Terminal"), "class ", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Thread")), new ArrayList<Entry>(Arrays.asList(new Entry[]{})), 
+		}, new StringEntry("TestGui"), "class ", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("JFrame")), new ArrayList<Entry>(Arrays.asList(new Entry[]{})), 
 		new Entry(){
 		public void get(StringBuilder builder){
 			builder.append("static class ");
-			new StringEntry("Terminal").get(builder);
+			new StringEntry("TestGui").get(builder);
 			new StringEntry("").get(builder);
 		}
-	}, Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Game"))), /*Name*/new ExternalStatement(new StringEntry("game")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))),new ExternalVariableEntry(true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Scanner"))), /*Name*/new ExternalStatement(new StringEntry("in")), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Scanner"))),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("System"))), /*Name*/new ExternalStatement(new StringEntry("in"))))))))}), Arrays.asList(new ExternalMethodEntry[]{new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("run")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
-		/*Cond*/new ExternalStatement.Conditional(
-			"while ", 
-			/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Game")))), /*Enty*/new ExternalStatement(new StringEntry("isRunning")))),
-			/*Body*/new ExternalStatement.Body(
-			/*Cond*/new ExternalStatement.Conditional(
-			"if ", 
-			/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("in"))), /*Enty*/new ExternalStatement(new StringEntry("nextLine"))),
-			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters())), /*Enty*/new ExternalStatement(new StringEntry("equals"))),
-			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Quot*/new ExternalStatement(new QuoteEntry("exit".toString())))))))),
-			/*Body*/new ExternalStatement.Body(
-				/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Game")))), /*Enty*/new ExternalStatement(new StringEntry("isRunning")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("false")))))))))))}), Arrays.asList(new ExternalClassEntry[]{}));
-	}
-}
-	protected Gui GuiClass = new Gui();
-	public class Gui extends ExternalClassEntry {
-
-
-
-
-	public void __INIT__(){
-		super.__SETUP__(
-		null, 
-		new Entry(){
-			public void get(StringBuilder __BUILDER__){
-			}
-		}, new StringEntry("Gui"), "class ", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("JFrame")), new ArrayList<Entry>(Arrays.asList(new Entry[]{})), 
-		new Entry(){
-		public void get(StringBuilder builder){
-			builder.append("static class ");
-			new StringEntry("Gui").get(builder);
-			new StringEntry("").get(builder);
-		}
-	}, Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Game"))), /*Name*/new ExternalStatement(new StringEntry("game")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))),new ExternalVariableEntry(true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Gui"))), /*Name*/new ExternalStatement(new StringEntry("gui")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null")))))}), Arrays.asList(new ExternalMethodEntry[]{new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Gui"))), /*Exac*/new ExternalStatement(new StringEntry("*")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Game"))), /*Name*/new ExternalStatement(new StringEntry("initialParent")))}), /*Body*/new ExternalStatement.Body(
+	}, Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Game"))), /*Name*/new ExternalStatement(new StringEntry("game")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))),new ExternalVariableEntry(true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("TestGui"))), /*Name*/new ExternalStatement(new StringEntry("gui")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null")))))}), Arrays.asList(new ExternalMethodEntry[]{new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("TestGui"))), /*Exac*/new ExternalStatement(new StringEntry("*")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Game"))), /*Name*/new ExternalStatement(new StringEntry("initialParent")))}), /*Body*/new ExternalStatement.Body(
 		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("super")),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Quot*/new ExternalStatement(new QuoteEntry("Questineer".toString())))))))),
 /*BODY*/				
 		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("setGame")),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("initialParent")))))))),
@@ -502,14 +500,18 @@ public class MainFlow extends FlowController  {
 		new Entry(){
 			public void get(StringBuilder __BUILDER__){
 			}
-		}, new StringEntry("Game"), "class ", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Thread")), new ArrayList<Entry>(Arrays.asList(new Entry[]{})), 
+		}, new StringEntry("Game"), "class ", null, new ArrayList<Entry>(Arrays.asList(new Entry[]{})), 
 		new Entry(){
 		public void get(StringBuilder builder){
 			builder.append(" class ");
 			new StringEntry("Game").get(builder);
 			new StringEntry("").get(builder);
 		}
-	}, Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Boolean"))), /*Name*/new ExternalStatement(new StringEntry("isRunning")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("true"))))),new ExternalVariableEntry(true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Game"))), /*Name*/new ExternalStatement(new StringEntry("game")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("List"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Environment"))))), /*Name*/new ExternalStatement(new StringEntry("environments")), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("ArrayList"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Environment"))))),new ExternalStatement.Parameters())))}), Arrays.asList(new ExternalMethodEntry[]{new ExternalMethodEntry(0, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Game"))), /*Exac*/new ExternalStatement(new StringEntry("*")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(mainStringArgs.toString())))), /*Name*/new ExternalStatement(new StringEntry("args")))}), /*Body*/new ExternalStatement.Body(
+	}, Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("List"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Environment"))))), /*Name*/new ExternalStatement(new StringEntry("environments")), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("ArrayList"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Environment"))))),new ExternalStatement.Parameters()))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Double"))), /*Name*/new ExternalStatement(new StringEntry("lastTick")), /*Optr*/new ExternalStatement("/", /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("System"))), /*Enty*/new ExternalStatement(new StringEntry("currentTimeMillis"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("1000.0"))))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Double"))), /*Name*/new ExternalStatement(new StringEntry("thisTick")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("lastTick")))))}), Arrays.asList(new ExternalMethodEntry[]{new ExternalMethodEntry(0, true,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("main")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(mainStringArgs.toString())))), /*Name*/new ExternalStatement(new StringEntry("args")))}), /*Body*/new ExternalStatement.Body(
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Gui"))),new ExternalStatement.Parameters()))))),new ExternalMethodEntry(0, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("load")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
 	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
 			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("environments"))), /*Enty*/new ExternalStatement(new StringEntry("add"))),
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
@@ -529,57 +531,28 @@ public class MainFlow extends FlowController  {
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
 			 		new ExternalStatement.Parameters())))))),
 /*BODY*/				
-	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("start")),new ExternalStatement.Parameters()))),
-/*BODY*/				
-	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Game")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Gui"))))),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("this")))))))),
-/*BODY*/				
 	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Game")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Terminal"))))),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("this")))))), /*Enty*/new ExternalStatement(new StringEntry("start"))),
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Gui")))), /*Enty*/new ExternalStatement(new StringEntry("renderer"))), /*Enty*/new ExternalStatement(new StringEntry("baseLayer"))), /*Enty*/new ExternalStatement(new StringEntry("add"))),
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters())))))),new ExternalMethodEntry(0, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("run")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
-	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Double"))), /*Name*/new ExternalStatement(new StringEntry("lastTick")), /*Optr*/new ExternalStatement("/", /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Drawables")))), /*Enty*/new ExternalStatement(new StringEntry("square"))), /*Enty*/new ExternalStatement(new StringEntry("image"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Images")))), /*Enty*/new ExternalStatement(new StringEntry("particles"))))))))))))))),new ExternalMethodEntry(0, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("update")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("thisTick")), /*Optr*/new ExternalStatement("/", /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
 			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("System"))), /*Enty*/new ExternalStatement(new StringEntry("currentTimeMillis"))),
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
 			 		new ExternalStatement.Parameters()))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("1000.0")))))),
-/*BODY*/				
-	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Double"))), /*Name*/new ExternalStatement(new StringEntry("thisTick")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0.0")))))),
-/*BODY*/				
-	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Game")))), /*Enty*/new ExternalStatement(new StringEntry("game")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("this"))))),
 /*BODY*/				
 	/*Cond*/new ExternalStatement.Conditional(
-			"while ", 
-			/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Game")))), /*Enty*/new ExternalStatement(new StringEntry("isRunning")))),
-			/*Body*/new ExternalStatement.Body(
-		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("thisTick")), /*Optr*/new ExternalStatement("/", /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("System"))), /*Enty*/new ExternalStatement(new StringEntry("currentTimeMillis"))),
-			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters()))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("1000.0")))))),
-/*BODY*/				
-		/*Cond*/new ExternalStatement.Conditional(
 			"for ", 
 			/*Optr*/new ExternalStatement(":", new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Environment"))), /*Name*/new ExternalStatement(new StringEntry("environment"))), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("environments"))))),
 			/*Body*/new ExternalStatement.Body(
-			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
 			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("environment"))), /*Enty*/new ExternalStatement(new StringEntry("tick"))),
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
 			 		new ExternalStatement.Parameters(/*Optr*/new ExternalStatement("-", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("thisTick")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("lastTick"))))))))))),
 /*BODY*/				
-		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("lastTick")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("thisTick")))))),
-/*BODY*/				
-		/*Cond*/new ExternalStatement.Conditional(
-			"if ", 
-			/*Optr*/new ExternalStatement("!=", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Game")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Gui")))))), /*Enty*/new ExternalStatement(new StringEntry("gui")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null")))),
-			/*Body*/new ExternalStatement.Body(
-			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Game")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Gui")))))), /*Enty*/new ExternalStatement(new StringEntry("gui"))), /*Enty*/new ExternalStatement(new StringEntry("repaint"))),
-			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters())))))))),
-/*BODY*/				
-	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Game")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Terminal")))))), /*Enty*/new ExternalStatement(new StringEntry("in"))), /*Enty*/new ExternalStatement(new StringEntry("close"))),
-			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters())))))),new ExternalMethodEntry(0, true,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("main")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(mainStringArgs.toString())))), /*Name*/new ExternalStatement(new StringEntry("args")))}), /*Body*/new ExternalStatement.Body(
-	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Game"))),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("args"))))))))))}), Arrays.asList(new ExternalClassEntry[]{GameClass.TerminalClass,GameClass.GuiClass}));
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("lastTick")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("thisTick"))))))))}), Arrays.asList(new ExternalClassEntry[]{GameClass.TestGuiClass}));
 	}
 }
 	protected Menu MenuClass = new Menu();
@@ -8798,6 +8771,2774 @@ public void addEventMethodsExclusive(final ExternalClassEntry inputClass,final M
 	}, Arrays.asList(new ExternalVariableEntry[]{}), Arrays.asList(new ExternalMethodEntry[]{}), Arrays.asList(new ExternalClassEntry[]{}));
 	}
 }
+	protected Renderer RendererClass = new Renderer();
+	public class Renderer extends ExternalClassEntry {
+		protected final ExternalStatement renderLayersBody = new ExternalStatement(/*InCl*/new ExternalStatement(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("baseLayer"))), /*Enty*/new ExternalStatement(new StringEntry("render"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))))));
+		protected final ExternalStatement animateLayersBody = new ExternalStatement(/*InCl*/new ExternalStatement(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("baseLayer"))), /*Enty*/new ExternalStatement(new StringEntry("animate"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))))));
+		protected final ExternalStatement loadLayersBody = new ExternalStatement(/*InCl*/new ExternalStatement(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("baseLayer"))), /*Enty*/new ExternalStatement(new StringEntry("load"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))))));
+
+	
+public void addLayer(final String layerName) {
+	final String realLayerName = layerName + "Layer";
+	renderLayersBody.add(/*InCl*/new ExternalStatement(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(realLayerName.toString()))), /*Enty*/new ExternalStatement(new StringEntry("render"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))))));
+	animateLayersBody.add(/*InCl*/new ExternalStatement(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(realLayerName.toString()))), /*Enty*/new ExternalStatement(new StringEntry("animate"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))))));
+	loadLayersBody.add(/*InCl*/new ExternalStatement(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(realLayerName.toString()))), /*Enty*/new ExternalStatement(new StringEntry("load"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))))));
+RendererClass.addVariable(new ExternalVariableEntry(true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Renderer")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Layer"))))), /*Enty*/new ExternalStatement(new StringEntry(realLayerName.toString())), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Renderer")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Layer"))))),new ExternalStatement.Parameters()))));
+}
+
+
+	protected Layer LayerClass = new Layer();
+	public class Layer extends ExternalClassEntry {
+
+
+
+	protected ControlEvent ControlEventClass = new ControlEvent();
+	public class ControlEvent extends ExternalClassEntry {
+
+
+
+
+	public void __INIT__(){
+		super.__SETUP__(
+		null, 
+		new Entry(){
+			public void get(StringBuilder __BUILDER__){
+			}
+		}, new StringEntry("ControlEvent"), "class ", null, new ArrayList<Entry>(Arrays.asList(new Entry[]{})), 
+		new Entry(){
+		public void get(StringBuilder builder){
+			builder.append("static class ");
+			new StringEntry("ControlEvent").get(builder);
+			new StringEntry("").get(builder);
+		}
+	}, Arrays.asList(new ExternalVariableEntry[]{}), Arrays.asList(new ExternalMethodEntry[]{new ExternalMethodEntry(2, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("act")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body())}), Arrays.asList(new ExternalClassEntry[]{}));
+	}
+}
+	protected Addition AdditionClass = new Addition();
+	public class Addition extends ExternalClassEntry {
+
+
+
+
+	public void __INIT__(){
+		super.__SETUP__(
+		null, 
+		new Entry(){
+			public void get(StringBuilder __BUILDER__){
+			}
+		}, new StringEntry("Addition"), "class ", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("ControlEvent")), new ArrayList<Entry>(Arrays.asList(new Entry[]{})), 
+		new Entry(){
+		public void get(StringBuilder builder){
+			builder.append(" class ");
+			new StringEntry("Addition").get(builder);
+			new StringEntry("").get(builder);
+		}
+	}, Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Gui")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Drawable"))))), /*Name*/new ExternalStatement(new StringEntry("toAdd")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null")))))}), Arrays.asList(new ExternalMethodEntry[]{new ExternalMethodEntry(2, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("act")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("layer"))), /*Enty*/new ExternalStatement(new StringEntry("add"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("toAdd")))))))))))}), Arrays.asList(new ExternalClassEntry[]{}));
+	}
+}
+	protected Removal RemovalClass = new Removal();
+	public class Removal extends ExternalClassEntry {
+
+
+
+
+	public void __INIT__(){
+		super.__SETUP__(
+		null, 
+		new Entry(){
+			public void get(StringBuilder __BUILDER__){
+			}
+		}, new StringEntry("Removal"), "class ", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("ControlEvent")), new ArrayList<Entry>(Arrays.asList(new Entry[]{})), 
+		new Entry(){
+		public void get(StringBuilder builder){
+			builder.append(" class ");
+			new StringEntry("Removal").get(builder);
+			new StringEntry("").get(builder);
+		}
+	}, Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Gui")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Drawable"))))), /*Name*/new ExternalStatement(new StringEntry("toRemove")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null")))))}), Arrays.asList(new ExternalMethodEntry[]{new ExternalMethodEntry(2, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("act")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("layer"))), /*Enty*/new ExternalStatement(new StringEntry("remove"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("toRemove")))))))))))}), Arrays.asList(new ExternalClassEntry[]{}));
+	}
+}
+
+	public void __INIT__(){
+		super.__SETUP__(
+		null, 
+		new Entry(){
+			public void get(StringBuilder __BUILDER__){
+			}
+		}, new StringEntry("Layer"), "class ", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Thread")), new ArrayList<Entry>(Arrays.asList(new Entry[]{})), 
+		new Entry(){
+		public void get(StringBuilder builder){
+			builder.append("static class ");
+			new StringEntry("Layer").get(builder);
+			new StringEntry("").get(builder);
+		}
+	}, Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("UNSTARTED")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("-1"))))),new ExternalVariableEntry(true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("WAITING_FOR_EVENT")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0"))))),new ExternalVariableEntry(true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("PROCESSING_EVENTS")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("1"))))),new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("List"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Gui")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Drawable"))))))), /*Name*/new ExternalStatement(new StringEntry("layer")), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("ArrayList"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Gui")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Drawable"))))))),new ExternalStatement.Parameters()))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("List"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("ControlEvent"))))), /*Name*/new ExternalStatement(new StringEntry("events")), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("ArrayList"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("ControlEvent"))))),new ExternalStatement.Parameters()))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("status")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("UNSTARTED")))))}), Arrays.asList(new ExternalMethodEntry[]{new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("add")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Gui")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Drawable"))))), /*Name*/new ExternalStatement(new StringEntry("toAdd")))}), /*Body*/new ExternalStatement.Body(
+		/*Cond*/new ExternalStatement.Conditional(
+			"synchronized ", 
+			/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("events")))),
+			/*Body*/new ExternalStatement.Body(
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("events"))), /*Enty*/new ExternalStatement(new StringEntry("add"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Layer")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Addition"))))),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("toAdd")))))))))))),
+/*BODY*/				
+			/*Cond*/new ExternalStatement.Conditional(
+			"if ", 
+			/*Optr*/new ExternalStatement("==", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("status")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("WAITING_FOR_EVENT")))),
+			/*Body*/new ExternalStatement.Body(
+				/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("events"))), /*Enty*/new ExternalStatement(new StringEntry("notifyAll"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters())))))))))),new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("remove")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Gui")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Drawable"))))), /*Name*/new ExternalStatement(new StringEntry("toRemove")))}), /*Body*/new ExternalStatement.Body(
+		/*Cond*/new ExternalStatement.Conditional(
+			"synchronized ", 
+			/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("events")))),
+			/*Body*/new ExternalStatement.Body(
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("events"))), /*Enty*/new ExternalStatement(new StringEntry("add"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Layer")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Removal"))))),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("toRemove")))))))))))),
+/*BODY*/				
+			/*Cond*/new ExternalStatement.Conditional(
+			"if ", 
+			/*Optr*/new ExternalStatement("==", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("status")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("WAITING_FOR_EVENT")))),
+			/*Body*/new ExternalStatement.Body(
+				/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("events"))), /*Enty*/new ExternalStatement(new StringEntry("notifyAll"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters())))))))))),new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("run")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+		/*Cond*/new ExternalStatement.Conditional(
+			"try ", null,
+			/*Body*/new ExternalStatement.Body(
+			/*Cond*/new ExternalStatement.Conditional(
+			"while ", 
+			/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Gui")))), /*Enty*/new ExternalStatement(new StringEntry("isRunning")))),
+			/*Body*/new ExternalStatement.Body(
+				/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("status")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("WAITING_FOR_EVENT")))))),
+/*BODY*/				
+				/*Cond*/new ExternalStatement.Conditional(
+			"while ", 
+			/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("events"))), /*Enty*/new ExternalStatement(new StringEntry("isEmpty"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))),
+			/*Body*/new ExternalStatement.Body(
+					/*Cond*/new ExternalStatement.Conditional(
+			"synchronized ", 
+			/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("events")))),
+			/*Body*/new ExternalStatement.Body(
+						/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("events"))), /*Enty*/new ExternalStatement(new StringEntry("wait"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters())))))))),
+/*BODY*/				
+				/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("status")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("PROCESSING_EVENTS")))))),
+/*BODY*/				
+				/*Cond*/new ExternalStatement.Conditional(
+			"while ", 
+			/*Optr*/new ExternalStatement("==", /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("events"))), /*Enty*/new ExternalStatement(new StringEntry("isEmpty"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("false")))),
+			/*Body*/new ExternalStatement.Body(
+					/*Cond*/new ExternalStatement.Conditional(
+			"synchronized ", 
+			/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("events")))),
+			/*Body*/new ExternalStatement.Body(
+						/*Cond*/new ExternalStatement.Conditional(
+			"for ", 
+			/*Optr*/new ExternalStatement(": ", new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("ControlEvent"))), /*Name*/new ExternalStatement(new StringEntry("event"))), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("events"))))),
+			/*Body*/new ExternalStatement.Body(
+							/*Cond*/new ExternalStatement.Conditional(
+			"synchronized ", 
+			/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("layer")))),
+			/*Body*/new ExternalStatement.Body(
+								/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("event"))), /*Enty*/new ExternalStatement(new StringEntry("act"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters())))))))))))))))),
+/*BODY*/				
+		/*Cond*/new ExternalStatement.Conditional(
+			"catch ", 
+			/*Optr*/new ExternalStatement(" ", /*Exac*/new ExternalStatement(new StringEntry("Exception")), /*Exac*/new ExternalStatement(new StringEntry("e0"))),
+			/*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Exac*/new ExternalStatement(new StringEntry("e0.printStackTrace()"))))))),new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("load")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("start")),new ExternalStatement.Parameters()))))),new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("render")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+		/*Cond*/new ExternalStatement.Conditional(
+			"synchronized ", 
+			/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("layer")))),
+			/*Body*/new ExternalStatement.Body(
+			/*Cond*/new ExternalStatement.Conditional(
+			"for ", 
+			/*Optr*/new ExternalStatement(": ", new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Gui")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Drawable"))))), /*Name*/new ExternalStatement(new StringEntry("drawable"))), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("layer"))))),
+			/*Body*/new ExternalStatement.Body(
+				/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("drawable"))), /*Enty*/new ExternalStatement(new StringEntry("render"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters())))))))))),new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("animate")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+		/*Cond*/new ExternalStatement.Conditional(
+			"for ", 
+			/*FIHd*/new ExternalStatement(";", new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("i")), /*Exac*/new ExternalStatement(new StringEntry("0"))), new ExternalStatement("< ", /*Name*/new ExternalStatement(new StringEntry("i")), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("layer"))), /*Enty*/new ExternalStatement(new StringEntry("size"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters())))), new ExternalStatement(new StringEntry("++"),"",/*Name*/new ExternalStatement(new StringEntry("i")))),
+			/*Body*/new ExternalStatement.Body(
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("layer"))), /*Enty*/new ExternalStatement(new StringEntry("get"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("i"))))))), /*Enty*/new ExternalStatement(new StringEntry("animate"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))))))))}), Arrays.asList(new ExternalClassEntry[]{RendererClass.LayerClass.ControlEventClass,RendererClass.LayerClass.AdditionClass,RendererClass.LayerClass.RemovalClass}));
+	}
+}
+	protected Animator AnimatorClass = new Animator();
+	public class Animator extends ExternalClassEntry {
+
+
+
+
+	public void __INIT__(){
+		super.__SETUP__(
+		null, 
+		new Entry(){
+			public void get(StringBuilder __BUILDER__){
+			}
+		}, new StringEntry("Animator"), "class ", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Thread")), new ArrayList<Entry>(Arrays.asList(new Entry[]{})), 
+		new Entry(){
+		public void get(StringBuilder builder){
+			builder.append(" class ");
+			new StringEntry("Animator").get(builder);
+			new StringEntry("").get(builder);
+		}
+	}, Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("animationTicks")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0")))))}), Arrays.asList(new ExternalMethodEntry[]{new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("run")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+		/*Cond*/new ExternalStatement.Conditional(
+			"while ", 
+			/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Gui")))), /*Enty*/new ExternalStatement(new StringEntry("isRunning")))),
+			/*Body*/new ExternalStatement.Body(
+			/*Cond*/new ExternalStatement.Conditional(
+			"synchronized ", 
+			/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("this")))),
+			/*Body*/new ExternalStatement.Body(
+				/*Cond*/new ExternalStatement.Conditional(
+			"while ", 
+			/*Optr*/new ExternalStatement("<", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("animationTicks")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("1 ")))),
+			/*Body*/new ExternalStatement.Body(
+					/*Cond*/new ExternalStatement.Conditional(
+			"try ", null,
+			/*Body*/new ExternalStatement.Body(
+						/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("wait")),new ExternalStatement.Parameters()))))),
+/*BODY*/				
+					/*Cond*/new ExternalStatement.Conditional(
+			"catch ", 
+			/*Optr*/new ExternalStatement(" ", /*Exac*/new ExternalStatement(new StringEntry("InterruptedException")), /*Exac*/new ExternalStatement(new StringEntry("e0"))),
+			/*Body*/new ExternalStatement.Body(
+					/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Exac*/new ExternalStatement(new StringEntry("e0.printStackTrace()"))))))),
+/*BODY*/				
+				/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("-=", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("animationTicks")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("1"))))))),
+/*BODY*/				
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*InCl*/new ExternalStatement(animateLayersBody)))))))),new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("animate")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+		/*Cond*/new ExternalStatement.Conditional(
+			"synchronized ", 
+			/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("this")))),
+			/*Body*/new ExternalStatement.Body(
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("+=", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("animationTicks")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("1"))))),
+/*BODY*/				
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("notifyAll")),new ExternalStatement.Parameters())))))))}), Arrays.asList(new ExternalClassEntry[]{}));
+	}
+}
+
+	public void __INIT__(){
+		super.__SETUP__(
+		new Entry(){
+			public void get(StringBuilder __BUILDER__){/*Enty*/new ExternalStatement(new StringEntry(packageName.toString())).get(__BUILDER__);
+				__BUILDER__.append(".");
+				/*Name*/new ExternalStatement(new StringEntry("gui")).get(__BUILDER__);
+			}
+		}, 
+		new Entry(){
+			public void get(StringBuilder __BUILDER__){
+			}
+		}, new StringEntry("Renderer"), "class ", null, new ArrayList<Entry>(Arrays.asList(new Entry[]{})), 
+		new Entry(){
+		public void get(StringBuilder builder){
+			builder.append(" class ");
+			new StringEntry("Renderer").get(builder);
+			new StringEntry("").get(builder);
+		}
+	}, Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Renderer")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Animator"))))), /*Name*/new ExternalStatement(new StringEntry("animator")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))), /*Name*/new ExternalStatement(new StringEntry("viewX")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0f"))))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))), /*Name*/new ExternalStatement(new StringEntry("viewY")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0f"))))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))), /*Name*/new ExternalStatement(new StringEntry("viewZ")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0f"))))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))), /*Name*/new ExternalStatement(new StringEntry("aspectRatio")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0f"))))),new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("viewportX")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0"))))),new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("viewportY")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0"))))),new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("viewportWidth")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0"))))),new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("viewportHeight")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0"))))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Long"))), /*Name*/new ExternalStatement(new StringEntry("ticksPerSecond")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0L"))))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Long"))), /*Name*/new ExternalStatement(new StringEntry("animationInterval")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("60L"))))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Long"))), /*Name*/new ExternalStatement(new StringEntry("previousAnimationTime")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0L"))))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Long"))), /*Name*/new ExternalStatement(new StringEntry("lastFrameTime")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0L"))))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Double"))), /*Name*/new ExternalStatement(new StringEntry("secondsSinceLastFrame")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0.0"))))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Double"))), /*Name*/new ExternalStatement(new StringEntry("avgSecsPerFrame")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0.01"))))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("frameCount")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0"))))),new ExternalVariableEntry(true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Renderer")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Layer"))))), /*Name*/new ExternalStatement(new StringEntry("baseLayer")), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Renderer")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Layer"))))),new ExternalStatement.Parameters())))}), Arrays.asList(new ExternalMethodEntry[]{new ExternalMethodEntry(0, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("render")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("glClear"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Optr*/new ExternalStatement("|", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("GL_COLOR_BUFFER_BIT")))), /*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("GL_DEPTH_BUFFER_BIT"))))))))),
+/*BODY*/				
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("glMatrixMode"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("GL_MODELVIEW"))))))))),
+/*BODY*/				
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("glLoadIdentity"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters())))),
+/*BODY*/				
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GLU")))), /*Enty*/new ExternalStatement(new StringEntry("gluLookAt"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0f")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0f")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("1f")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0f")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0f")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0f")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0f")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("1f")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0f"))))))))),
+/*BODY*/				
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("glTranslatef"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Optr*/new ExternalStatement("+", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("-0.7521f ")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("viewX")))),/*Optr*/new ExternalStatement("+", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("-0.565f ")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("viewY")))),/*Optr*/new ExternalStatement("+", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("-1.107f ")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("viewZ"))))))))),
+/*BODY*/				
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("glScalef"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("1.504f")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("1.12875f")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("1f"))))))))),
+/*BODY*/				
+	/*Cond*/new ExternalStatement.Conditional(
+			"if ", 
+			/*Optr*/new ExternalStatement(">", /*Optr*/new ExternalStatement("-", /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("System"))), /*Enty*/new ExternalStatement(new StringEntry("currentTimeMillis"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("previousAnimationTime")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("animationInterval")))),
+			/*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("previousAnimationTime")), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("System"))), /*Enty*/new ExternalStatement(new StringEntry("currentTimeMillis"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("animator"))), /*Enty*/new ExternalStatement(new StringEntry("animate"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters())))))),
+/*BODY*/				
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("glEnableClientState"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("GL_VERTEX_ARRAY"))))))))),
+/*BODY*/				
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("glEnableClientState"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("GL_TEXTURE_COORD_ARRAY"))))))))),
+/*BODY*/				
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("glFrontFace"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("GL_CW"))))))))),
+/*BODY*/				
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("glPushMatrix"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters())))),
+/*BODY*/				
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*InCl*/new ExternalStatement(renderLayersBody)))),
+/*BODY*/				
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("glPopMatrix"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters())))),
+/*BODY*/				
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("glDisableClientState"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("GL_VERTEX_ARRAY"))))))))),
+/*BODY*/				
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("glDisableClientState"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("GL_TEXTURE_COORD_ARRAY"))))))))),
+/*BODY*/				
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("+=", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("frameCount")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("1"))))),
+/*BODY*/				
+	/*Cond*/new ExternalStatement.Conditional(
+			"if ", 
+			/*Optr*/new ExternalStatement(">", /*Optr*/new ExternalStatement("-", /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Sys")))), /*Enty*/new ExternalStatement(new StringEntry("getTime"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("lastFrameTime")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("ticksPerSecond")))),
+			/*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("frameCount")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0")))))))))),new ExternalMethodEntry(0, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("load")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("DisplayMode"))), /*Name*/new ExternalStatement(new StringEntry("displayMode")))}), /*Body*/new ExternalStatement.Body(
+	/*Cond*/new ExternalStatement.Conditional(
+			"try ", null,
+			/*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("ticksPerSecond")), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Sys")))), /*Enty*/new ExternalStatement(new StringEntry("getTimerResolution"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))))),
+/*BODY*/				
+		/*Cond*/new ExternalStatement.Conditional(
+			"if ", 
+			/*Optr*/new ExternalStatement("==", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("aspectRatio")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0f ")))),
+			/*Body*/new ExternalStatement.Body(
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("aspectRatio")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("(float)displayMode.getWidth() / (float)displayMode.getHeight()")))))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("viewportHeight")), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("displayMode"))), /*Enty*/new ExternalStatement(new StringEntry("getHeight"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("viewportWidth")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("(int) (displayMode.getHeight() * aspectRatio)")))))),
+/*BODY*/				
+		/*Cond*/new ExternalStatement.Conditional(
+			"if ", 
+			/*Optr*/new ExternalStatement(">", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("viewportWidth")))), /*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("displayMode"))), /*Enty*/new ExternalStatement(new StringEntry("getWidth"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))),
+			/*Body*/new ExternalStatement.Body(
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("viewportWidth")), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("displayMode"))), /*Enty*/new ExternalStatement(new StringEntry("getWidth"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))))),
+/*BODY*/				
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("viewportHeight")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("(int) (displayMode.getWidth() / aspectRatio )")))))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("viewportX")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("(int) ((displayMode.getWidth()-viewportWidth) / 2)")))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("viewportY")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("(int) ((displayMode.getHeight()-viewportHeight) / 2)")))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("glEnable"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("GL_DEPTH_TEST"))))))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("glDepthFunc"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("GL_LEQUAL"))))))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("glClearColor"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0f")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0f")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0f")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("1f"))))))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("glEnable"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("GL_NORMALIZE"))))))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("glEnable"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("GL_CULL_FACE"))))))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("glEnable"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("GL_TEXTURE_2D"))))))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("glEnable"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("GL_BLEND"))))))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("glBlendFunc"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("GL_SRC_ALPHA")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("GL_ONE_MINUS_SRC_ALPHA"))))))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("glEnable"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("GL_ALPHA_TEST"))))))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("glAlphaFunc"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("GL_GREATER")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0f"))))))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("glLightModeli"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL12")))), /*Enty*/new ExternalStatement(new StringEntry("GL_LIGHT_MODEL_COLOR_CONTROL")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL12")))), /*Enty*/new ExternalStatement(new StringEntry("GL_SEPARATE_SPECULAR_COLOR"))))))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("glViewport"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("viewportX")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("viewportY")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("viewportWidth")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("viewportHeight"))))))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("setPerspective")),new ExternalStatement.Parameters()))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("glMatrixMode"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("GL_MODELVIEW"))))))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("glLoadIdentity"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters())))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("updateTimer")),new ExternalStatement.Parameters()))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Display")))), /*Enty*/new ExternalStatement(new StringEntry("update"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters())))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*InCl*/new ExternalStatement(loadLayersBody)))))),
+/*BODY*/				
+	/*Cond*/new ExternalStatement.Conditional(
+			"catch ", 
+			/*Optr*/new ExternalStatement(" ", /*Exac*/new ExternalStatement(new StringEntry("Exception")), /*Exac*/new ExternalStatement(new StringEntry("e0"))),
+			/*Body*/new ExternalStatement.Body(
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Exac*/new ExternalStatement(new StringEntry("e0.printStackTrace()"))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("System"))), /*Enty*/new ExternalStatement(new StringEntry("err"))), /*Enty*/new ExternalStatement(new StringEntry("println"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Quot*/new ExternalStatement(new QuoteEntry("Renderer Load Failed".toString()))))))))))))),new ExternalMethodEntry(0, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("setPerspective")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("glMatrixMode"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("GL_PROJECTION"))))))))),
+/*BODY*/				
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("glLoadIdentity"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters())))),
+/*BODY*/				
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GLU")))), /*Enty*/new ExternalStatement(new StringEntry("gluPerspective"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("40f")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("aspectRatio")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("1f")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("1000f"))))))))),
+/*BODY*/				
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("glMatrixMode"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("GL_MODELVIEW"))))))))))),new ExternalMethodEntry(0, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("updateTimer")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Double"))), /*Name*/new ExternalStatement(new StringEntry("numToAvg")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("50.0")))))),
+/*BODY*/				
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("secondsSinceLastFrame")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*InCl*/new ExternalStatement("(double)(Sys.getTime() - lastFrameTime) / (double)ticksPerSecond"))))),
+/*BODY*/				
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("lastFrameTime")), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Sys")))), /*Enty*/new ExternalStatement(new StringEntry("getTime"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))))),
+/*BODY*/				
+	/*Cond*/new ExternalStatement.Conditional(
+			"if ", 
+			/*Optr*/new ExternalStatement("<", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("secondsSinceLastFrame")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("1 ")))),
+			/*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("avgSecsPerFrame")), /*Optr*/new ExternalStatement("+", /*Optr*/new ExternalStatement("*", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("avgSecsPerFrame")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("numToAvg")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("secondsSinceLastFrame")))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("+", /*Optr*/new ExternalStatement("/=", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("avgSecsPerFrame")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("numToAvg")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("1.0")))))))))}), Arrays.asList(new ExternalClassEntry[]{RendererClass.LayerClass,RendererClass.AnimatorClass}));
+	}
+}
+	protected InputHandler InputHandlerClass = new InputHandler();
+	public class InputHandler extends ExternalClassEntry {
+
+
+
+	protected Events EventsClass = new Events();
+	public class Events extends ExternalClassEntry {
+
+
+
+	protected MouseWheelEvent MouseWheelEventClass = new MouseWheelEvent();
+	public class MouseWheelEvent extends ExternalClassEntry {
+
+
+
+	protected Listener ListenerClass = new Listener();
+	public class Listener extends ExternalClassEntry {
+
+
+
+
+	public void __INIT__(){
+		super.__SETUP__(
+		null, 
+		new Entry(){
+			public void get(StringBuilder __BUILDER__){
+			}
+		}, new StringEntry("Listener"), "interface ", null, new ArrayList<Entry>(Arrays.asList(new Entry[]{})), 
+		new Entry(){
+		public void get(StringBuilder builder){
+			builder.append("static interface ");
+			new StringEntry("Listener").get(builder);
+			new StringEntry("").get(builder);
+		}
+	}, Arrays.asList(new ExternalVariableEntry[]{}), Arrays.asList(new ExternalMethodEntry[]{new ExternalMethodEntry(3, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("listen")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("InputHandler")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("MouseWheelEvent"))))), /*Name*/new ExternalStatement(new StringEntry("event")))}), /*Body*/new ExternalStatement.Body())}), Arrays.asList(new ExternalClassEntry[]{}));
+	}
+}
+
+	public void __INIT__(){
+		super.__SETUP__(
+		null, 
+		new Entry(){
+			public void get(StringBuilder __BUILDER__){
+			}
+		}, new StringEntry("MouseWheelEvent"), "class ", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("InputHandler")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Event")))), new ArrayList<Entry>(Arrays.asList(new Entry[]{})), 
+		new Entry(){
+		public void get(StringBuilder builder){
+			builder.append("static class ");
+			new StringEntry("MouseWheelEvent").get(builder);
+			new StringEntry("").get(builder);
+		}
+	}, Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("List"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("InputHandler")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("MouseWheelEvent")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Listener"))))))), /*Name*/new ExternalStatement(new StringEntry("listeners")), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("ArrayList"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("InputHandler")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("MouseWheelEvent")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Listener"))))))),new ExternalStatement.Parameters()))),new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("amount")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0")))))}), Arrays.asList(new ExternalMethodEntry[]{new ExternalMethodEntry(2, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("handle")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+			/*Cond*/new ExternalStatement.Conditional(
+			"synchronized ", 
+			/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("InputHandler")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("MouseWheelEvent")))))), /*Enty*/new ExternalStatement(new StringEntry("listeners")))),
+			/*Body*/new ExternalStatement.Body(
+				/*Cond*/new ExternalStatement.Conditional(
+			"for ", 
+			/*Optr*/new ExternalStatement(": ", new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("InputHandler")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("MouseWheelEvent")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Listener"))))), /*Name*/new ExternalStatement(new StringEntry("listener"))), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("InputHandler")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("MouseWheelEvent")))))), /*Enty*/new ExternalStatement(new StringEntry("listeners"))))),
+			/*Body*/new ExternalStatement.Body(
+					/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("listener"))), /*Enty*/new ExternalStatement(new StringEntry("listen"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("this")))))))))))))))}), Arrays.asList(new ExternalClassEntry[]{InputHandlerClass.EventsClass.MouseWheelEventClass.ListenerClass}));
+	}
+}
+	protected MouseEvent MouseEventClass = new MouseEvent();
+	public class MouseEvent extends ExternalClassEntry {
+
+
+
+	protected Listener ListenerClass = new Listener();
+	public class Listener extends ExternalClassEntry {
+
+
+
+
+	public void __INIT__(){
+		super.__SETUP__(
+		null, 
+		new Entry(){
+			public void get(StringBuilder __BUILDER__){
+			}
+		}, new StringEntry("Listener"), "interface ", null, new ArrayList<Entry>(Arrays.asList(new Entry[]{})), 
+		new Entry(){
+		public void get(StringBuilder builder){
+			builder.append("static interface ");
+			new StringEntry("Listener").get(builder);
+			new StringEntry("").get(builder);
+		}
+	}, Arrays.asList(new ExternalVariableEntry[]{}), Arrays.asList(new ExternalMethodEntry[]{new ExternalMethodEntry(3, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("listen")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("InputHandler")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("MouseEvent")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Drag"))))), /*Name*/new ExternalStatement(new StringEntry("event")))}), /*Body*/new ExternalStatement.Body()),new ExternalMethodEntry(3, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("listen")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("InputHandler")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("MouseEvent")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Press"))))), /*Name*/new ExternalStatement(new StringEntry("event")))}), /*Body*/new ExternalStatement.Body()),new ExternalMethodEntry(3, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("listen")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("InputHandler")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("MouseEvent")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Release"))))), /*Name*/new ExternalStatement(new StringEntry("event")))}), /*Body*/new ExternalStatement.Body()),new ExternalMethodEntry(3, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("listen")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("InputHandler")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("MouseEvent")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Move"))))), /*Name*/new ExternalStatement(new StringEntry("event")))}), /*Body*/new ExternalStatement.Body())}), Arrays.asList(new ExternalClassEntry[]{}));
+	}
+}
+	protected Move MoveClass = new Move();
+	public class Move extends ExternalClassEntry {
+
+
+
+
+	public void __INIT__(){
+		super.__SETUP__(
+		null, 
+		new Entry(){
+			public void get(StringBuilder __BUILDER__){
+			}
+		}, new StringEntry("Move"), "class ", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("InputHandler")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("MouseEvent")))), new ArrayList<Entry>(Arrays.asList(new Entry[]{})), 
+		new Entry(){
+		public void get(StringBuilder builder){
+			builder.append("static class ");
+			new StringEntry("Move").get(builder);
+			new StringEntry("").get(builder);
+		}
+	}, Arrays.asList(new ExternalVariableEntry[]{}), Arrays.asList(new ExternalMethodEntry[]{new ExternalMethodEntry(3, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Move"))), /*Exac*/new ExternalStatement(new StringEntry("*")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("cursorX"))),
+/*PARAMS*/				new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("cursorY")))}), /*Body*/new ExternalStatement.Body(
+				/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("super")),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("cursorX")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("cursorY")))))))))),new ExternalMethodEntry(3, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Boolean"))), /*Exac*/new ExternalStatement(new StringEntry("isMove")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+				/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("true"))))))),new ExternalMethodEntry(3, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("handle")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+				/*Cond*/new ExternalStatement.Conditional(
+			"synchronized ", 
+			/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("InputHandler")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("MouseEvent")))))), /*Enty*/new ExternalStatement(new StringEntry("listeners")))),
+			/*Body*/new ExternalStatement.Body(
+					/*Cond*/new ExternalStatement.Conditional(
+			"for ", 
+			/*Optr*/new ExternalStatement(": ", new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("InputHandler")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("MouseEvent")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Listener"))))), /*Name*/new ExternalStatement(new StringEntry("listener"))), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("InputHandler")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("MouseEvent")))))), /*Enty*/new ExternalStatement(new StringEntry("listeners"))))),
+			/*Body*/new ExternalStatement.Body(
+						/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("listener"))), /*Enty*/new ExternalStatement(new StringEntry("listen"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("this")))))))))))))))}), Arrays.asList(new ExternalClassEntry[]{}));
+	}
+}
+	protected Drag DragClass = new Drag();
+	public class Drag extends ExternalClassEntry {
+
+
+
+
+	public void __INIT__(){
+		super.__SETUP__(
+		null, 
+		new Entry(){
+			public void get(StringBuilder __BUILDER__){
+			}
+		}, new StringEntry("Drag"), "class ", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("InputHandler")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("MouseEvent")))), new ArrayList<Entry>(Arrays.asList(new Entry[]{})), 
+		new Entry(){
+		public void get(StringBuilder builder){
+			builder.append("static class ");
+			new StringEntry("Drag").get(builder);
+			new StringEntry("").get(builder);
+		}
+	}, Arrays.asList(new ExternalVariableEntry[]{}), Arrays.asList(new ExternalMethodEntry[]{new ExternalMethodEntry(3, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Drag"))), /*Exac*/new ExternalStatement(new StringEntry("*")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("button"))),
+/*PARAMS*/				new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("cursorX"))),
+/*PARAMS*/				new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("cursorY")))}), /*Body*/new ExternalStatement.Body(
+				/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("super")),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("cursorX")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("cursorY")))))))),
+/*BODY*/				
+				/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("setIsLeftButton")),new ExternalStatement.Parameters(/*Optr*/new ExternalStatement("==", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("button")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0")))))))),
+/*BODY*/				
+				/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("setIsRightButton")),new ExternalStatement.Parameters(/*Optr*/new ExternalStatement("==", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("button")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("1")))))))))),new ExternalMethodEntry(3, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Boolean"))), /*Exac*/new ExternalStatement(new StringEntry("isDrag")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+				/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("true"))))))),new ExternalMethodEntry(3, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("handle")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+				/*Cond*/new ExternalStatement.Conditional(
+			"synchronized ", 
+			/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("InputHandler")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("MouseEvent")))))), /*Enty*/new ExternalStatement(new StringEntry("listeners")))),
+			/*Body*/new ExternalStatement.Body(
+					/*Cond*/new ExternalStatement.Conditional(
+			"for ", 
+			/*Optr*/new ExternalStatement(": ", new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("InputHandler")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("MouseEvent")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Listener"))))), /*Name*/new ExternalStatement(new StringEntry("listener"))), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("InputHandler")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("MouseEvent")))))), /*Enty*/new ExternalStatement(new StringEntry("listeners"))))),
+			/*Body*/new ExternalStatement.Body(
+						/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("listener"))), /*Enty*/new ExternalStatement(new StringEntry("listen"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("this")))))))))))))))}), Arrays.asList(new ExternalClassEntry[]{}));
+	}
+}
+	protected Press PressClass = new Press();
+	public class Press extends ExternalClassEntry {
+
+
+
+
+	public void __INIT__(){
+		super.__SETUP__(
+		null, 
+		new Entry(){
+			public void get(StringBuilder __BUILDER__){
+			}
+		}, new StringEntry("Press"), "class ", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("InputHandler")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("MouseEvent")))), new ArrayList<Entry>(Arrays.asList(new Entry[]{})), 
+		new Entry(){
+		public void get(StringBuilder builder){
+			builder.append("static class ");
+			new StringEntry("Press").get(builder);
+			new StringEntry("").get(builder);
+		}
+	}, Arrays.asList(new ExternalVariableEntry[]{}), Arrays.asList(new ExternalMethodEntry[]{new ExternalMethodEntry(3, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Press"))), /*Exac*/new ExternalStatement(new StringEntry("*")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("button"))),
+/*PARAMS*/				new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("cursorX"))),
+/*PARAMS*/				new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("cursorY")))}), /*Body*/new ExternalStatement.Body(
+				/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("super")),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("cursorX")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("cursorY")))))))),
+/*BODY*/				
+				/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("setIsLeftButton")),new ExternalStatement.Parameters(/*Optr*/new ExternalStatement("==", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("button")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0")))))))),
+/*BODY*/				
+				/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("setIsRightButton")),new ExternalStatement.Parameters(/*Optr*/new ExternalStatement("==", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("button")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("1")))))))))),new ExternalMethodEntry(3, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Boolean"))), /*Exac*/new ExternalStatement(new StringEntry("isPress")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+				/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("true"))))))),new ExternalMethodEntry(3, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("handle")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+				/*Cond*/new ExternalStatement.Conditional(
+			"synchronized ", 
+			/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("InputHandler")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("MouseEvent")))))), /*Enty*/new ExternalStatement(new StringEntry("listeners")))),
+			/*Body*/new ExternalStatement.Body(
+					/*Cond*/new ExternalStatement.Conditional(
+			"for ", 
+			/*Optr*/new ExternalStatement(": ", new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("InputHandler")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("MouseEvent")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Listener"))))), /*Name*/new ExternalStatement(new StringEntry("listener"))), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("InputHandler")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("MouseEvent")))))), /*Enty*/new ExternalStatement(new StringEntry("listeners"))))),
+			/*Body*/new ExternalStatement.Body(
+						/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("listener"))), /*Enty*/new ExternalStatement(new StringEntry("listen"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("this")))))))))))))))}), Arrays.asList(new ExternalClassEntry[]{}));
+	}
+}
+	protected Release ReleaseClass = new Release();
+	public class Release extends ExternalClassEntry {
+
+
+
+
+	public void __INIT__(){
+		super.__SETUP__(
+		null, 
+		new Entry(){
+			public void get(StringBuilder __BUILDER__){
+			}
+		}, new StringEntry("Release"), "class ", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("InputHandler")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("MouseEvent")))), new ArrayList<Entry>(Arrays.asList(new Entry[]{})), 
+		new Entry(){
+		public void get(StringBuilder builder){
+			builder.append("static class ");
+			new StringEntry("Release").get(builder);
+			new StringEntry("").get(builder);
+		}
+	}, Arrays.asList(new ExternalVariableEntry[]{}), Arrays.asList(new ExternalMethodEntry[]{new ExternalMethodEntry(3, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Release"))), /*Exac*/new ExternalStatement(new StringEntry("*")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("button"))),
+/*PARAMS*/				new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("cursorX"))),
+/*PARAMS*/				new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("cursorY")))}), /*Body*/new ExternalStatement.Body(
+				/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("super")),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("cursorX")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("cursorY")))))))),
+/*BODY*/				
+				/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("setIsLeftButton")),new ExternalStatement.Parameters(/*Optr*/new ExternalStatement("==", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("button")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0")))))))),
+/*BODY*/				
+				/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("setIsRightButton")),new ExternalStatement.Parameters(/*Optr*/new ExternalStatement("==", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("button")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("1")))))))))),new ExternalMethodEntry(3, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Boolean"))), /*Exac*/new ExternalStatement(new StringEntry("isRelease")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+				/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("true"))))))),new ExternalMethodEntry(3, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("handle")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+				/*Cond*/new ExternalStatement.Conditional(
+			"synchronized ", 
+			/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("InputHandler")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("MouseEvent")))))), /*Enty*/new ExternalStatement(new StringEntry("listeners")))),
+			/*Body*/new ExternalStatement.Body(
+					/*Cond*/new ExternalStatement.Conditional(
+			"for ", 
+			/*Optr*/new ExternalStatement(": ", new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("InputHandler")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("MouseEvent")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Listener"))))), /*Name*/new ExternalStatement(new StringEntry("listener"))), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("InputHandler")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("MouseEvent")))))), /*Enty*/new ExternalStatement(new StringEntry("listeners"))))),
+			/*Body*/new ExternalStatement.Body(
+						/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("listener"))), /*Enty*/new ExternalStatement(new StringEntry("listen"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("this")))))))))))))))}), Arrays.asList(new ExternalClassEntry[]{}));
+	}
+}
+
+	public void __INIT__(){
+		super.__SETUP__(
+		null, 
+		new Entry(){
+			public void get(StringBuilder __BUILDER__){
+			}
+		}, new StringEntry("MouseEvent"), "class ", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("InputHandler")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Event")))), new ArrayList<Entry>(Arrays.asList(new Entry[]{})), 
+		new Entry(){
+		public void get(StringBuilder builder){
+			builder.append("static class ");
+			new StringEntry("MouseEvent").get(builder);
+			new StringEntry("").get(builder);
+		}
+	}, Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("List"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("InputHandler")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("MouseEvent")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Listener"))))))), /*Name*/new ExternalStatement(new StringEntry("listeners")), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("ArrayList"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("InputHandler")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("MouseEvent")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Listener"))))))),new ExternalStatement.Parameters()))),new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("cursorX")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0"))))),new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("cursorY")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0"))))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Boolean"))), /*Name*/new ExternalStatement(new StringEntry("isLeftButton")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("false"))))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Boolean"))), /*Name*/new ExternalStatement(new StringEntry("isRightButton")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("false")))))}), Arrays.asList(new ExternalMethodEntry[]{new ExternalMethodEntry(2, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Boolean"))), /*Exac*/new ExternalStatement(new StringEntry("isDrag")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("false"))))))),new ExternalMethodEntry(2, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Boolean"))), /*Exac*/new ExternalStatement(new StringEntry("isMove")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("false"))))))),new ExternalMethodEntry(2, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Boolean"))), /*Exac*/new ExternalStatement(new StringEntry("isPress")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("false"))))))),new ExternalMethodEntry(2, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Boolean"))), /*Exac*/new ExternalStatement(new StringEntry("isRelease")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("false")))))))}), Arrays.asList(new ExternalClassEntry[]{InputHandlerClass.EventsClass.MouseEventClass.ListenerClass,InputHandlerClass.EventsClass.MouseEventClass.MoveClass,InputHandlerClass.EventsClass.MouseEventClass.DragClass,InputHandlerClass.EventsClass.MouseEventClass.PressClass,InputHandlerClass.EventsClass.MouseEventClass.ReleaseClass}));
+	}
+}
+	protected KeyboardEvent KeyboardEventClass = new KeyboardEvent();
+	public class KeyboardEvent extends ExternalClassEntry {
+
+
+
+	protected Listener ListenerClass = new Listener();
+	public class Listener extends ExternalClassEntry {
+
+
+
+
+	public void __INIT__(){
+		super.__SETUP__(
+		null, 
+		new Entry(){
+			public void get(StringBuilder __BUILDER__){
+			}
+		}, new StringEntry("Listener"), "interface ", null, new ArrayList<Entry>(Arrays.asList(new Entry[]{})), 
+		new Entry(){
+		public void get(StringBuilder builder){
+			builder.append("static interface ");
+			new StringEntry("Listener").get(builder);
+			new StringEntry("").get(builder);
+		}
+	}, Arrays.asList(new ExternalVariableEntry[]{}), Arrays.asList(new ExternalMethodEntry[]{new ExternalMethodEntry(3, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("listen")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("InputHandler")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("KeyboardEvent")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Press"))))), /*Name*/new ExternalStatement(new StringEntry("event")))}), /*Body*/new ExternalStatement.Body()),new ExternalMethodEntry(3, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("listen")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("InputHandler")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("KeyboardEvent")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Release"))))), /*Name*/new ExternalStatement(new StringEntry("event")))}), /*Body*/new ExternalStatement.Body())}), Arrays.asList(new ExternalClassEntry[]{}));
+	}
+}
+	protected Press PressClass = new Press();
+	public class Press extends ExternalClassEntry {
+
+
+
+
+	public void __INIT__(){
+		super.__SETUP__(
+		null, 
+		new Entry(){
+			public void get(StringBuilder __BUILDER__){
+			}
+		}, new StringEntry("Press"), "class ", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("InputHandler")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("KeyboardEvent")))), new ArrayList<Entry>(Arrays.asList(new Entry[]{})), 
+		new Entry(){
+		public void get(StringBuilder builder){
+			builder.append("static class ");
+			new StringEntry("Press").get(builder);
+			new StringEntry("").get(builder);
+		}
+	}, Arrays.asList(new ExternalVariableEntry[]{}), Arrays.asList(new ExternalMethodEntry[]{new ExternalMethodEntry(3, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Press"))), /*Exac*/new ExternalStatement(new StringEntry("*")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("keyInt"))),
+/*PARAMS*/				new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Character"))), /*Name*/new ExternalStatement(new StringEntry("keyChar")))}), /*Body*/new ExternalStatement.Body(
+				/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("super")),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("keyInt")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("keyChar")))))))))),new ExternalMethodEntry(3, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Boolean"))), /*Exac*/new ExternalStatement(new StringEntry("isPress")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+				/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("true"))))))),new ExternalMethodEntry(3, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("handle")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+				/*Cond*/new ExternalStatement.Conditional(
+			"synchronized ", 
+			/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("InputHandler")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("KeyboardEvent")))))), /*Enty*/new ExternalStatement(new StringEntry("listeners")))),
+			/*Body*/new ExternalStatement.Body(
+					/*Cond*/new ExternalStatement.Conditional(
+			"for ", 
+			/*Optr*/new ExternalStatement(": ", new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("InputHandler")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("KeyboardEvent")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Listener"))))), /*Name*/new ExternalStatement(new StringEntry("listener"))), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("InputHandler")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("KeyboardEvent")))))), /*Enty*/new ExternalStatement(new StringEntry("listeners"))))),
+			/*Body*/new ExternalStatement.Body(
+						/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("listener"))), /*Enty*/new ExternalStatement(new StringEntry("listen"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("this")))))))))))))))}), Arrays.asList(new ExternalClassEntry[]{}));
+	}
+}
+	protected Release ReleaseClass = new Release();
+	public class Release extends ExternalClassEntry {
+
+
+
+
+	public void __INIT__(){
+		super.__SETUP__(
+		null, 
+		new Entry(){
+			public void get(StringBuilder __BUILDER__){
+			}
+		}, new StringEntry("Release"), "class ", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("InputHandler")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("KeyboardEvent")))), new ArrayList<Entry>(Arrays.asList(new Entry[]{})), 
+		new Entry(){
+		public void get(StringBuilder builder){
+			builder.append("static class ");
+			new StringEntry("Release").get(builder);
+			new StringEntry("").get(builder);
+		}
+	}, Arrays.asList(new ExternalVariableEntry[]{}), Arrays.asList(new ExternalMethodEntry[]{new ExternalMethodEntry(3, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Release"))), /*Exac*/new ExternalStatement(new StringEntry("*")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("keyInt")))}), /*Body*/new ExternalStatement.Body(
+				/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("super")),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("keyInt")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("(char)0")))))))))),new ExternalMethodEntry(3, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Boolean"))), /*Exac*/new ExternalStatement(new StringEntry("isRelease")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+				/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("true"))))))),new ExternalMethodEntry(3, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("handle")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+				/*Cond*/new ExternalStatement.Conditional(
+			"synchronized ", 
+			/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("InputHandler")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("KeyboardEvent")))))), /*Enty*/new ExternalStatement(new StringEntry("listeners")))),
+			/*Body*/new ExternalStatement.Body(
+					/*Cond*/new ExternalStatement.Conditional(
+			"for ", 
+			/*Optr*/new ExternalStatement(": ", new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("InputHandler")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("KeyboardEvent")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Listener"))))), /*Name*/new ExternalStatement(new StringEntry("listener"))), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("InputHandler")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("KeyboardEvent")))))), /*Enty*/new ExternalStatement(new StringEntry("listeners"))))),
+			/*Body*/new ExternalStatement.Body(
+						/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("listener"))), /*Enty*/new ExternalStatement(new StringEntry("listen"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("this")))))))))))))))}), Arrays.asList(new ExternalClassEntry[]{}));
+	}
+}
+
+	public void __INIT__(){
+		super.__SETUP__(
+		null, 
+		new Entry(){
+			public void get(StringBuilder __BUILDER__){
+			}
+		}, new StringEntry("KeyboardEvent"), "class ", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("InputHandler")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Event")))), new ArrayList<Entry>(Arrays.asList(new Entry[]{})), 
+		new Entry(){
+		public void get(StringBuilder builder){
+			builder.append("static class ");
+			new StringEntry("KeyboardEvent").get(builder);
+			new StringEntry("").get(builder);
+		}
+	}, Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("List"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("InputHandler")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("KeyboardEvent")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Listener"))))))), /*Name*/new ExternalStatement(new StringEntry("listeners")), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("ArrayList"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("InputHandler")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("KeyboardEvent")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Listener"))))))),new ExternalStatement.Parameters()))),new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("keyInt")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0"))))),new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Character"))), /*Name*/new ExternalStatement(new StringEntry("keyChar")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0")))))}), Arrays.asList(new ExternalMethodEntry[]{new ExternalMethodEntry(2, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Boolean"))), /*Exac*/new ExternalStatement(new StringEntry("isPress")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("false"))))))),new ExternalMethodEntry(2, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Boolean"))), /*Exac*/new ExternalStatement(new StringEntry("isRelease")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("false")))))))}), Arrays.asList(new ExternalClassEntry[]{InputHandlerClass.EventsClass.KeyboardEventClass.ListenerClass,InputHandlerClass.EventsClass.KeyboardEventClass.PressClass,InputHandlerClass.EventsClass.KeyboardEventClass.ReleaseClass}));
+	}
+}
+
+	public void __INIT__(){
+		super.__SETUP__(
+		null, 
+		new Entry(){
+			public void get(StringBuilder __BUILDER__){
+			}
+		}, new StringEntry("Events"), "class ", null, new ArrayList<Entry>(Arrays.asList(new Entry[]{})), 
+		new Entry(){
+		public void get(StringBuilder builder){
+			builder.append("static class ");
+			new StringEntry("Events").get(builder);
+			new StringEntry("").get(builder);
+		}
+	}, Arrays.asList(new ExternalVariableEntry[]{}), Arrays.asList(new ExternalMethodEntry[]{}), Arrays.asList(new ExternalClassEntry[]{InputHandlerClass.EventsClass.MouseWheelEventClass,InputHandlerClass.EventsClass.MouseEventClass,InputHandlerClass.EventsClass.KeyboardEventClass}));
+	}
+}
+	protected Event EventClass = new Event();
+	public class Event extends ExternalClassEntry {
+
+
+
+
+	public void __INIT__(){
+		super.__SETUP__(
+		null, 
+		new Entry(){
+			public void get(StringBuilder __BUILDER__){
+			}
+		}, new StringEntry("Event"), "class ", null, new ArrayList<Entry>(Arrays.asList(new Entry[]{})), 
+		new Entry(){
+		public void get(StringBuilder builder){
+			builder.append("static class ");
+			new StringEntry("Event").get(builder);
+			new StringEntry("").get(builder);
+		}
+	}, Arrays.asList(new ExternalVariableEntry[]{}), Arrays.asList(new ExternalMethodEntry[]{new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("handle")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body())}), Arrays.asList(new ExternalClassEntry[]{}));
+	}
+}
+
+	public void __INIT__(){
+		super.__SETUP__(
+		new Entry(){
+			public void get(StringBuilder __BUILDER__){/*Enty*/new ExternalStatement(new StringEntry(packageName.toString())).get(__BUILDER__);
+				__BUILDER__.append(".");
+				/*Name*/new ExternalStatement(new StringEntry("gui")).get(__BUILDER__);
+			}
+		}, 
+		new Entry(){
+			public void get(StringBuilder __BUILDER__){
+			}
+		}, new StringEntry("InputHandler"), "class ", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Thread")), new ArrayList<Entry>(Arrays.asList(new Entry[]{})), 
+		new Entry(){
+		public void get(StringBuilder builder){
+			builder.append(" class ");
+			new StringEntry("InputHandler").get(builder);
+			new StringEntry("").get(builder);
+		}
+	}, Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("UNSTARTED")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("-1"))))),new ExternalVariableEntry(true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("WAITING_FOR_EVENTS")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0"))))),new ExternalVariableEntry(true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("PROCESSING_EVENTS")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("1"))))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("status")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("UNSTARTED"))))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("List"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("InputHandler")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Event"))))))), /*Name*/new ExternalStatement(new StringEntry("events")), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("ArrayList"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("InputHandler")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Event"))))))),new ExternalStatement.Parameters()))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("cursorX")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0"))))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("cursorY")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0"))))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Boolean"))), /*Name*/new ExternalStatement(new StringEntry("firstMove")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("true"))))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Boolean"))), /*Name*/new ExternalStatement(new StringEntry("continuousKeyboard")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("false"))))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Boolean"))), /*Name*/new ExternalStatement(new StringEntry("hideNativeCursor")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("false"))))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Boolean"))), /*Name*/new ExternalStatement(new StringEntry("disableNativeCursor")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("false")))))}), Arrays.asList(new ExternalMethodEntry[]{new ExternalMethodEntry(0, true,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("addMouseListener")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("InputHandler")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("MouseEvent")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Listener"))))), /*Name*/new ExternalStatement(new StringEntry("toAdd")))}), /*Body*/new ExternalStatement.Body(
+	/*Cond*/new ExternalStatement.Conditional(
+			"synchronized ", 
+			/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("InputHandler")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("MouseEvent")))))), /*Enty*/new ExternalStatement(new StringEntry("listeners")))),
+			/*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("InputHandler")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("MouseEvent")))))), /*Enty*/new ExternalStatement(new StringEntry("listeners"))), /*Enty*/new ExternalStatement(new StringEntry("add"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("toAdd"))))))))))))),new ExternalMethodEntry(0, true,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("removeMouseListener")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("InputHandler")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("MouseEvent")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Listener"))))), /*Name*/new ExternalStatement(new StringEntry("toRemove")))}), /*Body*/new ExternalStatement.Body(
+	/*Cond*/new ExternalStatement.Conditional(
+			"synchronized ", 
+			/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("InputHandler")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("MouseEvent")))))), /*Enty*/new ExternalStatement(new StringEntry("listeners")))),
+			/*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("InputHandler")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("MouseEvent")))))), /*Enty*/new ExternalStatement(new StringEntry("listeners"))), /*Enty*/new ExternalStatement(new StringEntry("remove"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("toRemove"))))))))))))),new ExternalMethodEntry(0, true,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("addMouseWheelListener")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("InputHandler")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("MouseWheelEvent")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Listener"))))), /*Name*/new ExternalStatement(new StringEntry("toAdd")))}), /*Body*/new ExternalStatement.Body(
+	/*Cond*/new ExternalStatement.Conditional(
+			"synchronized ", 
+			/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("InputHandler")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("MouseWheelEvent")))))), /*Enty*/new ExternalStatement(new StringEntry("listeners")))),
+			/*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("InputHandler")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("MouseWheelEvent")))))), /*Enty*/new ExternalStatement(new StringEntry("listeners"))), /*Enty*/new ExternalStatement(new StringEntry("add"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("toAdd"))))))))))))),new ExternalMethodEntry(0, true,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("removeWheelMouseListener")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("InputHandler")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("MouseWheelEvent")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Listener"))))), /*Name*/new ExternalStatement(new StringEntry("toRemove")))}), /*Body*/new ExternalStatement.Body(
+	/*Cond*/new ExternalStatement.Conditional(
+			"synchronized ", 
+			/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("InputHandler")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("MouseWheelEvent")))))), /*Enty*/new ExternalStatement(new StringEntry("listeners")))),
+			/*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("InputHandler")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("MouseWheelEvent")))))), /*Enty*/new ExternalStatement(new StringEntry("listeners"))), /*Enty*/new ExternalStatement(new StringEntry("remove"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("toRemove"))))))))))))),new ExternalMethodEntry(0, true,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("addKeyboardListener")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("InputHandler")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("KeyboardEvent")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Listener"))))), /*Name*/new ExternalStatement(new StringEntry("toAdd")))}), /*Body*/new ExternalStatement.Body(
+	/*Cond*/new ExternalStatement.Conditional(
+			"synchronized ", 
+			/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("InputHandler")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("KeyboardEvent")))))), /*Enty*/new ExternalStatement(new StringEntry("listeners")))),
+			/*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("InputHandler")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("KeyboardEvent")))))), /*Enty*/new ExternalStatement(new StringEntry("listeners"))), /*Enty*/new ExternalStatement(new StringEntry("add"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("toAdd"))))))))))))),new ExternalMethodEntry(0, true,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("removeKeyboardListener")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("InputHandler")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("KeyboardEvent")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Listener"))))), /*Name*/new ExternalStatement(new StringEntry("toRemove")))}), /*Body*/new ExternalStatement.Body(
+	/*Cond*/new ExternalStatement.Conditional(
+			"synchronized ", 
+			/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("InputHandler")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("KeyboardEvent")))))), /*Enty*/new ExternalStatement(new StringEntry("listeners")))),
+			/*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("InputHandler")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("KeyboardEvent")))))), /*Enty*/new ExternalStatement(new StringEntry("listeners"))), /*Enty*/new ExternalStatement(new StringEntry("remove"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("toRemove"))))))))))))),new ExternalMethodEntry(0, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("run")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+	/*Cond*/new ExternalStatement.Conditional(
+			"try ", null,
+			/*Body*/new ExternalStatement.Body(
+		/*Cond*/new ExternalStatement.Conditional(
+			"while ", 
+			/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Gui")))), /*Enty*/new ExternalStatement(new StringEntry("isRunning")))),
+			/*Body*/new ExternalStatement.Body(
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("status")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("WAITING_FOR_EVENTS")))))),
+/*BODY*/				
+			/*Cond*/new ExternalStatement.Conditional(
+			"synchronized ", 
+			/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("events")))),
+			/*Body*/new ExternalStatement.Body(
+				/*Cond*/new ExternalStatement.Conditional(
+			"while ", 
+			/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("events"))), /*Enty*/new ExternalStatement(new StringEntry("isEmpty"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))),
+			/*Body*/new ExternalStatement.Body(
+					/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("events"))), /*Enty*/new ExternalStatement(new StringEntry("wait"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters())))))))),
+/*BODY*/				
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("status")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("PROCESSING_EVENTS")))))),
+/*BODY*/				
+			/*Cond*/new ExternalStatement.Conditional(
+			"while ", 
+			/*Optr*/new ExternalStatement("==", /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("events"))), /*Enty*/new ExternalStatement(new StringEntry("isEmpty"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("false")))),
+			/*Body*/new ExternalStatement.Body(
+				/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("events"))), /*Enty*/new ExternalStatement(new StringEntry("remove"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0"))))))), /*Enty*/new ExternalStatement(new StringEntry("handle"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters())))))))))),
+/*BODY*/				
+	/*Cond*/new ExternalStatement.Conditional(
+			"catch ", 
+			/*Optr*/new ExternalStatement(" ", /*Exac*/new ExternalStatement(new StringEntry("InterruptedException")), /*Exac*/new ExternalStatement(new StringEntry("e0"))),
+			/*Body*/new ExternalStatement.Body(
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Exac*/new ExternalStatement(new StringEntry("e0.printStackTrace()"))))))),new ExternalMethodEntry(0, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("load")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("DisplayMode"))), /*Name*/new ExternalStatement(new StringEntry("displayMode")))}), /*Body*/new ExternalStatement.Body(
+	/*Cond*/new ExternalStatement.Conditional(
+			"try ", null,
+			/*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Keyboard")))), /*Enty*/new ExternalStatement(new StringEntry("create"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters())))),
+/*BODY*/				
+		/*Cond*/new ExternalStatement.Conditional(
+			"if ", 
+			/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("disableNativeCursor")))),
+			/*Body*/new ExternalStatement.Body(
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("disableNativeCursor")),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("true")))))))),
+/*BODY*/				
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("cursorX")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*InCl*/new ExternalStatement("(int) displayMode.getWidth() / 2"))))),
+/*BODY*/				
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("cursorY")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*InCl*/new ExternalStatement("(int) displayMode.getHeight() / 2"))))))),
+/*BODY*/				
+		/*Cond*/new ExternalStatement.Conditional(
+			"if ", 
+			/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("hideNativeCursor")))),
+			/*Body*/new ExternalStatement.Body(
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("hideNativeCursor")),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("true")))))))))))),
+/*BODY*/				
+	/*Cond*/new ExternalStatement.Conditional(
+			"catch ", 
+			/*Optr*/new ExternalStatement(" ", /*Exac*/new ExternalStatement(new StringEntry("Exception")), /*Exac*/new ExternalStatement(new StringEntry("e0"))),
+			/*Body*/new ExternalStatement.Body(
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Exac*/new ExternalStatement(new StringEntry("e0.printStackTrace()"))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("System"))), /*Enty*/new ExternalStatement(new StringEntry("err"))), /*Enty*/new ExternalStatement(new StringEntry("println"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Optr*/new ExternalStatement("+", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Quot*/new ExternalStatement(new QuoteEntry("InputHandler.load: ".toString())))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("e0"))))))))))),
+/*BODY*/				
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("start")),new ExternalStatement.Parameters()))))),new ExternalMethodEntry(0, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("handle")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("mouseDX")), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Mouse")))), /*Enty*/new ExternalStatement(new StringEntry("getDX"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))))),
+/*BODY*/				
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("mouseDY")), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Mouse")))), /*Enty*/new ExternalStatement(new StringEntry("getDY"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))))),
+/*BODY*/				
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("mouseDW")), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Mouse")))), /*Enty*/new ExternalStatement(new StringEntry("getDWheel"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))))),
+/*BODY*/				
+	/*Cond*/new ExternalStatement.Conditional(
+			"synchronized ", 
+			/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("events")))),
+			/*Body*/new ExternalStatement.Body(
+		/*Cond*/new ExternalStatement.Conditional(
+			"if ", 
+			/*Optr*/new ExternalStatement("!=", /*Optr*/new ExternalStatement("||", /*Optr*/new ExternalStatement("!=", /*Optr*/new ExternalStatement("||", /*Optr*/new ExternalStatement("!=", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("mouseDX")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0 ")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("mouseDY")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0 ")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("mouseDW")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0 ")))),
+			/*Body*/new ExternalStatement.Body(
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("cursorX")), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Mouse")))), /*Enty*/new ExternalStatement(new StringEntry("getX"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))))),
+/*BODY*/				
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("cursorY")), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Mouse")))), /*Enty*/new ExternalStatement(new StringEntry("getY"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))))),
+/*BODY*/				
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("events"))), /*Enty*/new ExternalStatement(new StringEntry("add"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("InputHandler")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("MouseEvent")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Move"))))),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("cursorX")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("cursorY")))))))))))))),
+/*BODY*/				
+		/*Cond*/new ExternalStatement.Conditional(
+			"if ", 
+			/*Optr*/new ExternalStatement("!=", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("mouseDW")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0 ")))),
+			/*Body*/new ExternalStatement.Body(
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("events"))), /*Enty*/new ExternalStatement(new StringEntry("add"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("InputHandler")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("MouseWheelEvent"))))),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("mouseDW")))))))))))))),
+/*BODY*/				
+		/*Cond*/new ExternalStatement.Conditional(
+			"while ", 
+			/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Mouse")))), /*Enty*/new ExternalStatement(new StringEntry("next"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))),
+			/*Body*/new ExternalStatement.Body(
+			/*Cond*/new ExternalStatement.Conditional(
+			"if ", 
+			/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Mouse")))), /*Enty*/new ExternalStatement(new StringEntry("getEventButtonState"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))),
+			/*Body*/new ExternalStatement.Body(
+				/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("events"))), /*Enty*/new ExternalStatement(new StringEntry("add"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("InputHandler")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("MouseEvent")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Press"))))),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Mouse")))), /*Enty*/new ExternalStatement(new StringEntry("getEventButton"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("cursorX")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("cursorY")))))))))))))),
+/*BODY*/				
+			/*Cond*/new ExternalStatement.Conditional(
+			"else ", null,
+			/*Body*/new ExternalStatement.Body(
+				/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("events"))), /*Enty*/new ExternalStatement(new StringEntry("add"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("InputHandler")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("MouseEvent")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Release"))))),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Mouse")))), /*Enty*/new ExternalStatement(new StringEntry("getEventButton"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("cursorX")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("cursorY")))))))))))))))),
+/*BODY*/				
+		/*Cond*/new ExternalStatement.Conditional(
+			"if ", 
+			/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Mouse")))), /*Enty*/new ExternalStatement(new StringEntry("isButtonDown"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0")))))))),
+			/*Body*/new ExternalStatement.Body(
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("events"))), /*Enty*/new ExternalStatement(new StringEntry("add"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("InputHandler")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("MouseEvent")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Drag"))))),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("cursorX")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("cursorY")))))))))))))),
+/*BODY*/				
+		/*Cond*/new ExternalStatement.Conditional(
+			"if ", 
+			/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Mouse")))), /*Enty*/new ExternalStatement(new StringEntry("isButtonDown"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("1")))))))),
+			/*Body*/new ExternalStatement.Body(
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("events"))), /*Enty*/new ExternalStatement(new StringEntry("add"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("InputHandler")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("MouseEvent")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Drag"))))),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("1")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("cursorX")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("cursorY")))))))))))))),
+/*BODY*/				
+		/*Cond*/new ExternalStatement.Conditional(
+			"if ", 
+			/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Keyboard")))), /*Enty*/new ExternalStatement(new StringEntry("next"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))),
+			/*Body*/new ExternalStatement.Body(
+			/*Cond*/new ExternalStatement.Conditional(
+			"if ", 
+			/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Keyboard")))), /*Enty*/new ExternalStatement(new StringEntry("getEventKeyState"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))),
+			/*Body*/new ExternalStatement.Body(
+				/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("events"))), /*Enty*/new ExternalStatement(new StringEntry("add"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("InputHandler")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("KeyboardEvent")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Press"))))),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Keyboard")))), /*Enty*/new ExternalStatement(new StringEntry("getEventKey"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))),/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Keyboard")))), /*Enty*/new ExternalStatement(new StringEntry("getEventCharacter"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))))))))))))),
+/*BODY*/				
+			/*Cond*/new ExternalStatement.Conditional(
+			"else ", null,
+			/*Body*/new ExternalStatement.Body(
+				/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("events"))), /*Enty*/new ExternalStatement(new StringEntry("add"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("InputHandler")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("KeyboardEvent")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Release"))))),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Keyboard")))), /*Enty*/new ExternalStatement(new StringEntry("getEventKey"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))))))))))))),
+/*BODY*/				
+			/*Cond*/new ExternalStatement.Conditional(
+			"while ", 
+			/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Keyboard")))), /*Enty*/new ExternalStatement(new StringEntry("next"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))),
+			/*Body*/new ExternalStatement.Body(
+				/*Cond*/new ExternalStatement.Conditional(
+			"if ", 
+			/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Keyboard")))), /*Enty*/new ExternalStatement(new StringEntry("getEventKeyState"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))),
+			/*Body*/new ExternalStatement.Body(
+					/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("events"))), /*Enty*/new ExternalStatement(new StringEntry("add"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("InputHandler")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("KeyboardEvent")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Press"))))),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Keyboard")))), /*Enty*/new ExternalStatement(new StringEntry("getEventKey"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))),/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Keyboard")))), /*Enty*/new ExternalStatement(new StringEntry("getEventCharacter"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))))))))))))),
+/*BODY*/				
+				/*Cond*/new ExternalStatement.Conditional(
+			"else ", null,
+			/*Body*/new ExternalStatement.Body(
+					/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("events"))), /*Enty*/new ExternalStatement(new StringEntry("add"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("InputHandler")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("KeyboardEvent")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Release"))))),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Keyboard")))), /*Enty*/new ExternalStatement(new StringEntry("getEventKey"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))))))))))))))))),
+/*BODY*/				
+		/*Cond*/new ExternalStatement.Conditional(
+			"else if ", 
+			/*Optr*/new ExternalStatement("&&", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("continuousKeyboard")))), /*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Keyboard")))), /*Enty*/new ExternalStatement(new StringEntry("getEventKeyState"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))),
+			/*Body*/new ExternalStatement.Body(
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("events"))), /*Enty*/new ExternalStatement(new StringEntry("add"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("InputHandler")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("KeyboardEvent")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Press"))))),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Keyboard")))), /*Enty*/new ExternalStatement(new StringEntry("getEventKey"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))),/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Keyboard")))), /*Enty*/new ExternalStatement(new StringEntry("getEventCharacter"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))))))))))))),
+/*BODY*/				
+		/*Cond*/new ExternalStatement.Conditional(
+			"if ", 
+			/*Optr*/new ExternalStatement("==", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("status")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("WAITING_FOR_EVENTS")))),
+			/*Body*/new ExternalStatement.Body(
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("events"))), /*Enty*/new ExternalStatement(new StringEntry("notifyAll"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters())))))))))),new ExternalMethodEntry(0, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Name*/new ExternalStatement(new StringEntry("disableNativeCursor")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Boolean"))), /*Name*/new ExternalStatement(new StringEntry("newNativeCursorValue")))}), /*Body*/new ExternalStatement.Body(
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("disableNativeCursor")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("newNativeCursorValue")))))),
+/*BODY*/				
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Mouse")))), /*Enty*/new ExternalStatement(new StringEntry("setGrabbed"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("newNativeCursorValue"))))))))))),new ExternalMethodEntry(0, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Name*/new ExternalStatement(new StringEntry("hideNativeCursor")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Boolean"))), /*Name*/new ExternalStatement(new StringEntry("hide")))}), /*Body*/new ExternalStatement.Body(
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("hideNativeCursor")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("hide")))))),
+/*BODY*/				
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("canHide")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*InCl*/new ExternalStatement("Cursor.getCapabilities() & Cursor.CURSOR_ONE_BIT_TRANSPARENCY"))))),
+/*BODY*/				
+	/*Cond*/new ExternalStatement.Conditional(
+			"if ", 
+			/*Optr*/new ExternalStatement("==", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("canHide")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0 ")))),
+			/*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("System"))), /*Enty*/new ExternalStatement(new StringEntry("err"))), /*Enty*/new ExternalStatement(new StringEntry("println"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Quot*/new ExternalStatement(new QuoteEntry("Renderer hideHardwareCursor(): No hardwared cursor support!".toString()))))))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Exac*/new ExternalStatement(new StringEntry(""))))),
+/*BODY*/				
+	/*Cond*/new ExternalStatement.Conditional(
+			"try ", null,
+			/*Body*/new ExternalStatement.Body(
+		/*Cond*/new ExternalStatement.Conditional(
+			"if ", 
+			/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("hide")))),
+			/*Body*/new ExternalStatement.Body(
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Cursor"))), /*Name*/new ExternalStatement(new StringEntry("cursor")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null")))))),
+/*BODY*/				
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("cursorImageCount")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("1")))))),
+/*BODY*/				
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("cursorWidth")), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Cursor")))), /*Enty*/new ExternalStatement(new StringEntry("getMaxCursorSize"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))))),
+/*BODY*/				
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("cursorHeight")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("cursorWidth")))))),
+/*BODY*/				
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("IntBuffer"))), /*Name*/new ExternalStatement(new StringEntry("cursorImages")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null")))))),
+/*BODY*/				
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("IntBuffer"))), /*Name*/new ExternalStatement(new StringEntry("cursorDelays")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null")))))),
+/*BODY*/				
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("cursorImages")), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("ByteBuffer")))), /*Enty*/new ExternalStatement(new StringEntry("allocateDirect"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Optr*/new ExternalStatement("*", /*Optr*/new ExternalStatement("*", /*Optr*/new ExternalStatement("*", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("cursorWidth")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("cursorHeight")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("cursorImageCount")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("4"))))))), /*Enty*/new ExternalStatement(new StringEntry("order"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("ByteOrder")))), /*Enty*/new ExternalStatement(new StringEntry("nativeOrder"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters())))))), /*Enty*/new ExternalStatement(new StringEntry("asIntBuffer"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))))),
+/*BODY*/				
+			/*Cond*/new ExternalStatement.Conditional(
+			"for ", 
+			/*FIHd*/new ExternalStatement(";", new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("i")), /*Exac*/new ExternalStatement(new StringEntry("0"))), new ExternalStatement("< ", /*Name*/new ExternalStatement(new StringEntry("i")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("cursorWidth"))))), new ExternalStatement(new StringEntry("++"),"",/*Name*/new ExternalStatement(new StringEntry("i")))),
+			/*Body*/new ExternalStatement.Body(
+				/*Cond*/new ExternalStatement.Conditional(
+			"for ", 
+			/*FIHd*/new ExternalStatement(";", new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("j")), /*Exac*/new ExternalStatement(new StringEntry("0"))), new ExternalStatement("< ", /*Name*/new ExternalStatement(new StringEntry("j")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("cursorHeight"))))), new ExternalStatement(new StringEntry("++"),"",/*Name*/new ExternalStatement(new StringEntry("j")))),
+			/*Body*/new ExternalStatement.Body(
+					/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("cursorImages"))), /*Enty*/new ExternalStatement(new StringEntry("put"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0x00000000"))))))))))))),
+/*BODY*/				
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("cursorImages"))), /*Enty*/new ExternalStatement(new StringEntry("flip"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters())))),
+/*BODY*/				
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("cursor")), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Cursor"))),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Cursor")))), /*Enty*/new ExternalStatement(new StringEntry("getMaxCursorSize"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))),/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Cursor")))), /*Enty*/new ExternalStatement(new StringEntry("getMaxCursorSize"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))),/*Optr*/new ExternalStatement("/", /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Cursor")))), /*Enty*/new ExternalStatement(new StringEntry("getMaxCursorSize"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("2")))),/*Optr*/new ExternalStatement("/", /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Cursor")))), /*Enty*/new ExternalStatement(new StringEntry("getMaxCursorSize"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("2")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("cursorImageCount")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("cursorImages")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("cursorDelays"))))))))),
+/*BODY*/				
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Mouse")))), /*Enty*/new ExternalStatement(new StringEntry("setNativeCursor"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("cursor"))))))))))),
+/*BODY*/				
+		/*Cond*/new ExternalStatement.Conditional(
+			"else ", null,
+			/*Body*/new ExternalStatement.Body(
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Mouse")))), /*Enty*/new ExternalStatement(new StringEntry("setNativeCursor"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))))))))))),
+/*BODY*/				
+	/*Cond*/new ExternalStatement.Conditional(
+			"catch ", 
+			/*Optr*/new ExternalStatement(" ", /*Exac*/new ExternalStatement(new StringEntry("Exception")), /*Exac*/new ExternalStatement(new StringEntry("e0"))),
+			/*Body*/new ExternalStatement.Body(
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Exac*/new ExternalStatement(new StringEntry("e0.printStackTrace()"))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("System"))), /*Enty*/new ExternalStatement(new StringEntry("err"))), /*Enty*/new ExternalStatement(new StringEntry("println"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Quot*/new ExternalStatement(new QuoteEntry("Renderer hideHardwareCursor(): error".toString())))))))))))))}), Arrays.asList(new ExternalClassEntry[]{InputHandlerClass.EventsClass,InputHandlerClass.EventClass}));
+	}
+}
+	protected Images ImagesClass = new Images();
+	public class Images extends ExternalClassEntry {
+
+
+
+
+	public void __INIT__(){
+		super.__SETUP__(
+		new Entry(){
+			public void get(StringBuilder __BUILDER__){/*Enty*/new ExternalStatement(new StringEntry(packageName.toString())).get(__BUILDER__);
+				__BUILDER__.append(".");
+				/*Name*/new ExternalStatement(new StringEntry("gui")).get(__BUILDER__);
+				__BUILDER__.append(".");
+				/*Name*/new ExternalStatement(new StringEntry("images")).get(__BUILDER__);
+			}
+		}, 
+		new Entry(){
+			public void get(StringBuilder __BUILDER__){
+			}
+		}, new StringEntry("Images"), "class ", null, new ArrayList<Entry>(Arrays.asList(new Entry[]{})), 
+		new Entry(){
+		public void get(StringBuilder builder){
+			builder.append(" class ");
+			new StringEntry("Images").get(builder);
+			new StringEntry("").get(builder);
+		}
+	}, Arrays.asList(new ExternalVariableEntry[]{}), Arrays.asList(new ExternalMethodEntry[]{}), Arrays.asList(new ExternalClassEntry[]{}));
+	}
+}
+	protected Colours ColoursClass = new Colours();
+	public class Colours extends ExternalClassEntry {
+
+
+
+
+	public void __INIT__(){
+		super.__SETUP__(
+		new Entry(){
+			public void get(StringBuilder __BUILDER__){/*Enty*/new ExternalStatement(new StringEntry(packageName.toString())).get(__BUILDER__);
+				__BUILDER__.append(".");
+				/*Name*/new ExternalStatement(new StringEntry("gui")).get(__BUILDER__);
+				__BUILDER__.append(".");
+				/*Name*/new ExternalStatement(new StringEntry("images")).get(__BUILDER__);
+			}
+		}, 
+		new Entry(){
+			public void get(StringBuilder __BUILDER__){
+			}
+		}, new StringEntry("Colours"), "class ", null, new ArrayList<Entry>(Arrays.asList(new Entry[]{})), 
+		new Entry(){
+		public void get(StringBuilder builder){
+			builder.append(" class ");
+			new StringEntry("Colours").get(builder);
+			new StringEntry("").get(builder);
+		}
+	}, Arrays.asList(new ExternalVariableEntry[]{}), Arrays.asList(new ExternalMethodEntry[]{}), Arrays.asList(new ExternalClassEntry[]{}));
+	}
+}
+	protected Drawables DrawablesClass = new Drawables();
+	public class Drawables extends ExternalClassEntry {
+
+
+
+
+	public void __INIT__(){
+		super.__SETUP__(
+		new Entry(){
+			public void get(StringBuilder __BUILDER__){/*Enty*/new ExternalStatement(new StringEntry(packageName.toString())).get(__BUILDER__);
+				__BUILDER__.append(".");
+				/*Name*/new ExternalStatement(new StringEntry("gui")).get(__BUILDER__);
+				__BUILDER__.append(".");
+				/*Name*/new ExternalStatement(new StringEntry("images")).get(__BUILDER__);
+			}
+		}, 
+		new Entry(){
+			public void get(StringBuilder __BUILDER__){
+			}
+		}, new StringEntry("Drawables"), "class ", null, new ArrayList<Entry>(Arrays.asList(new Entry[]{})), 
+		new Entry(){
+		public void get(StringBuilder builder){
+			builder.append(" class ");
+			new StringEntry("Drawables").get(builder);
+			new StringEntry("").get(builder);
+		}
+	}, Arrays.asList(new ExternalVariableEntry[]{}), Arrays.asList(new ExternalMethodEntry[]{}), Arrays.asList(new ExternalClassEntry[]{}));
+	}
+}
+	protected ImageLoader ImageLoaderClass = new ImageLoader();
+	public class ImageLoader extends ExternalClassEntry {
+		protected final Map<ExternalClassEntry,ExternalStatement.Parameters> animationCreationParameters = new HashMap<ExternalClassEntry,ExternalStatement.Parameters>();
+		protected final Map<ExternalClassEntry,ExternalStatement.Parameters> animationCreationArguments = new HashMap<ExternalClassEntry,ExternalStatement.Parameters>();
+		protected final Set<String> declaredImageLoaders = new HashSet<String>();
+
+	
+public void declaration(final IToken input,final ExternalClassEntry enclosingClass) {
+	final String animationTypeName = Generator.camelize(input.get("animationTypeName").toString());
+	if (enclosingClass == GuiClass.getSubClass("Image").getSubClass("AnimationType")) {
+enclosingClass.addSubClass(new ExternalClassEntry(){public void __INIT__(){super.__SETUP__(null, 
+		new Entry(){
+			public void get(StringBuilder __BUILDER__){
+			}
+		},new StringEntry(animationTypeName), "class ", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Gui")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Image")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("AnimationType")))), new ArrayList<Entry>(Arrays.asList(new Entry[]{})), 
+		new Entry(){
+		public void get(StringBuilder builder){
+			builder.append(" class ");
+			new StringEntry(animationTypeName).get(builder);
+			new StringEntry("").get(builder);
+		}
+	}, Arrays.asList(new ExternalVariableEntry[]{}), Arrays.asList(new ExternalMethodEntry[]{new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("animate")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body())}), Arrays.asList(new ExternalClassEntry[]{})) ;}});
+	}
+	else  {
+enclosingClass.addSubClass(new ExternalClassEntry(){public void __INIT__(){super.__SETUP__(null, 
+		new Entry(){
+			public void get(StringBuilder __BUILDER__){
+			}
+		},new StringEntry(animationTypeName), "class ", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Gui")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Image")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("AnimationType")))), new ArrayList<Entry>(Arrays.asList(new Entry[]{})), 
+		new Entry(){
+		public void get(StringBuilder builder){
+			builder.append(" class ");
+			new StringEntry(animationTypeName).get(builder);
+			new StringEntry("").get(builder);
+		}
+	}, Arrays.asList(new ExternalVariableEntry[]{}), Arrays.asList(new ExternalMethodEntry[]{new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("animate")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body())}), Arrays.asList(new ExternalClassEntry[]{})) ;}});
+	}
+	final ExternalStatement.Parameters parameters = new ExternalStatement.Parameters();
+	final ExternalStatement.Parameters arguments = new ExternalStatement.Parameters();
+	for(final IToken variable:input.getAllSafely("animation_type_variable_declaration")) {
+			for(final IToken element:variable.getAllSafely("value")) {
+				arguments.add(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(variable.get("variableName").toString())))));
+				for(final IToken value:element.getAllSafely("INTEGER")) {
+enclosingClass.getSubClass(animationTypeName.toString()).addVariable(new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Enty*/new ExternalStatement(new StringEntry(variable.get("variableName").toString())), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(value.toString()))))));
+					parameters.add(new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Enty*/new ExternalStatement(new StringEntry(variable.get("variableName").toString())), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(value.toString()))))));
+				}
+				for(final IToken value:variable.getAllSafely("FLOAT")) {
+enclosingClass.getSubClass(animationTypeName.toString()).addVariable(new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))), /*Enty*/new ExternalStatement(new StringEntry(variable.get("variableName").toString())), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Enty*/new ExternalStatement(new StringEntry(value.toString())), /*Name*/new ExternalStatement(new StringEntry("f"))))))));
+					parameters.add(new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Enty*/new ExternalStatement(new StringEntry(variable.get("variableName").toString())), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(value.toString()))))));
+				}
+				for(final IToken value:variable.getAllSafely("quote")) {
+enclosingClass.getSubClass(animationTypeName.toString()).addVariable(new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("String"))), /*Enty*/new ExternalStatement(new StringEntry(variable.get("variableName").toString())), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Quot*/new ExternalStatement(new QuoteEntry(value.toString()))))));
+					parameters.add(new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Enty*/new ExternalStatement(new StringEntry(variable.get("variableName").toString())), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(value.toString()))))));
+				}
+			}
+	}
+	animationCreationParameters.put(enclosingClass.getSubClass(animationTypeName.toString()),parameters);
+	animationCreationArguments.put(enclosingClass.getSubClass(animationTypeName.toString()),arguments);
+	ExternalClassEntry creationClass = enclosingClass.getSubClass(animationTypeName.toString());
+	String creationName = "";
+	final ExternalStatement.Parameters previousParameters = new ExternalStatement.Parameters();
+	final ExternalStatement.Parameters previousArguments = new ExternalStatement.Parameters();
+	String previousCreationName = null;
+	while (creationClass.getEnclosingClass() != GuiClass.getSubClass("Image").getSubClass("AnimationType")) {
+		creationName = creationClass.getName().toString() + creationName;
+		final String createMethodName = "create" + creationName.toString();
+		final ExternalClassEntry upperClass = creationClass.getEnclosingClass();
+		final ExternalStatement.Parameters realParameters = new ExternalStatement.Parameters();
+		realParameters.addAll(animationCreationParameters.get(creationClass));
+		realParameters.addAll(previousParameters);
+		final ExternalStatement creation = new ExternalStatement();
+		creation.add(/*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry(creationClass.getFullName()))),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*InCl*/new ExternalStatement(animationCreationArguments.get(creationClass))))))));
+		if (previousCreationName != null) {
+			creation.set(".");
+			final String currentPreviousCreationName = previousCreationName;
+			final ExternalStatement.Parameters currentPreviousArguements = new ExternalStatement.Parameters();
+			currentPreviousArguements.addAll(previousArguments);
+			creation.add(/*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Enty*/new ExternalStatement(new StringEntry(currentPreviousCreationName.toString())),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*InCl*/new ExternalStatement(currentPreviousArguements)))))));
+		}
+		previousCreationName = createMethodName;
+upperClass.addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry(enclosingClass.getFullName())), /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(animationTypeName.toString())))))), /*Enty*/new ExternalStatement(new StringEntry(createMethodName.toString())), realParameters, /*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*InCl*/new ExternalStatement(creation)))))));
+		previousParameters.addAll(animationCreationParameters.get(creationClass));
+		previousArguments.addAll(animationCreationArguments.get(creationClass));
+		creationClass = upperClass;
+	}
+	creationName = creationClass.getName().toString() + creationName;
+	final String createMethodName = "create" + creationName.toString();
+	final ExternalStatement.Parameters realParameters = new ExternalStatement.Parameters();
+	realParameters.addAll(animationCreationParameters.get(creationClass));
+	realParameters.addAll(previousParameters);
+	final ExternalStatement creation = new ExternalStatement();
+	creation.add(/*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry(creationClass.getFullName()))),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*InCl*/new ExternalStatement(animationCreationArguments.get(creationClass))))))));
+	if (previousCreationName != null) {
+		creation.set(".");
+		final String currentPreviousCreationName = previousCreationName;
+		final ExternalStatement.Parameters currentPreviousArguements = new ExternalStatement.Parameters();
+		currentPreviousArguements.addAll(previousArguments);
+		creation.add(/*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Enty*/new ExternalStatement(new StringEntry(currentPreviousCreationName.toString())),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*InCl*/new ExternalStatement(currentPreviousArguements)))))));
+	}
+GuiClass.getSubClass("Image").getSubClass("AnimationType").addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry(enclosingClass.getFullName())), /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(animationTypeName.toString())))))), /*Enty*/new ExternalStatement(new StringEntry(createMethodName.toString())), realParameters, /*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*InCl*/new ExternalStatement(creation)))))));
+	for(final IToken element:input.getAllSafely("animation_type_element")) {
+			for(final IToken atom:element.getAllSafely("animation_type_declaration")) {
+				ImageLoaderClass.declaration(atom,enclosingClass.getSubClass(animationTypeName.toString()));
+			}
+			for(final IToken atom:element.getAllSafely("statement")) {
+				final ExternalStatement statement = new ExternalStatement();
+				statement.add(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(atom.get("variableName").toString())))));
+				statement.set(atom.get("anit_operator").toString());
+				statement.add(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(atom.get("value").toString())))));
+				if (atom.get("animation_type_boolean") != null) {
+				final ExternalStatement header = new ExternalStatement();
+				for(IToken.Key __quark__KEY:atom.keySet()) {
+					if(__quark__KEY.getName().equals("animation_type_boolean")){ final IToken quark = atom.get(__quark__KEY);
+						final ExternalStatement headerElement = new ExternalStatement();
+						headerElement.add(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(quark.get("leftName").toString())))));
+						headerElement.set(quark.get("anit_boolean_operator").toString());
+						for(final IToken energy:quark.getAllSafely("value")) {
+							for(IToken.Key __quanta__KEY:energy.keySet()) {
+							if(__quanta__KEY.getName().equals("INTEGER")){ final IToken quanta = energy.get(__quanta__KEY);
+								headerElement.add(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(quanta.toString())))));
+							}
+							if(__quanta__KEY.getName().equals("FLOAT")){ final IToken quanta = energy.get(__quanta__KEY);
+								headerElement.add(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Enty*/new ExternalStatement(new StringEntry(quanta.toString())), /*Name*/new ExternalStatement(new StringEntry("f")))))));
+							}
+							if(__quanta__KEY.getName().equals("NAME")){ final IToken quanta = energy.get(__quanta__KEY);
+								headerElement.add(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(quanta.toString())))));
+							}
+							if(__quanta__KEY.getName().equals("frameName")){ final IToken quanta = energy.get(__quanta__KEY);
+								final String methodName = "get" + Generator.camelize(quanta.toString());
+								headerElement.add(/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("frames"))), /*Enty*/new ExternalStatement(new StringEntry(methodName.toString()))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))));
+							}
+							}
+						}
+						header.add(headerElement);
+					}
+					if(__quark__KEY.getName().equals("anit_continuation_operator")){ final IToken quark = atom.get(__quark__KEY);
+						if (quark.toString() == "&") {
+						header.set("&&");
+						}
+						else if (quark.toString() == "|") {
+						header.set("||");
+						}
+					}
+				}
+				enclosingClass.getSubClass(animationTypeName.toString()).getMethod("animate").appendToBody(/*Body*/new ExternalStatement.Body(
+		/*Cond*/new ExternalStatement.Conditional(
+			"if ", 
+			/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*InCl*/new ExternalStatement(header))),
+			/*Body*/new ExternalStatement.Body(
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*InCl*/new ExternalStatement(statement))))))));
+				}
+				else  {
+				enclosingClass.getSubClass(animationTypeName.toString()).getMethod("animate").appendToBody(/*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*InCl*/new ExternalStatement(statement))))));
+				}
+			}
+	}
+}
+	
+public void declareImageLoader(final String imageName,final String imageFileName,final Integer imageWidth,final Integer imageHeight) {
+	final String imageLoaderName = imageName + "DataLoader";
+	final String imageLoaderClassName = "ImageData" + imageWidth.toString() + "x" + imageHeight.toString() + "Loader";
+	ImageLoaderClass.getMethod("load").prependToBody(/*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(imageLoaderName.toString()))), /*Enty*/new ExternalStatement(new StringEntry("start"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))))));
+	ImageLoaderClass.getMethod("load").prependToBody(/*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(imageLoaderClassName.toString())))), /*Enty*/new ExternalStatement(new StringEntry(imageLoaderName.toString())), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(imageLoaderClassName.toString())))),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Quot*/new ExternalStatement(new QuoteEntry(imageFileName.toString())))))))))));
+	ImageLoaderClass.getMethod("load").appendToBody(/*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(imageLoaderName.toString()))), /*Enty*/new ExternalStatement(new StringEntry("attachTextures"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Images")), /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(imageName.toString())))))))))))))));
+	if (declaredImageLoaders.add(imageLoaderClassName) == false) {
+		return ;
+	}
+	final Integer totalSize = imageWidth * imageHeight;
+	final Integer totalByteSize = imageWidth * imageHeight * 4;
+ImageLoaderClass.addSubClass(new ExternalClassEntry(){public void __INIT__(){super.__SETUP__(null, 
+		new Entry(){
+			public void get(StringBuilder __BUILDER__){
+			}
+		},new StringEntry(imageLoaderClassName), "class ", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Thread")), new ArrayList<Entry>(Arrays.asList(new Entry[]{})), 
+		new Entry(){
+		public void get(StringBuilder builder){
+			builder.append("static class ");
+			new StringEntry(imageLoaderClassName).get(builder);
+			new StringEntry("").get(builder);
+		}
+	}, Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("String"))), /*Name*/new ExternalStatement(new StringEntry("fileName")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("ByteBuffer"))), /*Name*/new ExternalStatement(new StringEntry("pixelBuffer")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Boolean"))), /*Name*/new ExternalStatement(new StringEntry("failed")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("false")))))}), Arrays.asList(new ExternalMethodEntry[]{new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("run")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("BufferedImage"))), /*Name*/new ExternalStatement(new StringEntry("bufferedImage")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null")))))),
+/*BODY*/				
+		/*Cond*/new ExternalStatement.Conditional(
+			"try ", null,
+			/*Body*/new ExternalStatement.Body(
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("bufferedImage")), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("ImageIO")))), /*Enty*/new ExternalStatement(new StringEntry("read"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("File"))),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("fileName"))))))))))))))),
+/*BODY*/				
+		/*Cond*/new ExternalStatement.Conditional(
+			"catch ", 
+			/*Optr*/new ExternalStatement(" ", /*Exac*/new ExternalStatement(new StringEntry("Exception")), /*Exac*/new ExternalStatement(new StringEntry("e0"))),
+			/*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Exac*/new ExternalStatement(new StringEntry("e0.printStackTrace()"))),
+/*BODY*/				
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("failed")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("true")))))),
+/*BODY*/				
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Exac*/new ExternalStatement(new StringEntry(""))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(pintArrayType.toString())))), /*Name*/new ExternalStatement(new StringEntry("pixels")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(new StringEntry("new int[")), /*Enty*/new ExternalStatement(new StringEntry(totalSize.toString())))), /*Name*/new ExternalStatement(new StringEntry("]")))))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("PixelGrabber"))), /*Name*/new ExternalStatement(new StringEntry("pixelGrabber")), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("PixelGrabber"))),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("bufferedImage")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(imageWidth.toString())))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(imageHeight.toString())))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("pixels")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(imageWidth.toString()))))))))),
+/*BODY*/				
+		/*Cond*/new ExternalStatement.Conditional(
+			"try ", null,
+			/*Body*/new ExternalStatement.Body(
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("pixelGrabber"))), /*Enty*/new ExternalStatement(new StringEntry("grabPixels"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters())))))),
+/*BODY*/				
+		/*Cond*/new ExternalStatement.Conditional(
+			"catch ", 
+			/*Optr*/new ExternalStatement(" ", /*Exac*/new ExternalStatement(new StringEntry("Exception")), /*Exac*/new ExternalStatement(new StringEntry("e0"))),
+			/*Body*/new ExternalStatement.Body(
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("System"))), /*Enty*/new ExternalStatement(new StringEntry("err"))), /*Enty*/new ExternalStatement(new StringEntry("println"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Quot*/new ExternalStatement(new QuoteEntry("Pixel Grabbing interrupted!".toString()))))))))),
+/*BODY*/				
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("failed")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("true")))))),
+/*BODY*/				
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Exac*/new ExternalStatement(new StringEntry(""))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(byteArrayType.toString())))), /*Name*/new ExternalStatement(new StringEntry("bytes")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(new StringEntry("new byte[")), /*Enty*/new ExternalStatement(new StringEntry(totalByteSize.toString())))), /*Name*/new ExternalStatement(new StringEntry("]")))))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("int"))), /*Name*/new ExternalStatement(new StringEntry("p")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0")))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("int"))), /*Name*/new ExternalStatement(new StringEntry("r")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0")))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("int"))), /*Name*/new ExternalStatement(new StringEntry("g")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0")))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("int"))), /*Name*/new ExternalStatement(new StringEntry("b")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0")))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("int"))), /*Name*/new ExternalStatement(new StringEntry("a")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0")))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("int"))), /*Name*/new ExternalStatement(new StringEntry("j")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0")))))),
+/*BODY*/				
+		/*Cond*/new ExternalStatement.Conditional(
+			"for ", 
+			/*FIHd*/new ExternalStatement(";", new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("i")), /*Exac*/new ExternalStatement(new StringEntry("0"))), new ExternalStatement("< ", /*Name*/new ExternalStatement(new StringEntry("i")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(totalSize.toString()))))), new ExternalStatement(new StringEntry("++"),"",/*Name*/new ExternalStatement(new StringEntry("i")))),
+			/*Body*/new ExternalStatement.Body(
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("p")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("pixels[i]")))))),
+/*BODY*/				
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("a")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("(p >> 24) & 0xFF")))))),
+/*BODY*/				
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("r")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("(p >> 16) & 0xFF")))))),
+/*BODY*/				
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("g")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("(p >> 8) & 0xFF")))))),
+/*BODY*/				
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("b")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("(p >> 0) & 0xFF")))))),
+/*BODY*/				
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("bytes[j+0] = (byte)r"))))),
+/*BODY*/				
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("bytes[j+1] = (byte)g"))))),
+/*BODY*/				
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("bytes[j+2] = (byte)b"))))),
+/*BODY*/				
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("bytes[j+3] = (byte)a"))))),
+/*BODY*/				
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("+=", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("j")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("4"))))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("pixelBuffer")), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("ByteBuffer")))), /*Enty*/new ExternalStatement(new StringEntry("allocateDirect"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(totalByteSize.toString()))))))), /*Enty*/new ExternalStatement(new StringEntry("order"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("ByteOrder")))), /*Enty*/new ExternalStatement(new StringEntry("nativeOrder"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))))))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("pixelBuffer"))), /*Enty*/new ExternalStatement(new StringEntry("put"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("bytes"))))))), /*Enty*/new ExternalStatement(new StringEntry("flip"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters())))))),new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("attachTextures")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Gui")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Image"))))), /*Name*/new ExternalStatement(new StringEntry("imageObject")))}), /*Body*/new ExternalStatement.Body(
+		/*Cond*/new ExternalStatement.Conditional(
+			"try ", null,
+			/*Body*/new ExternalStatement.Body(
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("super"))), /*Enty*/new ExternalStatement(new StringEntry("join"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters())))))),
+/*BODY*/				
+		/*Cond*/new ExternalStatement.Conditional(
+			"catch ", 
+			/*Optr*/new ExternalStatement(" ", /*Exac*/new ExternalStatement(new StringEntry("InterruptedException")), /*Exac*/new ExternalStatement(new StringEntry("e0"))),
+			/*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Exac*/new ExternalStatement(new StringEntry("e0.printStackTrace()"))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("int"))), /*Name*/new ExternalStatement(new StringEntry("texture")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0")))))),
+/*BODY*/				
+		/*Cond*/new ExternalStatement.Conditional(
+			"if ", 
+			/*Optr*/new ExternalStatement("==", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("failed")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("true")))),
+			/*Body*/new ExternalStatement.Body(
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("imageObject"))), /*Enty*/new ExternalStatement(new StringEntry("setTexture"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0"))))))))),
+/*BODY*/				
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Exac*/new ExternalStatement(new StringEntry(""))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("IntBuffer"))), /*Name*/new ExternalStatement(new StringEntry("textureHandle")), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("ByteBuffer")))), /*Enty*/new ExternalStatement(new StringEntry("allocateDirect"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(INT_SIZE.toString()))))))), /*Enty*/new ExternalStatement(new StringEntry("order"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("ByteOrder")))), /*Enty*/new ExternalStatement(new StringEntry("nativeOrder"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters())))))), /*Enty*/new ExternalStatement(new StringEntry("asIntBuffer"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("glGenTextures"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("textureHandle"))))))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("texture")), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("textureHandle"))), /*Enty*/new ExternalStatement(new StringEntry("get"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0")))))))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("glPushAttrib"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("GL_TEXTURE_BIT"))))))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("glBindTexture"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("GL_TEXTURE_2D")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("texture"))))))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("glTexParameteri"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("GL_TEXTURE_2D")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("GL_TEXTURE_WRAP_S")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("GL_REPEAT"))))))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("glTexParameteri"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("GL_TEXTURE_2D")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("GL_TEXTURE_WRAP_T")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("GL_REPEAT"))))))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("glTexParameteri"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("GL_TEXTURE_2D")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("GL_TEXTURE_MAG_FILTER")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("GL_NEAREST"))))))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("glTexParameteri"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("GL_TEXTURE_2D")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("GL_TEXTURE_MIN_FILTER")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("GL_NEAREST"))))))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("glTexImage2D"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("GL_TEXTURE_2D")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("GL_RGBA8")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(imageWidth.toString())))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(imageHeight.toString())))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("GL_RGBA")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("GL_UNSIGNED_BYTE")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("pixelBuffer"))))))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("glPopAttrib"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters())))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("glBindTexture"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("GL_TEXTURE_2D")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("texture"))))))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("result")), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GLU")))), /*Enty*/new ExternalStatement(new StringEntry("gluBuild2DMipmaps"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("GL_TEXTURE_2D")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("GL_RGBA8")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(imageWidth.toString())))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(imageHeight.toString())))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("GL_RGBA")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("GL_UNSIGNED_BYTE")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("pixelBuffer")))))))))),
+/*BODY*/				
+		/*Cond*/new ExternalStatement.Conditional(
+			"if ", 
+			/*Optr*/new ExternalStatement("!=", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("result")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0 ")))),
+			/*Body*/new ExternalStatement.Body(
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("System"))), /*Enty*/new ExternalStatement(new StringEntry("err"))), /*Enty*/new ExternalStatement(new StringEntry("println"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Optr*/new ExternalStatement("+", /*Optr*/new ExternalStatement("+", /*Optr*/new ExternalStatement("+", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Quot*/new ExternalStatement(new QuoteEntry("GLApp.makeTextureMipMap(): Error occured while building mip map, result=".toString())))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("result")))), /*Acss*/new ExternalStatement(/*Quot*/new ExternalStatement(new QuoteEntry(" error=".toString())))), /*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GLU")))), /*Enty*/new ExternalStatement(new StringEntry("gluErrorString"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("result"))))))))))))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("glTexParameteri"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("GL_TEXTURE_2D")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("GL_TEXTURE_MIN_FILTER")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("GL_NEAREST"))))))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("glTexEnvf"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("GL_TEXTURE_ENV")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("GL_TEXTURE_ENV_MODE")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("GL_MODULATE"))))))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("imageObject"))), /*Enty*/new ExternalStatement(new StringEntry("setTexture"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("texture")))))))))))}), Arrays.asList(new ExternalClassEntry[]{})) ;}});
+}
+
+
+
+	public void __INIT__(){
+		super.__SETUP__(
+		new Entry(){
+			public void get(StringBuilder __BUILDER__){/*Enty*/new ExternalStatement(new StringEntry(packageName.toString())).get(__BUILDER__);
+				__BUILDER__.append(".");
+				/*Name*/new ExternalStatement(new StringEntry("gui")).get(__BUILDER__);
+				__BUILDER__.append(".");
+				/*Name*/new ExternalStatement(new StringEntry("images")).get(__BUILDER__);
+			}
+		}, 
+		new Entry(){
+			public void get(StringBuilder __BUILDER__){
+			}
+		}, new StringEntry("ImageLoader"), "class ", null, new ArrayList<Entry>(Arrays.asList(new Entry[]{})), 
+		new Entry(){
+		public void get(StringBuilder builder){
+			builder.append(" class ");
+			new StringEntry("ImageLoader").get(builder);
+			new StringEntry("").get(builder);
+		}
+	}, Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("FloatBuffer"))), /*Name*/new ExternalStatement(new StringEntry("placeHolder")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null")))))}), Arrays.asList(new ExternalMethodEntry[]{new ExternalMethodEntry(0, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("load")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body())}), Arrays.asList(new ExternalClassEntry[]{}));
+	}
+}
+	protected Gui GuiClass = new Gui();
+	public class Gui extends ExternalClassEntry {
+
+	
+public void importAny(final IToken import_any) {
+	for(final IToken import_colours:import_any.getAllSafely("IMPORT_COLOUR")) {
+			for(final IToken element:import_colours.getAllSafely("colour_declaration")) {
+				ColourClass.declaration(element);
+			}
+	}
+	for(final IToken import_animation_types:import_any.getAllSafely("IMPORT_ANIMATION_TYPE")) {
+			for(final IToken element:import_animation_types.getAllSafely("animation_type_declaration")) {
+				ImageLoaderClass.declaration(element,GuiClass.getSubClass("Image").getSubClass("AnimationType"));
+			}
+	}
+	for(final IToken import_images:import_any.getAllSafely("IMPORT_IMAGE")) {
+			for(final IToken element:import_images.getAllSafely("image_declaration")) {
+				ImageClass.declaration(element);
+			}
+	}
+	for(final IToken import_draws:import_any.getAllSafely("IMPORT_DRAWABLE")) {
+			for(final IToken element:import_draws.getAllSafely("drawable_declaration")) {
+				DrawableClass.declaration(element);
+			}
+	}
+	for(final IToken import_layers:import_any.getAllSafely("IMPORT_LAYER")) {
+			for(final IToken element:import_layers.getAllSafely("layer_declaration")) {
+				RendererClass.addLayer(element.get("layerName").toString());
+			}
+	}
+}
+
+
+	protected Renderable RenderableClass = new Renderable();
+	public class Renderable extends ExternalClassEntry {
+
+
+
+
+	public void __INIT__(){
+		super.__SETUP__(
+		null, 
+		new Entry(){
+			public void get(StringBuilder __BUILDER__){
+			}
+		}, new StringEntry("Renderable"), "interface ", null, new ArrayList<Entry>(Arrays.asList(new Entry[]{})), 
+		new Entry(){
+		public void get(StringBuilder builder){
+			builder.append("static interface ");
+			new StringEntry("Renderable").get(builder);
+			new StringEntry("").get(builder);
+		}
+	}, Arrays.asList(new ExternalVariableEntry[]{}), Arrays.asList(new ExternalMethodEntry[]{new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("render")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body()),new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("animate")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body())}), Arrays.asList(new ExternalClassEntry[]{}));
+	}
+}
+	protected Image ImageClass = new Image();
+	public class Image extends ExternalClassEntry {
+		protected final Map<String,Set<String>> declaredTextureBuffers = new HashMap<String,Set<String>>();
+
+	
+	public void declaration(final IToken input) {
+		try  {
+			final String imageName = input.get("imageName").toString();
+			final String imageFileName = "../Resource/gui/images/" + input.get("image_file_name").toString() + "." + input.get("image_type").toString();
+			final BufferedImage bimg = ImageIO.read(new File(imageFileName));
+			final Integer pWidth = bimg.getWidth();
+			final Integer pHeight = bimg.getHeight();
+ImagesClass.addVariable(new ExternalVariableEntry(true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Gui")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Image"))))), /*Enty*/new ExternalStatement(new StringEntry(imageName.toString())), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Gui")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Image"))))),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Quot*/new ExternalStatement(new QuoteEntry(imageFileName.toString())))),/*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Gui")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Image")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Dimensions"))))),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(pWidth.toString())))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(pHeight.toString()))))))),/*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Gui")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Image")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Dimensions"))))),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(input.get("frameWidth").toString())))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(input.get("frameHeight").toString()))))))))))));
+			if (declaredTextureBuffers.containsKey(input.get("frameWidth").toString()) == false || declaredTextureBuffers.get(input.get("frameWidth").toString()).contains(input.get("frameHeight").toString()) == false) {
+				declareTextureBuffer(input.get("frameWidth").toString(),input.get("frameHeight").toString());
+			}
+			final String textureBufferMethodLoaderClassName = "TextureBuffer" + input.get("frameWidth").toString() + "x" + input.get("frameHeight").toString() + "Loader";
+			ImageLoaderClass.getSubClass(textureBufferMethodLoaderClassName.toString()).getMethod("run").appendToBody(/*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Images")), /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(imageName.toString()))))))), /*Enty*/new ExternalStatement(new StringEntry("setTextureBuffer"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("textureBuffer")))))))))));
+			final String imageLoaderClassName = "ImageData" + pWidth.toString() + "x" + pHeight.toString() + "Loader";
+			ImageLoaderClass.declareImageLoader(imageName,imageFileName,pWidth,pHeight);
+		}
+		catch (IOException   e0) {
+			e0.printStackTrace();
+		}
+	}
+	
+	public void declareTextureBuffer(final String frameWidth,final String frameHeight) {
+		final Float width = Float.parseFloat(frameWidth);
+		final Float height = Float.parseFloat(frameHeight);
+		final Integer widthI = Integer.parseInt(frameWidth);
+		final Integer heightI = Integer.parseInt(frameHeight);
+		final Float xFactor = 0.02f / width;
+		final Float yFactor = 0.02f / height;
+		final String textureBufferMethodLoaderClassName = "TextureBuffer" + frameWidth.toString() + "x" + frameHeight.toString() + "Loader";
+		final String textureBufferMethodLoaderName = "loadTextureBuffer" + frameWidth.toString() + "x" + frameHeight.toString()+"Loader";
+		final String textureBufferName = "textureBuffer" + frameWidth.toString() + "x" + frameHeight.toString();
+		if (declaredTextureBuffers.isEmpty()) {
+ImageLoaderClass.addVariable(new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Map"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer")),/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Map"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer")),/*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(floatBufferArray.toString())))))))), /*Name*/new ExternalStatement(new StringEntry("textureBuffers")), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("HashMap"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer")),/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Map"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer")),/*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(floatBufferArray.toString())))))))),new ExternalStatement.Parameters()))));
+		}
+		ImageLoaderClass.getMethod("load").prependToBody(/*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(textureBufferMethodLoaderName.toString()))), /*Enty*/new ExternalStatement(new StringEntry("start"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))))));
+		ImageLoaderClass.getMethod("load").appendToBody(/*Body*/new ExternalStatement.Body(
+		/*Cond*/new ExternalStatement.Conditional(
+			"try ", null,
+			/*Body*/new ExternalStatement.Body(
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(textureBufferMethodLoaderName.toString()))), /*Enty*/new ExternalStatement(new StringEntry("join"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters())))))),
+/*BODY*/				
+		/*Cond*/new ExternalStatement.Conditional(
+			"catch ", 
+			/*Optr*/new ExternalStatement(" ", /*Exac*/new ExternalStatement(new StringEntry("InterruptedException")), /*Exac*/new ExternalStatement(new StringEntry("e0"))),
+			/*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Exac*/new ExternalStatement(new StringEntry("e0.printStackTrace()")))))));
+ImageLoaderClass.addVariable(new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Thread"))), /*Enty*/new ExternalStatement(new StringEntry(textureBufferMethodLoaderName.toString())), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("ImageLoader")), /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(textureBufferMethodLoaderClassName.toString())))))),new ExternalStatement.Parameters()))));
+ImageLoaderClass.addSubClass(new ExternalClassEntry(){public void __INIT__(){super.__SETUP__(null, 
+		new Entry(){
+			public void get(StringBuilder __BUILDER__){
+			}
+		},new StringEntry(textureBufferMethodLoaderClassName), "class ", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Thread")), new ArrayList<Entry>(Arrays.asList(new Entry[]{})), 
+		new Entry(){
+		public void get(StringBuilder builder){
+			builder.append(" class ");
+			new StringEntry(textureBufferMethodLoaderClassName).get(builder);
+			new StringEntry("").get(builder);
+		}
+	}, Arrays.asList(new ExternalVariableEntry[]{}), Arrays.asList(new ExternalMethodEntry[]{new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("run")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(floatBufferArray.toString())))), /*Name*/new ExternalStatement(new StringEntry("textureBuffer")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(new StringEntry("new FloatBuffer[")), /*Enty*/new ExternalStatement(new StringEntry(frameWidth.toString())))), /*Name*/new ExternalStatement(new StringEntry("][")))), /*Enty*/new ExternalStatement(new StringEntry(frameHeight.toString())))), /*Name*/new ExternalStatement(new StringEntry("]")))))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("ByteBuffer"))), /*Name*/new ExternalStatement(new StringEntry("byteBuffer")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))))))}), Arrays.asList(new ExternalClassEntry[]{})) ;}});
+		for (Integer x = 0; x <  widthI; ++x) {
+			for (Integer y = 0; y <  heightI; ++y) {
+				final String currentTextureBuffer = "textureBuffer[" + x.toString() + "][" + y.toString() + "]";
+				final StringBuilder floatArrayValues = new StringBuilder();
+				floatArrayValues.append("new float[]{");
+				floatArrayValues.append(x / width + xFactor);
+				floatArrayValues.append("f,");
+				floatArrayValues.append(y / height + 1 / height - yFactor);
+				floatArrayValues.append("f,");
+				floatArrayValues.append(x / width + xFactor);
+				floatArrayValues.append("f,");
+				floatArrayValues.append(y / height + yFactor);
+				floatArrayValues.append("f,");
+				floatArrayValues.append(x / width + 1 / width - xFactor);
+				floatArrayValues.append("f,");
+				floatArrayValues.append(y / height + 1 / height - yFactor);
+				floatArrayValues.append("f,");
+				floatArrayValues.append(x / width + 1 / width - xFactor);
+				floatArrayValues.append("f,");
+				floatArrayValues.append(y / height + yFactor);
+				floatArrayValues.append("f}");
+				ImageLoaderClass.getSubClass(textureBufferMethodLoaderClassName.toString()).getMethod("run").appendToBody(/*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("byteBuffer")), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("ByteBuffer")))), /*Enty*/new ExternalStatement(new StringEntry("allocateDirect"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Optr*/new ExternalStatement("*", /*Optr*/new ExternalStatement("*", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("2")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("4")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("4")))))))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("byteBuffer"))), /*Enty*/new ExternalStatement(new StringEntry("order"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("ByteOrder")))), /*Enty*/new ExternalStatement(new StringEntry("nativeOrder"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters())))))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Enty*/new ExternalStatement(new StringEntry(currentTextureBuffer.toString())), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("byteBuffer"))), /*Enty*/new ExternalStatement(new StringEntry("asFloatBuffer"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(currentTextureBuffer.toString()))), /*Enty*/new ExternalStatement(new StringEntry("put"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(floatArrayValues.toString()))))))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(currentTextureBuffer.toString()))), /*Enty*/new ExternalStatement(new StringEntry("position"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0")))))))))));
+			}
+		}
+		if (declaredTextureBuffers.containsKey(frameWidth) == false) {
+			declaredTextureBuffers.put(frameWidth,new HashSet<String>());
+			ImageLoaderClass.getSubClass(textureBufferMethodLoaderClassName.toString()).getMethod("run").appendToBody(/*Body*/new ExternalStatement.Body(
+		/*Cond*/new ExternalStatement.Conditional(
+			"synchronized ", 
+			/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("textureBuffers")))),
+			/*Body*/new ExternalStatement.Body(
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("textureBuffers"))), /*Enty*/new ExternalStatement(new StringEntry("put"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(widthI.toString())))),/*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("HashMap"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer")),/*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(floatBufferArray.toString())))))),new ExternalStatement.Parameters())))))))))));
+		}
+		declaredTextureBuffers.get(frameWidth).add(frameHeight);
+		ImageLoaderClass.getSubClass(textureBufferMethodLoaderClassName.toString()).getMethod("run").appendToBody(/*Body*/new ExternalStatement.Body(
+		/*Cond*/new ExternalStatement.Conditional(
+			"synchronized ", 
+			/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("textureBuffers")))),
+			/*Body*/new ExternalStatement.Body(
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("textureBuffers"))), /*Enty*/new ExternalStatement(new StringEntry("get"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(widthI.toString()))))))), /*Enty*/new ExternalStatement(new StringEntry("put"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(heightI.toString())))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("textureBuffer")))))))))))));
+	}
+
+
+	protected Dimensions DimensionsClass = new Dimensions();
+	public class Dimensions extends ExternalClassEntry {
+
+
+
+
+	public void __INIT__(){
+		super.__SETUP__(
+		null, 
+		new Entry(){
+			public void get(StringBuilder __BUILDER__){
+			}
+		}, new StringEntry("Dimensions"), "class ", null, new ArrayList<Entry>(Arrays.asList(new Entry[]{})), 
+		new Entry(){
+		public void get(StringBuilder builder){
+			builder.append("static class ");
+			new StringEntry("Dimensions").get(builder);
+			new StringEntry("").get(builder);
+		}
+	}, Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("width")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("-1"))))),new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("height")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("-1")))))}), Arrays.asList(new ExternalMethodEntry[]{}), Arrays.asList(new ExternalClassEntry[]{}));
+	}
+}
+	protected Crop CropClass = new Crop();
+	public class Crop extends ExternalClassEntry {
+
+
+
+
+	public void __INIT__(){
+		super.__SETUP__(
+		null, 
+		new Entry(){
+			public void get(StringBuilder __BUILDER__){
+			}
+		}, new StringEntry("Crop"), "class ", null, new ArrayList<Entry>(Arrays.asList(new Entry[]{/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Renderable"))})), 
+		new Entry(){
+		public void get(StringBuilder builder){
+			builder.append(" class ");
+			new StringEntry("Crop").get(builder);
+			new StringEntry("").get(builder);
+		}
+	}, Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("frameX")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0"))))),new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("frameY")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0")))))}), Arrays.asList(new ExternalMethodEntry[]{new ExternalMethodEntry(2, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("animate")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body()),new ExternalMethodEntry(2, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("render")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("glBindTexture"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("GL_TEXTURE_2D")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("texture"))))))))),
+/*BODY*/				
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("glTexCoordPointer"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("2")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("textureBuffer[frameX][frameY]"))))))))))),new ExternalMethodEntry(2, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("setFrameX")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("newX")))}), /*Body*/new ExternalStatement.Body(
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("frameX")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("newX")))))))),new ExternalMethodEntry(2, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("setFrameY")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("newY")))}), /*Body*/new ExternalStatement.Body(
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("frameY")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("newY"))))))))}), Arrays.asList(new ExternalClassEntry[]{}));
+	}
+}
+	protected AnimationType AnimationTypeClass = new AnimationType();
+	public class AnimationType extends ExternalClassEntry {
+
+
+
+
+	public void __INIT__(){
+		super.__SETUP__(
+		null, 
+		new Entry(){
+			public void get(StringBuilder __BUILDER__){
+			}
+		}, new StringEntry("AnimationType"), "class ", null, new ArrayList<Entry>(Arrays.asList(new Entry[]{/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Renderable"))})), 
+		new Entry(){
+		public void get(StringBuilder builder){
+			builder.append(" class ");
+			new StringEntry("AnimationType").get(builder);
+			new StringEntry("").get(builder);
+		}
+	}, Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("x")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0"))))),new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("y")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0"))))),new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("frameX")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0"))))),new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("frameY")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0")))))}), Arrays.asList(new ExternalMethodEntry[]{new ExternalMethodEntry(2, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("animate")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body()),new ExternalMethodEntry(2, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("render")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("glBindTexture"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("GL_TEXTURE_2D")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("texture"))))))))),
+/*BODY*/				
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("glTexCoordPointer"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("2")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("textureBuffer[frameX][frameY]"))))))))))),new ExternalMethodEntry(2, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("setFrameX")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("newX")))}), /*Body*/new ExternalStatement.Body(
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("frameX")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("newX")))))))),new ExternalMethodEntry(2, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("setFrameY")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("newY")))}), /*Body*/new ExternalStatement.Body(
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("frameY")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("newY")))))))),new ExternalMethodEntry(2, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("tick")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Double"))), /*Name*/new ExternalStatement(new StringEntry("millisSinceLastFrame")))}), /*Body*/new ExternalStatement.Body(
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("animate")),new ExternalStatement.Parameters()))),
+/*BODY*/				
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("setFrameX")),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("x")))))))),
+/*BODY*/				
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("setFrameY")),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("y"))))))))))}), Arrays.asList(new ExternalClassEntry[]{}));
+	}
+}
+
+	public void __INIT__(){
+		super.__SETUP__(
+		null, 
+		new Entry(){
+			public void get(StringBuilder __BUILDER__){
+			}
+		}, new StringEntry("Image"), "class ", null, new ArrayList<Entry>(Arrays.asList(new Entry[]{/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Renderable"))})), 
+		new Entry(){
+		public void get(StringBuilder builder){
+			builder.append("static class ");
+			new StringEntry("Image").get(builder);
+			new StringEntry("").get(builder);
+		}
+	}, Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("String"))), /*Name*/new ExternalStatement(new StringEntry("imageFileName")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))),new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Gui")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Image")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Dimensions"))))), /*Name*/new ExternalStatement(new StringEntry("pixels")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))),new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Gui")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Image")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Dimensions"))))), /*Name*/new ExternalStatement(new StringEntry("frames")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("texture")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("-1"))))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(floatBufferArray.toString())))), /*Name*/new ExternalStatement(new StringEntry("textureBuffer")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null")))))}), Arrays.asList(new ExternalMethodEntry[]{new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("animate")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body()),new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("render")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("glBindTexture"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("GL_TEXTURE_2D")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("texture"))))))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("glTexCoordPointer"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("2")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("textureBuffer[0][0]"))))))))))),new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Gui")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Image")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Crop"))))), /*Exac*/new ExternalStatement(new StringEntry("getCrop")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("frameX"))),
+/*PARAMS*/				new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("frameY")))}), /*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Gui")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Image")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Crop"))))),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("frameX")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("frameY"))))))))))}), Arrays.asList(new ExternalClassEntry[]{GuiClass.ImageClass.DimensionsClass,GuiClass.ImageClass.CropClass,GuiClass.ImageClass.AnimationTypeClass}));
+	}
+}
+	protected Colour ColourClass = new Colour();
+	public class Colour extends ExternalClassEntry {
+
+	
+	public void declaration(final IToken input) {
+		final String colourName = Generator.camelize(input.get("colourName").toString());
+ColoursClass.addSubClass(new ExternalClassEntry(){public void __INIT__(){super.__SETUP__(null, 
+		new Entry(){
+			public void get(StringBuilder __BUILDER__){
+			}
+		},new StringEntry(colourName), "class ", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Gui")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Colour")))), new ArrayList<Entry>(Arrays.asList(new Entry[]{})), 
+		new Entry(){
+		public void get(StringBuilder builder){
+			builder.append("static class ");
+			new StringEntry(colourName).get(builder);
+			new StringEntry("").get(builder);
+		}
+	}, Arrays.asList(new ExternalVariableEntry[]{}), Arrays.asList(new ExternalMethodEntry[]{}), Arrays.asList(new ExternalClassEntry[]{})) ;}});
+		for(IToken.Key __element__KEY:input.keySet()) {
+			if(__element__KEY.getName().equals("asInt")){ final IToken element = input.get(__element__KEY);
+				final Integer redInt = Integer.parseInt(element.get("red").toString());
+				final Integer greenInt = Integer.parseInt(element.get("green").toString());
+				final Integer blueInt = Integer.parseInt(element.get("blue").toString());
+				final Float redFloat = Float.parseFloat(element.get("red").toString()) / 256f;
+				final Float greenFloat = Float.parseFloat(element.get("green").toString()) / 256f;
+				final Float blueFloat = Float.parseFloat(element.get("blue").toString()) / 256f;
+ColoursClass.getSubClass(colourName.toString()).addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(floatArrayType.toString())))), /*Exac*/new ExternalStatement(new StringEntry("asFloatArray")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(new StringEntry("new Float[]{")), /*Enty*/new ExternalStatement(new StringEntry(redFloat.toString())))), /*Name*/new ExternalStatement(new StringEntry("f,")))), /*Enty*/new ExternalStatement(new StringEntry(greenFloat.toString())))), /*Name*/new ExternalStatement(new StringEntry("f,")))), /*Enty*/new ExternalStatement(new StringEntry(blueFloat.toString())))), /*Name*/new ExternalStatement(new StringEntry("f}"))))))))));
+ColoursClass.getSubClass(colourName.toString()).addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(intArrayType.toString())))), /*Exac*/new ExternalStatement(new StringEntry("asIntArray")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(new StringEntry("new Integer[]{")), /*Enty*/new ExternalStatement(new StringEntry(redInt.toString())))), /*Name*/new ExternalStatement(new StringEntry(",")))), /*Enty*/new ExternalStatement(new StringEntry(greenInt.toString())))), /*Name*/new ExternalStatement(new StringEntry(",")))), /*Enty*/new ExternalStatement(new StringEntry(blueInt.toString())))), /*Name*/new ExternalStatement(new StringEntry("}"))))))))));
+ColoursClass.getSubClass(colourName.toString()).addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Exac*/new ExternalStatement(new StringEntry("getRedI")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(redInt.toString()))))))));
+ColoursClass.getSubClass(colourName.toString()).addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Exac*/new ExternalStatement(new StringEntry("getGreenI")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(greenInt.toString()))))))));
+ColoursClass.getSubClass(colourName.toString()).addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Exac*/new ExternalStatement(new StringEntry("getBlueI")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(blueInt.toString()))))))));
+ColoursClass.getSubClass(colourName.toString()).addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))), /*Exac*/new ExternalStatement(new StringEntry("getRedF")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Enty*/new ExternalStatement(new StringEntry(redFloat.toString())), /*Name*/new ExternalStatement(new StringEntry("f"))))))))));
+ColoursClass.getSubClass(colourName.toString()).addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))), /*Exac*/new ExternalStatement(new StringEntry("getGreenF")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Enty*/new ExternalStatement(new StringEntry(greenFloat.toString())), /*Name*/new ExternalStatement(new StringEntry("f"))))))))));
+ColoursClass.getSubClass(colourName.toString()).addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))), /*Exac*/new ExternalStatement(new StringEntry("getBlueF")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Enty*/new ExternalStatement(new StringEntry(blueFloat.toString())), /*Name*/new ExternalStatement(new StringEntry("f"))))))))));
+ColoursClass.getSubClass(colourName.toString()).addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("render")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("glDisable"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("GL_TEXTURE_2D"))))))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("glDisable"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("GL_LIGHTING"))))))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("glColor3f"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Enty*/new ExternalStatement(new StringEntry(redFloat.toString())), /*Name*/new ExternalStatement(new StringEntry("f")))))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Enty*/new ExternalStatement(new StringEntry(greenFloat.toString())), /*Name*/new ExternalStatement(new StringEntry("f")))))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Enty*/new ExternalStatement(new StringEntry(blueFloat.toString())), /*Name*/new ExternalStatement(new StringEntry("f"))))))))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("glBegin"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("GL_TRIANGLE_STRIPS"))))))))))));
+ColoursClass.getSubClass(colourName.toString()).addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("endRender")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("glEnd"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters())))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("glEnable"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("GL_TEXTURE_2D"))))))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("glEnable"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("GL_LIGHTING"))))))))))));
+			}
+			if(__element__KEY.getName().equals("asFloat")){ final IToken element = input.get(__element__KEY);
+				final Float redFloat = Float.parseFloat(element.get("red").toString());
+				final Float greenFloat = Float.parseFloat(element.get("green").toString());
+				final Float blueFloat = Float.parseFloat(element.get("blue").toString());
+				final Float redIntValue = redFloat * 256f;
+				final Float greenIntValue = greenFloat * 256f;
+				final Float blueIntValue = blueFloat * 256f;
+				final Integer redInt = redIntValue.intValue();
+				final Integer greenInt = greenIntValue.intValue();
+				final Integer blueInt = blueIntValue.intValue();
+ColoursClass.getSubClass(colourName.toString()).addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(floatArrayType.toString())))), /*Exac*/new ExternalStatement(new StringEntry("asFloatArray")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(new StringEntry("new Float[]{")), /*Enty*/new ExternalStatement(new StringEntry(redFloat.toString())))), /*Name*/new ExternalStatement(new StringEntry("f,")))), /*Enty*/new ExternalStatement(new StringEntry(greenFloat.toString())))), /*Name*/new ExternalStatement(new StringEntry("f,")))), /*Enty*/new ExternalStatement(new StringEntry(blueFloat.toString())))), /*Name*/new ExternalStatement(new StringEntry("f}"))))))))));
+ColoursClass.getSubClass(colourName.toString()).addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(intArrayType.toString())))), /*Exac*/new ExternalStatement(new StringEntry("asIntArray")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(new StringEntry("new Integer[]{")), /*Enty*/new ExternalStatement(new StringEntry(redInt.toString())))), /*Name*/new ExternalStatement(new StringEntry(",")))), /*Enty*/new ExternalStatement(new StringEntry(greenInt.toString())))), /*Name*/new ExternalStatement(new StringEntry(",")))), /*Enty*/new ExternalStatement(new StringEntry(blueInt.toString())))), /*Name*/new ExternalStatement(new StringEntry("}"))))))))));
+ColoursClass.getSubClass(colourName.toString()).addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Exac*/new ExternalStatement(new StringEntry("getRedI")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(redInt.toString()))))))));
+ColoursClass.getSubClass(colourName.toString()).addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Exac*/new ExternalStatement(new StringEntry("getGreenI")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(greenInt.toString()))))))));
+ColoursClass.getSubClass(colourName.toString()).addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Exac*/new ExternalStatement(new StringEntry("getBlueI")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(blueInt.toString()))))))));
+ColoursClass.getSubClass(colourName.toString()).addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))), /*Exac*/new ExternalStatement(new StringEntry("getRedF")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Enty*/new ExternalStatement(new StringEntry(redFloat.toString())), /*Name*/new ExternalStatement(new StringEntry("f"))))))))));
+ColoursClass.getSubClass(colourName.toString()).addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))), /*Exac*/new ExternalStatement(new StringEntry("getGreenF")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Enty*/new ExternalStatement(new StringEntry(greenFloat.toString())), /*Name*/new ExternalStatement(new StringEntry("f"))))))))));
+ColoursClass.getSubClass(colourName.toString()).addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))), /*Exac*/new ExternalStatement(new StringEntry("getBlueF")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Enty*/new ExternalStatement(new StringEntry(blueFloat.toString())), /*Name*/new ExternalStatement(new StringEntry("f"))))))))));
+			}
+		}
+	}
+
+
+
+	public void __INIT__(){
+		super.__SETUP__(
+		null, 
+		new Entry(){
+			public void get(StringBuilder __BUILDER__){
+			}
+		}, new StringEntry("Colour"), "class ", null, new ArrayList<Entry>(Arrays.asList(new Entry[]{})), 
+		new Entry(){
+		public void get(StringBuilder builder){
+			builder.append("static class ");
+			new StringEntry("Colour").get(builder);
+			new StringEntry("").get(builder);
+		}
+	}, Arrays.asList(new ExternalVariableEntry[]{}), Arrays.asList(new ExternalMethodEntry[]{new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))), /*Exac*/new ExternalStatement(new StringEntry("getRedF")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))))),new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))), /*Exac*/new ExternalStatement(new StringEntry("getGreenF")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))))),new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))), /*Exac*/new ExternalStatement(new StringEntry("getBlueF")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))))),new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Exac*/new ExternalStatement(new StringEntry("getRedI")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))))),new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Exac*/new ExternalStatement(new StringEntry("getGreenI")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))))),new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Exac*/new ExternalStatement(new StringEntry("getBlueI")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))))),new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(floatArrayType.toString())))), /*Exac*/new ExternalStatement(new StringEntry("asFloatArray")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))))),new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(intArrayType.toString())))), /*Exac*/new ExternalStatement(new StringEntry("asIntegerArray")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))))),new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("render")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body()),new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("endRender")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body())}), Arrays.asList(new ExternalClassEntry[]{}));
+	}
+}
+	protected Drawable DrawableClass = new Drawable();
+	public class Drawable extends ExternalClassEntry {
+
+	
+	public void declaration(final IToken input) {
+		final String drawableName = input.get("drawableName").toString();
+		final String drawableClassName = Generator.camelize(input.get("drawableName").toString());
+GuiClass.getSubClass("Drawable").addSubClass(new ExternalClassEntry(){public void __INIT__(){super.__SETUP__(null, 
+		new Entry(){
+			public void get(StringBuilder __BUILDER__){
+			}
+		},new StringEntry(drawableClassName), "class ", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Drawable")), new ArrayList<Entry>(Arrays.asList(new Entry[]{})), 
+		new Entry(){
+		public void get(StringBuilder builder){
+			builder.append("static class ");
+			new StringEntry(drawableClassName).get(builder);
+			new StringEntry("").get(builder);
+		}
+	}, Arrays.asList(new ExternalVariableEntry[]{}), Arrays.asList(new ExternalMethodEntry[]{new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("load")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body()),new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Gui")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Drawable")))), /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(drawableClassName.toString())))))), /*Name*/new ExternalStatement(new StringEntry("image")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Gui")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Image"))))), /*Name*/new ExternalStatement(new StringEntry("image")))}), /*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Gui")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Drawable")))), /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(drawableClassName.toString()))))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Image"))))),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("image")))))))))),new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Gui")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Drawable")))), /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(drawableClassName.toString())))))), /*Name*/new ExternalStatement(new StringEntry("colour")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Gui")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Colour"))))), /*Name*/new ExternalStatement(new StringEntry("colour")))}), /*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Gui")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Drawable")))), /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(drawableClassName.toString()))))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Colour"))))),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("colour"))))))))))}), Arrays.asList(new ExternalClassEntry[]{})) ;}});
+DrawablesClass.addVariable(new ExternalVariableEntry(true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Gui")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Drawable")))), /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(drawableClassName.toString())))))), /*Enty*/new ExternalStatement(new StringEntry(drawableName.toString())), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Gui")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Drawable")))), /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(drawableClassName.toString())))))),new ExternalStatement.Parameters()))));
+		ImageLoaderClass.getMethod("load").prependToBody(/*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("Drawables"))), /*Enty*/new ExternalStatement(new StringEntry(drawableName.toString()))), /*Enty*/new ExternalStatement(new StringEntry("load"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))))));
+		final StringBuilder vertexArray = new StringBuilder();
+		Float gridWidth = -1f;
+		Float gridHeight = -1f;
+		Boolean buildingWidth = true;
+		for(final IToken element:input.getAllSafely("drawable_grid_element")) {
+				if (element.get("endLine") != null) {
+				gridHeight += 1f;
+				buildingWidth = false;
+				}
+				else if (buildingWidth) {
+				gridWidth += 1f;
+				}
+		}
+		Float gridX = 0f;
+		Float gridY = 0f;
+		Integer numberOfElements = 0;
+		final Map<Integer,Float> gridXMap = new HashMap<Integer,Float>();
+		final Map<Integer,Float> gridYMap = new HashMap<Integer,Float>();
+		for(final IToken element:input.getAllSafely("drawable_grid_element")) {
+				if (element.get("point") != null) {
+				gridXMap.put(Integer.parseInt(element.get("point").toString()),gridX / gridWidth);
+				gridYMap.put(Integer.parseInt(element.get("point").toString()),1f  - gridY / gridHeight);
+				numberOfElements += 1;
+				}
+				if (element.get("endLine") != null) {
+				gridY += 1f;
+				gridX = 0f;
+				}
+				else  {
+				gridX += 1f;
+				}
+		}
+		vertexArray.append("float[] vertices = new float[]{");
+		String comma = "";
+		for (Integer i = 0; i <  numberOfElements; ++i) {
+			vertexArray.append(comma);
+			vertexArray.append(gridXMap.get(i + 1));
+			vertexArray.append("f,");
+			vertexArray.append(gridYMap.get(i + 1));
+			vertexArray.append("f,0f");
+			comma = ",";
+		}
+		vertexArray.append("}");
+		final Integer sizeOfByteBuffer = numberOfElements * 4;
+		GuiClass.getSubClass("Drawable").getSubClass(drawableClassName.toString()).getMethod("load").appendToBody(/*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(vertexArray.toString()))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("ByteBuffer"))), /*Name*/new ExternalStatement(new StringEntry("byteBuffer")), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("ByteBuffer")))), /*Enty*/new ExternalStatement(new StringEntry("allocateDirect"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(sizeOfByteBuffer.toString())))))))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("byteBuffer"))), /*Enty*/new ExternalStatement(new StringEntry("order"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("ByteOrder")))), /*Enty*/new ExternalStatement(new StringEntry("nativeOrder"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters())))))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("vertexBuffer")), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("byteBuffer"))), /*Enty*/new ExternalStatement(new StringEntry("asFloatBuffer"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("vertexBuffer"))), /*Enty*/new ExternalStatement(new StringEntry("clear"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters())))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("vertexBuffer"))), /*Enty*/new ExternalStatement(new StringEntry("put"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("vertices"))))))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("vertexBuffer"))), /*Enty*/new ExternalStatement(new StringEntry("position"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0")))))))))));
+		final Integer numberOfElementsValue = numberOfElements;
+GuiClass.getSubClass("Drawable").getSubClass(drawableClassName.toString()).addSubClass(new ExternalClassEntry(){public void __INIT__(){super.__SETUP__(null, 
+		new Entry(){
+			public void get(StringBuilder __BUILDER__){
+			}
+		},new StringEntry("Image"), "class ", /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(drawableClassName.toString()))), new ArrayList<Entry>(Arrays.asList(new Entry[]{})), 
+		new Entry(){
+		public void get(StringBuilder builder){
+			builder.append(" class ");
+			new StringEntry("Image").get(builder);
+			new StringEntry("").get(builder);
+		}
+	}, Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Gui")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Renderable"))))), /*Name*/new ExternalStatement(new StringEntry("image")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null")))))}), Arrays.asList(new ExternalMethodEntry[]{new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("render")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("image"))), /*Enty*/new ExternalStatement(new StringEntry("render"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters())))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("super"))), /*Enty*/new ExternalStatement(new StringEntry("render"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters())))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("glDrawArrays"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("GL_TRIANGLE_STRIP")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(numberOfElementsValue.toString()))))))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("glPopMatrix"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters())))))),new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("animate")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("image"))), /*Enty*/new ExternalStatement(new StringEntry("animate"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))))))}), Arrays.asList(new ExternalClassEntry[]{})) ;}});
+GuiClass.getSubClass("Drawable").getSubClass(drawableClassName.toString()).addSubClass(new ExternalClassEntry(){public void __INIT__(){super.__SETUP__(null, 
+		new Entry(){
+			public void get(StringBuilder __BUILDER__){
+			}
+		},new StringEntry("Colour"), "class ", /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(drawableClassName.toString()))), new ArrayList<Entry>(Arrays.asList(new Entry[]{})), 
+		new Entry(){
+		public void get(StringBuilder builder){
+			builder.append(" class ");
+			new StringEntry("Colour").get(builder);
+			new StringEntry("").get(builder);
+		}
+	}, Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Gui")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Colour"))))), /*Name*/new ExternalStatement(new StringEntry("colour")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null")))))}), Arrays.asList(new ExternalMethodEntry[]{new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("render")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("colour"))), /*Enty*/new ExternalStatement(new StringEntry("render"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))))))}), Arrays.asList(new ExternalClassEntry[]{})) ;}});
+		GuiClass.getSubClass("Drawable").getSubClass(drawableClassName.toString()).getSubClass("Colour").getMethod("render").appendToBody(/*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("colour"))), /*Enty*/new ExternalStatement(new StringEntry("endRender"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))))));
+	}
+
+
+
+	public void __INIT__(){
+		super.__SETUP__(
+		null, 
+		new Entry(){
+			public void get(StringBuilder __BUILDER__){
+			}
+		}, new StringEntry("Drawable"), "class ", null, new ArrayList<Entry>(Arrays.asList(new Entry[]{})), 
+		new Entry(){
+		public void get(StringBuilder builder){
+			builder.append("static class ");
+			new StringEntry("Drawable").get(builder);
+			new StringEntry("").get(builder);
+		}
+	}, Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("FloatBuffer"))), /*Name*/new ExternalStatement(new StringEntry("vertexBuffer")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))), /*Name*/new ExternalStatement(new StringEntry("visualX")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0f"))))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))), /*Name*/new ExternalStatement(new StringEntry("visualY")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0f"))))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))), /*Name*/new ExternalStatement(new StringEntry("visualWidth")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("1f"))))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))), /*Name*/new ExternalStatement(new StringEntry("visualHeight")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("1f"))))),new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))), /*Name*/new ExternalStatement(new StringEntry("visualAngle")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0f")))))}), Arrays.asList(new ExternalMethodEntry[]{new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("render")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("glPushMatrix"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters())))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("glTranslatef"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("visualX")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("visualY")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0.0f"))))))))),
+/*BODY*/				
+		/*Cond*/new ExternalStatement.Conditional(
+			"if ", 
+			/*Optr*/new ExternalStatement("!=", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("visualAngle")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0f")))),
+			/*Body*/new ExternalStatement.Body(
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("glTranslatef"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Optr*/new ExternalStatement("/", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("visualWidth")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("2f")))),/*Optr*/new ExternalStatement("/", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("visualHeight")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("2f")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0.0f"))))))))),
+/*BODY*/				
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("glRotatef"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("visualAngle")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("1"))))))))),
+/*BODY*/				
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("glTranslatef"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Optr*/new ExternalStatement("/", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("visualWidth")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("-2f")))),/*Optr*/new ExternalStatement("/", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("visualHeight")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("-2f")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0.0f"))))))))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("glScalef"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("visualWidth")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("visualHeight")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("1f"))))))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("glVertexPointer"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("3")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("vertexBuffer"))))))))))),new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("animate")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body()),new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("load")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body())}), Arrays.asList(new ExternalClassEntry[]{}));
+	}
+}
+
+	public void __INIT__(){
+		super.__SETUP__(
+		new Entry(){
+			public void get(StringBuilder __BUILDER__){/*Enty*/new ExternalStatement(new StringEntry(packageName.toString())).get(__BUILDER__);
+				__BUILDER__.append(".");
+				/*Name*/new ExternalStatement(new StringEntry("gui")).get(__BUILDER__);
+			}
+		}, 
+		new Entry(){
+			public void get(StringBuilder __BUILDER__){
+			}
+		}, new StringEntry("Gui"), "class ", null, new ArrayList<Entry>(Arrays.asList(new Entry[]{})), 
+		new Entry(){
+		public void get(StringBuilder builder){
+			builder.append(" class ");
+			new StringEntry("Gui").get(builder);
+			new StringEntry("").get(builder);
+		}
+	}, Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("FloatBuffer"))), /*Name*/new ExternalStatement(new StringEntry("placeHolder")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))),new ExternalVariableEntry(true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Boolean"))), /*Name*/new ExternalStatement(new StringEntry("isRunning")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("true"))))),new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("ImageLoader"))), /*Name*/new ExternalStatement(new StringEntry("imageLoader")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))),new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("InputHandler"))), /*Name*/new ExternalStatement(new StringEntry("inputHandler")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))),new ExternalVariableEntry(true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Game"))), /*Name*/new ExternalStatement(new StringEntry("game")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))),new ExternalVariableEntry(true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Renderer"))), /*Name*/new ExternalStatement(new StringEntry("renderer")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null")))))}), Arrays.asList(new ExternalMethodEntry[]{new ExternalMethodEntry(0, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("load")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("initializeDisplay")),new ExternalStatement.Parameters()))),
+/*BODY*/				
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("inputHandler")), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("InputHandler"))),new ExternalStatement.Parameters())))),
+/*BODY*/				
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("inputHandler"))), /*Enty*/new ExternalStatement(new StringEntry("load"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("displayMode"))))))))),
+/*BODY*/				
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("imageLoader")), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("ImageLoader"))),new ExternalStatement.Parameters())))),
+/*BODY*/				
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("imageLoader"))), /*Enty*/new ExternalStatement(new StringEntry("load"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters())))),
+/*BODY*/				
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("renderer")), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Renderer"))),new ExternalStatement.Parameters())))),
+/*BODY*/				
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("renderer"))), /*Enty*/new ExternalStatement(new StringEntry("load"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("displayMode"))))))))),
+/*BODY*/				
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("game")), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Game"))),new ExternalStatement.Parameters())))),
+/*BODY*/				
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("game"))), /*Enty*/new ExternalStatement(new StringEntry("load"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))))))}), Arrays.asList(new ExternalClassEntry[]{GuiClass.RenderableClass,GuiClass.ImageClass,GuiClass.ColourClass,GuiClass.DrawableClass}));
+	}
+}
 	//Internals
 	protected final String packageName = "com.rem.qstnr";
 	protected final IParser rootParser = Rules.base;
@@ -8809,6 +11550,12 @@ public void addEventMethodsExclusive(final ExternalClassEntry inputClass,final M
 	protected final Set<String> declaredMapSet = new HashSet<String>();
 	protected final String TT = "<T>T";
 	protected final String mainStringArgs = "String[]";
+	protected final Integer INT_SIZE = 4;
+	protected final String floatArrayType = "Float[]";
+	protected final String intArrayType = "Integer[]";
+	protected final String pintArrayType = "int[]";
+	protected final String byteArrayType = "byte[]";
+	protected final String floatBufferArray = "FloatBuffer[][]";
 
 	public static void main(final String[] args) {
 		if(args.length==1) {
@@ -9682,6 +12429,353 @@ keyNameClass.addSubClass(new ExternalClassEntry(){public void __INIT__(){super._
 	public String getMainStringArgs() {
 		return mainStringArgs;
 	}
+	public void setupGui() {
+GuiClass.addVariable(new ExternalVariableEntry(true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("StringBuilder"))), /*Name*/new ExternalStatement(new StringEntry("_log")), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("StringBuilder"))),new ExternalStatement.Parameters()))));
+GuiClass.addMethod(new ExternalMethodEntry(1, true,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("log")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("String"))), /*Name*/new ExternalStatement(new StringEntry("toLog")))}), /*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("_log"))), /*Enty*/new ExternalStatement(new StringEntry("append"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("toLog"))))))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("_log"))), /*Enty*/new ExternalStatement(new StringEntry("append"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Quot*/new ExternalStatement(new QuoteEntry("\\n".toString()))))))))))));
+GuiClass.addVariable(new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("finishedKey")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Keyboard")))), /*Enty*/new ExternalStatement(new StringEntry("KEY_ESCAPE"))))));
+GuiClass.addVariable(new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("String"))), /*Name*/new ExternalStatement(new StringEntry("window_title")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Quot*/new ExternalStatement(new QuoteEntry("OpenGL Window".toString()))))));
+GuiClass.addVariable(new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Boolean"))), /*Name*/new ExternalStatement(new StringEntry("VSyncEnabled")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("true"))))));
+GuiClass.addVariable(new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Boolean"))), /*Name*/new ExternalStatement(new StringEntry("useCurrentDisplay")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("false"))))));
+GuiClass.addVariable(new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Boolean"))), /*Name*/new ExternalStatement(new StringEntry("fullScreen")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("false"))))));
+GuiClass.addVariable(new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Boolean"))), /*Name*/new ExternalStatement(new StringEntry("showMessages")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("true"))))));
+GuiClass.addVariable(new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("displayWidth")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("-1"))))));
+GuiClass.addVariable(new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("displayHeight")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("-1"))))));
+GuiClass.addVariable(new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("displayColorBits")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("-1"))))));
+GuiClass.addVariable(new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("displayFrequency")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("-1"))))));
+GuiClass.addVariable(new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("depthBufferBits")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("24"))))));
+GuiClass.addVariable(new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("DisplayMode"))), /*Name*/new ExternalStatement(new StringEntry("originalDisplayMode")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))));
+GuiClass.addVariable(new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("DisplayMode"))), /*Name*/new ExternalStatement(new StringEntry("displayMode")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))));
+		GuiClass.getMethod("*").appendToBody(/*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("load")),new ExternalStatement.Parameters()))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("run")),new ExternalStatement.Parameters())))));
+GuiClass.addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("initializeDisplay")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("originalDisplayMode")), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Display")))), /*Enty*/new ExternalStatement(new StringEntry("getDisplayMode"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Gui")))), /*Enty*/new ExternalStatement(new StringEntry("log"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Optr*/new ExternalStatement("+", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Quot*/new ExternalStatement(new QuoteEntry("GLApp.initDisplay(): Current display mode is ".toString())))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("originalDisplayMode"))))))))),
+/*BODY*/				
+		/*Cond*/new ExternalStatement.Conditional(
+			"if ", 
+			/*Optr*/new ExternalStatement("==", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("displayHeight")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("-1 ")))),
+			/*Body*/new ExternalStatement.Body(
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("displayHeight")), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("originalDisplayMode"))), /*Enty*/new ExternalStatement(new StringEntry("getHeight"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))))))),
+/*BODY*/				
+		/*Cond*/new ExternalStatement.Conditional(
+			"if ", 
+			/*Optr*/new ExternalStatement("==", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("displayWidth")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("-1 ")))),
+			/*Body*/new ExternalStatement.Body(
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("displayWidth")), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("originalDisplayMode"))), /*Enty*/new ExternalStatement(new StringEntry("getWidth"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))))))),
+/*BODY*/				
+		/*Cond*/new ExternalStatement.Conditional(
+			"if ", 
+			/*Optr*/new ExternalStatement("==", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("displayColorBits")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("-1 ")))),
+			/*Body*/new ExternalStatement.Body(
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("displayColorBits")), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("originalDisplayMode"))), /*Enty*/new ExternalStatement(new StringEntry("getBitsPerPixel"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))))))),
+/*BODY*/				
+		/*Cond*/new ExternalStatement.Conditional(
+			"if ", 
+			/*Optr*/new ExternalStatement("==", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("displayFrequency")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("-1 ")))),
+			/*Body*/new ExternalStatement.Body(
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("displayFrequency")), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("originalDisplayMode"))), /*Enty*/new ExternalStatement(new StringEntry("getFrequency"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))))))),
+/*BODY*/				
+		/*Cond*/new ExternalStatement.Conditional(
+			"try ", null,
+			/*Body*/new ExternalStatement.Body(
+			/*Cond*/new ExternalStatement.Conditional(
+			"if ", 
+			/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("useCurrentDisplay")))),
+			/*Body*/new ExternalStatement.Body(
+				/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("displayMode")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("originalDisplayMode")))))))),
+/*BODY*/				
+			/*Cond*/new ExternalStatement.Conditional(
+			"else ", null,
+			/*Body*/new ExternalStatement.Body(
+				/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("displayMode")), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("getDisplayMode")),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("displayWidth")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("displayHeight")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("displayColorBits")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("displayFrequency"))))))))),
+/*BODY*/				
+				/*Cond*/new ExternalStatement.Conditional(
+			"if ", 
+			/*Optr*/new ExternalStatement("==", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("displayMode")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null")))),
+			/*Body*/new ExternalStatement.Body(
+					/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("displayMode")), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("getDisplayMode")),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("1024")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("768")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("32")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("60"))))))))),
+/*BODY*/				
+					/*Cond*/new ExternalStatement.Conditional(
+			"if ", 
+			/*Optr*/new ExternalStatement("==", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("displayMode")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null")))),
+			/*Body*/new ExternalStatement.Body(
+						/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("displayMode")), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("getDisplayMode")),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("1024")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("768")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("16")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("60"))))))))),
+/*BODY*/				
+						/*Cond*/new ExternalStatement.Conditional(
+			"if ", 
+			/*Optr*/new ExternalStatement("==", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("displayMode")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null")))),
+			/*Body*/new ExternalStatement.Body(
+							/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("displayMode")), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("getDisplayMode")),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("originalDisplayMode"))), /*Enty*/new ExternalStatement(new StringEntry("getWidth"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))),/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("originalDisplayMode"))), /*Enty*/new ExternalStatement(new StringEntry("getHeight"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))),/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("originalDisplayMode"))), /*Enty*/new ExternalStatement(new StringEntry("getBitsPerPixel"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))),/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("originalDisplayMode"))), /*Enty*/new ExternalStatement(new StringEntry("getFrequency"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters())))))))),
+/*BODY*/				
+							/*Cond*/new ExternalStatement.Conditional(
+			"if ", 
+			/*Optr*/new ExternalStatement("==", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("displayMode")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null")))),
+			/*Body*/new ExternalStatement.Body(
+								/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("System"))), /*Enty*/new ExternalStatement(new StringEntry("err"))), /*Enty*/new ExternalStatement(new StringEntry("println"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Quot*/new ExternalStatement(new QuoteEntry("Gui Load Display Cant find a compatible Display Mode!!!".toString()))))))))))))))))))),
+/*BODY*/				
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Gui")))), /*Enty*/new ExternalStatement(new StringEntry("log"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Optr*/new ExternalStatement("+", /*Optr*/new ExternalStatement("+", /*Optr*/new ExternalStatement("+", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Quot*/new ExternalStatement(new QuoteEntry("initializeDisplay: Setting display mode to ".toString())))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("displayMode")))), /*Acss*/new ExternalStatement(/*Quot*/new ExternalStatement(new QuoteEntry(" with pixel depth = ".toString())))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("depthBufferBits"))))))))),
+/*BODY*/				
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Display")))), /*Enty*/new ExternalStatement(new StringEntry("setDisplayMode"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("displayMode"))))))))),
+/*BODY*/				
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("displayMode")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("displayMode")))))),
+/*BODY*/				
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("displayWidth")), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("displayMode"))), /*Enty*/new ExternalStatement(new StringEntry("getWidth"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))))),
+/*BODY*/				
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("displayHeight")), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("displayMode"))), /*Enty*/new ExternalStatement(new StringEntry("getHeight"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))))),
+/*BODY*/				
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("displayColorBits")), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("displayMode"))), /*Enty*/new ExternalStatement(new StringEntry("getBitsPerPixel"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))))),
+/*BODY*/				
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("displayFrequency")), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("displayMode"))), /*Enty*/new ExternalStatement(new StringEntry("getFrequency"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))))))),
+/*BODY*/				
+		/*Cond*/new ExternalStatement.Conditional(
+			"catch ", 
+			/*Optr*/new ExternalStatement(" ", /*Exac*/new ExternalStatement(new StringEntry("Exception")), /*Exac*/new ExternalStatement(new StringEntry("e0"))),
+			/*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Exac*/new ExternalStatement(new StringEntry("e0.printStackTrace()"))),
+/*BODY*/				
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("System"))), /*Enty*/new ExternalStatement(new StringEntry("err"))), /*Enty*/new ExternalStatement(new StringEntry("println"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Quot*/new ExternalStatement(new QuoteEntry("initializeDisplay: Failed to create display: ".toString()))))))))),
+/*BODY*/				
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("System"))), /*Enty*/new ExternalStatement(new StringEntry("exit"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("1"))))))))))),
+/*BODY*/				
+		/*Cond*/new ExternalStatement.Conditional(
+			"try ", null,
+			/*Body*/new ExternalStatement.Body(
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Display")))), /*Enty*/new ExternalStatement(new StringEntry("create"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("PixelFormat"))),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("depthBufferBits")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("8")))))))))))),
+/*BODY*/				
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Display")))), /*Enty*/new ExternalStatement(new StringEntry("setTitle"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("window_title"))))))))),
+/*BODY*/				
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Display")))), /*Enty*/new ExternalStatement(new StringEntry("setFullscreen"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("fullScreen"))))))))),
+/*BODY*/				
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Display")))), /*Enty*/new ExternalStatement(new StringEntry("setVSyncEnabled"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("VSyncEnabled"))))))))))),
+/*BODY*/				
+		/*Cond*/new ExternalStatement.Conditional(
+			"catch ", 
+			/*Optr*/new ExternalStatement(" ", /*Exac*/new ExternalStatement(new StringEntry("Exception")), /*Exac*/new ExternalStatement(new StringEntry("e0"))),
+			/*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Exac*/new ExternalStatement(new StringEntry("e0.printStackTrace()"))),
+/*BODY*/				
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("System"))), /*Enty*/new ExternalStatement(new StringEntry("err"))), /*Enty*/new ExternalStatement(new StringEntry("println"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Quot*/new ExternalStatement(new QuoteEntry("initializeDisplay: Failed to create OpenGL window".toString()))))))))),
+/*BODY*/				
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("System"))), /*Enty*/new ExternalStatement(new StringEntry("exit"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("1"))))))))))))));
+		final String displayModeArrayType = "DisplayMode[]";
+GuiClass.addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("DisplayMode"))), /*Exac*/new ExternalStatement(new StringEntry("getDisplayMode")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("width"))),
+/*PARAMS*/				new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("height"))),
+/*PARAMS*/				new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("colourBits"))),
+/*PARAMS*/				new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("frequency")))}), /*Body*/new ExternalStatement.Body(
+		/*Cond*/new ExternalStatement.Conditional(
+			"try ", null,
+			/*Body*/new ExternalStatement.Body(
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(displayModeArrayType.toString())))), /*Name*/new ExternalStatement(new StringEntry("allDisplayModes")), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Display")))), /*Enty*/new ExternalStatement(new StringEntry("getAvailableDisplayModes"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))))),
+/*BODY*/				
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("DisplayMode"))), /*Name*/new ExternalStatement(new StringEntry("tempDisplayMode")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null")))))),
+/*BODY*/				
+			/*Cond*/new ExternalStatement.Conditional(
+			"for ", 
+			/*FIHd*/new ExternalStatement(";", new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))), /*Name*/new ExternalStatement(new StringEntry("i")), /*Exac*/new ExternalStatement(new StringEntry("0"))), new ExternalStatement("< ", /*Name*/new ExternalStatement(new StringEntry("i")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("allDisplayModes"))), /*Enty*/new ExternalStatement(new StringEntry("length"))))), new ExternalStatement(new StringEntry("++"),"",/*Name*/new ExternalStatement(new StringEntry("i")))),
+			/*Body*/new ExternalStatement.Body(
+				/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("tempDisplayMode")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("allDisplayModes[i]")))))),
+/*BODY*/				
+				/*Cond*/new ExternalStatement.Conditional(
+			"if ", 
+			/*Optr*/new ExternalStatement("==", /*Optr*/new ExternalStatement("&&", /*Optr*/new ExternalStatement("==", /*Optr*/new ExternalStatement("&&", /*Optr*/new ExternalStatement("==", /*Optr*/new ExternalStatement("&&", /*Optr*/new ExternalStatement("==", /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("tempDisplayMode"))), /*Enty*/new ExternalStatement(new StringEntry("getWidth"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("width")))), /*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("tempDisplayMode"))), /*Enty*/new ExternalStatement(new StringEntry("getHeight"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("height")))), /*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("tempDisplayMode"))), /*Enty*/new ExternalStatement(new StringEntry("getBitsPerPixel"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("colourBits")))), /*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("tempDisplayMode"))), /*Enty*/new ExternalStatement(new StringEntry("getFrequency"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("frequency")))),
+			/*Body*/new ExternalStatement.Body(
+					/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("tempDisplayMode"))))))))))),
+/*BODY*/				
+		/*Cond*/new ExternalStatement.Conditional(
+			"catch ", 
+			/*Optr*/new ExternalStatement(" ", /*Exac*/new ExternalStatement(new StringEntry("Exception")), /*Exac*/new ExternalStatement(new StringEntry("e0"))),
+			/*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Exac*/new ExternalStatement(new StringEntry("e0.printStackTrace()"))),
+/*BODY*/				
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("System"))), /*Enty*/new ExternalStatement(new StringEntry("err"))), /*Enty*/new ExternalStatement(new StringEntry("println"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Quot*/new ExternalStatement(new QuoteEntry("getDisplayMode Failed".toString()))))))))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))))));
+GuiClass.addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))), /*Exac*/new ExternalStatement(new StringEntry("run")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), /*Body*/new ExternalStatement.Body(
+		/*Cond*/new ExternalStatement.Conditional(
+			"try ", null,
+			/*Body*/new ExternalStatement.Body(
+			/*Cond*/new ExternalStatement.Conditional(
+			"while ", 
+			/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("isRunning")))),
+			/*Body*/new ExternalStatement.Body(
+				/*Cond*/new ExternalStatement.Conditional(
+			"if ", 
+			/*Optr*/new ExternalStatement("==", /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Display")))), /*Enty*/new ExternalStatement(new StringEntry("isVisible"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("false")))),
+			/*Body*/new ExternalStatement.Body(
+					/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Thread")))), /*Enty*/new ExternalStatement(new StringEntry("sleep"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("200L"))))))))))),
+/*BODY*/				
+				/*Cond*/new ExternalStatement.Conditional(
+			"else if ", 
+			/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Display")))), /*Enty*/new ExternalStatement(new StringEntry("isCloseRequested"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters()))),
+			/*Body*/new ExternalStatement.Body(
+					/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("isRunning")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("false")))))))),
+/*BODY*/				
+				/*Cond*/new ExternalStatement.Conditional(
+			"else ", null,
+			/*Body*/new ExternalStatement.Body(
+					/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Thread")))), /*Enty*/new ExternalStatement(new StringEntry("sleep"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("1"))))))))))),
+/*BODY*/				
+				/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("inputHandler"))), /*Enty*/new ExternalStatement(new StringEntry("handle"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters())))),
+/*BODY*/				
+				/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("game"))), /*Enty*/new ExternalStatement(new StringEntry("update"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters())))),
+/*BODY*/				
+				/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("renderer"))), /*Enty*/new ExternalStatement(new StringEntry("render"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters())))),
+/*BODY*/				
+				/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Display")))), /*Enty*/new ExternalStatement(new StringEntry("update"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters())))))))),
+/*BODY*/				
+		/*Cond*/new ExternalStatement.Conditional(
+			"catch ", 
+			/*Optr*/new ExternalStatement(" ", /*Exac*/new ExternalStatement(new StringEntry("InterruptedException")), /*Exac*/new ExternalStatement(new StringEntry("e0"))),
+			/*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Exac*/new ExternalStatement(new StringEntry("e0.printStackTrace()"))))))));
+	}
+	public Integer getINTSIZE() {
+		return INT_SIZE;
+	}
+	public String getFloatArrayType() {
+		return floatArrayType;
+	}
+	public String getIntArrayType() {
+		return intArrayType;
+	}
+	public String getPintArrayType() {
+		return pintArrayType;
+	}
+	public String getByteArrayType() {
+		return byteArrayType;
+	}
+	public String getFloatBufferArray() {
+		return floatBufferArray;
+	}
 	public void assignListElementNames(final ParseContext context,final IToken root) {
 		context.retainList(new HeroStats());
 	}
@@ -9700,6 +12794,7 @@ keyNameClass.addSubClass(new ExternalClassEntry(){public void __INIT__(){super._
 					}
 				}
 		}
+		setupGui();
 		ConditionsClass.setup(data);
 		AspectsClass.setup(data);
 		ItemsClass.setup(data);
@@ -9713,6 +12808,7 @@ keyNameClass.addSubClass(new ExternalClassEntry(){public void __INIT__(){super._
 		TileClass.setup(data);
 		for(final IToken imports:root.getAllSafely("import_any")) {
 				importAny(imports);
+				GuiClass.importAny(imports);
 		}
 		output(data);
 	}
@@ -10257,6 +13353,63 @@ keyNameClass.addSubClass(new ExternalClassEntry(){public void __INIT__(){super._
 	__DIRECTORY__ = new File(__ROOT_DIRECTORY__, __BUILDER__.toString().replace(".","/"));
 	__DIRECTORY__.mkdirs();
 	addFile(__DIRECTORY__,Generator.camelize("Event")+".java", EventClass);
+				__BUILDER__ = new StringBuilder();
+	/*Enty*/new ExternalStatement(new StringEntry(packageName.toString())).get(__BUILDER__);
+				__BUILDER__.append(".");
+				/*Name*/new ExternalStatement(new StringEntry("gui")).get(__BUILDER__);
+	__DIRECTORY__ = new File(__ROOT_DIRECTORY__, __BUILDER__.toString().replace(".","/"));
+	__DIRECTORY__.mkdirs();
+	addFile(__DIRECTORY__,Generator.camelize("Renderer")+".java", RendererClass);
+				__BUILDER__ = new StringBuilder();
+	/*Enty*/new ExternalStatement(new StringEntry(packageName.toString())).get(__BUILDER__);
+				__BUILDER__.append(".");
+				/*Name*/new ExternalStatement(new StringEntry("gui")).get(__BUILDER__);
+	__DIRECTORY__ = new File(__ROOT_DIRECTORY__, __BUILDER__.toString().replace(".","/"));
+	__DIRECTORY__.mkdirs();
+	addFile(__DIRECTORY__,Generator.camelize("InputHandler")+".java", InputHandlerClass);
+				__BUILDER__ = new StringBuilder();
+	/*Enty*/new ExternalStatement(new StringEntry(packageName.toString())).get(__BUILDER__);
+				__BUILDER__.append(".");
+				/*Name*/new ExternalStatement(new StringEntry("gui")).get(__BUILDER__);
+				__BUILDER__.append(".");
+				/*Name*/new ExternalStatement(new StringEntry("images")).get(__BUILDER__);
+	__DIRECTORY__ = new File(__ROOT_DIRECTORY__, __BUILDER__.toString().replace(".","/"));
+	__DIRECTORY__.mkdirs();
+	addFile(__DIRECTORY__,Generator.camelize("Images")+".java", ImagesClass);
+				__BUILDER__ = new StringBuilder();
+	/*Enty*/new ExternalStatement(new StringEntry(packageName.toString())).get(__BUILDER__);
+				__BUILDER__.append(".");
+				/*Name*/new ExternalStatement(new StringEntry("gui")).get(__BUILDER__);
+				__BUILDER__.append(".");
+				/*Name*/new ExternalStatement(new StringEntry("images")).get(__BUILDER__);
+	__DIRECTORY__ = new File(__ROOT_DIRECTORY__, __BUILDER__.toString().replace(".","/"));
+	__DIRECTORY__.mkdirs();
+	addFile(__DIRECTORY__,Generator.camelize("Colours")+".java", ColoursClass);
+				__BUILDER__ = new StringBuilder();
+	/*Enty*/new ExternalStatement(new StringEntry(packageName.toString())).get(__BUILDER__);
+				__BUILDER__.append(".");
+				/*Name*/new ExternalStatement(new StringEntry("gui")).get(__BUILDER__);
+				__BUILDER__.append(".");
+				/*Name*/new ExternalStatement(new StringEntry("images")).get(__BUILDER__);
+	__DIRECTORY__ = new File(__ROOT_DIRECTORY__, __BUILDER__.toString().replace(".","/"));
+	__DIRECTORY__.mkdirs();
+	addFile(__DIRECTORY__,Generator.camelize("Drawables")+".java", DrawablesClass);
+				__BUILDER__ = new StringBuilder();
+	/*Enty*/new ExternalStatement(new StringEntry(packageName.toString())).get(__BUILDER__);
+				__BUILDER__.append(".");
+				/*Name*/new ExternalStatement(new StringEntry("gui")).get(__BUILDER__);
+				__BUILDER__.append(".");
+				/*Name*/new ExternalStatement(new StringEntry("images")).get(__BUILDER__);
+	__DIRECTORY__ = new File(__ROOT_DIRECTORY__, __BUILDER__.toString().replace(".","/"));
+	__DIRECTORY__.mkdirs();
+	addFile(__DIRECTORY__,Generator.camelize("ImageLoader")+".java", ImageLoaderClass);
+				__BUILDER__ = new StringBuilder();
+	/*Enty*/new ExternalStatement(new StringEntry(packageName.toString())).get(__BUILDER__);
+				__BUILDER__.append(".");
+				/*Name*/new ExternalStatement(new StringEntry("gui")).get(__BUILDER__);
+	__DIRECTORY__ = new File(__ROOT_DIRECTORY__, __BUILDER__.toString().replace(".","/"));
+	__DIRECTORY__.mkdirs();
+	addFile(__DIRECTORY__,Generator.camelize("Gui")+".java", GuiClass);
 				outputAll();
 			}
 			public void generateRoot(IToken rootToken){
@@ -10267,6 +13420,8 @@ keyNameClass.addSubClass(new ExternalClassEntry(){public void __INIT__(){super._
 	public void setup(String rootDirectory){
 		__ROOT_DIRECTORY__ = rootDirectory;ExternalClassEntry.suppliment("Math", "java.lang");
 		ExternalClassEntry.suppliment("StringBuilder", "java.lang");
+		ExternalClassEntry.suppliment("Thread", "java.lang");
+		ExternalClassEntry.suppliment("Runnable", "java.lang");
 		ExternalClassEntry.suppliment("Iterator", "java.util");
 		ExternalClassEntry.suppliment("List", "java.util");
 		ExternalClassEntry.suppliment("LinkedList", "java.util");
@@ -10287,7 +13442,6 @@ keyNameClass.addSubClass(new ExternalClassEntry(){public void __INIT__(){super._
 		ExternalClassEntry.suppliment("ParseContext", "com.rem.parser");
 		ExternalClassEntry.suppliment("RegexParser", "com.rem.parser.parser");
 		ExternalClassEntry.suppliment("Rules", "lists");
-		ExternalClassEntry.suppliment("HeroStats", "lists");
 		ExternalClassEntry.suppliment("GeneralTokens", "lists");
 		ExternalClassEntry.suppliment("Listnames", "lists");
 		ExternalClassEntry.suppliment("JFrame", "javax.swing");
@@ -10339,6 +13493,31 @@ keyNameClass.addSubClass(new ExternalClassEntry(){public void __INIT__(){super._
 		EnvironmentsClass.__INIT__();
 		EventsClass.__INIT__();
 		EventClass.__INIT__();
+		RendererClass.__INIT__();
+		InputHandlerClass.__INIT__();
+		ExternalClassEntry.suppliment("BufferedImage", "java.awt.image");
+		ExternalClassEntry.suppliment("ImageIO", "javax.imageio");
+		ExternalClassEntry.suppliment("ByteOrder", "java.nio");
+		ExternalClassEntry.suppliment("ByteBuffer", "java.nio");
+		ExternalClassEntry.suppliment("FloatBuffer", "java.nio");
+		ExternalClassEntry.suppliment("IntBuffer", "java.nio");
+		ExternalClassEntry.suppliment("GL11", "org.lwjgl.opengl");
+		ExternalClassEntry.suppliment("GL12", "org.lwjgl.opengl");
+		ExternalClassEntry.suppliment("GLU", "org.lwjgl.util.glu");
+		ExternalClassEntry.suppliment("PixelGrabber", "java.awt.image");
+		ExternalClassEntry.suppliment("DisplayMode", "org.lwjgl.opengl");
+		ExternalClassEntry.suppliment("Display", "org.lwjgl.opengl");
+		ExternalClassEntry.suppliment("Keyboard", "org.lwjgl.input");
+		ExternalClassEntry.suppliment("Mouse", "org.lwjgl.input");
+		ExternalClassEntry.suppliment("Cursor", "org.lwjgl.input");
+		ExternalClassEntry.suppliment("Sys", "org.lwjgl");
+		ExternalClassEntry.suppliment("PixelFormat", "org.lwjgl.opengl");
+		ImagesClass.__INIT__();
+		ColoursClass.__INIT__();
+		DrawablesClass.__INIT__();
+		ImageLoaderClass.__INIT__();
+		GuiClass.__INIT__();
+		ExternalClassEntry.suppliment("HeroStats", "lists");
 	}
 	public void output(ParseContext data){
 		ExternalImportEntry.solidify();

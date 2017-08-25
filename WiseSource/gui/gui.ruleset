@@ -5,17 +5,8 @@ import_any
 	IMPORT_COLOUR
 	IMPORT_ANIMATION_TYPE
 	IMPORT_IMAGE
-
-
-import animation_types
-import images
-
-colourBrace-s are Braced
-	[,.] as COLOUR_FILE with WILD as colour_file_name 
-colourImporter-s are Import
-	[><<\"gui/\",colour_file_name,\".colours\">>\n] as IMPORT_COLOUR from (NEWLINE|COMMENTS|colour_declaration)*; with COLOUR_FILE COLOURS
-colour_declaration
-	NAME as colourName ((INTEGER as red INTEGER as blue INTEGER as green) as asInt | ((FLOAT|INTEGER) as red (FLOAT|INTEGER) as blue (FLOAT|INTEGER) as green) as asFloat) 
+	IMPORT_DRAWABLE 
+	IMPORT_LAYER
 
 comment-s are Braced
 	[#,#] as COMMENTS with WILD as comment
@@ -26,3 +17,5 @@ generalToken-s
 	[.*] as WILD
 	"\n" as NEWLINE
 	"colours" as COLOURS
+
+import gui_headers

@@ -22,13 +22,14 @@ public class ImageDeclaration extends ConcreteRule {
 					
 						new ChainParser(
 							new AddTokenParser(
-								GeneralTokens.INTEGER,"left"),
+								AnimationTokens.INTEGER,"frameWidth"),
 							ImageTokens.CROSS,
 							new OptionalParser(
 									new AddTokenParser(
-										GeneralTokens.INTEGER,"right"))),
+										AnimationTokens.INTEGER,"frameHeight"))),
 					GeneralTokens.EQUALSIGN,
-					ImageBraces.IMAGE_FILE));
+					ImageBraces.IMAGE_FILE,
+					Rules.image_type));
 
 	}
 

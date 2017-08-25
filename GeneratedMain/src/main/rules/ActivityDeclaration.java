@@ -29,7 +29,7 @@ public class ActivityDeclaration extends ConcreteRule {
 									new ManyParser(
 											
 												new ChainParser(
-													ActivityTokens.COMMA,
+													AnimationTokens.COMMA,
 													new AddTokenParser(
 														AssociationTokens.NAME,"className"))))),
 					ActivityBraces.ACTIVITY_DESCRIPTION,

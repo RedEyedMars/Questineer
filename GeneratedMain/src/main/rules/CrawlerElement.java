@@ -33,7 +33,7 @@ public class CrawlerElement extends ConcreteRule {
 									
 										new ChainParser(
 											new AddTokenParser(
-												GeneralTokens.INTEGER,"sides"),
+												AnimationTokens.INTEGER,"sides"),
 											TileTokens.SIDES)),
 							new MultipleParser(
 									Rules.branch_element)),"branch")),
