@@ -42,6 +42,32 @@ class 'packageName'."environments" Tiles {
         return id;
       }
     }
+    if declarationToken->"imageId" != null {
+        
+      Tiles->'mapName'->'tileName' += ~Gui->Drawable drawable = null
+      Body stateChangeBody = new Body ();
+      String imageName = 'declarationToken->"imageName"';
+      String imageClassName = ^declarationToken->"imageName";  
+      stateChangeBody.add(|Images->'imageClassName'->States imageStates = Images->'imageName'.asStates();|);
+      StringBuilder newState = new StringBuilder();
+      ~String underscore = "";
+      declarationToken : element : imageId {
+        newState.append(underscore);
+        newState.append('element');
+        underscore = "_";
+      }
+      stateChangeBody.add(|imageStates.'newState'();|);
+      if nodeTiles.contains(tileName) || declarationToken->"crawler" != null {
+        stateChangeBody.add(|"drawable" = Drawables.court.image("imageStates");|);
+      }
+      else {
+        stateChangeBody.add(|"drawable" = Drawables.square.image("imageStates");|);  
+      }
+      Tiles->'mapName'->'tileName' += Gui->Drawable getDrawable(){
+        if "drawable" ==  null `stateChangeBody`
+        return "drawable";
+      }
+    }
     Tiles->*"create".prependToBody({
       if "tileName".equals(''tileName'') {
         return new Tiles->'mapName'->'tileName'(); 
@@ -473,6 +499,9 @@ class 'packageName'."environments" Tile Environment->Position Loaddable Tickable
   }
   interface 'packageName'."environments" Factory {
     Tile create(){}
+  }
+  Gui->Drawable getDrawable(){
+    return null;
   }
   class 'packageName'."environments" Listener {
     class 'packageName'."environments" Die Events->Die->Listener {

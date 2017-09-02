@@ -1,19 +1,54 @@
 #DRAWABLES
+multiple_drawable_declaration
+	STAR STAR NAME as multipleName drawable_multiple_element+
 drawable_declaration
 	NAME as drawableName NEWLINE drawable_grid_element+
 drawable_grid_element
+	MULTIPLE_DRAWABLE_POINTS
 	INTEGER as point
 	NEWLINE as endLine
 	DOT as space
+drawable_multiple_element
+	NEWTAB NAME as drawableName ( DRAWABLE_AS_DEFAULT_STATE | ( IMAGE_STATE_CHANGE NAME as newStateName )+ ) ( DRAWABLE_DIMENSIONS ( drawable_arthmetic_operator drawable_multiple_value ) as supplementary* ) as position ( DRAWABLE_DIMENSIONS ( drawable_arthmetic_operator drawable_multiple_value ) as supplementary* ) as dimensions DRAWABLE_AMPERSAND  ( DRAWABLE_DIMENSIONS ( drawable_arthmetic_operator drawable_multiple_value ) as supplementary* ) as rotation? DRAWABLE_AMPERSAND ( drawable_multiple_value  ( drawable_arthmetic_operator drawable_multiple_value )* ) as angle
+drawable_arthmetic_operator
+	PLUS
+	MINUS
+	DIVIDE
+	MULTIPLY
+drawable_multiple_value
+	DRAWABLE_X
+	DRAWABLE_Y
+	DRAWABLE_WIDTH
+	DRAWABLE_HEIGHT
+	DRAWABLE_ANGLE
+	FLOAT
+	INTEGER
 
 drawableBrace-s are Braced
 	[,.] as DRAWABLE_FILE with WILD as drawable_file_name
+	[(,)] as DRAWABLE_DIMENSIONS with ( drawable_multiple_value ( drawable_arthmetic_operator drawable_multiple_value )* ) as leftParameter COMMA ( drawable_multiple_value ( drawable_arthmetic_operator drawable_multiple_value )* ) as rightParameter
+	[[,]] as MULTIPLE_DRAWABLE_POINTS with INTEGER as point ( COMMA INTEGER as point )*
 drawableImports-s are Import
-	[><<\"gui/\",drawable_file_name,\".dwbs\">>\n] as IMPORT_DRAWABLE from (NEWLINE|COMMENTS|drawable_declaration)*; with DRAWABLE_FILE DWBS
+	[><<\"gui/\",drawable_file_name,\".dwbs\">>\n] as IMPORT_DRAWABLE from (NEWLINE|COMMENTS|multiple_drawable_declaration|drawable_declaration)*; with DRAWABLE_FILE DWBS
 drawableToken-s
 	[[a-zA-Z_][a-zA-Z0-9_]*] as NAME
 	[[-]?\\d+] as INTEGER
+	[[-]?\\d+\\Q.\\E\\d+] as FLOAT
 	[.*] as WILD
+	"*" as STAR
+	"*" as DRAWABLE_AS_DEFAULT_STATE
+	"->" as IMAGE_STATE_CHANGE
+	"X" as DRAWABLE_X
+	"Y" as DRAWABLE_Y
+	"Width" as DRAWABLE_WIDTH
+	"Height" as DRAWABLE_HEIGHT
+	"Angle" as DRAWABLE_ANGLE
 	"dwbs" as DWBS
 	"\n" as NEWLINE
+	"&" as DRAWABLE_AMPERSAND
 	"." as DOT
+	"," as COMMA
+	"+" as PLUS
+	"-" as MINUS
+	"/" as DIVIDE
+	"*" as MULTIPLY

@@ -26,7 +26,18 @@ public class AnimationTypeBoolean extends ConcreteRule {
 							AnimationTokens.INTEGER,
 							AnimationTokens.FLOAT,
 							AssociationTokens.NAME,
-							AnimationBraces.ANIMATION_TYPE_FRAME_DATA),"value")));
+							AnimationBraces.ANIMATION_TYPE_FRAME_DATA),"value"),
+					new ManyParser(
+							
+								new ChainParser(
+									Rules.anit_arithmetic_operator,
+									new AddTokenParser(
+										
+									new ChoiceParser(
+											AnimationTokens.INTEGER,
+											AnimationTokens.FLOAT,
+											AssociationTokens.NAME,
+											AnimationBraces.ANIMATION_TYPE_FRAME_DATA),"value")))));
 
 	}
 

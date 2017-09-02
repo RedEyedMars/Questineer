@@ -20,6 +20,17 @@ public class TileDefinition extends ConcreteRule {
 				new ChainParser(
 					new AddTokenToListParser(
 						AssociationTokens.NAME,"tileName","tile_names"),
+					new OptionalParser(
+							
+								new ChainParser(
+									new AddTokenParser(
+										AssociationTokens.NAME,"imageName"),
+									new ManyParser(
+											
+												new ChainParser(
+													TileTokens.TILE_IMAGE_ACCESS,
+													new AddTokenParser(
+														AssociationTokens.NAME,"imageId"))))),
 					new ManyParser(
 							Rules.tile_element)));
 

@@ -9,6 +9,7 @@ tileToken-s
 	"\n\t\t" as NEWTABTAB
 	"\n\t\t\t" as NEWTABTABTAB
 	"-" as DASH
+	"->" as TILE_IMAGE_ACCESS
 	"tile" as TILE
 	"Path" as PATH
 	"Paths" as PATHS
@@ -63,7 +64,7 @@ tile_declaration
 	(PATHS COLON  tile_name ( COMMA tile_name )* ) as paths
 	tile_definition
 tile_definition is silent
-	NAME as tileName in tile_names tile_element*
+	NAME as tileName in tile_names (NAME as imageName (TILE_IMAGE_ACCESS NAME as imageId)*)? tile_element*
 tile_element is silent
 	NEWLINE* COMMENTS
 	NEWTAB ( CONNECT tile_name (COLON tile_cost ( PIPE tile_cost)*)? ) as connection

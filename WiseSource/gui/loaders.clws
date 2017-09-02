@@ -37,29 +37,41 @@ class 'packageName'."gui"."images" ImageLoader {
 > void declaration(IToken input, Class enclosingClass){
     String animationTypeName = ^input->"animationTypeName";
     if enclosingClass == Gui->Image->AnimationType {
-      enclosingClass += ~class animationTypeName / Gui->Image->AnimationType/{
+      enclosingClass += ~class animationTypeName // Gui->Renderable{
         void animate(){ }
+        void render(){
+          \animationRender();
+        }
+        Integer getTexture(){
+          return \getImageTexture();
+        }
       }
     }
     else {
-      enclosingClass += ~class animationTypeName /Gui->Image->AnimationType/{
+      enclosingClass += ~class animationTypeName // Gui->Renderable{
         void animate(){ }
+        void render(){
+          \animationRender();
+        }
+        Integer getTexture(){
+          return \getImageTexture();
+        }
       }
     }
     Parameters parameters = new Parameters ();
     Parameters arguments = new Parameters ();
     input : variable : animation_type_variable_declaration {
-      variable : element : value {
+      variable : element : animation_variable_value {
         arguments.add(|'variable->"variableName"'|);
         element : value : INTEGER {
           enclosingClass->'animationTypeName' += Integer 'variable->"variableName"' = 'value'
           parameters.add(Integer 'variable->"variableName"' = 'value';);
         }
-        variable : value : FLOAT {
+        element : value : FLOAT {
           enclosingClass->'animationTypeName' += Float 'variable->"variableName"' = 'value'+"f"
           parameters.add(Integer 'variable->"variableName"' = 'value';);
         }
-        variable : value : quote {
+        element : value : quote {
           enclosingClass->'animationTypeName' += String 'variable->"variableName"' = ''value''
           parameters.add(Integer 'variable->"variableName"' = 'value';);
         }
@@ -113,6 +125,31 @@ class 'packageName'."gui"."images" ImageLoader {
     Gui->Image->AnimationType += enclosingClass->'animationTypeName' 'createMethodName' `realParameters` {
       return `creation`;
     }
+    Parameters imageAnimationParameters = new Parameters ();
+    imageAnimationParameters.add( Integer animationX = 0; );
+    imageAnimationParameters.add( Integer animationY = 0; );
+    Parameters imageAnimationArguments = new Parameters();
+    imageAnimationArguments.add( |"animationX"| );
+    imageAnimationArguments.add( |"animationY"| );
+    String currentPreviousCreationName = "create"\+creationName;
+    Parameters currentPreviousArguements = new Parameters ();
+    currentPreviousArguements.addAll(animationCreationArguments.get(creationClass));
+    if previousCreationName != null {
+      imageAnimationParameters.addAll(animationCreationParameters.get(creationClass));
+      imageAnimationParameters.addAll(previousParameters);
+      currentPreviousArguements.addAll(previousArguments);
+      Gui->Image += enclosingClass->'animationTypeName' 'createMethodName' `imageAnimationParameters` {
+        Gui->Image->AnimationType base = new Gui->Image->AnimationType(`imageAnimationArguments`);
+        return base.'currentPreviousCreationName'(`currentPreviousArguements`);
+      }
+    }
+    else {
+      imageAnimationParameters.addAll(animationCreationParameters.get(creationClass));
+      Gui->Image += enclosingClass->'animationTypeName' 'createMethodName' `imageAnimationParameters` {
+        Gui->Image->AnimationType base = new Gui->Image->AnimationType(`imageAnimationArguments`);
+        return base.'currentPreviousCreationName'(`currentPreviousArguements`);
+      }
+    }
     input : element : animation_type_element {
       element : atom : animation_type_declaration {
         ImageLoader.declaration(atom,enclosingClass->'animationTypeName');
@@ -121,7 +158,13 @@ class 'packageName'."gui"."images" ImageLoader {
         Statement statement = new Statement ();
         statement.add(|'atom->"variableName"'|);
         statement.set('atom->"anit_operator"');
-        statement.add(|'atom->"value"'|);
+        atom : quark : value {
+          statement.add(|'quark'|);
+        }
+        : anit_arithmetic_operator {
+          statement.set('quark'.trim());
+        }
+        
         if atom->"animation_type_boolean" != null {
           Statement header = new Statement ();
           atom : quark : animation_type_boolean {
@@ -142,14 +185,18 @@ class 'packageName'."gui"."images" ImageLoader {
                 String methodName = "get" \+ ^quanta;
                 headerElement.add(|"frames".'methodName'()|);
               }
+              
+            }
+            : anit_arithmetic_operator {
+              headerElement.set('energy'.trim());
             }
             header.add(headerElement);
           }
           : anit_continuation_operator {
-            if 'quark' == "&" {
+            if 'quark'.contains("&") {
               header.set("&&");
             }
-            else if 'quark' == "|" {
+            else if 'quark'.contains("|") {
               header.set("||");
             }
           }
@@ -276,8 +323,13 @@ class 'packageName'."gui" Gui {
     game.load();
   }
   interface Renderable // {
+    Integer getTexture(){}
     void render(){}
     void animate(){}
+  }
+  interface Statable // {
+    Gui->Image->States asStates(){}
+    Gui->Drawable asStates(Gui->Drawable drawable){}
   }
 
   class Image // Renderable {
@@ -286,9 +338,11 @@ class 'packageName'."gui" Gui {
     Gui->Image->Dimensions frames = null;
     ~Integer texture = -1;
     ~'floatBufferArray' textureBuffer = null;
+    Integer getImageTexture(){
+      return texture;
+    }
     void animate(){}
     void render(){
-      GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture);
       GL11.glTexCoordPointer(2, 0, "textureBuffer[0][0]");
     }
     class Dimensions // {
@@ -303,24 +357,44 @@ class 'packageName'."gui" Gui {
       Integer frameY = 0;
       void animate(){}
       void render(){
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture);
         GL11.glTexCoordPointer(2, 0, "textureBuffer[frameX][frameY]");
       }
       void setFrameX(Integer newX){ frameX = newX; }
       void setFrameY(Integer newY){ frameY = newY; }
+      Integer getTexture(){
+        return \getImageTexture();
+      }
+    }
+    class States // Renderable {
+      ~Gui->Renderable current = null;
+      @Integer DEFAULT = -1;
+      void animate(){
+        current.animate();
+      }      
+      void render(){
+        current.render();
+      }
+      Integer getTexture(){
+        return current.getTexture();
+      }
+      void changeState(Integer newState){
+      }
     }
     ~class AnimationType / / Renderable {
       Integer x = 0;
       Integer y = 0;
-      Integer frameX = 0;
-      Integer frameY = 0;
       void animate(){ }      
       void render(){
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture);
-        GL11.glTexCoordPointer(2, 0, "textureBuffer[frameX][frameY]");
+        GL11.glTexCoordPointer(2, 0, "textureBuffer[x][y]");
       }
-      void setFrameX(Integer newX){ frameX = newX; }
-      void setFrameY(Integer newY){ frameY = newY; }
+      void animationRender(){
+        GL11.glTexCoordPointer(2, 0, "textureBuffer[x][y]");
+      }
+      Integer getTexture(){
+        return \getImageTexture();
+      }
+      void setFrameX(Integer newX){ x = newX; }
+      void setFrameY(Integer newY){ y = newY; }
       void tick(Double millisSinceLastFrame){
         \animate();
         \setFrameX(x);
@@ -328,15 +402,24 @@ class 'packageName'."gui" Gui {
       }
     }
 >   Map<String,Set<String>> declaredTextureBuffers = new HashMap<String,Set<String>>();
-
+>   Map<String,Integer> animationStateIndices = new HashMap<String,Integer>();
+>   ~Integer animationStateIndex = 0;
 >   void declaration(IToken input){
       try {
         String imageName = 'input->"imageName"';
+        String imageClassName = ^input->"imageName";
         String imageFileName = "../Resource/gui/images/"\+'input->"image_file_name"'\+"."\+'input->"image_type"';
         BufferedImage bimg = ImageIO.read(new File(imageFileName));
         Integer pWidth = bimg.getWidth();
         Integer pHeight = bimg.getHeight();
-        Images += @Gui->Image 'imageName' = new Gui->Image(''imageFileName'',new Gui->Image->Dimensions('pWidth','pHeight'),new Gui->Image->Dimensions('input->"frameWidth"','input->"frameHeight"'))
+        Images += @Images->'imageClassName' 'imageName' = new Images->'imageClassName'()
+        Images += class imageClassName / Gui->Image / Gui->Statable {
+        }
+        Images->'imageClassName'->*.appendToBody({
+          imageFileName = ''imageFileName'';
+          pixels = new Gui->Image->Dimensions('pWidth','pHeight');
+          frames = new Gui->Image->Dimensions('input->"frameWidth"','input->"frameHeight"');
+        });
         if declaredTextureBuffers.containsKey('input->"frameWidth"')==false || declaredTextureBuffers.get('input->"frameWidth"').contains('input->"frameHeight"')==false {
           \declareTextureBuffer('input->"frameWidth"','input->"frameHeight"');
         }
@@ -346,6 +429,104 @@ class 'packageName'."gui" Gui {
         });
         String imageLoaderClassName = "ImageData"\+'pWidth'\+"x"\+'pHeight'\+"Loader";
         ImageLoader.declareImageLoader(imageName,imageFileName,pWidth,pHeight);
+        Images->'imageClassName' += class States / Gui->Image->States / {
+          ~Integer currentId = "Gui.Image.States.DEFAULT";
+          void changeState(Integer newState){
+          }
+        }
+        Images->'imageClassName' += Images->'imageClassName'->States asStates() { return new Images->'imageClassName'->States(); }
+        Images->'imageClassName' += Gui->Drawable asStates(Gui->Drawable drawable) { return drawable.image(new Images->'imageClassName'->States()); }
+        
+        Images->'imageClassName' += Gui->Drawable asDrawable(Gui->Drawable drawable) { return drawable.image(this); }
+        ~Boolean isFirst = true;
+        ~String firstFlipMethod = null ;
+        
+        if input->"animation_state" == null {
+          Images->'imageClassName'->States += Gui->Renderable "defaultState" = \Images.'imageName' 
+          Images->'imageClassName'->States->*.appendToBody({\setCurrent("defaultState");});
+        }
+        input : atom : animation_state {
+          Parameters arguments = new Parameters ();
+          atom : element : animation_variable_value {
+            element : value : INTEGER {
+              arguments.add(|'value'|);
+            }
+            element : value : FLOAT {
+              arguments.add(|'value'|);
+            }
+            element : value : quote {
+              arguments.add(|'' 'value' ''|);
+            }
+          }
+          String creationMethod = "create"\+'atom->"animationTypeName"';
+          ~String stateIdFind = "";
+          StringBuilder flipToMethod = new StringBuilder();
+          ~String previousStateIdFind = null;
+          ~String underscore = "";
+          ~Integer previousStateIndex = -1;
+          atom : quark : animationId {
+            previousStateIdFind = 'flipToMethod';
+            if animationStateIndices.containsKey(previousStateIdFind) == true {
+              previousStateIndex = animationStateIndices.get(stateIdFind);
+            }
+            stateIdFind = 'quark';
+            flipToMethod.append(underscore);
+            flipToMethod.append(stateIdFind);
+            underscore = "_";
+            if animationStateIndices.containsKey(stateIdFind) == false {
+              String stateId = stateIdFind;
+              animationStateIndices.put(stateId,animationStateIndex);
+              Gui->Image->States += @Integer 'stateId' = 'animationStateIndex'
+              animationStateIndex \+= 1;
+            }
+            if animationStateIndices.containsKey('flipToMethod') == false {
+              String stateId = 'flipToMethod';
+              animationStateIndices.put(stateId,animationStateIndex);
+              Gui->Image->States += @Integer 'stateId' = 'animationStateIndex'
+              animationStateIndex \+= 1;
+            }
+          }
+          String stateId = stateIdFind;
+          String previousStateId = previousStateIdFind;
+          Integer animationStateIndexValue = animationStateIndices.get('flipToMethod');
+          Integer previousStateIndexValue = previousStateIndex;
+          Images->'imageClassName'->States += Gui->Renderable 'flipToMethod'+"State" = \Images.'imageName'.'creationMethod'(`arguments`)
+          Images->'imageClassName'->States += void 'flipToMethod'(){
+            \setCurrent('flipToMethod'+"State");
+            "currentId" = 'animationStateIndexValue';
+          }
+          if isFirst {
+            Images->'imageClassName'->States->*.appendToBody({'flipToMethod'();});
+            firstFlipMethod = 'flipToMethod';
+            Images->'imageClassName'->States->*"changeState".appendToBody({
+              if "currentId" == 'previousStateIndexValue' && "newState"  == 'animationStateIndices.get(stateId)' {
+                'flipToMethod'();
+              }
+            });
+          } 
+          else {
+            Images->'imageClassName'->States->*"changeState".appendToBody({
+              else if "currentId" == 'previousStateIndexValue' && "newState"  == 'animationStateIndices.get(stateId)' {
+                'flipToMethod'();
+              }
+            });
+          }
+          if previousStateId.equals("") {
+            Images->'imageClassName'->States->*"changeState".appendToBody({
+              else if "currentId" == 'animationStateIndexValue' && "newState"  == 'previousStateIndexValue' {
+                'firstFlipMethod'();
+              }
+            });
+          }
+          else {
+            Images->'imageClassName'->States->*"changeState".appendToBody({
+              else if "currentId" == 'animationStateIndexValue' && "newState"  == 'previousStateIndexValue' {
+                'previousStateId'();
+              }
+            });
+          }
+          isFirst = false;
+        }
       }
       print catch  IO {}
     }
@@ -354,8 +535,8 @@ class 'packageName'."gui" Gui {
       Float height = Float.parseFloat(frameHeight);
       Integer widthI = Integer.parseInt(frameWidth);
       Integer heightI = Integer.parseInt(frameHeight);
-	  Float xFactor = 0.02f/width;
-	  Float yFactor = 0.02f/height;
+	  Float xFactor = 0.00f/width;
+	  Float yFactor = 0.00f/height;
       String textureBufferMethodLoaderClassName = "TextureBuffer"\+'frameWidth'\+"x"\+'frameHeight'\+"Loader";
       String textureBufferMethodLoaderName = "loadTextureBuffer"\+'frameWidth'\+"x"\+'frameHeight'+"Loader";
       String textureBufferName = "textureBuffer"\+'frameWidth'\+"x"\+'frameHeight';
@@ -410,18 +591,18 @@ class 'packageName'."gui" Gui {
       }
       if declaredTextureBuffers.containsKey(frameWidth)==false {
         declaredTextureBuffers.put(frameWidth, new HashSet<String>());
-        ImageLoader->'textureBufferMethodLoaderClassName'->*"run".appendToBody({
+        #ImageLoader->'textureBufferMethodLoaderClassName'->*"run".appendToBody({
           synchronized "textureBuffers" {
             "textureBuffers".put('widthI', new HashMap<Integer,'floatBufferArray'>);
           }
-        });
+        });#
       }
       declaredTextureBuffers.get(frameWidth).add(frameHeight);
-	  ImageLoader->'textureBufferMethodLoaderClassName'->*"run".appendToBody({
+	  #ImageLoader->'textureBufferMethodLoaderClassName'->*"run".appendToBody({
         synchronized "textureBuffers" {
 	      "textureBuffers".get('widthI').put('heightI', "textureBuffer");
 	    }
-      });
+      });#
     }
   }
   class Colour // {
@@ -433,6 +614,9 @@ class 'packageName'."gui" Gui {
     Integer getBlueI(){ return null; }
     $'floatArrayType' asFloatArray(){return null;}
     $'intArrayType' asIntegerArray(){return null;}
+    Integer getTexture(){
+      return 0;
+    }
     void render(){}
     void endRender(){}
 >   void declaration(IToken input){
@@ -494,19 +678,29 @@ class 'packageName'."gui" Gui {
   }
   class Drawable // {
     ~FloatBuffer vertexBuffer = null;
+    ~List<Gui\>Drawable\>ChangeListener> changeListeners = new ArrayList<Gui\>Drawable\>ChangeListener>();
     ~Float visualX = 0f;
     ~Float visualY = 0f;
     ~Float visualWidth = 1f;
     ~Float visualHeight = 1f;
+    ~Float visualRotationPointX = 0f;
+    ~Float visualRotationPointY = 0f;
     ~Float visualAngle = 0f;
+    ~Float angle = 0f;
+    void display(){
+      Renderer.botLayer.add(this);
+    }
+    void display(Renderer->Layer layer){
+      layer.add(this);
+    }
     void render(){
       
 		GL11.glPushMatrix();
 		GL11.glTranslatef(visualX, visualY, 0.0f);
 		if visualAngle != 0f{
-			GL11.glTranslatef(visualWidth/2f, visualHeight/2f, 0.0f);
+			GL11.glTranslatef(visualRotationPointX, visualRotationPointY, 0.0f);
 			GL11.glRotatef(visualAngle, 0, 0, 1);	
-			GL11.glTranslatef(visualWidth \/ -2f, visualHeight \/ -2f, 0.0f);
+			GL11.glTranslatef(-1f*visualRotationPointX, -1f*visualRotationPointY, 0.0f);
 		}
 		GL11.glScalef(visualWidth, visualHeight, 1f);
 		GL11.glVertexPointer(3, 0, vertexBuffer);
@@ -515,24 +709,78 @@ class 'packageName'."gui" Gui {
     }
     void load(){
     }
+    Integer getTexture(){
+      return 0;
+    }
+    Gui->Drawable image(Gui->Renderable image){
+      return null;
+    }
+    Gui->Drawable colour(Gui->Colour colour){
+      return null;
+    }
+    void add(Gui\>Drawable\>ChangeListener changeListener){
+      changeListeners.add(changeListener);
+    }
+    class ChangeListener // {
+      void setVisualX(Float newX){
+      }
+      void setVisualY(Float newY){
+      }
+      void setVisualWidth(Float newWidth){
+      }
+      void setVisualHeight(Float newHeight){
+      }
+      void setAngle(Float newAngle){
+      }
+    }
+>   void setup(){
+      Gui->Drawable->*"setVisualX".appendToBody({
+        for Gui->Drawable->ChangeListener changeListener : changeListeners {
+          changeListener.setVisualX("newVisualX");
+        }
+      });
+      Gui->Drawable->*"setVisualY".appendToBody({
+        for Gui->Drawable->ChangeListener changeListener : changeListeners {
+          changeListener.setVisualY("newVisualY");
+        }
+      });
+      Gui->Drawable->*"setVisualWidth".appendToBody({
+        for Gui->Drawable->ChangeListener changeListener : changeListeners {
+          changeListener.setVisualWidth("newVisualWidth");
+        }
+      });
+      Gui->Drawable->*"setVisualHeight".appendToBody({
+        for Gui->Drawable->ChangeListener changeListener : changeListeners {
+          changeListener.setVisualHeight("newVisualHeight");
+        }
+      });
+      Gui->Drawable->*"setAngle".appendToBody({
+        for Gui->Drawable->ChangeListener changeListener : changeListeners {
+          changeListener.setAngle("newAngle");
+        }
+      });
+      Gui->Drawable->*"setAngle".prependToBody({
+        "visualAngle" = "(float)(newAngle" * 180.0 / "Math.PI)"; 
+      });
+    }
 >   void declaration(IToken input){
       String drawableName = 'input->"drawableName"';
       String drawableClassName = ^input->"drawableName";
-      Gui->Drawable += class drawableClassName / Drawable / {
+      Drawables += class drawableClassName / Gui->Drawable / {
         void load(){
         }
-        Gui->Drawable->'drawableClassName' image(Gui->Image image){
-          Gui->Drawable->'drawableClassName' newImage = new Gui->Drawable->'drawableClassName'->Image(image);
+        Drawables->'drawableClassName' image(Gui->Renderable image){
+          Drawables->'drawableClassName' newImage = new Drawables->'drawableClassName'->Image(image);
           newImage.setVertexBuffer("vertexBuffer");
           return newImage;
         }
-        Gui->Drawable->'drawableClassName' colour(Gui->Colour colour){
-          Gui->Drawable->'drawableClassName' newColour = new Gui->Drawable->'drawableClassName'->Colour(colour);
+        Drawables->'drawableClassName' colour(Gui->Colour colour){
+          Drawables->'drawableClassName' newColour = new Drawables->'drawableClassName'->Colour(colour);
           newColour.setVertexBuffer("vertexBuffer");
           return newColour;
         }
       }
-      Drawables += @Gui->Drawable->'drawableClassName' 'drawableName' = new Gui->Drawable->'drawableClassName'()  
+      Drawables += @Drawables->'drawableClassName' 'drawableName' = new Drawables->'drawableClassName'()  
       ImageLoader->*"load".prependToBody({ \Drawables.'drawableName'.load(); });
       
       StringBuilder vertexArray = new StringBuilder();
@@ -550,13 +798,16 @@ class 'packageName'."gui" Gui {
       }
       ~Float gridX = 0f;
       ~Float gridY = 0f;
+      ~Float gridAHeight = gridHeight - 1;
       ~Integer numberOfElements = 0;
       Map<Integer,Float> gridXMap = new HashMap<Integer,Float>();
       Map<Integer,Float> gridYMap = new HashMap<Integer,Float>();
       input : element : drawable_grid_element {
         if element->"point" != null {
-          gridXMap.put(Integer.parseInt('element->"point"'), gridX / gridWidth );
-          gridYMap.put(Integer.parseInt('element->"point"'), 1f \- gridY / gridHeight );
+          element : atom : point {
+            gridXMap.put(Integer.parseInt('atom'), gridX / gridWidth );
+            gridYMap.put(Integer.parseInt('atom'), 1f \- gridY / gridAHeight );
+          }
           numberOfElements \+= 1;
         }
         if element->"endLine" != null {
@@ -579,7 +830,7 @@ class 'packageName'."gui" Gui {
       }
       vertexArray.append("}");
       Integer sizeOfByteBuffer = numberOfElements * 4 * 3;
-      Gui->Drawable->'drawableClassName'->*"load".appendToBody({
+      Drawables->'drawableClassName'->*"load".appendToBody({
         'vertexArray';
 		ByteBuffer byteBuffer = ByteBuffer.allocateDirect('sizeOfByteBuffer');
 		byteBuffer.order(ByteOrder.nativeOrder());
@@ -589,7 +840,7 @@ class 'packageName'."gui" Gui {
 		"vertexBuffer".position(0);
       });
       Integer numberOfElementsValue = numberOfElements;
-      Gui->Drawable->'drawableClassName' += class Image / 'drawableClassName' / {
+      Drawables->'drawableClassName' += class Image / 'drawableClassName' / {
         Gui->Renderable image = null;
         void render(){
           image.render();
@@ -600,17 +851,207 @@ class 'packageName'."gui" Gui {
         void animate(){
           image.animate();
         }
+        Integer getTexture(){
+          return image.getTexture();
+        }
       }
-      Gui->Drawable->'drawableClassName' += class Colour / 'drawableClassName' / {
+      Drawables->'drawableClassName' += class Colour / 'drawableClassName' / {
         Gui->Colour colour = null;
         void render(){
           colour.render();
         }
+        Integer getTexture(){
+          return colour.getTexture();
+        }
       }
-      Gui->Drawable->'drawableClassName'->Colour->*"render".appendToBody({
+      Drawables->'drawableClassName'->Colour->*"render".appendToBody({
         colour.endRender();
       });
     }
+>   void multipleDeclaration(IToken input){
+      String multipleName = 'input->"multipleName"';
+      String multipleClassName = ^multipleName;
+      Drawables += class multipleClassName / Gui->Drawable / {
+        void load(){
+        }
+        void render(){
+        }
+        void animate(){
+        }
+        Drawables->'multipleClassName' image(Gui->Renderable image){
+        }
+      }
+      Drawables += @Drawables->'multipleClassName' 'multipleName' = new Drawables->'multipleClassName'() 
+      Drawables->'multipleClassName' += class Image / 'multipleClassName' / {
+        Integer imageTexture = -1;
+        void render(){
+        }
+        void animate(){
+        }
+        Integer getTexture(){
+          return imageTexture;
+        }
+      }
+      ~Integer imageIndex = 1;
+      Parameters imageParameters = new Parameters ();
+      imageParameters.add(|"image".getTexture()|);
+      input : element : drawable_multiple_element {
+        String imageName = "image"\+imageIndex;
+        String drawableName = 'element->"drawableName"';
+        if element->"newStateName" != null {
+          Drawables->'multipleClassName'->*"image".appendToBody({
+            Gui->Image->States 'imageName' = "((Gui.Statable)image).asStates()";
+          });
+          element : atom : newStateName {
+            Drawables->'multipleClassName'->*"image".appendToBody({
+              'imageName'.changeState( "Gui.Image.States."+'atom' );
+            });
+          }
+          imageParameters.add(|\Drawables.'drawableName'.image('imageName')|);
+        }
+        else {
+          imageParameters.add(|\Drawables.'drawableName'.image("image")|);
+        }
+        String changeListenerClassName = ^imageName \+ "ChangeListener";
+        Drawables->'multipleClassName'->Image += ~class changeListenerClassName / Gui->Drawable->ChangeListener / { 
+          void setVisualX(Float newX){
+          }
+          void setVisualY(Float newY){
+          }
+          void setVisualWidth(Float newWidth){
+          }
+          void setVisualHeight(Float newHeight){
+          }
+          void setAngle(Float newAngle){
+          }
+        }
+        \addChangeListener(element->"angle",Drawables->'multipleClassName'->Image,imageName,NORMAL, "setAngle");
+        \addChangeListener(element->"position",Drawables->'multipleClassName'->Image,imageName,"setVisualX","setVisualY");
+        \addChangeListener(element->"dimensions",Drawables->'multipleClassName'->Image,imageName,"setVisualWidth","setVisualHeight");
+        if element->"rotation" != null {
+          \addChangeListener(element->"rotation",Drawables->'multipleClassName'->Image,imageName,"setVisualRotationPointX","setVisualRotationPointY");
+        }
+        
+        Drawables->'multipleClassName'->Image += Gui->Drawable 'imageName' = null
+        Drawables->'multipleClassName'->Image->*"render".appendToBody({'imageName'.render();});
+        Drawables->'multipleClassName'->Image->*"animate".appendToBody({'imageName'.animate();});
+        
+        Drawables->'multipleClassName'->Image->*.appendToBody({\add(new Drawables->'multipleClassName'->Image->'changeListenerClassName'());});
+        imageIndex \+= 1;
+      }
+      Drawables->'multipleClassName'->Image->*.appendToBody({
+        for Gui->Drawable->ChangeListener changeListener : changeListeners {
+		  "changeListener".setVisualX(0f);
+		  "changeListener".setVisualY(0f);
+		  "changeListener".setVisualWidth(1f);
+		  "changeListener".setVisualHeight(1f);
+		  "changeListener".setAngle(0f);
+		}
+      });
+      Drawables->'multipleClassName'->*"image".appendToBody({
+        return new Drawables->'multipleClassName'->Image(`imageParameters`);
+      });
+    }
+>   Integer LEFT_SUPPLEMENTARY = 1;
+>   Integer RIGHT_SUPPLEMENTARY = 2;
+>   Integer NORMAL = 3;
+>   Statement getMultipleValue(IToken input, Integer status){
+      ~Statement result = null;
+      if input->"DRAWABLE_ANGLE" != null {
+        if status == LEFT_SUPPLEMENTARY {
+          return |\Math.cos(\getAngle())|;
+        }
+        else if status == RIGHT_SUPPLEMENTARY {
+          return |\Math.sin(\getAngle())|;
+        }
+        else if status == NORMAL {
+          return |\getAngle()|;
+        }
+      }
+      else if input->"DRAWABLE_X" != null {
+        return |\getVisualX()|;
+      }
+      else if input->"DRAWABLE_Y" != null {
+        return |\getVisualY()|;
+      }
+      else if input->"DRAWABLE_WIDTH" != null {
+        return |\getVisualWidth()|;
+      }
+      else if input->"DRAWABLE_HEIGHT" != null {
+        return |\getVisualHeight()|;
+      }
+      else if input->"FLOAT" != null {
+        return |'input->"FLOAT"'+"f"|;
+      }
+      else if input->"INTEGER" != null {
+        return |'input->"INTEGER"'|;
+      }
+      \System.err.println("Drawable.getMultipleValue() could not parse:");
+      input.print();
+      return null;
+    }
+        
+>   void addChangeListener(IToken input, Class masterClass, String drawableToChange, String leftParameterSetMethod, String rightParameterSetMethod){
+      \addChangeListener(input->"leftParameter",masterClass,drawableToChange, LEFT_SUPPLEMENTARY, leftParameterSetMethod);
+      \addChangeListener(input->"rightParameter",masterClass,drawableToChange, RIGHT_SUPPLEMENTARY, rightParameterSetMethod);
+    }
+>   void addChangeListener(IToken input, Class masterClass, String drawableToChange, Integer status, String setMethod){
+      String changeListenerClassName = ^drawableToChange \+ "ChangeListener";
+      Statement statement = new Statement ();
+      Set<String> toChangeMethods = new HashSet<String>();
+      input : element : drawable_multiple_value {
+        statement.add(\getMultipleValue(element,status));
+        if element->"DRAWABLE_WIDTH" != null {
+          toChangeMethods.add("setVisualWidth");
+        }
+        else if element->"DRAWABLE_HEIGHT" != null {
+          toChangeMethods.add("setVisualHeight");
+        }
+        else if element->"DRAWABLE_X" != null {
+          toChangeMethods.add("setVisualX");
+        }
+        else if element->"DRAWABLE_Y" != null {
+          toChangeMethods.add("setVisualY");
+        }
+        else if element->"DRAWABLE_ANGLE" != null {
+          toChangeMethods.add("setAngle");
+        }
+      }
+      : drawable_arthmetic_operator {
+        statement.set('element');
+      }
+      input : element : supplementary {
+        element : atom : drawable_multiple_value {
+          statement.add(\getMultipleValue(atom,status));
+          if atom->"DRAWABLE_WIDTH" != null {
+            toChangeMethods.add("setVisualWidth");
+          }
+          else if atom->"DRAWABLE_HEIGHT" != null {
+            toChangeMethods.add("setVisualHeight");
+          }
+          else if atom->"DRAWABLE_X" != null {
+            toChangeMethods.add("setVisualX");
+          }
+          else if atom->"DRAWABLE_Y" != null {
+            toChangeMethods.add("setVisualY");
+          }
+          else if atom->"DRAWABLE_ANGLE" != null {
+            toChangeMethods.add("setAngle");
+          }
+        }
+        : drawable_arthmetic_operator {
+          statement.set('atom');
+        }
+      }
+      for String changeMethod : toChangeMethods {
+        masterClass->'changeListenerClassName'->*'changeMethod'.appendToBody({
+          'drawableToChange'.'setMethod'("(float)("+`statement`+")");
+        });
+      }
+    }
+  }
+> void setup(){
+    Drawable.setup();
   }
 > void importAny(IToken import_any){
 	import_any : import_colours : IMPORT_COLOUR {
@@ -631,6 +1072,9 @@ class 'packageName'."gui" Gui {
 	import_any : import_draws : IMPORT_DRAWABLE {
 	  import_draws : element : drawable_declaration {
 		Drawable.declaration(element);
+	  }
+	  import_draws : element : multiple_drawable_declaration {
+		Drawable.multipleDeclaration(element);
 	  }
 	}
 	import_any : import_layers : IMPORT_LAYER {

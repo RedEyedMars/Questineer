@@ -29,11 +29,15 @@ public class AnimationTokens extends ParseList {
 	public static final ExactParser ANIMATION_TYPES = new ExactParser("ANIMATION_TYPES","animationTokens","animationTypes");
 	public static final ExactParser ANIT_ISEQUAL = new ExactParser("ANIT_ISEQUAL","animationTokens","==");
 	public static final ExactParser ANIT_ISNOTEQUAL = new ExactParser("ANIT_ISNOTEQUAL","animationTokens","!=");
+	public static final ExactParser ANIT_PLUS = new ExactParser("ANIT_PLUS","animationTokens","+");
+	public static final ExactParser ANIT_MINUS = new ExactParser("ANIT_MINUS","animationTokens","-");
+	public static final ExactParser ANIT_DIVIDE = new ExactParser("ANIT_DIVIDE","animationTokens","*");
+	public static final ExactParser ANIT_MULTIPLY = new ExactParser("ANIT_MULTIPLY","animationTokens","/");
 	public static final ExactParser ANIT_LESSTHAN = new ExactParser("ANIT_LESSTHAN","animationTokens","<");
 	public static final ExactParser ANIT_GREATERTHAN = new ExactParser("ANIT_GREATERTHAN","animationTokens",">");
 	public static final ExactParser ANIT_LESSOREQUAL = new ExactParser("ANIT_LESSOREQUAL","animationTokens","<=");
 	public static final ExactParser ANIT_GREATEROREQUAL = new ExactParser("ANIT_GREATEROREQUAL","animationTokens",">=");
 
 	public static final ChoiceParser parser = new ChoiceParser(
-				NAME,FLOAT,INTEGER,WILD,NEWLINE,COMMA,IF,ANIT_EQUALS,ANIT_PLUSEQUALS,ANIT_AND,ANIT_OR,ANIMATION_TYPES,ANIT_ISEQUAL,ANIT_ISNOTEQUAL,ANIT_LESSTHAN,ANIT_GREATERTHAN,ANIT_LESSOREQUAL,ANIT_GREATEROREQUAL);
+				NAME,FLOAT,INTEGER,WILD,NEWLINE,COMMA,IF,ANIT_EQUALS,ANIT_PLUSEQUALS,ANIT_AND,ANIT_OR,ANIMATION_TYPES,ANIT_ISEQUAL,ANIT_ISNOTEQUAL,ANIT_PLUS,ANIT_MINUS,ANIT_DIVIDE,ANIT_MULTIPLY,ANIT_LESSTHAN,ANIT_GREATERTHAN,ANIT_LESSOREQUAL,ANIT_GREATEROREQUAL);
 }

@@ -1,4 +1,19 @@
 square
-	2.4
-	...
-	1.3
+	2 . 4
+	. . .
+	1 . 3
+
+hexagon
+	. . 2 . . 4 . . 
+	. . . . . . . . 
+	. . . . . . . . 
+	1 . . . . . . 6 
+	. . . . . . . . 
+	. . . . . . . .
+	. . 3 . . 5 . .
+
+**court
+	square *          (X              ,Y - Height/2.0         ) ( Width , Height ) & ( 0.0 , Height/2.0 ) & Angle
+	square ->westEdge (X -       Angle,Y - Height/2.0 - Angle ) ( 1.0   , Height ) & ( 0.0 , Height/2.0 ) & Angle
+	square ->eastEdge (X + Width*Angle,Y - Height/2.0 + Angle ) ( 1.0   , Height ) & ( 0.0 , Height/2.0 ) & Angle
+	

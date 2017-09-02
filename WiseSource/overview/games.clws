@@ -1,23 +1,55 @@
 > String mainStringArgs = "String[]";
-class 'packageName'."game" Game {
+class 'packageName'."game" Game \Object InputHandler->Events->KeyboardEvent->Listener  InputHandler->Events->MouseEvent->Listener {
   ~List<Environment> environments = new ArrayList<Environment>();
   ~Double lastTick = \System.currentTimeMillis()/1000.0;
   ~Double thisTick = lastTick;
+  ~Gui->Drawable court = null;
   @void main('mainStringArgs' args){
     new Gui();
   }
   void load(){
     environments.add(new Environments->\Forest());
     environments.add(new Environments->\Town());
-    for Environment environment:environments {
-      environment.load();
-    }
-    Gui.renderer.baseLayer.add(Drawables.square.image(Images.particles));
+	for Environment environment:environments {
+	  environment.load();
+	}
+	court = Drawables.court.image(Images.foliage);
+	Renderer.baseLayer.add(court);
+	InputHandler.addKeyboardListener(this);
+	InputHandler.addMouseListener(this);
   }
+  Float angle = 0f;
+  void listen(InputHandler->Events->KeyboardEvent->Release event) {
+  }
+  void listen(InputHandler->Events->KeyboardEvent->Press event) {
+	if event.getKeyChar()== 113 {
+	  angle += 0.1f;
+	  court.setAngle(angle);
+	}
+  }
+  void listen(InputHandler->Events->MouseEvent->Release event) {
+  }
+  void listen(InputHandler->Events->MouseEvent->Press event) {
+  }
+  void listen(InputHandler->Events->MouseEvent->Drag event) {
+  }
+  void listen(InputHandler->Events->MouseEvent->Move event) {
+  }
+
   void update(){
     thisTick = \System.currentTimeMillis()/1000.0;
     for Environment environment:environments {
       environment.tick(thisTick-lastTick);
+    }
+    List<Tile> tileList = environments.get(0).getTiles().get(Tiles->\Forest->\Path.id);
+    if tileList!=null  && tileList.isEmpty()==false {
+      for Integer i < tileList.size() {
+        Tile tile = tileList.get(i);
+        Tiles->\Forest->\Path path = "(Tiles.Forest.Path)tileList".get(i);
+        if path.getHome()!=null {
+          path.getDrawable().display();
+		}
+      }
     }
     lastTick = thisTick;
   }

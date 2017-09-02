@@ -29,7 +29,9 @@ public class ImageDeclaration extends ConcreteRule {
 										AnimationTokens.INTEGER,"frameHeight"))),
 					GeneralTokens.EQUALSIGN,
 					ImageBraces.IMAGE_FILE,
-					Rules.image_type));
+					Rules.image_type,
+					new ManyParser(
+							Rules.animation_state)));
 
 	}
 

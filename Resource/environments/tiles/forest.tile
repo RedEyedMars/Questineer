@@ -2,7 +2,7 @@ Background: Tree
 Underneath: Grass
 Paths: Path, Bridge
 Grass
-Path
+Path foliage->grass
 	Crawler
 		Branch
 			1 - 20% 

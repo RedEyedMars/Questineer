@@ -17,6 +17,7 @@ public class DrawableGridElement extends ConcreteRule {
 	public void setup(){
 		set(
 			new ChoiceParser(
+					DrawableBraces.MULTIPLE_DRAWABLE_POINTS,
 					new AddTokenParser(
 						AnimationTokens.INTEGER,"point"),
 					new AddTokenParser(

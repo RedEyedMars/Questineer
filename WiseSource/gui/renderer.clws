@@ -42,7 +42,7 @@ class 'packageName'."gui" Renderer {
       try {
         while Gui.isRunning {
           status = WAITING_FOR_EVENT;
-          while events.isEmpty() {
+          while Gui.isRunning && events.isEmpty() {
             synchronized events {
               events.wait();
             }
@@ -65,22 +65,25 @@ class 'packageName'."gui" Renderer {
           events.notifyAll();
         }
       }
-      Keyboard.destroy();
-      Display.destroy();
     }
     void load(){
       \start();
     }
     void render(){
+      Integer previousTexture = -2;
       synchronized layer {
-        for Gui->Drawable drawable: layer {
+        for Gui->Drawable drawable : layer {
+          if drawable.getTexture()!=previousTexture {
+            previousTexture = drawable.getTexture();
+            GL11.glBindTexture(GL11.GL_TEXTURE_2D, previousTexture);
+          }
           drawable.render();
         }
       }
     }
     void animate(){
-      for Integer i < layer.size() {
-        layer.get(i).animate();
+      for Integer j < layer.size() {
+        layer.get(j).animate();
       }
     }
   }
@@ -89,7 +92,7 @@ class 'packageName'."gui" Renderer {
     void run() {
       while Gui.isRunning {
         synchronized this {
-          while animationTicks < 1 {
+          while Gui.isRunning && animationTicks < 1 {
             try {
               \wait();
             }
@@ -115,6 +118,14 @@ class 'packageName'."gui" Renderer {
       }
     }
   }
+  @void add(Gui->Drawable drawable, Renderer->Layer layer){
+    layer.add(drawable);
+  }
+  @Gui->Drawable add(Gui->Drawable drawable, Gui->Renderable image, Renderer->Layer layer){
+    drawable = drawable.image(image);
+    layer.add(drawable);
+    return drawable;
+  }
 > Statement renderLayersBody = new Statement (|baseLayer.render();|);
 > Statement animateLayersBody = new Statement (|baseLayer.animate();|);
 > Statement loadLayersBody = new Statement (|baseLayer.load();|);
@@ -129,14 +140,14 @@ class 'packageName'."gui" Renderer {
   ~Renderer->Animator animator = null;
   ~Float viewX = 0f;
   ~Float viewY = 0f;
-  ~Float viewZ = 0f;
+  ~Float viewZ = -10f;
   ~Float aspectRatio = 0f;
   Integer viewportX = 0;
   Integer viewportY = 0;
   Integer viewportWidth = 0;
   Integer viewportHeight = 0;
   ~\Long ticksPerSecond = "0L";
-  ~\Long animationInterval = "60L";
+  ~\Long animationInterval = "180L";
   ~\Long previousAnimationTime = "0L";
   ~\Long lastFrameTime = "0L";
   ~Double secondsSinceLastFrame = "0.0";
@@ -214,6 +225,7 @@ class 'packageName'."gui" Renderer {
       \updateTimer();
       Display.update();
       animator = new Renderer->Animator();
+      animator.start();
       `loadLayersBody`;
     }
     print catch * {
@@ -221,6 +233,8 @@ class 'packageName'."gui" Renderer {
     }
   }
   void end(){
+	Keyboard.destroy();
+	Display.destroy();
     animator.end();
     baseLayer.end();
   }

@@ -7,10 +7,12 @@ animation_type_element
 	( NAME as variableName anit_operator ( INTEGER | FLOAT | NAME | ANIMATION_TYPE_FRAME_DATA ) as value ( IF animation_type_boolean (anit_continuation_operator animation_type_boolean)* )? ) as statement
 	animation_type_declaration
 animation_type_boolean
-	NAME as leftName anit_boolean_operator ( INTEGER | FLOAT | NAME | ANIMATION_TYPE_FRAME_DATA ) as value
+	NAME as leftName anit_boolean_operator ( INTEGER | FLOAT | NAME | ANIMATION_TYPE_FRAME_DATA ) as value ( anit_arithmetic_operator ( INTEGER | FLOAT | NAME | ANIMATION_TYPE_FRAME_DATA ) as value )*
 animation_type_variable_declaration
-	NAME as typeName NAME as variableName ANIT_EQUALS ( INTEGER | FLOAT | QUOTE as quote ) as value 
-	NAME as variableName ANIT_EQUALS ( INTEGER | FLOAT | QUOTE as quote ) as value 
+	NAME as typeName NAME as variableName ANIT_EQUALS animation_variable_value 
+	NAME as variableName ANIT_EQUALS animation_variable_value 
+animation_variable_value
+	INTEGER | FLOAT | QUOTE as quote
 
 anit_continuation_operator
 	ANIT_AND
@@ -18,6 +20,11 @@ anit_continuation_operator
 anit_operator
 	ANIT_EQUALS
 	ANIT_PLUSEQUALS
+anit_arithmetic_operator
+	ANIT_PLUS
+	ANIT_MINUS
+	ANIT_DIVIDE
+	ANIT_MULTIPLY
 anit_boolean_operator
 	ANIT_ISEQUAL
 	ANIT_ISNOTEQUAL
@@ -49,6 +56,10 @@ animationToken-s
 	"animationTypes" as ANIMATION_TYPES
 	"==" as ANIT_ISEQUAL
 	"!=" as ANIT_ISNOTEQUAL
+	"+" as ANIT_PLUS
+	"-" as ANIT_MINUS
+	"*" as ANIT_DIVIDE
+	"/" as ANIT_MULTIPLY
 	"<" as ANIT_LESSTHAN
 	">" as ANIT_GREATERTHAN
 	"<=" as ANIT_LESSOREQUAL

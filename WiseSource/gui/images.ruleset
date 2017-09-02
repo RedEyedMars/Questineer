@@ -5,7 +5,10 @@ imageToken-s
 	[[a-zA-Z_][a-zA-Z0-9_]*] as NAME
 	[.*] as WILD
 	"\n" as NEWLINE
+	"\n\t" as NEWTAB
+	"->" as IMAGE_STATE_CHANGE
 	"," as COMMA
+	":" as COLON
 	[[Xx]] as CROSS
 	"-" as DASH
 	">" as LESSTHAN
@@ -19,7 +22,9 @@ imageBrace-s are Braced
 imageImport-s are Import
 	[><<\"gui/images/\",image_file_name,\".imgs\">>\n] as IMPORT_IMAGE from (NEWLINE|image_declaration)+; with (IMAGE_FILE IMGS)
 image_declaration
-	NAME as imageName in image_names ( INTEGER as frameWidth CROSS INTEGER as frameHeight? ) EQUALSIGN IMAGE_FILE image_type
+	NAME as imageName in image_names ( INTEGER as frameWidth CROSS INTEGER as frameHeight? ) EQUALSIGN IMAGE_FILE image_type animation_state*
+animation_state
+	NEWTAB NAME as animationId ( IMAGE_STATE_CHANGE NAME as animationId )* COLON NAME as animationTypeName animation_variable_value*
 image_id
 	image_name ( INTEGER as frameWidth (COMMA INTEGER as frameHeight)? )?
 animation

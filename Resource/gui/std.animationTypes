@@ -1,3 +1,6 @@
+Stationary {
+}
+
 Progression{
 	X{
 		x += 1
@@ -25,7 +28,7 @@ Progression{
 Cycle(Integer direction = 1){
 	X{
 		x += direction
-		direction = -1 if x == [width]
+		direction = -1 if x == [width]-1
 		direction = 1 if x == 0
 	}
 	Y{
@@ -36,7 +39,7 @@ Cycle(Integer direction = 1){
 	Bounded(Integer startX = 0, Integer startY = 0, Integer endX = 0, Integer endY = 0){
 		X{
 			x += direction
-			y += direction if direction == 1 & x == endX | direction == -1 & x == startX 
+			y += direction if direction == 1 & x == endX & y < endY | direction == -1 & x == startX & y > startY 
 			x = startX if direction == 1 & x == endX & y < endY
 			x = endX if direction == -1 & x == startX & y > startY
 			 
@@ -45,7 +48,7 @@ Cycle(Integer direction = 1){
 		}
 		Y{
 			y += direction
-			x += direction if direction == 1 & y == endY | direction == -1 & y == startY 
+			x += direction if direction == 1 & y == endY & x < endX | direction == -1 & y == startY & x > startX
 			y = startY if direction == 1 & y == endY & x < endX
 			y = endY if direction == -1 & y == startY & x > startX
 			 

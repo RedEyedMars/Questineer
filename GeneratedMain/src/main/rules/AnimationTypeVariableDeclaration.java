@@ -23,24 +23,12 @@ public class AnimationTypeVariableDeclaration extends ConcreteRule {
 					new AddTokenParser(
 						AssociationTokens.NAME,"variableName"),
 					AnimationTokens.ANIT_EQUALS,
-					new AddTokenParser(
-						
-					new ChoiceParser(
-							AnimationTokens.INTEGER,
-							AnimationTokens.FLOAT,
-							new AddTokenParser(
-								AnimationBraces.QUOTE,"quote")),"value")),
+					Rules.animation_variable_value),
 				new ChainParser(
 					new AddTokenParser(
 						AssociationTokens.NAME,"variableName"),
 					AnimationTokens.ANIT_EQUALS,
-					new AddTokenParser(
-						
-					new ChoiceParser(
-							AnimationTokens.INTEGER,
-							AnimationTokens.FLOAT,
-							new AddTokenParser(
-								AnimationBraces.QUOTE,"quote")),"value"))));
+					Rules.animation_variable_value)));
 
 	}
 

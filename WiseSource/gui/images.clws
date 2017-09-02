@@ -1,5 +1,6 @@
 
 > void setupGui() {
+    Gui.setup();
 	Gui += @StringBuilder _log = new StringBuilder()
 	Gui += @void log(String toLog) {
 		_log.append(toLog);
@@ -168,7 +169,7 @@ class 'packageName'."gui" InputHandler Thread{
 	  while Gui.isRunning{
 		status=WAITING_FOR_EVENTS;
 		synchronized events{
-		  while events.isEmpty(){
+		  while Gui.isRunning && events.isEmpty(){
 			events.wait();
 		  }
 		}

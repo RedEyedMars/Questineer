@@ -24,6 +24,7 @@ public class DrawableImportss extends ParseList {
 									new ChoiceParser(
 											AssociationTokens.NEWLINE,
 											Comments.COMMENTS,
+											Rules.multiple_drawable_declaration,
 											Rules.drawable_declaration)));
 
 	public static final ChoiceParser parser = new ChoiceParser(
