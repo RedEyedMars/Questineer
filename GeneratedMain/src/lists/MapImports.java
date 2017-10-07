@@ -25,8 +25,7 @@ public class MapImports extends ParseList {
 											AssociationTokens.NEWLINE,
 											Comments.COMMENTS,
 											Rules.map_header,
-											Rules.map_connection,
-											Rules.map_declaration)));
+											Rules.area_declaration)));
 
 	public static final ChoiceParser parser = new ChoiceParser(
 				IMPORT_MAP);

@@ -28,33 +28,6 @@ public class TileCost extends ConcreteRule {
 							new ListNameElementParser("payment_long_type_names"),
 							new ListNameElementParser("payment_short_type_names"),
 							new ListNameElementParser("item_names")),"paymentType"),
-					new AddTokenParser(
-						
-					new ChoiceParser(
-							ConditionTokens.PLUS,
-							ConditionTokens.MINUS),"operator"),
-					new AddTokenParser(
-						Rules.num,"amount"),
-					GeneralTokens.PERCENT,
-					GeneralTokens.IN,
-					new AddTokenParser(
-						Rules.num,"radius"),
-					TileTokens.ARRR,
-					new OptionalParser(
-							
-								new ChainParser(
-									TileTokens.TILE_AND,
-									Rules.tile_cost))),
-				new ChainParser(
-					new OptionalParser(
-							new AddTokenParser(
-								AnimationTokens.INTEGER,"payment")),
-					new AddTokenParser(
-						
-					new ChoiceParser(
-							new ListNameElementParser("payment_long_type_names"),
-							new ListNameElementParser("payment_short_type_names"),
-							new ListNameElementParser("item_names")),"paymentType"),
 					new OptionalParser(
 							
 								new ChainParser(

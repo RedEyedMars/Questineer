@@ -17,6 +17,14 @@ public class AnimationVariableValue extends ConcreteRule {
 	public void setup(){
 		set(
 			new ChoiceParser(
+					new AddTokenParser(
+						
+						new ChainParser(
+							new AddTokenParser(
+								AnimationTokens.INTEGER,"lowerBound"),
+							PaymentTokens.DASH,
+							new AddTokenParser(
+								AnimationTokens.INTEGER,"upperBound")),"range"),
 					AnimationTokens.INTEGER,
 					AnimationTokens.FLOAT,
 					new AddTokenParser(

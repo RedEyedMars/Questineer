@@ -20,37 +20,55 @@ public class TileDeclaration extends ConcreteRule {
 					new AddTokenParser(
 						
 						new ChainParser(
-							TileTokens.BACKGROUND,
-							PaymentTokens.COLON,
-							new ListNameElementParser("tile_names"),
+							new MultipleParser(
+									ConditionTokens.STAR),
+							TileTokens.FLOOR,
+							new MultipleParser(
+									ConditionTokens.STAR),
 							new ManyParser(
-									
-										new ChainParser(
-											AnimationTokens.COMMA,
-											new ListNameElementParser("tile_names")))),"background"),
+									AssociationTokens.NEWLINE),
+							new ManyParser(
+									Rules.edge_definition),
+							new ManyParser(
+									AssociationTokens.NEWLINE),
+							new ManyParser(
+									Rules.tile_definition)),"floor_declaration"),
 					new AddTokenParser(
 						
 						new ChainParser(
-							TileTokens.UNDERNEATH,
-							PaymentTokens.COLON,
-							new ListNameElementParser("tile_names"),
+							new MultipleParser(
+									ConditionTokens.STAR),
+							TileTokens.TERRAIN,
+							new MultipleParser(
+									ConditionTokens.STAR),
 							new ManyParser(
-									
-										new ChainParser(
-											AnimationTokens.COMMA,
-											new ListNameElementParser("tile_names")))),"underneath"),
+									AssociationTokens.NEWLINE),
+							new ManyParser(
+									Rules.tile_definition)),"terrain_declaration"),
 					new AddTokenParser(
 						
 						new ChainParser(
-							TileTokens.PATHS,
-							PaymentTokens.COLON,
-							new ListNameElementParser("tile_names"),
+							new MultipleParser(
+									ConditionTokens.STAR),
+							TileTokens.DENS,
+							new MultipleParser(
+									ConditionTokens.STAR),
 							new ManyParser(
-									
-										new ChainParser(
-											AnimationTokens.COMMA,
-											new ListNameElementParser("tile_names")))),"paths"),
-					Rules.tile_definition));
+									AssociationTokens.NEWLINE),
+							new ManyParser(
+									Rules.tile_definition)),"dens_declaration"),
+					new AddTokenParser(
+						
+						new ChainParser(
+							new MultipleParser(
+									ConditionTokens.STAR),
+							TileTokens.CHESTS,
+							new MultipleParser(
+									ConditionTokens.STAR),
+							new ManyParser(
+									AssociationTokens.NEWLINE),
+							new ManyParser(
+									Rules.tile_definition)),"chests_declaration")));
 
 	}
 

@@ -47,15 +47,20 @@ public class Rules extends ParseList {
 	public static final IRule statRange = StatRange.parser;
 	public static final IRule entity_declaration = EntityDeclaration.parser;
 	public static final IRule entity_definition = EntityDefinition.parser;
+	public static final IRule area_shape_name = AreaShapeName.parser;
 	public static final IRule map_header = MapHeader.parser;
-	public static final IRule map_connection = MapConnection.parser;
-	public static final IRule map_declaration = MapDeclaration.parser;
+	public static final IRule area_declaration = AreaDeclaration.parser;
+	public static final IRule area_element = AreaElement.parser;
+	public static final IRule patch_element = PatchElement.parser;
 	public static final IRule shape_type = ShapeType.parser;
 	public static final IRule tile_declaration = TileDeclaration.parser;
+	public static final IRule direction_name = DirectionName.parser;
+	public static final IRule edge_definition = EdgeDefinition.parser;
+	public static final IRule edge_if = EdgeIf.parser;
+	public static final IRule edge_if_operator = EdgeIfOperator.parser;
 	public static final IRule tile_definition = TileDefinition.parser;
 	public static final IRule tile_element = TileElement.parser;
-	public static final IRule crawler_element = CrawlerElement.parser;
-	public static final IRule branch_element = BranchElement.parser;
+	public static final IRule tile_rate = TileRate.parser;
 	public static final IRule tile_cost = TileCost.parser;
 	public static final IRule payment_type_declaration = PaymentTypeDeclaration.parser;
 	public static final IRule event_declaration = EventDeclaration.parser;
@@ -109,5 +114,5 @@ public class Rules extends ParseList {
 	public static final IRule layer_declaration = LayerDeclaration.parser;
 
 	public static final ChoiceParser parser = new ChoiceParser(
-				base,import_any,aspect_declaration,item_declaration,item_parameter,affinity_declaration,condition_declaration,condition_element,trait_declaration,trait_element,activity_declaration,activity_element,attack_declaration,attack_element,support_declaration,support_element,quest_type_declaration,quest_type_element,quest_destination,quest_tile_description,skill_declaration,skill_element,association_declaration,association_element,association_start,association_join,association_event,reason_declaration,statRange,entity_declaration,entity_definition,map_header,map_connection,map_declaration,shape_type,tile_declaration,tile_definition,tile_element,crawler_element,branch_element,tile_cost,payment_type_declaration,event_declaration,num,range,operator,body_element,acquisition,imposition,quest_addition,if_statement,for_statement,while_statement,boolean_statement,boolean_element,has_chance,spawn_statement,has_statement,requirement,requirement_element,return_statement,statement,variable_declaration,variable_header,variable_call,variable_call_element,variable_group,method,type_name,animation_type_declaration,animation_type_element,animation_type_boolean,animation_type_variable_declaration,animation_variable_value,anit_continuation_operator,anit_operator,anit_arithmetic_operator,anit_boolean_operator,image_type,image_declaration,animation_state,image_id,animation,multiple_drawable_declaration,drawable_declaration,drawable_grid_element,drawable_multiple_element,drawable_arthmetic_operator,drawable_multiple_value,colour_declaration,layer_declaration);
+				base,import_any,aspect_declaration,item_declaration,item_parameter,affinity_declaration,condition_declaration,condition_element,trait_declaration,trait_element,activity_declaration,activity_element,attack_declaration,attack_element,support_declaration,support_element,quest_type_declaration,quest_type_element,quest_destination,quest_tile_description,skill_declaration,skill_element,association_declaration,association_element,association_start,association_join,association_event,reason_declaration,statRange,entity_declaration,entity_definition,area_shape_name,map_header,area_declaration,area_element,patch_element,shape_type,tile_declaration,direction_name,edge_definition,edge_if,edge_if_operator,tile_definition,tile_element,tile_rate,tile_cost,payment_type_declaration,event_declaration,num,range,operator,body_element,acquisition,imposition,quest_addition,if_statement,for_statement,while_statement,boolean_statement,boolean_element,has_chance,spawn_statement,has_statement,requirement,requirement_element,return_statement,statement,variable_declaration,variable_header,variable_call,variable_call_element,variable_group,method,type_name,animation_type_declaration,animation_type_element,animation_type_boolean,animation_type_variable_declaration,animation_variable_value,anit_continuation_operator,anit_operator,anit_arithmetic_operator,anit_boolean_operator,image_type,image_declaration,animation_state,image_id,animation,multiple_drawable_declaration,drawable_declaration,drawable_grid_element,drawable_multiple_element,drawable_arthmetic_operator,drawable_multiple_value,colour_declaration,layer_declaration);
 }

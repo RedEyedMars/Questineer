@@ -6,80 +6,66 @@ tileToken-s
 	[.*] as WILD
 	"\n" as NEWLINE
 	"\n\t" as NEWTAB
-	"\n\t\t" as NEWTABTAB
-	"\n\t\t\t" as NEWTABTABTAB
 	"-" as DASH
 	"->" as TILE_IMAGE_ACCESS
 	"tile" as TILE
-	"Path" as PATH
-	"Paths" as PATHS
-	"Start" as START
-	"Background" as BACKGROUND
-	"R" as ARRR
 	"." as DOT
 	"%" as PERCENT
 	"+" as PLUS
 	"-" as MINUS
-	"<" as EXTENDS
-	"(" as OPEN_PARA
-	")" as CLOSE_PARA
 	"|" as PIPE
 	":" as COLON
-	"Common" as COMMON
-	"Uncommon" as UNCOMMON
-	"Rare" as RARE
-	"Epic" as EPIC
-	"Legendary" as LEGENDARY
-	"Seeded" as SEEDED
 	"Free" as FREE
 	"&" as TILE_AND
-	"Underneath" as UNDERNEATH
-	"Crawler" as CRAWLER
-	"Branch" as BRANCH
-	"Sides" as SIDES
-	"otherwise" as OTHERWISE
-	"encounter" as ENCOUNTER
-	"Small" as SMALL
-	"Medium" as MEDIUM
-	"Large" as LARGE
-	"Huge" as HUGE
-	"Room" as ROOM
-	"length" as LENGTH
-	"Length" as TILE_LENGTH
-	"Connect" as CONNECT
 	"Circle" as CIRCLE
 	"Court" as COURT
 	"Square" as SQUARE
+	"/" as FORESLASH
+	"==" as EDGE_EQUALS
+	"!=" as EDGE_NOT_EQUALS
+	"Floor" as FLOOR
+	"Terrain" as TERRAIN
+	"Dens" as DENS
+	"Chests" as CHESTS
+	"North" as NORTH
+	"East" as EAST
+	"South" as SOUTH
+	"West" as WEST
+	"Neighbour" as NEIGHBOUR
+	"Direction" as DIRECTION
+	"in" as IN
+	"Passable" as PASSABLE
+	"*" as STAR
 shape_type
 	CIRCLE | COURT | SQUARE
 tileBrace-s are Braced
 	[,.] as TILE_FILE with WILD as tile_file_name
-	[(,)] as TILE_CRAWLER_TYPE_PARAMETERS with (LENGTH|num)? ( COMMA (LENGTH|num) )*
-	[[,]] as TILE_CRAWLER_TYPE with ( tile_name shape_type TILE_CRAWLER_TYPE_PARAMETERS ) as shape? ( COMMA ( tile_name shape_type TILE_CRAWLER_TYPE_PARAMETERS ) as shape)*
+	[[,]] as TILE_DIMENSIONS with INTEGER as width COMMA INTEGER as height
 tileImport-s are Import
 	[><<\"environments/tiles/\",tile_file_name,\".tile\">>\n] as IMPORT_TILE from (NEWLINE|COMMENTS|tile_declaration)*; with TILE_FILE TILE
 tile_declaration
-	(BACKGROUND COLON tile_name ( COMMA tile_name )* ) as background
-	(UNDERNEATH COLON tile_name ( COMMA tile_name )* ) as underneath
-	(PATHS COLON  tile_name ( COMMA tile_name )* ) as paths
-	tile_definition
-tile_definition is silent
-	NAME as tileName in tile_names (NAME as imageName (TILE_IMAGE_ACCESS NAME as imageId)*)? tile_element*
+	( STAR+ FLOOR STAR+ NEWLINE* edge_definition* NEWLINE* tile_definition* ) as floor_declaration
+	( STAR+ TERRAIN STAR+ NEWLINE* tile_definition* ) as terrain_declaration
+	( STAR+ DENS STAR+ NEWLINE* tile_definition* ) as dens_declaration
+	( STAR+ CHESTS STAR+ NEWLINE* tile_definition* ) as chests_declaration
+direction_name
+	NORTH | EAST | SOUTH | WEST
+edge_definition
+	FORESLASH NAME as edgeTileName ( PIPE NAME as edgeTileName )* direction_name (PIPE direction_name)* ( NEWLINE edge_if )*
+edge_if
+	( IF NEIGHBOUR (IN DIRECTION | INTEGER INTEGER ) edge_if_operator ( NULL ) ) as neighbourIf
+edge_if_operator
+	EDGE_EQUALS
+	EDGE_NOT_EQUALS 
+tile_definition
+	NAME as tileName in tile_names TILE_DIMENSIONS? ( PASSABLE  SEMICOLON )? (tile_rate SEMICOLON)? (NAME as imageName (TILE_IMAGE_ACCESS NAME as imageId)* SEMICOLON )? tile_element*
 tile_element is silent
 	NEWLINE* COMMENTS
-	NEWTAB ( CONNECT tile_name (COLON tile_cost ( PIPE tile_cost)*)? ) as connection
-	NEWTAB ( (COMMON|UNCOMMON|RARE|EPIC|LEGENDARY|SEEDED) as rarity (COLON tile_cost ( PIPE tile_cost)*)? ) as rate
-	NEWTAB ( CRAWLER crawler_element+ ) as crawler
+	NEWTAB edge_definition
 	NEWTAB ( (PLUS|MINUS)+ entity_declaration ) as entity
 	NEWLINE+
-crawler_element is silent
-	NEWTABTAB TILE_LENGTH range as length
-	NEWTABTAB BRANCH ((INTEGER as sides SIDES)? branch_element+ ) as branch
-	NEWTABTAB ( (ENCOUNTER) as eventName BODY ) as event
-	NEWTABTAB ( TILE_CRAWLER_TYPE (OTHERWISE | num as chance PERCENT) ) as generate_shape
-branch_element
-	NEWTABTABTAB INTEGER as amount DASH num as chance PERCENT
+tile_rate
+	tile_cost ( PIPE tile_cost)*
 tile_cost
 	FREE
-	INTEGER as payment? ( payment_long_type_name|payment_short_type_name|item_name ) as paymentType (PLUS|MINUS) as operator num as amount PERCENT IN num as radius ARRR ( TILE_AND tile_cost )?
 	INTEGER as payment? ( payment_long_type_name|payment_short_type_name|item_name ) as paymentType ( TILE_AND tile_cost )?

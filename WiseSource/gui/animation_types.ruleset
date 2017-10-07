@@ -12,7 +12,7 @@ animation_type_variable_declaration
 	NAME as typeName NAME as variableName ANIT_EQUALS animation_variable_value 
 	NAME as variableName ANIT_EQUALS animation_variable_value 
 animation_variable_value
-	INTEGER | FLOAT | QUOTE as quote
+	( INTEGER as lowerBound DASH INTEGER as upperBound ) as range | INTEGER | FLOAT | QUOTE as quote
 
 anit_continuation_operator
 	ANIT_AND

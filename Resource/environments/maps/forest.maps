@@ -1,20 +1,9 @@
 Forest > forest.tile
-#
-Areas
-	Elder Glade (8FD)
-		Center :Elder Pedestal
-		Entrance : None
-		Set Entrance Radius: 1
-		Place Center at Origin
-		Clear All (Center) [*<->Center <=8]
-		Place Entrance (Center) [*<->Center > 6 & *<->Center <=8]
-		Repeat 100
-			Grow Tree (Center)  [!Entrance\*/ & *<->Center > 6 & *<->Center <=8]
-		Repeat 10
-			Grow Long Grass (Center) [*<->Center < 6 & *<->Center >=5]
-		Angle toCenter = Entrance~~Center
-		Build Path
-			1: Center.x, Center.y
-			2: 8*COS(toCenter), 8*SIN(toCenter)
-			3: Closest
-#
+
+Room:
+	Rectangle [3-6, 3-6]
+		Entry Path 1-3 Exits 
+		Patches (0:1%, 1:19%, 2:70%, 3:10%) :
+			Long_Grass [2-4,2-4]
+			Lone_Rock [1,1]
+			Bear_Den [1,1]

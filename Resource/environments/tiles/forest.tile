@@ -1,62 +1,35 @@
-Background: Tree
-Underneath: Grass
-Paths: Path, Bridge
-Grass
-Path foliage->grass
-	Crawler
-		Branch
-			1 - 20% 
-			2 - 10% 
-			3 - 30% 
-			4 - 20% 
-			5 - 10% 
-			6 - 10% 
-		Length 4.0-7.0 
-		[Grass Circle(length)] 10%
-		[Grass Circle(length)] 15% 
-		[Grass Court(2.0,length)] otherwise
-	 Seeded : 1FD
-Bridge
-	Crawler
-		Branch
-			0 - 100%
-Minor_Chest
-	Uncommon : 3FD +1% in 10R | 5G +5% in 10R
-Major_Chest
-Treasure_Chest
-Legendary_Chest
-Tree
-	Common : Seed +40% in 5R | TreeSeed +60% in 2R
-Lake
-	Rare : 25FD
-Water
-	Crawler
-		Branch
-			1 - 50% 
-			3 - 30% 
-			4 - 20%
-		Length 2.0-10.0 
-		[Lake Circle(length)] 10%
-		encounter {
-		  if event->tile.isPath() {
-			event->tile.transmute(Forest[Bridge])
-		  }
-		}
-	Uncommon : 10FD
-Long_Grass
-	Common : Free
-	+Praying Matris {
+
+**Floor**
+/ Tree North | West
+	if Neighbour in Direction == null
+Grass  Free;     foliage->grass;
+Path   1FD;      foliage->path;
+Bridge 1FD | 1G; outside->bridge;
+
+**Terrain**
+Tree       Seed | TreeSeed | 2FD; foliage->tree;
+Lake [2,2] 15FD;                  outside->lake;
+Water      3FD;                   outside->water;
+
+**Chests**
+Minor_Chest     3FD  | 5G;   chests->minor;
+Major_Chest     6FD  | 12G;  chests->major;
+Treasure_Chest  10FD | 20G;  chests->treasure;
+Legendary_Chest 20FD | 50G;  chests->legendary;
+
+**Dens**
+Long_Grass Passable; Free;          foliage->long_grass;
+	+Praying_Matris {
     	STR 5-7 | DEX 6-9 | CON 2-3 | KNW 1-2 | MND 1-2 | CRM 1
 	}
-	+++Killer Bees {
+	+++Killer_Bees {
     	STR 2-3 | DEX 3-4 | CON 1-3 | KNW 1-2 | MND 1-2 | CRM 1
     	load {
     	  event->host.join(null,event->host->spawn.get(Hive, new Associations.Hive.Factory()))
     	  event->host.gain(new Skills.DefendMemberOf(event->host.get(Hive)))
     	}
 	}
-Lone_Rock
-	Uncommon : DeadMeat +10% in 50R 
+Lone_Rock          3FD & 3DeadMeat; forest->lone_rock;
 	++Wolf {
 		wild
 		STR 7-9 | DEX 4-6 | CON 4-6 | KNW 1-2 | MND 3-4 | CRM 2
@@ -66,21 +39,20 @@ Lone_Rock
     	  event->host.gain(new Skills.DefendMemberOf(event->host.get(Pack)))
     	}
 	}
-	+Dire Wolf {
+	+Dire_Wolf {
 		wild
 		TerritorialAggression
 		STR 9-12 | DEX 5-7 | CON 6-8 | KNW 3-4 | MND 2-3 | CRM 2
 	}
-Bear_Den
-	Uncommon : Honey +20% in 25R | Berries +10% in 50R 
-	++Bear Cub {
+Bear_Den 3FD & 2Honey; forest->bear_den;
+	++Bear_Cub {
 		wild
 		STR 4-6 | DEX 3-4 | CON 8-10 | KNW 1-2 | MND 3-4 | CRM 2
 		load {
     	  event->host.join(null,event->host->spawn.get(Cubs, new Associations.Cubs.Factory()))
     	}
 	}
-	+Mother Bear {
+	+Mother_Bear {
 		wild
 		STR 9-12 | DEX 4-5 | CON 11-13 | KNW 3-4 | MND 2-3 | CRM 2
 		TerritorialAggression
@@ -88,9 +60,8 @@ Bear_Den
 		  event->host.gain(new Skills.DefendMemberOf(event->host->spawn.get(Cubs, new Associations.Cubs.Factory())))
 		}
 	}
-Elder_Stag_Pedestal
-	Legendary
-	-Elder Stag {
+Elder_Stag_Pedestal [1,2] 30FD; forest->ethereal_pedestal;
+	-Elder_Stag {
 		ethereal
 		STR 20-25 | DEX 15-20 | CON 20-25 | KNW 25-30 | MND 10-15 | CRM 15-20
 	}

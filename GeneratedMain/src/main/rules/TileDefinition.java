@@ -15,11 +15,22 @@ public class TileDefinition extends ConcreteRule {
 	}
 	@Override
 	public void setup(){
-		isSilent(true);
 		set(
 				new ChainParser(
 					new AddTokenToListParser(
 						AssociationTokens.NAME,"tileName","tile_names"),
+					new OptionalParser(
+							TileBraces.TILE_DIMENSIONS),
+					new OptionalParser(
+							
+								new ChainParser(
+									TileTokens.PASSABLE,
+									GeneralTokens.SEMICOLON)),
+					new OptionalParser(
+							
+								new ChainParser(
+									Rules.tile_rate,
+									GeneralTokens.SEMICOLON)),
 					new OptionalParser(
 							
 								new ChainParser(
@@ -30,7 +41,8 @@ public class TileDefinition extends ConcreteRule {
 												new ChainParser(
 													TileTokens.TILE_IMAGE_ACCESS,
 													new AddTokenParser(
-														AssociationTokens.NAME,"imageId"))))),
+														AssociationTokens.NAME,"imageId"))),
+									GeneralTokens.SEMICOLON)),
 					new ManyParser(
 							Rules.tile_element)));
 

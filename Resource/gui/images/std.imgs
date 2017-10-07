@@ -7,5 +7,19 @@ monsters_1 8x4 = monsters_1.png
 	wolf->walkLeft  : CycleBoundedX  4 0 1  3 0 5 0
 foliage 8x4 = foliage.png
 	grass             : Stationary 0 0
-	grass->westEdge   : Stationary 1 0
-	grass->eastEdge   : Stationary 2 0
+	path              : Stationary 1 0
+	long_grass        : Stationary 2 0
+	tree              : Stationary 3 0
+forest 8x4 = forest.png
+	lone_rock         : Stationary 0 0
+	bear_den          : Stationary 1 0
+	ethereal_pedestal : Stationary 2 0-1
+outside 8x4 = outside.png
+	water		      : Stationary 0 0
+	lake	          : Stationary 1-2 0-1
+	bridge	          : Stationary 3 0
+chests 8x4 = chests.png
+	minor			  : Stationary 0 0
+	major			  : Stationary 1 0
+	treasure		  : Stationary 2 0
+	legendary		  : Stationary 3 0

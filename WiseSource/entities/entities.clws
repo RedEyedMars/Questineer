@@ -20,7 +20,7 @@ class 'packageName'."misc" Int {
 class 'packageName'."entities" Entities {
   @Entity createEntity(String "entityName"){
     return null;
-  } 
+  }
 > Class declaration(IToken declarationToken){
     StringBuilder entityNameBuilder = new StringBuilder();
 	declarationToken : element : entityName {
@@ -103,6 +103,50 @@ class 'packageName'."entities" Entity \Object Source Loaddable Tickable {
 	void release(Source "source"){}
 	String getName(){}
   }
+  class Event // {
+    class Id // {}
+    Entity->Event->Id getId(){
+      return null;
+    }
+    class MovedToNewArea / Entity->Event / {
+      @Entity->Event->Id \id = new Entity->Event->Id();
+      Entity->Event->Id getId(){
+        return \id;
+      }
+      Area oldArea = null;
+      Area newArea = null;
+    }
+    class FailedToMove / Entity->Event / {
+      class Id / Entity->Event->Id / {}
+      @Entity->Event->FailedToMove->Id \id = new Entity->Event->FailedToMove->Id();
+      Entity->Event->Id getId(){
+        return \id;
+      }
+      Tile causalTile = null;
+      class TileHasOccupant / Entity->Event->FailedToMove / {
+        @Entity->Event->FailedToMove->Id \id = new Entity->Event->FailedToMove->Id();
+        TileHasOccupant *(Tile superCausalTile, Entity initialOccupant){
+          \super(superCausalTile);
+          causalOccupant = initialOccupant;
+        }
+        Entity->Event->Id getId(){
+          return \id;
+        }
+        Entity causalOccupant = null;
+      }
+      class TerrainImpassable / Entity->Event->FailedToMove / {
+        @Entity->Event->FailedToMove->Id \id = new Entity->Event->FailedToMove->Id();
+        Entity->Event->Id getId(){
+          return \id;
+        }
+        TerrainImpassable *(Tile superCausalTile, Tiles->Terrain initialTerrain){
+          \super(superCausalTile);
+          causalTerrain = initialTerrain;
+        }
+        Tiles->Terrain causalTerrain = null;
+      }
+    }
+  }
   @Integer ALIVE = 0;
   @Integer DEAD  = 1;
   String name = null;
@@ -112,11 +156,12 @@ class 'packageName'."entities" Entity \Object Source Loaddable Tickable {
   ~Tile "spawn" = null;
   ~Item->List "equippedItems" = new Item->List();
   ~Skill focusSkill = null;
-  ~Environment->Location location = new Environment->Location(-1001f,-1001f,null,this);
+  ~Environment->Location location = new Environment->Location(this);
   ~\EntityMap->\_Reason "relationships";
   ~Activity currentActivity = null;
   ~Integer currentActivityIndex = -1;
   ~Activity->List activityList = new Activity->List();
+  ~ArrayList<Entity\>Event> events = new ArrayList<Entity\>Event>();
   
   Float getItemDamage(){
     Float "sum" = 0f;
@@ -145,9 +190,25 @@ class 'packageName'."entities" Entity \Object Source Loaddable Tickable {
 	"weightHeld" = "weightHeld" \+ "item".getWeight().use(this);
 	"item".on(new Events->\Unequip(this,"item"));
   }
-  void rememberIncomingNode(Node in, Node to){
+  void addEvent(Entity->Event event){
+    events.add(event);
+  }
+  void exploreEntryPoint(Tiles->EntryPoint point){
     if currentActivity != null {
-      currentActivity.rememberIncomingNode(in,to);
+      currentActivity.rememberEntryPoint(point);
+    }
+  }
+  void explore(Area newArea){
+    if currentActivity != null {
+      currentActivity.explore(newArea);
+    }
+  }
+  Boolean hasExplored(Area area){
+    if currentActivity != null {
+      return currentActivity.hasExplored(area);
+    } 
+    else {
+      return false;
     }
   }
   void load(){
@@ -158,10 +219,25 @@ class 'packageName'."entities" Entity \Object Source Loaddable Tickable {
       currentActivity = activityList.get(0);
       currentActivityIndex = 0;
     }
-    if currentActivity!=null {
-      currentActivity.on(new Events->\Tick(this));
+    
+    if events.isEmpty() == false {
+      if currentActivity!=null {
+        for Entity->Event event: events {
+          currentActivity.listen(this,event);
+        }
+        currentActivity.on(new Events->\Tick(this));
+      }
+      else {
+        for Entity->Event event: events {
+          \listen(event);
+        }
+      }
     }
     \on(new Events->\Tick(this));
+  }
+  void listen(Entity->Event event){
+    if event.getId() == Entity->Event->FailedToMove.id {
+    }
   }
   void join(Entity recruiter, Association newAssociation){
     newAssociation.add(this);
@@ -189,6 +265,12 @@ class 'packageName'."entities" Entity \Object Source Loaddable Tickable {
       currentActivity = null;
       currentActivityIndex = -1;
     }
+  }
+  Boolean hasCorpse(){
+    return false;
+  }
+  Tiles->Terrain->Corpse getCorpse(){
+    return null;
   }
 > void setup(ParseContext data){
 	List<String> namesToAdd = new ArrayList<String>();

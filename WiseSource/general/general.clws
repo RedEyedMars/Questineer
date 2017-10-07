@@ -58,6 +58,14 @@ class 'packageName'."misc" Range {
   @Float getRandomFloat(){
     return "(float)Math.random()";
   }
+  @Integer getRandom(Integer lowerBound, Integer upperBound){
+    if lowerBound >= upperBound {
+      return lowerBound;
+    }
+    else {
+      return "(int)((upperBound-lowerBound)*Math.random())+lowerBound";
+    }
+  }
   @Integer normalize(Double value){
     if value > 0.001 {
       return 1;

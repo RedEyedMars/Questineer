@@ -365,7 +365,7 @@ class 'packageName'."gui" Gui {
         return \getImageTexture();
       }
     }
-    class States // Renderable {
+    class States // Renderable Statable {
       ~Gui->Renderable current = null;
       @Integer DEFAULT = -1;
       void animate(){
@@ -378,6 +378,12 @@ class 'packageName'."gui" Gui {
         return current.getTexture();
       }
       void changeState(Integer newState){
+      }
+      Gui->Image->States asStates(){
+        return this;
+      }
+      Gui->Drawable asStates(Gui->Drawable drawable){
+        return drawable.image(this);
       }
     }
     ~class AnimationType / / Renderable {
@@ -436,6 +442,18 @@ class 'packageName'."gui" Gui {
         }
         Images->'imageClassName' += Images->'imageClassName'->States asStates() { return new Images->'imageClassName'->States(); }
         Images->'imageClassName' += Gui->Drawable asStates(Gui->Drawable drawable) { return drawable.image(new Images->'imageClassName'->States()); }
+        Images->'imageClassName'->States += Images->'imageClassName'->States asStates() {
+          Images->'imageClassName'->States result = new Images->'imageClassName'->States();
+          result.setCurrent(current);
+          result.setCurrentId(currentId);
+          return result;
+        }
+        Images->'imageClassName'->States += Gui->Drawable asStates(Gui->Drawable drawable) {
+          Images->'imageClassName'->States result = new Images->'imageClassName'->States();
+          result.setCurrent(current);
+          result.setCurrentId(currentId); 
+          return drawable.image(result);
+        }
         
         Images->'imageClassName' += Gui->Drawable asDrawable(Gui->Drawable drawable) { return drawable.image(this); }
         ~Boolean isFirst = true;
@@ -446,18 +464,63 @@ class 'packageName'."gui" Gui {
           Images->'imageClassName'->States->*.appendToBody({\setCurrent("defaultState");});
         }
         input : atom : animation_state {
-          Parameters arguments = new Parameters ();
+          ~List< Parameters > arguments = new ArrayList< Parameters >();
+          arguments.add( new Parameters () );
+          Parameters multipleArguments = new Parameters ();
+          Parameters xArgumentLayer = new Parameters();
+          List< Parameters > yArgumentLayers = new ArrayList< Parameters >();
+          ~Integer yArgumentLayerSize = 0;
+          ~Integer valueIndex = 0;
           atom : element : animation_variable_value {
+            element : value : range {
+              List< Parameters > oldArguments = arguments;
+              arguments = new ArrayList<Parameters >();
+              Integer lowerBound = Integer.parseInt('value->"lowerBound"');
+              Integer upperBound = Integer.parseInt('value->"upperBound"');
+              for Parameters args: oldArguments {
+                if valueIndex == 1 {
+                  yArgumentLayerSize = upperBound\-lowerBound \+ 1;
+                }
+                for Integer i <= upperBound\-lowerBound {
+                  Parameters newArg = new Parameters ();
+                  newArg.addAll(args);
+                  Integer index = i+lowerBound;
+                  newArg.add(|'index'|);
+                  arguments.add(newArg);
+                  if valueIndex == 0 {
+                    Parameters yArgumentLayer = new Parameters ();
+                    yArgumentLayers.add(yArgumentLayer);
+                    xArgumentLayer.add(|"new Gui.Renderable[]{"+`yArgumentLayer`+"}"|);
+                  }
+                }
+              }
+            }
             element : value : INTEGER {
-              arguments.add(|'value'|);
+              for Parameters args: arguments {
+                args.add(|'value'|);
+              }
+              if valueIndex == 0 {
+                Parameters yArgumentLayer = new Parameters ();
+                yArgumentLayers.add(yArgumentLayer);
+                xArgumentLayer.add(|"new Gui.Renderable[]{"+`yArgumentLayer`+"}"|);
+              }
+              else if valueIndex == 1 {
+                yArgumentLayerSize = 1 ;
+              }
             }
             element : value : FLOAT {
-              arguments.add(|'value'|);
+              for Parameters args: arguments {
+                args.add(|'value'|);
+              }
             }
             element : value : quote {
-              arguments.add(|'' 'value' ''|);
+              for Parameters args: arguments {
+                args.add(|'' 'value' ''|);
+              }
             }
+            valueIndex \+= 1;
           }
+          multipleArguments.add(|"new Gui.Renderable[][]{"+`xArgumentLayer`+"}"|);
           String creationMethod = "create"\+'atom->"animationTypeName"';
           ~String stateIdFind = "";
           StringBuilder flipToMethod = new StringBuilder();
@@ -473,62 +536,104 @@ class 'packageName'."gui" Gui {
             flipToMethod.append(underscore);
             flipToMethod.append(stateIdFind);
             underscore = "_";
-            if animationStateIndices.containsKey(stateIdFind) == false {
+            
+            if arguments.size() == 1{
+              if animationStateIndices.containsKey(stateIdFind) == false {
+                String stateId = stateIdFind;
+                animationStateIndices.put(stateId,animationStateIndex);
+                Gui->Image->States += @Integer 'stateId' = 'animationStateIndex'
+                animationStateIndex \+= 1;
+              }
+              if animationStateIndices.containsKey('flipToMethod') == false {
+                String stateId = 'flipToMethod';
+                animationStateIndices.put(stateId,animationStateIndex);
+                Gui->Image->States += @Integer 'stateId' = 'animationStateIndex'
+                animationStateIndex \+= 1;
+              }
+            }
+            else {
+              for Integer i < arguments.size() {
+                if animationStateIndices.containsKey(stateIdFind\+"_"\+i) == false {
+                  String stateId = stateIdFind\+"_"\+i;
+                  animationStateIndices.put(stateId,animationStateIndex);
+                  Gui->Image->States += @Integer 'stateId' = 'animationStateIndex'
+                  animationStateIndex \+= 1;
+                }
+                if animationStateIndices.containsKey('flipToMethod'\+"_"\+i) == false {
+                  String stateId = 'flipToMethod'\+"_"\+i;
+                  animationStateIndices.put(stateId,animationStateIndex);
+                  Gui->Image->States += @Integer 'stateId' = 'animationStateIndex'
+                  animationStateIndex \+= 1;
+                }
+              }
+            }
+          }
+          if arguments.size() == 1{
+            String stateId = stateIdFind;
+            String previousStateId = previousStateIdFind;
+            Integer animationStateIndexValue = animationStateIndices.get('flipToMethod');
+            Integer previousStateIndexValue = previousStateIndex;
+            Images->'imageClassName'->States += Gui->Renderable 'flipToMethod'+"State" = \Images.'imageName'.'creationMethod'(`arguments.get(0)`)
+            if isFirst {
+              firstFlipMethod = 'flipToMethod';
+            }
+            \declareFlipMethod(isFirst, imageClassName, 'flipToMethod', 'flipToMethod'+"State", stateId, animationStateIndexValue, previousStateId, previousStateIndexValue, firstFlipMethod);
+          }
+          else {
+            ~Integer realIndex = 0;
+            for Parameters args: arguments {
+              Integer indexValue = realIndex;
               String stateId = stateIdFind;
-              animationStateIndices.put(stateId,animationStateIndex);
-              Gui->Image->States += @Integer 'stateId' = 'animationStateIndex'
-              animationStateIndex \+= 1;
+              String previousStateId = previousStateIdFind;
+              Integer animationStateIndexValue = animationStateIndices.get('flipToMethod'\+"_"\+realIndex);
+              Integer previousStateIndexValue = previousStateIndex;
+              Images->'imageClassName'->States += Gui->Renderable 'flipToMethod'+"State_"+'indexValue' = \Images.'imageName'.'creationMethod'(`args`)
+              yArgumentLayers.get(realIndex / yArgumentLayerSize).add(|'flipToMethod'+"State_"+'indexValue'|);
+              \declareFlipMethod(isFirst, imageClassName, 'flipToMethod'\+"_"\+realIndex, 'flipToMethod'+"State_"+'indexValue', stateId\+"_"\+realIndex, animationStateIndexValue, previousStateId, previousStateIndexValue, firstFlipMethod);
+              realIndex \+= 1;
             }
-            if animationStateIndices.containsKey('flipToMethod') == false {
-              String stateId = 'flipToMethod';
-              animationStateIndices.put(stateId,animationStateIndex);
-              Gui->Image->States += @Integer 'stateId' = 'animationStateIndex'
-              animationStateIndex \+= 1;
-            }
-          }
-          String stateId = stateIdFind;
-          String previousStateId = previousStateIdFind;
-          Integer animationStateIndexValue = animationStateIndices.get('flipToMethod');
-          Integer previousStateIndexValue = previousStateIndex;
-          Images->'imageClassName'->States += Gui->Renderable 'flipToMethod'+"State" = \Images.'imageName'.'creationMethod'(`arguments`)
-          Images->'imageClassName'->States += void 'flipToMethod'(){
-            \setCurrent('flipToMethod'+"State");
-            "currentId" = 'animationStateIndexValue';
-          }
-          if isFirst {
-            Images->'imageClassName'->States->*.appendToBody({'flipToMethod'();});
-            firstFlipMethod = 'flipToMethod';
-            Images->'imageClassName'->States->*"changeState".appendToBody({
-              if "currentId" == 'previousStateIndexValue' && "newState"  == 'animationStateIndices.get(stateId)' {
-                'flipToMethod'();
-              }
-            });
-          } 
-          else {
-            Images->'imageClassName'->States->*"changeState".appendToBody({
-              else if "currentId" == 'previousStateIndexValue' && "newState"  == 'animationStateIndices.get(stateId)' {
-                'flipToMethod'();
-              }
-            });
-          }
-          if previousStateId.equals("") {
-            Images->'imageClassName'->States->*"changeState".appendToBody({
-              else if "currentId" == 'animationStateIndexValue' && "newState"  == 'previousStateIndexValue' {
-                'firstFlipMethod'();
-              }
-            });
-          }
-          else {
-            Images->'imageClassName'->States->*"changeState".appendToBody({
-              else if "currentId" == 'animationStateIndexValue' && "newState"  == 'previousStateIndexValue' {
-                'previousStateId'();
-              }
-            });
+            #Images->'imageClassName' += Gui->Renderable 'flipToMethod'+"State" = \Images.'imageName'."createMultiple"(`multipleArguments`)
+            #
           }
           isFirst = false;
         }
       }
       print catch  IO {}
+    }
+>   void declareFlipMethod(Boolean isFirst, String imageClassName, String flipToMethod, String realStateName, String stateId, Integer animationStateIndexValue, String previousStateId, Integer previousStateIndexValue, String firstFlipMethod){
+      Images->'imageClassName'->States += void 'flipToMethod'(){
+        \setCurrent('realStateName');
+        "currentId" = 'animationStateIndexValue';
+      }
+      if isFirst {
+        Images->'imageClassName'->States->*.appendToBody({'flipToMethod'();});
+        Images->'imageClassName'->States->*"changeState".appendToBody({
+          if "currentId" == 'previousStateIndexValue' && "newState"  == 'animationStateIndices.get(stateId)' {
+            'flipToMethod'();
+          }
+        });
+      } 
+      else {
+        Images->'imageClassName'->States->*"changeState".appendToBody({
+          else if "currentId" == 'previousStateIndexValue' && "newState"  == 'animationStateIndices.get(stateId)' {
+            'flipToMethod'();
+          }
+        });
+      }
+      if previousStateId.equals("") {
+        Images->'imageClassName'->States->*"changeState".appendToBody({
+          else if "currentId" == 'animationStateIndexValue' && "newState"  == 'previousStateIndexValue' {
+            'firstFlipMethod'();
+          }
+        });
+      }
+      else {
+        Images->'imageClassName'->States->*"changeState".appendToBody({
+          else if "currentId" == 'animationStateIndexValue' && "newState"  == 'previousStateIndexValue' {
+           'previousStateId'();
+          }
+        });
+      }
     }
 >   void declareTextureBuffer(String frameWidth, String frameHeight){
       Float width = Float.parseFloat(frameWidth);
@@ -678,7 +783,7 @@ class 'packageName'."gui" Gui {
   }
   class Drawable // {
     ~FloatBuffer vertexBuffer = null;
-    ~List<Gui\>Drawable\>ChangeListener> changeListeners = new ArrayList<Gui\>Drawable\>ChangeListener>();
+    ~List<Gui\>Drawable\>ChangeListener> changeListeners = null;
     ~Float visualX = 0f;
     ~Float visualY = 0f;
     ~Float visualWidth = 1f;
@@ -687,11 +792,24 @@ class 'packageName'."gui" Gui {
     ~Float visualRotationPointY = 0f;
     ~Float visualAngle = 0f;
     ~Float angle = 0f;
+    
+    ~Renderer->Layer displayLayer = null;
     void display(){
-      Renderer.botLayer.add(this);
+      if displayLayer == null {
+        displayLayer = Renderer.botLayer;
+        displayLayer.add(this);
+      }
     }
     void display(Renderer->Layer layer){
-      layer.add(this);
+      if displayLayer == null {
+        layer = Renderer.botLayer;
+        displayLayer.add(this);
+      }
+      else if displayLayer != layer {
+        displayLayer.remove(this);
+        displayLayer = layer;
+        displayLayer.add(this);
+      }
     }
     void render(){
       
@@ -719,6 +837,9 @@ class 'packageName'."gui" Gui {
       return null;
     }
     void add(Gui\>Drawable\>ChangeListener changeListener){
+      if changeListeners == null {
+        changeListeners = new ArrayList<Gui\>Drawable\>ChangeListener>();
+      }
       changeListeners.add(changeListener);
     }
     class ChangeListener // {
@@ -735,28 +856,38 @@ class 'packageName'."gui" Gui {
     }
 >   void setup(){
       Gui->Drawable->*"setVisualX".appendToBody({
-        for Gui->Drawable->ChangeListener changeListener : changeListeners {
-          changeListener.setVisualX("newVisualX");
+        if changeListeners != null {
+          for Gui->Drawable->ChangeListener changeListener : changeListeners {
+            changeListener.setVisualX("newVisualX");
+          }
         }
       });
       Gui->Drawable->*"setVisualY".appendToBody({
-        for Gui->Drawable->ChangeListener changeListener : changeListeners {
-          changeListener.setVisualY("newVisualY");
+        if changeListeners != null {
+          for Gui->Drawable->ChangeListener changeListener : changeListeners {
+            changeListener.setVisualY("newVisualY");
+          }
         }
       });
       Gui->Drawable->*"setVisualWidth".appendToBody({
-        for Gui->Drawable->ChangeListener changeListener : changeListeners {
-          changeListener.setVisualWidth("newVisualWidth");
+        if changeListeners != null {
+          for Gui->Drawable->ChangeListener changeListener : changeListeners {
+            changeListener.setVisualWidth("newVisualWidth");
+          }
         }
       });
       Gui->Drawable->*"setVisualHeight".appendToBody({
-        for Gui->Drawable->ChangeListener changeListener : changeListeners {
-          changeListener.setVisualHeight("newVisualHeight");
+        if changeListeners != null {
+          for Gui->Drawable->ChangeListener changeListener : changeListeners {
+            changeListener.setVisualHeight("newVisualHeight");
+          }
         }
       });
       Gui->Drawable->*"setAngle".appendToBody({
-        for Gui->Drawable->ChangeListener changeListener : changeListeners {
-          changeListener.setAngle("newAngle");
+        if changeListeners != null {
+          for Gui->Drawable->ChangeListener changeListener : changeListeners {
+            changeListener.setAngle("newAngle");
+          }
         }
       });
       Gui->Drawable->*"setAngle".prependToBody({
@@ -940,12 +1071,14 @@ class 'packageName'."gui" Gui {
         imageIndex \+= 1;
       }
       Drawables->'multipleClassName'->Image->*.appendToBody({
+        if changeListeners != null {
         for Gui->Drawable->ChangeListener changeListener : changeListeners {
 		  "changeListener".setVisualX(0f);
 		  "changeListener".setVisualY(0f);
 		  "changeListener".setVisualWidth(1f);
 		  "changeListener".setVisualHeight(1f);
 		  "changeListener".setAngle(0f);
+		}
 		}
       });
       Drawables->'multipleClassName'->*"image".appendToBody({

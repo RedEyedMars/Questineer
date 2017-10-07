@@ -20,7 +20,7 @@ entityBrace-s are Braced
 	[{,}] as ENTITY_DEFINITION with entity_definition*
 
 entity_declaration
-	NEWLINE* (NAME as entityName+) NEWLINE* ENTITY_DEFINITION
+	NEWLINE* NAME as entityName NEWLINE* ENTITY_DEFINITION
 entity_definition
 	NEWLINE
 	COMMENTS

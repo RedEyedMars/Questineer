@@ -19,10 +19,8 @@ public class EntityDeclaration extends ConcreteRule {
 				new ChainParser(
 					new ManyParser(
 							AssociationTokens.NEWLINE),
-					
-							new MultipleParser(
-									new AddTokenParser(
-										AssociationTokens.NAME,"entityName")),
+					new AddTokenParser(
+						AssociationTokens.NAME,"entityName"),
 					new ManyParser(
 							AssociationTokens.NEWLINE),
 					EntityBraces.ENTITY_DEFINITION));

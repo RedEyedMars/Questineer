@@ -88,7 +88,7 @@ class 'packageName'."entities"."behaviours"."quests" Quests {
     String description = 'declarationToken->"description"';
     Quests += class questName / Quest / {
       void generateDestinations(Entity quester){}
-      Boolean fulfill(Entity quester, Node destinationReached){
+      Boolean fulfill(Entity quester, Area destinationReached){
         return true;
       }
     }
@@ -99,8 +99,8 @@ class 'packageName'."entities"."behaviours"."quests" Quests {
       Statement tileClause = new Statement();
       tileClause.brace();
       tileClause.set("||");
-      Quests->'questName' += ~Set<Node> '"visited"+tileCount' = new HashSet<Node>()
-      Quests->'questName' += ~Set<Node> '"toVisit"+tileCount' = new HashSet<Node>()
+      Quests->'questName' += ~Set<Area> '"visited"+tileCount' = new HashSet<Area>()
+      Quests->'questName' += ~Set<Area> '"toVisit"+tileCount' = new HashSet<Area>()
       element : atom : quest_tile_description {
         String tileName = 'atom->"tileName"'.replace(" ","");
         String mapName = 'atom->"mapName"'.replace(" ","");

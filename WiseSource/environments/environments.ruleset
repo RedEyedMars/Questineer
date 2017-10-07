@@ -6,23 +6,34 @@ mapToken-s
 	[.*] as WILD
 	"\n" as NEWLINE
 	"\n\t" as NEWTAB
-	"\t" as TAB
+	"\n\t\t" as NEWTABTAB
+	"\n\t\t\t" as NEWTABTABTAB
 	"maps" as MAPS
-	"map" as MAP
-	"Connection" as CONNECTION
-	"." as DOT
-	"+" as PLUS
-	"-" as MINUS
 	":" as COLON
-	"(" as OPEN_PARA
-	")" as CLOSE_PARA
+	"Rectangle" as RECTANGLE
+	"-" as DASH
+	"," as COMMA
+	"Entry" as ENTRY
+	"Exits" as EXITS
+	"Patches" as PATCHES
+	"%" as PERCENT
+	"map" as MAP
+
+area_shape_name
+	RECTANGLE
+
 mapBrace-s are Braced
 	[,.] as MAP_FILE with WILD as map_file_name
+	[[,]] as AREA_DIMENSIONS with ( INTEGER as lowerBound ( DASH INTEGER ) as upperBound? ) as widthRange COMMA ( INTEGER as lowerBound ( DASH INTEGER ) as upperBound? ) as heightRange
+	[(,)] as PATCH_PROBABILITY with ( INTEGER as amount COLON INTEGER as percent PERCENT ) as probability ( COMMA INTEGER as amount COLON INTEGER as percent PERCENT ) as probability*
 mapImport-s are Import
-	[><<\"environments/maps/\",map_file_name,\".maps\">>\n] as IMPORT_MAP from (NEWLINE|COMMENTS|map_header|map_connection|map_declaration)*; with MAP_FILE MAPS
+	[><<\"environments/maps/\",map_file_name,\".maps\">>\n] as IMPORT_MAP from (NEWLINE|COMMENTS|map_header|area_declaration)*; with MAP_FILE MAPS
 map_header
 	NAME as mapName in map_names IMPORT_TILE
-map_connection
-	CONNECTION OPEN_PARA tile_symbol as path_symbol CLOSE_PARA ( NEWTAB ( PLUS+ tile_symbol ) as benign_symbol | NEWLINE+ )*
-map_declaration
-	NEWLINE* (NAME as mapElementName*) COLON NEWLINE* ( tile_symbol+ ) as line ( NEWTAB tile_symbol+) as line*
+area_declaration
+	NEWLINE* NAME as areaName COLON ( NEWTAB area_shape_name AREA_DIMENSIONS ( NEWTABTAB area_element)* )*
+area_element
+	( ENTRY tile_name ( PIPE tile_name )* ( INTEGER as lowerBound ( DASH INTEGER ) as upperBound? EXITS ) as range? ) as  entryPointGeneration
+	PATCHES PATCH_PROBABILITY COLON ( NEWTABTABTAB patch_element )*
+patch_element
+	tile_name AREA_DIMENSIONS

@@ -3,7 +3,7 @@ class 'packageName'."game" Game \Object InputHandler->Events->KeyboardEvent->Lis
   ~List<Environment> environments = new ArrayList<Environment>();
   ~Double lastTick = \System.currentTimeMillis()/1000.0;
   ~Double thisTick = lastTick;
-  ~Gui->Drawable court = null;
+  ~Tile mosiac = null;
   @void main('mainStringArgs' args){
     new Gui();
   }
@@ -13,8 +13,6 @@ class 'packageName'."game" Game \Object InputHandler->Events->KeyboardEvent->Lis
 	for Environment environment:environments {
 	  environment.load();
 	}
-	court = Drawables.court.image(Images.foliage);
-	Renderer.baseLayer.add(court);
 	InputHandler.addKeyboardListener(this);
 	InputHandler.addMouseListener(this);
   }
@@ -22,10 +20,6 @@ class 'packageName'."game" Game \Object InputHandler->Events->KeyboardEvent->Lis
   void listen(InputHandler->Events->KeyboardEvent->Release event) {
   }
   void listen(InputHandler->Events->KeyboardEvent->Press event) {
-	if event.getKeyChar()== 113 {
-	  angle += 0.1f;
-	  court.setAngle(angle);
-	}
   }
   void listen(InputHandler->Events->MouseEvent->Release event) {
   }
@@ -44,40 +38,8 @@ class 'packageName'."game" Game \Object InputHandler->Events->KeyboardEvent->Lis
     List<Tile> tileList = environments.get(0).getTiles().get(Tiles->\Forest->\Path.id);
     if tileList!=null  && tileList.isEmpty()==false {
       for Integer i < tileList.size() {
-        Tile tile = tileList.get(i);
-        Tiles->\Forest->\Path path = "(Tiles.Forest.Path)tileList".get(i);
-        if path.getHome()!=null {
-          path.getDrawable().display();
-		}
       }
     }
     lastTick = thisTick;
-  }
-  class TestGui / JFrame / {
-    ~Game game = null;
-    @TestGui gui = null;
-    TestGui *(Game initialParent){
-      \super(''"Questineer"'');
-      \setGame(initialParent);
-      \setSize(600,400);
-      \setVisible(true);
-      \setDefaultCloseOperation(this."EXIT_ON_CLOSE");
-      gui = this;
-    }
-    void paint(Graphics g){
-      List<Tile> tileList = game.getEnvironments().get(0).getTiles().get(Tiles->\Forest->\Path.id);
-      if tileList!=null  && tileList.isEmpty()==false {
-        for Integer i < tileList.size() {
-          Tile tile = tileList.get(i);
-          Tiles->\Forest->\Path path = "(Tiles.Forest.Path)tileList".get(i);
-          if path.getHome()!=null {
-			g.drawLine("(int)(path.getX()+100), (int)(path.getY()+100), (int)(path.getHome().getX()+100), (int)(path.getHome().getY()+100)");
-		  }
-		  else {
-			g.drawOval("(int)(path.getX()+100), (int)(path.getY()+100), 3, 3");
-		  }
-        }
-      }
-    }
   }
 }

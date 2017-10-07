@@ -14,17 +14,21 @@ class 'packageName'."entities"."behaviours"."activities" Activity \Object Source
   }
   ~String name = null;
   ~String description = null;
-  ~Map<Node,Set<Node>> nodeStoppers = new HashMap<Node,Set<Node>>();
+  ~Set<Tiles\>EntryPoint> exploredPoints = new HashSet<Tiles\>EntryPoint>();
+  ~Set<Area> exploredAreas = new HashSet<Area>();
   ~Entity targetEntity = null;
   ~Boolean failed = false;
   Boolean hasTarget() {
     return targetEntity != null;
   }
-  void rememberIncomingNode(Node in, Node to){
-    if nodeStoppers.containsKey(in){
-      nodeStoppers.put(in, new HashSet<Node>());
-    }
-    nodeStoppers.get(in).add(to);
+  void rememberEntryPoint(Tiles->EntryPoint point){
+    exploredPoints.add(point);
+  }
+  void explore(Area newArea){
+    exploredAreas.add(newArea);
+  }
+  Boolean hasExplored(Area area){
+    return exploredAreas.contains(area);
   }
   Entity getTarget(Entity host, \EntityCriteria targetCriteria){
     return host.getLocation().getClosestEntity(targetCriteria);
@@ -54,6 +58,10 @@ class 'packageName'."entities"."behaviours"."activities" Activity \Object Source
   void add(Usable newUsable){
   }
   void remove(Usable newUsable){
+  }
+  void listen(Entity host, Entity->Event event){
+    if event.getId() == Entity->Event->FailedToMove.id {
+    }
   }
   void on(Events->\Tick event){
   	Entity host = event.getHost();
