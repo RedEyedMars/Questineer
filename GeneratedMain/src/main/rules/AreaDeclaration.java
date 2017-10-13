@@ -21,6 +21,9 @@ public class AreaDeclaration extends ConcreteRule {
 							AssociationTokens.NEWLINE),
 					new AddTokenParser(
 						AssociationTokens.NAME,"areaName"),
+					new AddTokenParser(
+						AnimationTokens.INTEGER,"chance"),
+					GeneralTokens.PERCENT,
 					PaymentTokens.COLON,
 					new ManyParser(
 							

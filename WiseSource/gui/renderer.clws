@@ -140,7 +140,7 @@ class 'packageName'."gui" Renderer {
   ~Renderer->Animator animator = null;
   ~Float viewX = 0f;
   ~Float viewY = 0f;
-  ~Float viewZ = -10f;
+  ~Float viewZ = 0f;
   ~Float aspectRatio = 0f;
   Integer viewportX = 0;
   Integer viewportY = 0;

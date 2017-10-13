@@ -134,7 +134,6 @@ class 'packageName'."environments" Tiles {
     String tileName = ^declarationToken->"tileName";
     Tiles->'mapName' += class 'packageName'."environments" tileName tileExtendsClass {
       @Tile->Id id = new tileExtendsClass->Id();
-      ~Tile above = null;
       Tile->Id getId(){
         return id;
       }
@@ -166,8 +165,18 @@ class 'packageName'."environments" Tiles {
         newState.append('element');
         underscore = "_";
       }
+      if declarationToken->"width" != null {
+        newState.append("_0");
+      }
       stateChangeBody.add(|imageStates.'newState'();|);
       stateChangeBody.add(|"drawable" = Drawables.isosquare.image("imageStates");|);
+      Float factor = 6f;
+      Float xFactor = factor*1.85f;
+      Float yFactor = factor*3.85f;
+      stateChangeBody.add(|"drawable".setVisualX("(float)(getX()+getY())/"+'xFactor'+"f");|);
+      stateChangeBody.add(|"drawable".setVisualY("(float)(getY()-getX())/"+'yFactor'+"f");|);
+      stateChangeBody.add(|"drawable".setVisualWidth("(float)getWidth()/"+'factor'+"f");|);
+      stateChangeBody.add(|"drawable".setVisualHeight("(float)getHeight()/"+'factor'+"f");|);
       Tiles->'mapName'->'tileName' += Gui->Drawable getDrawable(){
         if "drawable" ==  null `stateChangeBody`
         return "drawable";

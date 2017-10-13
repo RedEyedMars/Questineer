@@ -31,7 +31,7 @@ mapImport-s are Import
 map_header
 	NAME as mapName in map_names IMPORT_TILE
 area_declaration
-	NEWLINE* NAME as areaName COLON ( NEWTAB area_shape_name AREA_DIMENSIONS ( NEWTABTAB area_element)* )*
+	NEWLINE* NAME as areaName INTEGER as chance PERCENT COLON ( NEWTAB area_shape_name AREA_DIMENSIONS ( NEWTABTAB area_element)* )*
 area_element
 	( ENTRY tile_name ( PIPE tile_name )* ( INTEGER as lowerBound ( DASH INTEGER ) as upperBound? EXITS ) as range? ) as  entryPointGeneration
 	PATCHES PATCH_PROBABILITY COLON ( NEWTABTABTAB patch_element )*

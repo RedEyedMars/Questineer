@@ -1,4 +1,5 @@
 import tiles.clws
+import areas.clws
 
 class 'packageName'."environments" Environment \Object Loaddable Tickable {
   interface Movable // {
@@ -21,6 +22,7 @@ class 'packageName'."environments" Environment \Object Loaddable Tickable {
       areaMap.put(newArea.getId(), new ArrayList<Area>());
     }
     areaMap.get(newArea.getId()).add(newArea);
+    newArea.setParent(this);
   }
   Area getArea(Integer index){
     return areas.get(index);
@@ -344,8 +346,10 @@ class 'packageName'."environments" Environment \Object Loaddable Tickable {
     if startArea == null {
       startArea = newArea;
     }
-    newArea.load();
-    \add(newArea);
+    if newArea != null {
+      newArea.load();
+      \add(newArea);
+    }
   }
   void tick(Double millisSinceLastFrame){
     for Area activeArea: activeAreas {
@@ -392,324 +396,25 @@ class 'packageName'."environments" Environment \Object Loaddable Tickable {
     }
     Areas->\mapName += class Generator / Area->Generator / {
       Environment parent = null;
-      Area generate(Environment parent){
-        Area newArea = new Area();
-      }
-      Tiles->Floor generateFloor(Integer x, Integer y){
-        Tiles->Floor result = null;
-      }
-      Tiles->EntryPoint generateEntryPoint(Integer x, Integer y){
-        Tiles->EntryPoint result = null;
+      Area generate(){
+        Float chance = Range.getRandomFloat();
       }
     }
-    Areas->\mapName->Generator->*"generate".appendToBody(|
-      "parent".add("newArea");
-      return "newArea"; |);
-    Areas->\mapName->Generator->*"generateFloor".appendToBody(|return "result";|);
-    Areas->\mapName->Generator->*"generateEntryPoint".appendToBody(|return "result";|);
+    Area->Generators += class mapName // {
+      }
+    ~Boolean isFirst = true;
+    ~Double previousChance = 0.0;
+    declarationToken : area : area_declaration {
+      previousChance = Area.declaration(area,underneathTiles,isFirst,previousChance);
+      isFirst = false;
+    }
+    Areas->\mapName->Generator->*"generate".appendToBody(|return null;|);
     Environments->\mapName->*.prependToBody(|"areaGenerator" = new Areas->'mapName'->Generator(this);|);
     Environments->\mapName->*.prependToBody({
         if name == null {
           name = ''mapName'';
         }
       });
-  }
-}
-class 'packageName'."environments" Areas {
-}
-class 'packageName'."environments" Area Environment->Position {
-  > String tickEventArray = "Area.Event.Tick.Listener[]";
-  > String tickEventArrayDeclaration = "new Area.Event.Tick.Listener[256]";
-  > String tickEventArrayGetTick = "tickEvents[currentTickPosition++]";
-  > String tickEventArrayGetPut = "tickEvents[putIndex]";
-  > String tickEventArrayLength = "256";
-  class Id // {
-  }
-  Area->Id getId(){
-    return null;
-  }
-  Environment environment = null;
-  ~ArrayList<Tile> tiles = new ArrayList<Tile>();
-  ~Map<Integer, Map<Integer, Tiles\>Floor>> layout = new HashMap<Integer, Map<Integer, Tiles\>Floor>>();
-  ~ArrayList<Tiles\>EntryPoint> entryPoints = new ArrayList<Tiles\>EntryPoint>();
-  ~Map<Tile\>Id, ArrayList<Tile>> tileMap = new HashMap<Tile\>Id, ArrayList<Tile>>();
-  ~Map<Tiles\>Floor\>Id, ArrayList<Tiles\>Floor>> floorMap = new HashMap<Tiles\>Floor\>Id, ArrayList<Tiles\>Floor>>();
-  ~Map<Tiles\>Terrain\>Id, ArrayList<Tiles\>Terrain>> terrainMap = new HashMap<Tiles\>Terrain\>Id, ArrayList<Tiles\>Terrain>>();
-  ~Entity->List entities = new Entity->List();
-  ~Integer width = 0;
-  ~Integer height = 0;
-  ~Integer currentTickPosition = 0;
-  
-  ~'tickEventArray' tickEvents = 'tickEventArrayDeclaration'; 
-  
-  class Event // {
-    interface Tick // {
-      void tick(Double millisSinceLastFrame){
-      }
-      class Listener / ArrayList<Area\>Event\>Tick> / {
-        void tick(Double millisSinceLastFrame){
-          for Area->Event->Tick ticker: \this {
-            ticker.tick(millisSinceLastFrame);
-          }
-          \clear();
-        }
-      }
-    }
-  }
-  class Generator // {
-    Area generate(){
-      return null;
-    }
-  }
-  class Generators // {
-  }
-  class Comparators // {
-    class Distance // {
-      class Ascending // Comparator<Area> {
-        Environment->Position origin = null;
-        \int compare(Area area1, Area area2){
-          return "(int)(float)(origin.getDistanceTo(area1) - origin.getDistanceTo(area2))";
-        }
-      }
-      class Descending // Comparator<Area> {
-        Environment->Position origin = null;
-        \int compare(Area area1, Area area2){
-          return "(int)(float)(origin.getDistanceTo(area2) - origin.getDistanceTo(area1))";
-        }
-      }
-    }
-  }
-> void setup(ParseContext data){
-  }
-  Tiles->Floor getFloorTile(Integer x, Integer y){
-    if layout.containsKey(x) {
-      return layout.get(x).get(y);
-    }
-    else {
-      return null;
-    }
-  }
-  Tiles->Floor getTile(Integer x, Integer y){
-    if layout.containsKey(x) {
-      return layout.get(x).get(y);
-    }
-    else {
-      return null;
-    }
-  }
-  Tile getTile(Tile->Id findId){
-    if tileMap.containsKey(findId) == false || tileMap.get(findId).isEmpty() {
-      return null;
-    }
-    else {
-      return Range.select(tileMap.get(findId));
-    }
-  }
-  Tile getTile(Tiles->Floor->Id findId){
-    if floorMap.containsKey(findId) == false || floorMap.get(findId).isEmpty() {
-      return null;
-    }
-    else {
-      return Range.select(floorMap.get(findId));
-    }
-  }
-  Tile getTile(Tiles->Terrain->Id findId){
-    if terrainMap.containsKey(findId) == false || terrainMap.get(findId).isEmpty() {
-      return null;
-    }
-    else {
-      return Range.select(terrainMap.get(findId));
-    }
-  }
-  void load(){
-    for Integer currentTickPosition < 'tickEventArrayLength' {
-      'tickEventArrayGetTick' = new Area->Event->Tick->Listener();
-    }
-    for Tile tile: tiles {
-      tile.load();
-    }
-  }
-  void tick(Double millisSinceLastFrame){
-    for Tile tile: tiles {
-      tile.tick(millisSinceLastFrame);
-    }
-    'tickEventArrayGetTick'.tick(millisSinceLastFrame);
-    if currentTickPosition >= 'tickEventArrayLength' {
-      currentTickPosition = 0;
-    }
-  }
-  void addEvent(Integer offset, Area->Event->Tick event) {
-    Integer putIndex = currentTickPosition\+offset;
-    if putIndex >= 'tickEventArrayLength' {
-      putIndex \-= 'tickEventArrayLength';
-    }
-    'tickEventArrayGetPut'.add(event);
-  }
-  Boolean add(Entity entity){
-    return entities.add(entity);
-  }
-  Boolean add(Tile newTile){
-    newTile.setArea(this);
-    if newTile.getX() \+ newTile.getWidth() > width {
-      width = newTile.getX() \+ newTile.getWidth();
-    }
-    if newTile.getY() \+ newTile.getHeight() > height {
-      height = newTile.getY() \+ newTile.getHeight();
-    }
-    if tileMap.containsKey(newTile.getId()) == false {
-      tileMap.put(newTile.getId(), new ArrayList<Tile>());
-    }
-    tileMap.get(newTile.getId()).add(newTile);
-    if "newTile.getId() instanceof Tiles.EntryPoint.Id" {
-      entryPoints.add("((Tiles.EntryPoint)newTile)");
-    }
-    else if "newTile.getId() instanceof Tiles.Floor.Id" {
-      if floorMap.containsKey(newTile.getId()) == false {
-        floorMap.put("(Tiles.Floor.Id)newTile.getId()",new ArrayList<Tiles\>Floor>());
-      }
-      floorMap.get("(Tiles.EntryPoint.Id)newTile.getId()").add("(Tiles.Floor)newTile");
-      if layout.containsKey(newTile.getX()) == false {
-        layout.put(newTile.getX(), new HashMap<Integer,Tiles\>Floor>());
-      }
-      layout.get(newTile.getX()).put(newTile.getY(),"(Tiles.Floor)newTile");
-    }
-    else if "newTile.getId() instanceof Tiles.Terrain.Id" {
-      if terrainMap.containsKey(newTile.getId()) == false {
-        terrainMap.put("(Tiles.Terrain.Id)newTile.getId()",new ArrayList<Tiles\>Terrain>());
-      }
-      terrainMap.get(newTile.getId()).add("(Tiles.Terrain)newTile");
-    }
-    return tiles.add(newTile);
-  }
-  void changeFloorLocation(Integer oldX, Integer oldY, Integer newX, Integer newY){
-    if layout.containsKey(newX) == false {
-      layout.put(newX,new HashMap<Integer, Tiles\>Floor>());
-    }
-    layout.get(newX).put(newY, layout.get(oldX).remove(oldY));
-  }
-  void changeTerrain(Tiles\>Terrain oldTile, Tiles\>Terrain newTile){
-    if oldTile != null {
-      if terrainMap.containsKey(oldTile.getId()) {
-        terrainMap.get("(Tiles.Terrain.Id)oldTile".getId()).remove(oldTile);
-      }
-    }
-    if newTile != null {
-      if terrainMap.containsKey(newTile.getId()) == false {
-        terrainMap.put("(Tiles.Terrain.Id)newTile".getId(), new ArrayList<Tiles\>Terrain>());
-      }
-      terrainMap.get(newTile.getId()).add(newTile);
-    }
-  }
-  Boolean remove(Entity entity){
-    return entities.remove(entity);
-  }
-  Boolean remove(Tile oldTile){
-    oldTile.setArea(null);
-    tileMap.get(oldTile.getId()).remove(oldTile);
-    if "oldTile.getId() instanceof Tiles.EntryPoint.Id" {
-      entryPoints.remove(oldTile);
-    }
-    else if "oldTile.getId() instanceof Tiles.Floor.Id" {
-      floorMap.get(oldTile.getId()).remove("(Tiles.Floor)oldTile");
-      if layout.containsKey(oldTile.getX()) {
-        layout.get(oldTile.getX()).remove(oldTile.getY());
-      }
-    }
-    else if "oldTile.getId() instanceof Tiles.Terrain.Id" {
-      terrainMap.get(oldTile.getId()).remove("(Tiles.Terrain)oldTile");
-    }
-    return tiles.remove(oldTile);
-  }
-  Tile getUnexploredPoint(Entity explorer){
-    if entryPoints.isEmpty() == false {
-      return null;
-    }
-    else {
-      for Tiles\>EntryPoint tile: entryPoints {
-        if explorer.hasExplored(tile.getSister().getArea()) == false {
-          return tile;
-        }
-      }
-      return null;
-    }
-  }
-  Entity->List getEntitiesWithin(Environment->Position position, Float range){
-    Entity->List result = new Entity->List();
-    for Entity entity: entities {
-      if entity.getLocation().getDistanceTo(position) <= range {
-        result.add(entity);
-      }
-    }
-    return result;
-  }
-  Entity->List getEntitiesWithin(Environment->Position position, Float range, \EntityCriteria criteria){
-    Entity->List result = new Entity->List();
-    for Entity entity: entities {
-      if entity.getLocation().getDistanceTo(position) <= range && criteria.satisfies(entity) {
-        result.add(entity);
-      }
-    }
-    return result;
-  }
-  Entity getClosestEntity(Environment->Position position, \EntityCriteria criteria){
-    Entity candidate = null;
-    Double distance = Double.MAX_VALUE;
-    for Entity entity: entities {
-      Double candidateDistance = entity.getLocation().getDistanceTo(position);
-      if candidateDistance < distance && criteria.satisfies(entity) {
-        candidate = entity;
-        distance = candidateDistance;
-      }
-    }
-    return candidate;
-  }
-  Tile getClosestTile(Environment->Position position, Tile->Id tileId){
-    if tileMap.containsKey(tileId) == false {
-      return null;
-    }
-    Tile candidate = null;
-    Double distance = Double.MAX_VALUE;
-    for Tile tile: tileMap.get(tileId) {
-      Double candidateDistance = tile.getDistanceTo(position);
-      if candidateDistance < distance  {
-        candidate = tile;
-        distance = candidateDistance;
-      }
-    }
-    return candidate;
-  }
-  Tile getClosestTile(Environment->Position position, Tiles->Terrain->Id terrainId){
-    if terrainMap.containsKey(terrainId) == false {
-      return null;
-    }
-    Tile candidate = null;
-    Double distance = Double.MAX_VALUE;
-    for Tile tile: terrainMap.get(terrainId) {
-      Double candidateDistance = tile.getDistanceTo(position);
-      if candidateDistance < distance  {
-        candidate = tile;
-        distance = candidateDistance;
-      }
-    }
-    return candidate;
-  }
-  Tile getClosestEntryPoint(Environment->Position position){
-    if entryPoints.isEmpty() {
-      return null;
-    }
-    Tile candidate = null;
-    Double distance = Double.MAX_VALUE;
-    for Tile tile: entryPoints {
-      Double candidateDistance = tile.getDistanceTo(position);
-      if candidateDistance < distance  {
-        candidate = tile;
-        distance = candidateDistance;
-      }
-    }
-    return candidate;
-  }
-  Boolean isWithin(Environment->Position otherPosition){
-    return otherPosition.getX() >= 0 && otherPosition.getX() < "width" && otherPosition.getY() >= 0 && otherPosition.getY() < "height";
   }
 }
 class 'packageName'."environments" Environments {

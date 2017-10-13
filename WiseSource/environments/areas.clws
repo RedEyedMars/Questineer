@@ -1,0 +1,530 @@
+
+class 'packageName'."environments" Areas {
+}
+class 'packageName'."environments" Area Environment->Position {
+  > String tickEventArray = "Area.Event.Tick.Listener[]";
+  > String tickEventArrayDeclaration = "new Area.Event.Tick.Listener[256]";
+  > String tickEventArrayGetTick = "tickEvents[currentTickPosition++]";
+  > String tickEventArrayGetPut = "tickEvents[putIndex]";
+  > String tickEventArrayLength = "256";
+  class Id // {
+  }
+  Area->Id getId(){
+    return null;
+  }
+  Environment environment = null;
+  ~ArrayList<Tile> tiles = new ArrayList<Tile>();
+  ~Map<Integer, Map<Integer, Tiles\>Floor>> layout = new HashMap<Integer, Map<Integer, Tiles\>Floor>>();
+  ~ArrayList<Tiles\>EntryPoint> entryPoints = new ArrayList<Tiles\>EntryPoint>();
+  ~Map<Tile\>Id, ArrayList<Tile>> tileMap = new HashMap<Tile\>Id, ArrayList<Tile>>();
+  ~Map<Tiles\>Floor\>Id, ArrayList<Tiles\>Floor>> floorMap = new HashMap<Tiles\>Floor\>Id, ArrayList<Tiles\>Floor>>();
+  ~Map<Tiles\>Terrain\>Id, ArrayList<Tiles\>Terrain>> terrainMap = new HashMap<Tiles\>Terrain\>Id, ArrayList<Tiles\>Terrain>>();
+  ~Entity->List entities = new Entity->List();
+  ~Integer width = 0;
+  ~Integer height = 0;
+  ~Integer currentTickPosition = 0;
+  
+  ~'tickEventArray' tickEvents = 'tickEventArrayDeclaration'; 
+  
+  class Event // {
+    interface Tick // {
+      void tick(Double millisSinceLastFrame){
+      }
+      class Listener / ArrayList<Area\>Event\>Tick> / {
+        void tick(Double millisSinceLastFrame){
+          for Area->Event->Tick ticker: \this {
+            ticker.tick(millisSinceLastFrame);
+          }
+          \clear();
+        }
+      }
+    }
+  }
+  class Generator // {
+    Area generate(){
+      return null;
+    }
+  }
+  class Generators // {
+  }
+  class Comparators // {
+    class Distance // {
+      class Ascending // Comparator<Area> {
+        Environment->Position origin = null;
+        \int compare(Area area1, Area area2){
+          return "(int)(float)(origin.getDistanceTo(area1) - origin.getDistanceTo(area2))";
+        }
+      }
+      class Descending // Comparator<Area> {
+        Environment->Position origin = null;
+        \int compare(Area area1, Area area2){
+          return "(int)(float)(origin.getDistanceTo(area2) - origin.getDistanceTo(area1))";
+        }
+      }
+    }
+  }
+> void setup(ParseContext data){
+  }
+> Double declaration(IToken declarationToken, List<String> floorTiles, Boolean isFirst, Double previousChance){
+    String areaClassName = ^declarationToken->"areaName";
+    String areaName = areaClassName.toLowerCase();
+    Double chance = Double.parseDouble('declarationToken->"chance"')/100.0\+previousChance;
+    Area->Generators->\mapName += class areaClassName / Area->Generator / {
+       Environment parent = null;
+       Area generate(){
+         Area newArea = new Area();
+         parent.add(newArea);
+       }
+       Tiles->Floor generateFloor(Integer x, Integer y){
+         Tiles->Floor result = null;
+       }
+       Tiles->EntryPoint generateEntryPoint(Integer x, Integer y){
+         Tiles->EntryPoint result = null;
+       }
+     }
+    Areas->\mapName->Generator += ~Area->Generators->\mapName->\areaClassName 'areaName' = null
+    Areas->\mapName->Generator->*.appendToBody(|'areaName' = new Area->Generators->\mapName->\areaClassName("parent");|);
+    if isFirst {
+      Areas->\mapName->Generator->*"generate".appendToBody(|
+        if "chance" <= 'chance' {
+          return 'areaName'.generate();
+        }|);
+    }
+    else {
+      Areas->\mapName->Generator->*"generate".appendToBody(|
+        else if "change" <= 'chance' {
+          return 'areaName'.generate();
+        }|);
+    }
+    Area->Generators->\mapName->\areaClassName->*"generate".appendToBody(| return "newArea"; |);
+    Area->Generators->\mapName->\areaClassName->*"generateFloor".appendToBody(|return "result";|);
+    Area->Generators->\mapName->\areaClassName->*"generateEntryPoint".appendToBody(|return "result";|);
+    return chance;
+  }
+> void readBlueprint(String fileName){
+	ByteBuffer pixelBuffer = null;
+	~BufferedImage bufferedImage = null;
+	try {
+	  bufferedImage = ImageIO.read(new File(fileName));
+	}
+	print catch * {}
+	Integer width = bufferedImage.getWidth();
+	Integer height = bufferedImage.getHeight();
+	int[] pixels = new int[width*height];
+	PixelGrabber pixelGrabber = new PixelGrabber(bufferedImage,0,0,width,height,pixels,0,width);
+	try {
+	  pixelGrabber.grabPixels();
+	}
+	catch * {
+	  System.err.println("Pixel Grabbing interrupted!");
+	  return void;
+	}
+	byte[] bytes = new byte[width*height*4];
+	Map<Integer,Map<Integer, Region>> regions = new HashMap<Integer, Map<Integer, Region>>();
+	for Integer i < width {
+	  regions.put(i, new HashMap<Integer, Region>());
+	  for Integer j < height {
+		regions.get(i).put(j,new Region(i,j, pixels[i*32+j]));
+	  }
+	}
+	for Integer x < width\-1{
+	  for Integer y < height\-1{
+	    if regions.get(x).get(y).isCompatible(regions.get(x+1).get(y)) {
+		  regions.get(x).get(y).add(regions.get(x+1).get(y));
+		  regions.get(x+1).put(y, regions.get(x).get(y));
+	    }
+	    if regions.get(x).get(y).isCompatible(regions.get(x).get(y+1)) {
+ 		  regions.get(x).get(y).add(regions.get(x).get(y+1));
+	      regions.get(x).put(y+1, regions.get(x).get(y));
+        }
+	  }
+	}
+	if regions.get(width\-2).get(height\-1).isCompatible(regions.get(width\-1).get(height\-1)) {
+	  regions.get(width\-2).get(height\-1).add(regions.get(width\-1).get(height\-1));
+	  regions.get(width\-1).put(height\-1, regions.get(width\-2).get(height\-1));
+    }
+	if regions.get(width\-1).get(height\-2).isCompatible(regions.get(width\-1).get(height\-1)) {
+	  regions.get(width\-1).get(height\-2).add(regions.get(width\-1).get(height\-1));
+	  regions.get(width\-1).put(height\-1, regions.get(width\-1).get(height\-2));
+	}
+  }
+>  byte getPixelA(int p){
+    return (byte)((p >> 24) & 0xFF);
+  }
+>  byte getPixelR(int p){
+    return (byte)((p >> 16) & 0xFF);
+  }
+>  byte getPixelG(int p){
+    return (byte)((p >> 8) & 0xFF);
+  }
+>  byte getPixelB(int p){
+    return (byte)((p >> 0) & 0xFF);
+  }
+  void display(){
+    for Tiles->Floor->Id floorId : floorMap.keySet() {
+      for Tiles\>Floor tile : floorMap.get(floorId) {
+        tile.getDrawable().display();
+      }
+    }
+  }
+  Tiles->Floor getFloorTile(Integer x, Integer y){
+    if layout.containsKey(x) {
+      return layout.get(x).get(y);
+    }
+    else {
+      return null;
+    }
+  }
+  Tiles->Floor getTile(Integer x, Integer y){
+    if layout.containsKey(x) {
+      return layout.get(x).get(y);
+    }
+    else {
+      return null;
+    }
+  }
+  Tile getTile(Tile->Id findId){
+    if tileMap.containsKey(findId) == false || tileMap.get(findId).isEmpty() {
+      return null;
+    }
+    else {
+      return Range.select(tileMap.get(findId));
+    }
+  }
+  Tile getTile(Tiles->Floor->Id findId){
+    if floorMap.containsKey(findId) == false || floorMap.get(findId).isEmpty() {
+      return null;
+    }
+    else {
+      return Range.select(floorMap.get(findId));
+    }
+  }
+  Tile getTile(Tiles->Terrain->Id findId){
+    if terrainMap.containsKey(findId) == false || terrainMap.get(findId).isEmpty() {
+      return null;
+    }
+    else {
+      return Range.select(terrainMap.get(findId));
+    }
+  }
+  void load(){
+    for Integer currentTickPosition < 'tickEventArrayLength' {
+      'tickEventArrayGetTick' = new Area->Event->Tick->Listener();
+    }
+    for Tile tile: tiles {
+      tile.load();
+    }
+  }
+  void tick(Double millisSinceLastFrame){
+    for Tile tile: tiles {
+      tile.tick(millisSinceLastFrame);
+    }
+    'tickEventArrayGetTick'.tick(millisSinceLastFrame);
+    if currentTickPosition >= 'tickEventArrayLength' {
+      currentTickPosition = 0;
+    }
+  }
+  void addEvent(Integer offset, Area->Event->Tick event) {
+    Integer putIndex = currentTickPosition\+offset;
+    if putIndex >= 'tickEventArrayLength' {
+      putIndex \-= 'tickEventArrayLength';
+    }
+    'tickEventArrayGetPut'.add(event);
+  }
+  Boolean add(Entity entity){
+    return entities.add(entity);
+  }
+  Boolean add(Tile newTile){
+    newTile.setArea(this);
+    if newTile.getX() \+ newTile.getWidth() > width {
+      width = newTile.getX() \+ newTile.getWidth();
+    }
+    if newTile.getY() \+ newTile.getHeight() > height {
+      height = newTile.getY() \+ newTile.getHeight();
+    }
+    if tileMap.containsKey(newTile.getId()) == false {
+      tileMap.put(newTile.getId(), new ArrayList<Tile>());
+    }
+    tileMap.get(newTile.getId()).add(newTile);
+    if "newTile.getId() instanceof Tiles.EntryPoint.Id" {
+      entryPoints.add("((Tiles.EntryPoint)newTile)");
+    }
+    else if "newTile.getId() instanceof Tiles.Floor.Id" {
+      if floorMap.containsKey(newTile.getId()) == false {
+        floorMap.put("(Tiles.Floor.Id)newTile.getId()",new ArrayList<Tiles\>Floor>());
+      }
+      floorMap.get("(Tiles.Floor.Id)newTile.getId()").add("(Tiles.Floor)newTile");
+      if layout.containsKey(newTile.getX()) == false {
+        layout.put(newTile.getX(), new HashMap<Integer,Tiles\>Floor>());
+      }
+      layout.get(newTile.getX()).put(newTile.getY(),"(Tiles.Floor)newTile");
+    }
+    else if "newTile.getId() instanceof Tiles.Terrain.Id" {
+      if terrainMap.containsKey(newTile.getId()) == false {
+        terrainMap.put("(Tiles.Terrain.Id)newTile.getId()",new ArrayList<Tiles\>Terrain>());
+      }
+      terrainMap.get(newTile.getId()).add("(Tiles.Terrain)newTile");
+    }
+    if parent != null {
+      parent.add(newTile);
+    }
+    return tiles.add(newTile);
+  }
+  void changeFloorLocation(Integer oldX, Integer oldY, Integer newX, Integer newY){
+    if layout.containsKey(newX) == false {
+      layout.put(newX,new HashMap<Integer, Tiles\>Floor>());
+    }
+    layout.get(newX).put(newY, layout.get(oldX).remove(oldY));
+  }
+  void changeTerrain(Tiles\>Terrain oldTile, Tiles\>Terrain newTile){
+    if oldTile != null {
+      if terrainMap.containsKey(oldTile.getId()) {
+        terrainMap.get("(Tiles.Terrain.Id)oldTile".getId()).remove(oldTile);
+      }
+    }
+    if newTile != null {
+      if terrainMap.containsKey(newTile.getId()) == false {
+        terrainMap.put("(Tiles.Terrain.Id)newTile".getId(), new ArrayList<Tiles\>Terrain>());
+      }
+      terrainMap.get(newTile.getId()).add(newTile);
+    }
+  }
+  Boolean remove(Entity entity){
+    return entities.remove(entity);
+  }
+  Boolean remove(Tile oldTile){
+    oldTile.setArea(null);
+    tileMap.get(oldTile.getId()).remove(oldTile);
+    if "oldTile.getId() instanceof Tiles.EntryPoint.Id" {
+      entryPoints.remove(oldTile);
+    }
+    else if "oldTile.getId() instanceof Tiles.Floor.Id" {
+      floorMap.get(oldTile.getId()).remove("(Tiles.Floor)oldTile");
+      if layout.containsKey(oldTile.getX()) {
+        layout.get(oldTile.getX()).remove(oldTile.getY());
+      }
+    }
+    else if "oldTile.getId() instanceof Tiles.Terrain.Id" {
+      terrainMap.get(oldTile.getId()).remove("(Tiles.Terrain)oldTile");
+    }
+    return tiles.remove(oldTile);
+  }
+  Tile getUnexploredPoint(Entity explorer){
+    if entryPoints.isEmpty() == false {
+      return null;
+    }
+    else {
+      for Tiles\>EntryPoint tile: entryPoints {
+        if explorer.hasExplored(tile.getSister().getArea()) == false {
+          return tile;
+        }
+      }
+      return null;
+    }
+  }
+  Entity->List getEntitiesWithin(Environment->Position position, Float range){
+    Entity->List result = new Entity->List();
+    for Entity entity: entities {
+      if entity.getLocation().getDistanceTo(position) <= range {
+        result.add(entity);
+      }
+    }
+    return result;
+  }
+  Entity->List getEntitiesWithin(Environment->Position position, Float range, \EntityCriteria criteria){
+    Entity->List result = new Entity->List();
+    for Entity entity: entities {
+      if entity.getLocation().getDistanceTo(position) <= range && criteria.satisfies(entity) {
+        result.add(entity);
+      }
+    }
+    return result;
+  }
+  Entity getClosestEntity(Environment->Position position, \EntityCriteria criteria){
+    Entity candidate = null;
+    Double distance = Double.MAX_VALUE;
+    for Entity entity: entities {
+      Double candidateDistance = entity.getLocation().getDistanceTo(position);
+      if candidateDistance < distance && criteria.satisfies(entity) {
+        candidate = entity;
+        distance = candidateDistance;
+      }
+    }
+    return candidate;
+  }
+  Tile getClosestTile(Environment->Position position, Tile->Id tileId){
+    if tileMap.containsKey(tileId) == false {
+      return null;
+    }
+    Tile candidate = null;
+    Double distance = Double.MAX_VALUE;
+    for Tile tile: tileMap.get(tileId) {
+      Double candidateDistance = tile.getDistanceTo(position);
+      if candidateDistance < distance  {
+        candidate = tile;
+        distance = candidateDistance;
+      }
+    }
+    return candidate;
+  }
+  Tile getClosestTile(Environment->Position position, Tiles->Terrain->Id terrainId){
+    if terrainMap.containsKey(terrainId) == false {
+      return null;
+    }
+    Tile candidate = null;
+    Double distance = Double.MAX_VALUE;
+    for Tile tile: terrainMap.get(terrainId) {
+      Double candidateDistance = tile.getDistanceTo(position);
+      if candidateDistance < distance  {
+        candidate = tile;
+        distance = candidateDistance;
+      }
+    }
+    return candidate;
+  }
+  Tile getClosestEntryPoint(Environment->Position position){
+    if entryPoints.isEmpty() {
+      return null;
+    }
+    Tile candidate = null;
+    Double distance = Double.MAX_VALUE;
+    for Tile tile: entryPoints {
+      Double candidateDistance = tile.getDistanceTo(position);
+      if candidateDistance < distance  {
+        candidate = tile;
+        distance = candidateDistance;
+      }
+    }
+    return candidate;
+  }
+  Boolean isWithin(Environment->Position otherPosition){
+    return otherPosition.getX() >= 0 && otherPosition.getX() < "width" && otherPosition.getY() >= 0 && otherPosition.getY() < "height";
+  }
+}
+> class RegionPoint // {
+    ~Integer x = 0;
+	~Integer y = 0;
+	~Integer pixel = 0;
+	RegionPoint *(int ix, int iy, int ip){
+	  x = ix;
+	  y = iy;
+	  pixel = ip;
+	}
+  }
+> class Region // {
+	@int PIXEL_ZERO = -16777216;
+	@int PIXEL_GREEN = -11731200;
+	@int PIXEL_RED = -65536;
+	@int PIXEL_CYAN = -16711681;
+	@int PIXEL_PURPLE = -65316;
+	@int PIXEL_YELLOW = -10240;
+    ~Integer x = 0;
+	~Integer y = 0;
+	~Integer pixel = 0;
+	Map<Integer, List<RegionPoint>> pixelMap = new HashMap<Integer, List<RegionPoint>>(); 
+	Region *(int ix, int iy, int ipixel){
+	  x = ix;
+	  y = iy;
+	  pixel = ipixel;
+	  pixelMap.put(pixel, new ArrayList<RegionPoint>());
+	  pixelMap.get(pixel).add(new RegionPoint(x,y,pixel));
+	}
+	void add(Region otherRegion){
+	  for Integer p : otherRegion.pixelMap.keySet() {
+	    if pixelMap.containsKey(p) == false {
+	      pixelMap.put(p, new ArrayList<RegionPoint>());
+	    }
+	    pixelMap.get(p).addAll(otherRegion.pixelMap.get(p));
+	  }
+	}
+	List<List<RegionPoint>> getZones(){
+	  List<List<RegionPoint>> results = new ArrayList<List<RegionPoint>>();
+	  if pixelMap.containsKey(PIXEL_YELLOW) {
+	    for RegionPoint yellowPoint : pixelMap.get(PIXEL_YELLOW) {
+	      List<RegionPoint> zone = new ArrayList<RegionPoint>();
+	      zone.add(yellowPoint);
+	      \makeZone(results,zone,\getCounterPoints(yellowPoint), yellowPoint);
+	    }
+	  }
+	  return results;
+	}
+	void makeZone(List<List<RegionPoint>> zones, List<RegionPoint> zone, List<RegionPoint> counters, RegionPoint startPoint){
+	  for RegionPoint point: counters {
+	    if point.getPixel() == PIXEL_YELLOW {
+	      if point == startPoint {
+	        zones.add(zone);
+	      }
+	    }
+	    else {
+	      List<RegionPoint> newZone = new ArrayList<RegionPoint>();
+	      newZone.addAll(zone);
+	      newZone.add(point);
+	      \makeZone(zones,newZone,\getCounterPoints(point),startPoint);
+	    }
+	  }
+	}
+	List<RegionPoint> getCounterPoints(RegionPoint point){
+	  List<RegionPoint> result = new ArrayList<RegionPoint>();
+	  if point.getPixel() == PIXEL_YELLOW || point.getPixel() == PIXEL_RED {
+	    if pixelMap.containsKey(PIXEL_CYAN) {
+	      for RegionPoint otherPoint: pixelMap.get(PIXEL_CYAN)  {
+	        if point.getX() == otherPoint.getX() {
+	          result.add(otherPoint);
+	        }
+	      }
+	    }
+	  }
+	  else if point.getPixel() == PIXEL_CYAN {
+	    if pixelMap.containsKey(PIXEL_YELLOW) {
+	      for RegionPoint otherPoint: pixelMap.get(PIXEL_YELLOW) {
+	        if point.getY() == otherPoint.getY() {
+	          result.add(otherPoint);
+	        }
+	      }
+	    }
+	    if pixelMap.containsKey(PIXEL_RED) {
+	      for RegionPoint otherPoint: pixelMap.get(PIXEL_RED) {
+	        if point.getY() == otherPoint.getY() {
+	          result.add(otherPoint);
+	        }
+	      }
+	    }
+	  }
+	  return result;
+	}
+	Boolean isBlack(){
+	  return pixel == PIXEL_ZERO;
+	}
+	Boolean isWhite(){
+	  return pixel == -1;
+	}
+	Boolean isCompatible(Region other){
+	  if pixel == PIXEL_ZERO {
+	    if other.pixel == PIXEL_ZERO {
+		  return true;
+		}
+		else {
+		  return false;
+		}
+	  }
+	  else if pixel == -1 {
+		if other.pixel == -1 {
+		  return true;
+		}
+		else {
+		  return false;
+		}
+	  }
+	  else {
+		if other.pixel == PIXEL_ZERO {
+		  return false;
+		}
+		else if other.pixel == -1 {
+		  return false;
+		}
+		else {
+		  return true;
+		}
+	  }
+	}
+  }

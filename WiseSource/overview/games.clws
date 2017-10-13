@@ -4,6 +4,7 @@ class 'packageName'."game" Game \Object InputHandler->Events->KeyboardEvent->Lis
   ~Double lastTick = \System.currentTimeMillis()/1000.0;
   ~Double thisTick = lastTick;
   ~Tile mosiac = null;
+  ~Area focusArea = null;
   @void main('mainStringArgs' args){
     new Gui();
   }
@@ -35,11 +36,10 @@ class 'packageName'."game" Game \Object InputHandler->Events->KeyboardEvent->Lis
     for Environment environment:environments {
       environment.tick(thisTick-lastTick);
     }
-    List<Tile> tileList = environments.get(0).getTiles().get(Tiles->\Forest->\Path.id);
-    if tileList!=null  && tileList.isEmpty()==false {
-      for Integer i < tileList.size() {
-      }
+    if focusArea == null {
+      focusArea = environments.get(0).getAreas().get(0);
     }
+    focusArea.display();
     lastTick = thisTick;
   }
 }
