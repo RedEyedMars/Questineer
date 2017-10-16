@@ -17,6 +17,20 @@ public class TileDefinition extends ConcreteRule {
 	public void setup(){
 		set(
 				new ChainParser(
+					new OptionalParser(
+							
+								new ChainParser(
+									
+										new ChainParser(
+											new AddTokenParser(
+												new ListNameElementParser("tile_names"),"floorParentName"),
+											new ManyParser(
+													
+														new ChainParser(
+															AnimationTokens.COMMA,
+															new AddTokenParser(
+																new ListNameElementParser("tile_names"),"floorParentName")))),
+									TileTokens.DOUBLE_COLON)),
 					new AddTokenToListParser(
 						AssociationTokens.NAME,"tileName","tile_names"),
 					new OptionalParser(

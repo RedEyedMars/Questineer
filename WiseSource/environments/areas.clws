@@ -65,11 +65,11 @@ class 'packageName'."environments" Area Environment->Position {
   }
 > void setup(ParseContext data){
   }
-> Double declaration(IToken declarationToken, List<String> floorTiles, Boolean isFirst, Double previousChance){
+> Double declaration(IToken declarationToken, String mapName, List<String> floorTiles, Boolean isFirst, Double previousChance){
     String areaClassName = ^declarationToken->"areaName";
     String areaName = areaClassName.toLowerCase();
     Double chance = Double.parseDouble('declarationToken->"chance"')/100.0\+previousChance;
-    Area->Generators->\mapName += class areaClassName / Area->Generator / {
+    Area->Generators->'mapName' += class areaClassName / Area->Generator / {
        Environment parent = null;
        Area generate(){
          Area newArea = new Area();
@@ -78,34 +78,96 @@ class 'packageName'."environments" Area Environment->Position {
        Tiles->Floor generateFloor(Integer x, Integer y){
          Tiles->Floor result = null;
        }
+       Area->TerrainChoice generateTerrainChoice(){
+         Tiles->Floor->Factory floorFactory = null;
+         Tiles->Terrain->Factory terrainFactory = null;
+       }
        Tiles->EntryPoint generateEntryPoint(Integer x, Integer y){
          Tiles->EntryPoint result = null;
        }
      }
-    Areas->\mapName->Generator += ~Area->Generators->\mapName->\areaClassName 'areaName' = null
-    Areas->\mapName->Generator->*.appendToBody(|'areaName' = new Area->Generators->\mapName->\areaClassName("parent");|);
+    Areas->'mapName'->Generator += ~Area->Generators->\mapName->\areaClassName 'areaName' = null
+    Areas->'mapName'->Generator->*.appendToBody(|'areaName' = new Area->Generators->\mapName->\areaClassName("parent");|);
     if isFirst {
-      Areas->\mapName->Generator->*"generate".appendToBody(|
+      Areas->'mapName'->Generator->*"generate".appendToBody(|
         if "chance" <= 'chance' {
           return 'areaName'.generate();
         }|);
     }
     else {
-      Areas->\mapName->Generator->*"generate".appendToBody(|
+      Areas->'mapName'->Generator->*"generate".appendToBody(|
         else if "change" <= 'chance' {
           return 'areaName'.generate();
         }|);
     }
-    Area->Generators->\mapName->\areaClassName->*"generate".appendToBody(| return "newArea"; |);
-    Area->Generators->\mapName->\areaClassName->*"generateFloor".appendToBody(|return "result";|);
-    Area->Generators->\mapName->\areaClassName->*"generateEntryPoint".appendToBody(|return "result";|);
+    ~String entryPointTileName = null;
+    ~Integer lowEntryBound = 0;
+    ~Integer upperEntryBound = -1;
+    declarationToken : element : area_element {
+      element : atom : entryPointGeneration {
+        lowEntryBound = Integer.parseInt('atom->"range"->"lowerBound"')\+1;
+        upperEntryBound = Integer.parseInt('atom->"range"->"upperBound"')\+1;
+        entryPointTileName = 'atom->"tile_names"';
+      }
+    }
+    if upperEntryBound == -1 {
+      upperEntryBound = upperEntryBound \+ 1;
+    }
+    Body terrainChanceBody = new Body ();
+    ~Double terrainChanceBuilder = 0.0;
+    terrainChanceBody.add(|Float terrainChance = Range.getRandomFloat();|);
+    declarationToken : element : area_element {
+      element : atom : terrainGeneration {
+        atom : quark : probability {
+          Double terrainChanceValue = Double.parseDouble('quark->"percent"')\+terrainChanceBuilder;
+          terrainChanceBody.add(|if "terrainChance" <= 'terrainChanceValue' {
+              "numberOfTerrainPoints" = 'quark->"amount"';
+            }|);
+          terrainChanceBuilder = terrainChanceValue;
+        }
+        
+        ~Integer choiceCount = 0;
+        atom : quark : patch_element {
+          choiceCount \+= 1;
+        }
+        
+        Body terrainSwitchBody = new Body ();
+        Integer choiceCountValue = choiceCount;
+        Area->Generators->'mapName'->'areaClassName'->*"generateTerrainChoice".appendToBody(| switch Range.getRandom(0,'choiceCountValue') `terrainSwitchBody` |);
+        ~Integer choiceIndex = 0;
+        atom : quark : patch_element {
+          Integer choiceIndexValue = choiceIndex;
+          terrainSwitchBody.add(|
+            case 'choiceIndexValue' {
+              "floorFactory" = Tiles->'mapName'->'quark->"tile_names"'->\FloorFactory();
+              "terrainFactory" = Tiles->'mapName'->'quark->"tile_names"'->Factory();
+              "break";
+            }|);
+          choiceIndex \+= 1;
+        }
+      }
+    }
+    \readBlueprint('declarationToken->"AREA_BLUEPRINT"',mapName, areaClassName,lowEntryBound,upperEntryBound, entryPointTileName, terrainChanceBody );
+    Body floorSwitchBody = new Body ();
+    Integer numberOfFloorTiles = floorTiles.size();
+    Area->Generators->'mapName'->'areaClassName'->*"generateFloor".appendToBody(|switch Range.getRandom(0,'numberOfFloorTiles') `floorSwitchBody`|);
+    ~Integer floorIndex = 0;
+    for String floorName: floorTiles {
+      Integer floorIndexValue = floorIndex;
+      floorSwitchBody.add(|case 'floorIndexValue' { "result" = new Tiles->'mapName'->'floorName'("x","y","parent"); "break"; }|);
+      floorIndex \+= 1;
+    }
+    Area->Generators->'mapName'->'areaClassName'->*"generate".appendToBody(| return "newArea"; |);
+    Area->Generators->'mapName'->'areaClassName'->*"generateTerrainChoice".appendToBody(|return new TerrainChoice("floorFactory","terrainFactory");|);
+    Area->Generators->'mapName'->'areaClassName'->*"generateFloor".appendToBody(|return "result";|);
+    Area->Generators->'mapName'->'areaClassName'->*"generateEntryPoint".appendToBody(|return "result";|);
     return chance;
   }
-> void readBlueprint(String fileName){
+> void readBlueprint(String fileName, String mapName, String areaClassName, Integer lowEntryBound, Integer upperEntryBound, String entryPointTileName, Body terrainChanceBody ){
 	ByteBuffer pixelBuffer = null;
 	~BufferedImage bufferedImage = null;
 	try {
-	  bufferedImage = ImageIO.read(new File(fileName));
+	  bufferedImage = ImageIO.read(new File("../Resource/environments/maps/blueprints/"+fileName));
 	}
 	print catch * {}
 	Integer width = bufferedImage.getWidth();
@@ -124,7 +186,7 @@ class 'packageName'."environments" Area Environment->Position {
 	for Integer i < width {
 	  regions.put(i, new HashMap<Integer, Region>());
 	  for Integer j < height {
-		regions.get(i).put(j,new Region(i,j, pixels[i*32+j]));
+		regions.get(i).put(j,new Region(j,width\-i, pixels[i*32+j]));
 	  }
 	}
 	for Integer x < width\-1{
@@ -147,6 +209,106 @@ class 'packageName'."environments" Area Environment->Position {
 	  regions.get(width\-1).get(height\-2).add(regions.get(width\-1).get(height\-1));
 	  regions.get(width\-1).put(height\-1, regions.get(width\-1).get(height\-2));
 	}
+	Set<Region> regionSet = new HashSet<Region>();
+    for Integer x < width {
+	  for Integer y < height {
+		if(regions.get(x).get(y).getPixel()!=Region.PIXEL_ZERO&&regions.get(x).get(y).getPixel()!= -1){
+		  regionSet.add(regions.get(x).get(y));
+		}
+	  }
+	}
+	for Region region: regionSet {
+	  List<List<RegionPoint>> zones = region.getZones();
+	  List<RegionZone> points = region.getPoints(zones);
+	  ~int zoneIndex = 0;
+      Body switchBody = new Body ();
+      Integer numberOfZones = points.size();
+	  Area->Generators->'mapName'->'areaClassName'->*"generate".appendToBody(|
+	    switch Range.getRandom(0,'numberOfZones') `switchBody`|);
+       
+	  for RegionZone zone: points {
+		Integer startX = zone.getLowerBoundX();
+		Integer startY = zone.getLowerBoundY();
+		Integer zoneIndexValue = zoneIndex;
+		~Integer entryPointIndex = 0;
+		~Integer floorIndex = 0;
+		Body caseBody = new Body ();
+        Body entryWhileBody = new Body ();
+        Body terrainWhileBody = new Body ();
+		switchBody.add(|case 'zoneIndexValue' { "generateZone"+'zoneIndexValue'("newArea"); "break"; }|);
+		caseBody.add(|
+	      Integer numberOfEntryPoints = Range.getRandom('lowEntryBound','upperEntryBound');
+	      Set<Integer> chosenEntryPoints = new HashSet<Integer>();
+	      while chosenEntryPoints.size() < numberOfEntryPoints `entryWhileBody` 
+	      Integer numberOfTerrainPoints = 0; |);
+	    caseBody.add(terrainChanceBody);
+	    caseBody.add(|
+	      Map<Integer, TerrainChoice > chosenTerrainPoints = new HashMap<Integer, TerrainChoice>();
+	      while chosenTerrainPoints.size() < numberOfTerrainPoints `terrainWhileBody` |);
+		for RegionPoint point: zone {
+		  if point != null {
+		    Integer floorIndexValue = floorIndex;
+		    floorIndex \+= 1;
+		    Integer pointX = point.getX()\-startX;
+		    Integer pointY = point.getY()\-startY;
+		    if zone.getUps().containsKey(point.getX()) {
+		      for RegionEdge edge: zone.getUps().get(point.getX()) {
+		        if point.getY() >= edge.getStart() && point.getY() <= edge.getEnd() {
+		          caseBody.add(\addAreaEntryPoint(pointX\-1, pointY, mapName, entryPointTileName, entryPointIndex));
+		          entryPointIndex \+= 1;
+		        }
+		      }
+		    }
+		    else if zone.getDowns().containsKey(point.getX()) {
+		      for RegionEdge edge: zone.getDowns().get(point.getX()) {
+		        if point.getY() >= edge.getStart() && point.getY() <= edge.getEnd() {
+		          caseBody.add(\addAreaEntryPoint(pointX\+1, pointY, mapName, entryPointTileName, entryPointIndex));
+		          entryPointIndex \+= 1;
+		        }
+		      }
+		    }
+		    if zone.getRights().containsKey(point.getY()) {
+		      for RegionEdge edge: zone.getRights().get(point.getY()) {
+		        if point.getX() >= edge.getStart() && point.getX() <= edge.getEnd() {
+		          caseBody.add(\addAreaEntryPoint(pointX, pointY\+1, mapName, entryPointTileName, entryPointIndex));
+		          entryPointIndex \+= 1;
+		        }
+		      }
+		    }
+		    else if zone.getLefts().containsKey(point.getY()) {
+		      for RegionEdge edge: zone.getLefts().get(point.getY()) {
+		        if point.getX() >= edge.getStart() && point.getX() <= edge.getEnd() {
+		          caseBody.add(\addAreaEntryPoint(pointX, pointY\-1, mapName, entryPointTileName, entryPointIndex));
+		          entryPointIndex \+= 1;
+		        }
+		      }
+		    }
+	        caseBody.add(|
+	          if "chosenTerrainPoints".containsKey('floorIndexValue') {
+	            Tiles->Floor newFloorTile = "chosenTerrainPoints".get('floorIndexValue').getFloorFactory().create('pointX','pointY',"parent");
+	            newFloorTile.setTerrain("chosenTerrainPoints".get('floorIndexValue').getTerrainFactory().create(newFloorTile));
+	            "newArea".add(newFloorTile);
+	          }
+	          else {
+	            "newArea".add(\generateFloor('pointX','pointY'));
+	          }|);
+	      }
+		}
+		Area->Generators->'mapName'->'areaClassName' += void "generateZone"+'zoneIndexValue'(Area newArea){}
+		Area->Generators->'mapName'->'areaClassName'->*"generateZone"+'zoneIndexValue'.appendToBody(caseBody);
+		
+		Integer entryPointIndexValue = entryPointIndex;
+		entryWhileBody.add(|"chosenEntryPoints".add(Range.getRandom(0,'entryPointIndexValue'));|);
+		Integer floorIndexValue = floorIndex;
+		terrainWhileBody.add(|"chosenTerrainPoints".put(Range.getRandom(0,'floorIndexValue'), \generateTerrainChoice());|);
+        zoneIndex \+= 1;
+	  }
+	}
+  }
+> Statement addAreaEntryPoint(Integer pointX,Integer pointY, String mapName, String entryPointTileName,Integer entryPointIndex) {
+    return |if "chosenEntryPoints".contains('entryPointIndex') {
+        "newArea".add(new EntryPoints->'mapName'->'entryPointTileName'('pointX','pointY',"parent"));
+      }|;
   }
 >  byte getPixelA(int p){
     return (byte)((p >> 24) & 0xFF);
@@ -163,8 +325,11 @@ class 'packageName'."environments" Area Environment->Position {
   void display(){
     for Tiles->Floor->Id floorId : floorMap.keySet() {
       for Tiles\>Floor tile : floorMap.get(floorId) {
-        tile.getDrawable().display();
+        tile.display();
       }
+    }
+    for Tiles\>EntryPoint tile : entryPoints {
+      tile.display();
     }
   }
   Tiles->Floor getFloorTile(Integer x, Integer y){
@@ -400,6 +565,11 @@ class 'packageName'."environments" Area Environment->Position {
   Boolean isWithin(Environment->Position otherPosition){
     return otherPosition.getX() >= 0 && otherPosition.getX() < "width" && otherPosition.getY() >= 0 && otherPosition.getY() < "height";
   }
+  
+  class TerrainChoice // {
+    Tiles->Floor->Factory floorFactory = null;
+    Tiles->Terrain->Factory terrainFactory = null;
+  }
 }
 > class RegionPoint // {
     ~Integer x = 0;
@@ -411,6 +581,128 @@ class 'packageName'."environments" Area Environment->Position {
 	  pixel = ip;
 	}
   }
+> class RegionZone // Iterable<RegionPoint> {
+	~Map<Integer, Map<Integer, RegionPoint>> map = new HashMap<Integer, Map<Integer,RegionPoint>>();
+	~Map<Integer, List<RegionEdge>> ups = new HashMap<Integer, List<RegionEdge>>();
+	~Map<Integer, List<RegionEdge>> downs = new HashMap<Integer, List<RegionEdge>>();
+	~Map<Integer, List<RegionEdge>> rights = new HashMap<Integer, List<RegionEdge>>();
+	~Map<Integer, List<RegionEdge>> lefts = new HashMap<Integer, List<RegionEdge>>();
+    ~Integer lowerBoundX = Integer.MAX_VALUE;
+    ~Integer lowerBoundY = Integer.MAX_VALUE;
+    ~Integer upperBoundX = 0;
+    ~Integer upperBoundY = 0;
+    ~RegionPoint previousEdgePoint = null;
+    void add(RegionPoint newPoint){
+      if newPoint.getX() < lowerBoundX {
+        lowerBoundX = newPoint.getX();
+      }
+      if newPoint.getY() < lowerBoundY {
+        lowerBoundY = newPoint.getY();
+      }
+      if newPoint.getX() > upperBoundX {
+        upperBoundX = newPoint.getX();
+      }
+      if newPoint.getY() > upperBoundY {
+        upperBoundY = newPoint.getY();
+      }
+      if map.containsKey(newPoint.getX()) == false{
+        map.put(newPoint.getX(),new HashMap<Integer, RegionPoint>());
+      }
+      map.get(newPoint.getX()).put(newPoint.getY(),newPoint);
+    }
+    void addEdgePoint(RegionPoint edge){
+      if previousEdgePoint != null {
+        if edge.getX() > previousEdgePoint.getX() {
+          if rights.containsKey(previousEdgePoint.getY()) == false {
+            rights.put(previousEdgePoint.getY(), new ArrayList<RegionEdge>());
+          }
+          rights.get(previousEdgePoint.getY()).add(new RegionEdge(previousEdgePoint.getX(),edge.getX()));
+        }
+        else if edge.getX() < previousEdgePoint.getX() {
+          if lefts.containsKey(edge.getY()) == false {
+            lefts.put(edge.getY(), new ArrayList<RegionEdge>());
+          }
+          lefts.get(edge.getY()).add(new RegionEdge(edge.getX(),previousEdgePoint.getX()));
+        }
+        else if edge.getY() > previousEdgePoint.getY() {
+          if ups.containsKey(previousEdgePoint.getX()) == false {
+            ups.put(previousEdgePoint.getX(), new ArrayList<RegionEdge>());
+          }
+          ups.get(previousEdgePoint.getX()).add(new RegionEdge(previousEdgePoint.getY(),edge.getY()));
+        }
+        else if edge.getY() < previousEdgePoint.getY() {
+          if downs.containsKey(edge.getX()) == false {
+            downs.put(edge.getX(), new ArrayList<RegionEdge>());
+          }
+          downs.get(edge.getX()).add(new RegionEdge(edge.getY(),previousEdgePoint.getY() ));
+        }
+      }
+      previousEdgePoint = edge;
+    }
+    Iterator<RegionPoint> iterator(){
+      return new RegionZoneIterator(this);
+    }
+  }
+> class RegionEdge // {
+    ~Integer startEdge = 0;
+    ~Integer endEdge = 0;
+    RegionEdge *(Integer initialStart, Integer initialEnd){
+      startEdge = initialStart;
+      endEdge = initialEnd;
+    }
+    Integer getStart(){
+      return startEdge;
+    }
+    Integer getEnd(){
+      return endEdge;
+    }
+  }
+< Iterable : \java.\lang;
+< Iterator : \java.\util;
+> class RegionZoneIterator // Iterator<RegionPoint>  {
+    ~RegionZone toIterate = null;
+    ~Integer x = 0;
+    ~Integer y = 0;
+    ~Map<Integer, Map<Integer, RegionPoint>> map = null;
+    RegionZoneIterator *(RegionZone iIterable){
+      toIterate = iIterable;
+      x = toIterate.getLowerBoundX();
+      y = toIterate.getLowerBoundY();
+      map = toIterate.getMap();
+    }
+    boolean hasNext(){
+      return x <= toIterate.getUpperBoundX() && y <= toIterate.getUpperBoundY();
+    }
+    void advanceIndex(){
+      if y == toIterate.getUpperBoundY() {
+        y = toIterate.getLowerBoundY();
+        x \+= 1;
+      }
+      else {
+        y \+= 1;
+      }
+    }
+    RegionPoint next(){
+      if map.containsKey(x) {
+        if map.get(x).containsKey(y) {
+          RegionPoint point = map.get(x).get(y);
+          \advanceIndex();
+          return point;
+        }
+        else {
+          \advanceIndex();
+          return null;
+        }
+      }
+      else {
+        \advanceIndex();
+        return null;
+      }
+    }
+    
+    void remove(){
+    }
+  }
 > class Region // {
 	@int PIXEL_ZERO = -16777216;
 	@int PIXEL_GREEN = -11731200;
@@ -421,21 +713,58 @@ class 'packageName'."environments" Area Environment->Position {
     ~Integer x = 0;
 	~Integer y = 0;
 	~Integer pixel = 0;
-	Map<Integer, List<RegionPoint>> pixelMap = new HashMap<Integer, List<RegionPoint>>(); 
+	Map<Integer, Set<RegionPoint>> pixelMap = new HashMap<Integer, Set<RegionPoint>>();
+	Map<Integer, Set<RegionPoint>> horizontals = new HashMap<Integer,Set<RegionPoint>>();
 	Region *(int ix, int iy, int ipixel){
 	  x = ix;
 	  y = iy;
 	  pixel = ipixel;
-	  pixelMap.put(pixel, new ArrayList<RegionPoint>());
+	  pixelMap.put(pixel, new HashSet<RegionPoint>());
 	  pixelMap.get(pixel).add(new RegionPoint(x,y,pixel));
+	  horizontals.put(y, new HashSet<RegionPoint>());
+	  horizontals.get(y).add(new RegionPoint(x,y,pixel));
 	}
 	void add(Region otherRegion){
 	  for Integer p : otherRegion.pixelMap.keySet() {
 	    if pixelMap.containsKey(p) == false {
-	      pixelMap.put(p, new ArrayList<RegionPoint>());
+	      pixelMap.put(p, new HashSet<RegionPoint>());
 	    }
 	    pixelMap.get(p).addAll(otherRegion.pixelMap.get(p));
 	  }
+	  for Integer y : otherRegion.horizontals.keySet() {
+		 if horizontals.containsKey(y) == false {
+		   horizontals.put(y, new HashSet<RegionPoint>());
+		 }
+		 horizontals.get(y).addAll(otherRegion.horizontals.get(y));
+	  }
+	}
+	List<RegionZone> getPoints(List<List<RegionPoint>> zones){
+		List<RegionZone> points = new ArrayList<RegionZone>();
+		for List<RegionPoint> zone: zones {
+		  RegionZone zonePoints = new RegionZone();
+		  points.add(zonePoints);
+		  ~Integer i = 1;
+		  while i<zone.size()-1 {
+			if zone.get(i).getPixel()==PIXEL_CYAN && zone.get(i+1).getPixel()==PIXEL_RED {
+				int baseX = zone.get(i).getX();
+				int endX = zone.get(i+1).getX();
+				~int y = zone.get(i).getY();
+				while y>=zone.get(i-1).getY() {
+				  for RegionPoint point: horizontals.get(y) {
+				    if point.getX() >= baseX && point.getX() <= endX {
+				    	zonePoints.add(point);
+				    }
+				  }
+				  y \-= 1;
+				}
+			}
+		    i \+= 1;
+		  }
+		  for RegionPoint point: zone {
+		    zonePoints.addEdgePoint(point);
+		  }
+		}
+		return points;
 	}
 	List<List<RegionPoint>> getZones(){
 	  List<List<RegionPoint>> results = new ArrayList<List<RegionPoint>>();
@@ -465,7 +794,7 @@ class 'packageName'."environments" Area Environment->Position {
 	}
 	List<RegionPoint> getCounterPoints(RegionPoint point){
 	  List<RegionPoint> result = new ArrayList<RegionPoint>();
-	  if point.getPixel() == PIXEL_YELLOW || point.getPixel() == PIXEL_RED {
+	  if point.getPixel() == PIXEL_YELLOW || point.getPixel() == PIXEL_RED || point.getPixel() == PIXEL_GREEN {
 	    if pixelMap.containsKey(PIXEL_CYAN) {
 	      for RegionPoint otherPoint: pixelMap.get(PIXEL_CYAN)  {
 	        if point.getX() == otherPoint.getX() {

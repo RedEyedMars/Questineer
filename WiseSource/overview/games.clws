@@ -5,6 +5,7 @@ class 'packageName'."game" Game \Object InputHandler->Events->KeyboardEvent->Lis
   ~Double thisTick = lastTick;
   ~Tile mosiac = null;
   ~Area focusArea = null;
+  boolean[] pressedKeys = new boolean[128]; 
   @void main('mainStringArgs' args){
     new Gui();
   }
@@ -17,10 +18,11 @@ class 'packageName'."game" Game \Object InputHandler->Events->KeyboardEvent->Lis
 	InputHandler.addKeyboardListener(this);
 	InputHandler.addMouseListener(this);
   }
-  Float angle = 0f;
   void listen(InputHandler->Events->KeyboardEvent->Release event) {
+    pressedKeys[event.getKeyInt()] = false;
   }
   void listen(InputHandler->Events->KeyboardEvent->Press event) {
+    pressedKeys[event.getKeyInt()] = true;
   }
   void listen(InputHandler->Events->MouseEvent->Release event) {
   }
@@ -40,6 +42,18 @@ class 'packageName'."game" Game \Object InputHandler->Events->KeyboardEvent->Lis
       focusArea = environments.get(0).getAreas().get(0);
     }
     focusArea.display();
+    if pressedKeys[17] {
+      Gui.renderer.moveView(0.0f, -0.01f);
+    }
+    if pressedKeys[30] {
+      Gui.renderer.moveView(0.01f, 0.0f);
+    }
+    if pressedKeys[31] {
+      Gui.renderer.moveView(0.0f, 0.01f);
+    }
+    if pressedKeys[32] {
+      Gui.renderer.moveView(-0.01f,0.0f);
+    }
     lastTick = thisTick;
   }
 }

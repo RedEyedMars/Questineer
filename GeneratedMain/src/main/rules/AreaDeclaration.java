@@ -29,8 +29,7 @@ public class AreaDeclaration extends ConcreteRule {
 							
 								new ChainParser(
 									AssociationTokens.NEWTAB,
-									Rules.area_shape_name,
-									MapBraces.AREA_DIMENSIONS,
+									MapTokens.AREA_BLUEPRINT,
 									new ManyParser(
 											
 												new ChainParser(

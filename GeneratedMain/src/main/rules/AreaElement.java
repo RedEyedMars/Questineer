@@ -34,11 +34,11 @@ public class AreaElement extends ConcreteRule {
 											new AddTokenParser(
 												AnimationTokens.INTEGER,"lowerBound"),
 											new OptionalParser(
-													new AddTokenParser(
-														
+													
 														new ChainParser(
 															PaymentTokens.DASH,
-															AnimationTokens.INTEGER),"upperBound")),
+															new AddTokenParser(
+																AnimationTokens.INTEGER,"upperBound"))),
 											MapTokens.EXITS),"range"))),"entryPointGeneration"),
 				new ChainParser(
 					MapTokens.PATCHES,

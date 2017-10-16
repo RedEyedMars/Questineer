@@ -4,21 +4,20 @@
 	if Neighbour in Direction == null
 Grass  Free;     foliage->grass;
 Path   1FD;      foliage->path;
-Bridge 1FD | 1G; outside->bridge;
+Water  3FD;      outside->water;
 
 **Terrain**
-Tree       Seed | TreeSeed | 2FD; foliage->tree;
-Lake [2,2] 15FD;                  outside->lake;
-Water      3FD;                   outside->water;
+Grass::Tree             Seed | TreeSeed | 2FD; foliage->tree;
+Water::Bridge Passable; 1FD  | 1G;             outside->bridge;
 
 **Chests**
-Minor_Chest     3FD  | 5G;   chests->minor;
-Major_Chest     6FD  | 12G;  chests->major;
-Treasure_Chest  10FD | 20G;  chests->treasure;
-Legendary_Chest 20FD | 50G;  chests->legendary;
+Grass::Minor_Chest     3FD  | 5G;   chests->minor;
+Grass::Major_Chest     6FD  | 12G;  chests->major;
+Grass::Treasure_Chest  10FD | 20G;  chests->treasure;
+Grass::Legendary_Chest 20FD | 50G;  chests->legendary;
 
 **Dens**
-Long_Grass Passable; Free;          foliage->long_grass;
+Grass::Long_Grass Passable; Free;          foliage->long_grass;
 	+Praying_Matris {
     	STR 5-7 | DEX 6-9 | CON 2-3 | KNW 1-2 | MND 1-2 | CRM 1
 	}
@@ -29,7 +28,7 @@ Long_Grass Passable; Free;          foliage->long_grass;
     	  event->host.gain(new Skills.DefendMemberOf(event->host.get(Hive)))
     	}
 	}
-Lone_Rock          3FD & 3DeadMeat; forest->lone_rock;
+Grass::Lone_Rock          3FD & 3DeadMeat; forest->lone_rock;
 	++Wolf {
 		wild
 		STR 7-9 | DEX 4-6 | CON 4-6 | KNW 1-2 | MND 3-4 | CRM 2
@@ -44,7 +43,7 @@ Lone_Rock          3FD & 3DeadMeat; forest->lone_rock;
 		TerritorialAggression
 		STR 9-12 | DEX 5-7 | CON 6-8 | KNW 3-4 | MND 2-3 | CRM 2
 	}
-Bear_Den 3FD & 2Honey; forest->bear_den;
+Grass::Bear_Den 3FD & 2Honey; forest->bear_den;
 	++Bear_Cub {
 		wild
 		STR 4-6 | DEX 3-4 | CON 8-10 | KNW 1-2 | MND 3-4 | CRM 2
@@ -60,7 +59,7 @@ Bear_Den 3FD & 2Honey; forest->bear_den;
 		  event->host.gain(new Skills.DefendMemberOf(event->host->spawn.get(Cubs, new Associations.Cubs.Factory())))
 		}
 	}
-Elder_Stag_Pedestal [1,2] 30FD; forest->ethereal_pedestal;
+Grass::Elder_Stag_Pedestal [1,2] 30FD; forest->ethereal_pedestal;
 	-Elder_Stag {
 		ethereal
 		STR 20-25 | DEX 15-20 | CON 20-25 | KNW 25-30 | MND 10-15 | CRM 15-20

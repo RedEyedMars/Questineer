@@ -253,4 +253,8 @@ class 'packageName'."gui" Renderer {
       avgSecsPerFrame /= numToAvg \+ 1.0;
     }
   }
+  void moveView(Float moveX, Float moveY){
+    viewX \+= moveX;
+    viewY \+= moveY;
+  }
 }

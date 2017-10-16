@@ -382,6 +382,7 @@ class 'packageName'."environments" Environment \Object Loaddable Tickable {
     List<String> backgroundTiles = new ArrayList<String>();
     
     Tiles += class mapName // {}
+    EntryPoints += class mapName // {}
     declarationToken : element : map_header {
       element : atom : IMPORT_TILE {
         atom : quark : tile_declaration {
@@ -405,7 +406,7 @@ class 'packageName'."environments" Environment \Object Loaddable Tickable {
     ~Boolean isFirst = true;
     ~Double previousChance = 0.0;
     declarationToken : area : area_declaration {
-      previousChance = Area.declaration(area,underneathTiles,isFirst,previousChance);
+      previousChance = Area.declaration(area,mapName, underneathTiles,isFirst,previousChance);
       isFirst = false;
     }
     Areas->\mapName->Generator->*"generate".appendToBody(|return null;|);

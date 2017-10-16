@@ -13,6 +13,7 @@ public class  RegionPoint   {
 	//Internals
 protected Integer x = 0;
 protected Integer y = 0;
+protected Integer pixel = 0;
 
 	public Integer getX() {
 		return x;
@@ -20,9 +21,13 @@ protected Integer y = 0;
 	public Integer getY() {
 		return y;
 	}
-public RegionPoint (final int ix,final int iy) {
+	public Integer getPixel() {
+		return pixel;
+	}
+public RegionPoint (final int ix,final int iy,final int ip) {
 	x = ix;
 	y = iy;
+	pixel = ip;
 }
 
 }

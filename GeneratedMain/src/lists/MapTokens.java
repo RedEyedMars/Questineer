@@ -31,7 +31,8 @@ public class MapTokens extends ParseList {
 	public static final ExactParser PATCHES = new ExactParser("PATCHES","mapTokens","Patches");
 	public static final ExactParser PERCENT = new ExactParser("PERCENT","mapTokens","%");
 	public static final ExactParser MAP = new ExactParser("MAP","mapTokens","map");
+	public static final RegexParser AREA_BLUEPRINT = new RegexParser("AREA_BLUEPRINT","mapTokens","[^\\n]+");
 
 	public static final ChoiceParser parser = new ChoiceParser(
-				NAME,WILD,NEWLINE,NEWTAB,NEWTABTAB,NEWTABTABTAB,MAPS,COLON,RECTANGLE,DASH,COMMA,ENTRY,EXITS,PATCHES,PERCENT,MAP);
+				NAME,WILD,NEWLINE,NEWTAB,NEWTABTAB,NEWTABTABTAB,MAPS,COLON,RECTANGLE,DASH,COMMA,ENTRY,EXITS,PATCHES,PERCENT,MAP,AREA_BLUEPRINT);
 }
