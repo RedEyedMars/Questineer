@@ -25,7 +25,6 @@ area_shape_name
 
 mapBrace-s are Braced
 	[,.] as MAP_FILE with WILD as map_file_name
-	[[,]] as AREA_DIMENSIONS with ( INTEGER as lowerBound ( DASH INTEGER ) as upperBound? ) as widthRange COMMA ( INTEGER as lowerBound ( DASH INTEGER ) as upperBound? ) as heightRange
 	[(,)] as PATCH_PROBABILITY with ( INTEGER as amount COLON INTEGER as percent PERCENT ) as probability ( COMMA INTEGER as amount COLON INTEGER as percent PERCENT ) as probability*
 
 mapImport-s are Import
@@ -38,4 +37,4 @@ area_element
 	( ENTRY tile_name ( PIPE tile_name )* ( INTEGER as lowerBound ( DASH INTEGER as upperBound )? EXITS ) as range? ) as  entryPointGeneration
 	( PATCHES PATCH_PROBABILITY COLON ( NEWTABTABTAB patch_element )* ) as terrainGeneration
 patch_element
-	tile_name AREA_DIMENSIONS
+	tile_name ( INTEGER as patchWidth CROSS INTEGER as patchHeight )?

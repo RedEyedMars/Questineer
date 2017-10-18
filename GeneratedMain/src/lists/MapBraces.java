@@ -18,31 +18,6 @@ public class MapBraces extends ParseList {
 	public static final BracedParser MAP_FILE = new BracedParser(
 							new AddTokenParser(
 								AssociationTokens.WILD,"map_file_name"),"MAP_FILE","mapBraces",",.");
-	public static final BracedParser AREA_DIMENSIONS = new BracedParser(
-						new ChainParser(
-							new AddTokenParser(
-								
-								new ChainParser(
-									new AddTokenParser(
-										AnimationTokens.INTEGER,"lowerBound"),
-									new OptionalParser(
-											new AddTokenParser(
-												
-												new ChainParser(
-													PaymentTokens.DASH,
-													AnimationTokens.INTEGER),"upperBound"))),"widthRange"),
-							AnimationTokens.COMMA,
-							new AddTokenParser(
-								
-								new ChainParser(
-									new AddTokenParser(
-										AnimationTokens.INTEGER,"lowerBound"),
-									new OptionalParser(
-											new AddTokenParser(
-												
-												new ChainParser(
-													PaymentTokens.DASH,
-													AnimationTokens.INTEGER),"upperBound"))),"heightRange")),"AREA_DIMENSIONS","mapBraces","[,]");
 	public static final BracedParser PATCH_PROBABILITY = new BracedParser(
 						new ChainParser(
 							new AddTokenParser(
@@ -67,5 +42,5 @@ public class MapBraces extends ParseList {
 											GeneralTokens.PERCENT),"probability"))),"PATCH_PROBABILITY","mapBraces","(,)");
 
 	public static final ChoiceParser parser = new ChoiceParser(
-				MAP_FILE,AREA_DIMENSIONS,PATCH_PROBABILITY);
+				MAP_FILE,PATCH_PROBABILITY);
 }

@@ -401,8 +401,8 @@ class 'packageName'."environments" Environment \Object Loaddable Tickable {
         Float chance = Range.getRandomFloat();
       }
     }
-    Area->Generators += class mapName // {
-      }
+    Area->Generators += class mapName // {}
+    Area->TerrainChoice += class mapName // {}
     ~Boolean isFirst = true;
     ~Double previousChance = 0.0;
     declarationToken : area : area_declaration {

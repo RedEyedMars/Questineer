@@ -40,15 +40,17 @@ public class AreaElement extends ConcreteRule {
 															new AddTokenParser(
 																AnimationTokens.INTEGER,"upperBound"))),
 											MapTokens.EXITS),"range"))),"entryPointGeneration"),
-				new ChainParser(
-					MapTokens.PATCHES,
-					MapBraces.PATCH_PROBABILITY,
-					PaymentTokens.COLON,
-					new ManyParser(
-							
-								new ChainParser(
-									MapTokens.NEWTABTABTAB,
-									Rules.patch_element)))));
+					new AddTokenParser(
+						
+						new ChainParser(
+							MapTokens.PATCHES,
+							MapBraces.PATCH_PROBABILITY,
+							PaymentTokens.COLON,
+							new ManyParser(
+									
+										new ChainParser(
+											MapTokens.NEWTABTABTAB,
+											Rules.patch_element))),"terrainGeneration")));
 
 	}
 

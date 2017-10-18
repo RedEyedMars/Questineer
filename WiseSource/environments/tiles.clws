@@ -29,7 +29,7 @@ class 'packageName'."environments" Tiles {
       if occupant != null {
         return false;
       }
-      else if terrain != null && terrain.isPassable(directionX, directionY) {
+      else if terrain != null &&! terrain.isPassable(directionX, directionY) {
         return false;
       }
        else {
@@ -79,7 +79,7 @@ class 'packageName'."environments" Tiles {
     }
   }
   class 'packageName'."environments" EntryPoint Tiles->Floor {
-    class Id / Tile->Id / {
+    class Id / Tiles->Floor->Id / {
     }
     ~Tiles->EntryPoint sister = null;
     Entity->Event acceptEntity(Entity newOccupant){
@@ -160,9 +160,23 @@ class 'packageName'."environments" Tiles {
       void tick(Double millisSinceLastFrame){
       }
     }
-    if declarationToken->"PASSABLE" != null {
-      collectionClass->'mapName'->'tileName' += Boolean isPassable(Integer directionX, Integer directionY){
-        return true;
+    if tileExtendsClass == Tiles->Floor || tileExtendsClass == Tiles->EntryPoint {
+      if declarationToken->"IMPASSABLE" != null {
+        collectionClass->'mapName'->'tileName' += Boolean isPassable(Integer directionX, Integer directionY){
+          if "terrain" != null {
+            return "terrain".isPassable(directionX,directionY);
+          }
+          else {
+            return false;
+          }
+        }
+      }
+    }
+    else {
+      if declarationToken->"PASSABLE" != null {
+        collectionClass->'mapName'->'tileName' += Boolean isPassable(Integer directionX, Integer directionY){
+          return true;
+        }
       }
     }
     if declarationToken->"imageId" != null {
@@ -202,7 +216,7 @@ class 'packageName'."environments" Tiles {
           "drawable" = Drawables.square.image("imageStates");
           if "floorTile" != null {
             drawable.setVisualX(floorTile.getDrawable().getVisualX());
-            drawable.setVisualY(floorTile.getDrawable().getVisualY());
+            drawable.setVisualY(floorTile.getDrawable().getVisualY()\+0.025f);
           }
           else {
             "drawable".setVisualX("(float)(getX()+getY())/"+'xFactor'+"f");
@@ -443,15 +457,45 @@ class 'packageName'."environments" Tile Environment->Position Loaddable Tickable
   ~Integer width = 1;
   ~Integer height = 1;
   ~Area area = null;
-  ~Tile rightNeighbour = null;
-  ~Tile upNeighbour = null;
-  ~Tile leftNeighbour = null;
-  ~Tile downNeighbour = null;
+  ~Tiles->Floor rightNeighbour = null;
+  ~Tiles->Floor upNeighbour = null;
+  ~Tiles->Floor leftNeighbour = null;
+  ~Tiles->Floor downNeighbour = null;
   
   Tile->Id getId(){
     return null;
   }
-  Tile getNeighbour(Direction direction){
+  void resetNeighbour(Tile oldTile){
+    if upNeighbour == oldTile {
+      upNeighbour = null;
+    }
+    else if downNeighbour == oldTile {
+      downNeighbour = null;
+    }
+    else if leftNeighbour == oldTile {
+      leftNeighbour = null;
+    }
+    else if rightNeighbour == oldTile {
+      rightNeighbour = null;
+    }
+  }
+  ArrayList<Tiles\>Floor> getNeighbours(){
+    ArrayList<Tiles\>Floor> neighbours = new ArrayList<Tiles\>Floor>();
+    if \getNeighbour(Direction.right)!= null {
+      neighbours.add(rightNeighbour);
+    }
+    if \getNeighbour(Direction.left)!= null {
+      neighbours.add(leftNeighbour);
+    }
+    if \getNeighbour(Direction.up)!= null {
+      neighbours.add(upNeighbour);
+    }
+    if \getNeighbour(Direction.down)!= null {
+      neighbours.add(downNeighbour);
+    }
+    return neighbours;
+  }
+  Tiles->Floor getNeighbour(Direction direction){
     if area == null {
       return null;
     }
@@ -486,6 +530,9 @@ class 'packageName'."environments" Tile Environment->Position Loaddable Tickable
   Boolean isPassable(Integer directionX, Integer directionY){
     return true;
   }
+  Boolean isPassable(Tile previousTile){
+    return \isPassable(previousTile.getX()\-\getX(),previousTile.getY()\-\getY());
+  }
   Boolean isWithin(Environment->Position otherPosition){
     return \super.isWithin(otherPosition, width, height);
   }
@@ -510,6 +557,9 @@ class 'packageName'."environments" Tile Environment->Position Loaddable Tickable
   }
   Association get(Association->Id id, Association->Factory factory){
     return "associations".get(id,factory);
+  }
+  String toString(){
+	return '' "(" '' \+ \getX() \+ '' "," '' \+ \ getY() \+ '' ")" '';
   }
 > void setup(ParseContext data){
     \createList(Entity->Factory);

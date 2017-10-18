@@ -35,6 +35,7 @@ tileToken-s
 	"Direction" as DIRECTION
 	"in" as IN
 	"Passable" as PASSABLE
+	"Impassable" as IMPASSABLE
 	"*" as STAR
 	"::" as DOUBLE_COLON
 shape_type
@@ -59,7 +60,13 @@ edge_if_operator
 	EDGE_EQUALS
 	EDGE_NOT_EQUALS 
 tile_definition
-	( (tile_name as floorParentName (COMMA tile_name as floorParentName)*) DOUBLE_COLON )? NAME as tileName in tile_names TILE_DIMENSIONS? ( PASSABLE  SEMICOLON )? (tile_rate SEMICOLON)? (NAME as imageName (TILE_IMAGE_ACCESS NAME as imageId)* SEMICOLON )? tile_element*
+	( (tile_name as floorParentName (COMMA tile_name as floorParentName)*) DOUBLE_COLON )? NAME as tileName in tile_names tile_definition_element* tile_element*
+tile_definition_element is silent
+	TILE_DIMENSIONS
+	IMPASSABLE  SEMICOLON
+	PASSABLE  SEMICOLON
+	tile_rate SEMICOLON
+	NAME as imageName (TILE_IMAGE_ACCESS NAME as imageId)* SEMICOLON 
 tile_element is silent
 	NEWLINE* COMMENTS
 	NEWTAB edge_definition

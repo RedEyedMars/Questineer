@@ -802,7 +802,7 @@ class 'packageName'."gui" Gui {
     }
     void display(Renderer->Layer layer){
       if displayLayer == null {
-        layer = Renderer.botLayer;
+        displayLayer = layer;
         displayLayer.add(this);
       }
       else if displayLayer != layer {

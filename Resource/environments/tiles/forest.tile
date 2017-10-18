@@ -2,9 +2,9 @@
 **Floor**
 / Tree North | West
 	if Neighbour in Direction == null
-Grass  Free;     foliage->grass;
-Path   1FD;      foliage->path;
-Water  3FD;      outside->water;
+Grass              Free;     foliage->grass;
+Path               1FD;      foliage->path;
+Water  Impassable; 3FD;      outside->water;
 
 **Terrain**
 Grass::Tree             Seed | TreeSeed | 2FD; foliage->tree;

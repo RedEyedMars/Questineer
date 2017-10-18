@@ -18,7 +18,14 @@ public class PatchElement extends ConcreteRule {
 		set(
 				new ChainParser(
 					new ListNameElementParser("tile_names"),
-					MapBraces.AREA_DIMENSIONS));
+					new OptionalParser(
+							
+								new ChainParser(
+									new AddTokenParser(
+										AnimationTokens.INTEGER,"patchWidth"),
+									ImageTokens.CROSS,
+									new AddTokenParser(
+										AnimationTokens.INTEGER,"patchHeight")))));
 
 	}
 

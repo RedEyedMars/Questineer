@@ -48,9 +48,10 @@ public class TileTokens extends ParseList {
 	public static final ExactParser DIRECTION = new ExactParser("DIRECTION","tileTokens","Direction");
 	public static final ExactParser IN = new ExactParser("IN","tileTokens","in");
 	public static final ExactParser PASSABLE = new ExactParser("PASSABLE","tileTokens","Passable");
+	public static final ExactParser IMPASSABLE = new ExactParser("IMPASSABLE","tileTokens","Impassable");
 	public static final ExactParser STAR = new ExactParser("STAR","tileTokens","*");
 	public static final ExactParser DOUBLE_COLON = new ExactParser("DOUBLE_COLON","tileTokens","::");
 
 	public static final ChoiceParser parser = new ChoiceParser(
-				NAME,WILD,NEWLINE,NEWTAB,DASH,TILE_IMAGE_ACCESS,TILE,DOT,PERCENT,PLUS,MINUS,PIPE,COLON,FREE,TILE_AND,CIRCLE,COURT,SQUARE,FORESLASH,EDGE_EQUALS,EDGE_NOT_EQUALS,FLOOR,TERRAIN,DENS,CHESTS,NORTH,EAST,SOUTH,WEST,NEIGHBOUR,DIRECTION,IN,PASSABLE,STAR,DOUBLE_COLON);
+				NAME,WILD,NEWLINE,NEWTAB,DASH,TILE_IMAGE_ACCESS,TILE,DOT,PERCENT,PLUS,MINUS,PIPE,COLON,FREE,TILE_AND,CIRCLE,COURT,SQUARE,FORESLASH,EDGE_EQUALS,EDGE_NOT_EQUALS,FLOOR,TERRAIN,DENS,CHESTS,NORTH,EAST,SOUTH,WEST,NEIGHBOUR,DIRECTION,IN,PASSABLE,IMPASSABLE,STAR,DOUBLE_COLON);
 }
