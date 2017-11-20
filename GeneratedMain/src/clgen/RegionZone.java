@@ -1,4 +1,12 @@
 package clgen;
+import java.util.*;
+import java.io.*;
+import lists.*;
+import com.rem.parser.generation.classwise.*;
+import com.rem.parser.generation.*;
+import com.rem.parser.parser.*;
+import com.rem.parser.token.*;
+import com.rem.parser.*;
 import clgen.RegionZone;
 import com.rem.parser.generation.*;
 import com.rem.parser.generation.classwise.*;
@@ -12,6 +20,10 @@ import clgen.RegionPoint;
 import java.util.ArrayList;
 import java.util.Iterator;
 public class  RegionZone  implements Iterable<RegionPoint> {
+	public static class classes {
+	}
+	public static RegionZone variables = null;
+	public static RegionZone methods = null;
 	//Externals
 
 
@@ -27,37 +39,67 @@ protected Integer upperBoundX = 0;
 protected Integer upperBoundY = 0;
 protected RegionPoint previousEdgePoint = null;
 
-	public Map<Integer,Map<Integer,RegionPoint>> getMap() {
+	public Map<Integer,Map<Integer,RegionPoint>> getMap()  {
 		return map;
 	}
-	public Map<Integer,List<RegionEdge>> getUps() {
+	public Map<Integer,Map<Integer,RegionPoint>> get_map()  {
+		return map;
+	}
+	public Map<Integer,List<RegionEdge>> getUps()  {
 		return ups;
 	}
-	public Map<Integer,List<RegionEdge>> getDowns() {
+	public Map<Integer,List<RegionEdge>> get_ups()  {
+		return ups;
+	}
+	public Map<Integer,List<RegionEdge>> getDowns()  {
 		return downs;
 	}
-	public Map<Integer,List<RegionEdge>> getRights() {
+	public Map<Integer,List<RegionEdge>> get_downs()  {
+		return downs;
+	}
+	public Map<Integer,List<RegionEdge>> getRights()  {
 		return rights;
 	}
-	public Map<Integer,List<RegionEdge>> getLefts() {
+	public Map<Integer,List<RegionEdge>> get_rights()  {
+		return rights;
+	}
+	public Map<Integer,List<RegionEdge>> getLefts()  {
 		return lefts;
 	}
-	public Integer getLowerBoundX() {
+	public Map<Integer,List<RegionEdge>> get_lefts()  {
+		return lefts;
+	}
+	public Integer getLowerBoundX()  {
 		return lowerBoundX;
 	}
-	public Integer getLowerBoundY() {
+	public Integer get_lowerBoundX()  {
+		return lowerBoundX;
+	}
+	public Integer getLowerBoundY()  {
 		return lowerBoundY;
 	}
-	public Integer getUpperBoundX() {
+	public Integer get_lowerBoundY()  {
+		return lowerBoundY;
+	}
+	public Integer getUpperBoundX()  {
 		return upperBoundX;
 	}
-	public Integer getUpperBoundY() {
+	public Integer get_upperBoundX()  {
+		return upperBoundX;
+	}
+	public Integer getUpperBoundY()  {
 		return upperBoundY;
 	}
-	public RegionPoint getPreviousEdgePoint() {
+	public Integer get_upperBoundY()  {
+		return upperBoundY;
+	}
+	public RegionPoint getPreviousEdgePoint()  {
 		return previousEdgePoint;
 	}
-public void add(final RegionPoint newPoint) {
+	public RegionPoint get_previousEdgePoint()  {
+		return previousEdgePoint;
+	}
+public void add(final RegionPoint newPoint)  {
 	if (newPoint.getX() < lowerBoundX) {
 		lowerBoundX = newPoint.getX();
 	}
@@ -75,7 +117,7 @@ public void add(final RegionPoint newPoint) {
 	}
 	map.get(newPoint.getX()).put(newPoint.getY(),newPoint);
 }
-public void addEdgePoint(final RegionPoint edge) {
+public void addEdgePoint(final RegionPoint edge)  {
 	if (previousEdgePoint != null) {
 		if (edge.getX() > previousEdgePoint.getX()) {
 			if (rights.containsKey(previousEdgePoint.getY()) == false) {
@@ -104,7 +146,7 @@ public void addEdgePoint(final RegionPoint edge) {
 	}
 	previousEdgePoint = edge;
 }
-public Iterator<RegionPoint> iterator() {
+public Iterator<RegionPoint> iterator()  {
 	return new RegionZoneIterator(this);
 }
 

@@ -18,10 +18,10 @@ Grass::Legendary_Chest 20FD | 50G;  chests->legendary;
 
 **Dens**
 Grass::Long_Grass Passable; Free;          foliage->long_grass;
-	+Praying_Matris {
+	+Praying_Matris monsters_1->praying_mantis {
     	STR 5-7 | DEX 6-9 | CON 2-3 | KNW 1-2 | MND 1-2 | CRM 1
 	}
-	+++Killer_Bees {
+	+++Killer_Bees monsters_1->killer_bees {
     	STR 2-3 | DEX 3-4 | CON 1-3 | KNW 1-2 | MND 1-2 | CRM 1
     	load {
     	  event->host.join(null,event->host->spawn.get(Hive, new Associations.Hive.Factory()))
@@ -29,7 +29,7 @@ Grass::Long_Grass Passable; Free;          foliage->long_grass;
     	}
 	}
 Grass::Lone_Rock          3FD & 3DeadMeat; forest->lone_rock;
-	++Wolf {
+	++Wolf monsters_1->wolf {
 		wild
 		STR 7-9 | DEX 4-6 | CON 4-6 | KNW 1-2 | MND 3-4 | CRM 2
 		TerritorialAggression
@@ -38,20 +38,20 @@ Grass::Lone_Rock          3FD & 3DeadMeat; forest->lone_rock;
     	  event->host.gain(new Skills.DefendMemberOf(event->host.get(Pack)))
     	}
 	}
-	+Dire_Wolf {
+	+Dire_Wolf monsters_1->wolf{
 		wild
 		TerritorialAggression
 		STR 9-12 | DEX 5-7 | CON 6-8 | KNW 3-4 | MND 2-3 | CRM 2
 	}
 Grass::Bear_Den 3FD & 2Honey; forest->bear_den;
-	++Bear_Cub {
+	++Bear_Cub monsters_1->bear{
 		wild
 		STR 4-6 | DEX 3-4 | CON 8-10 | KNW 1-2 | MND 3-4 | CRM 2
 		load {
     	  event->host.join(null,event->host->spawn.get(Cubs, new Associations.Cubs.Factory()))
     	}
 	}
-	+Mother_Bear {
+	+Mother_Bear monsters_1->bear {
 		wild
 		STR 9-12 | DEX 4-5 | CON 11-13 | KNW 3-4 | MND 2-3 | CRM 2
 		TerritorialAggression

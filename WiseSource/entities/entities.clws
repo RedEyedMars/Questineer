@@ -21,6 +21,25 @@ class 'packageName'."entities" Entities {
   @Entity createEntity(String "entityName"){
     return null;
   }
+  class Hero / Entity / {
+    Hero *(Gui->Statable image){
+      imageStates = image.asStates();
+    }
+    
+    boolean getIsPlayerAffiliated(){
+      return true;
+    }
+    ~Gui->Image->States imageStates = null;
+    ~Gui->Drawable drawable = null;
+    Gui->Drawable getDrawable(){
+      if drawable == null {
+        drawable = Drawables.square.image(imageStates);
+        drawable.setVisualWidth(2/13f);
+        drawable.setVisualHeight(2/13f);
+      }
+      return drawable;
+    }
+  }
 > Class declaration(IToken declarationToken){
     StringBuilder entityNameBuilder = new StringBuilder();
 	declarationToken : element : entityName {
@@ -28,12 +47,37 @@ class 'packageName'."entities" Entities {
 	}
 	String entityName = entityNameBuilder.toString();
     Entities += class 'packageName'."entities" entityName Entity {
+      ~Gui->Drawable drawable = null;
     }
     Entities->\entityName += class 'packageName'."entities" Factory \Object Entity->Factory {
         Entity create(){
           return new Entities->'entityName'();
         }
       }
+    if declarationToken->"imageName" != null {
+      String imageName = 'declarationToken->"imageName"';
+      String imageClassName = ^declarationToken->"imageName";  
+      StringBuilder newState = new StringBuilder();
+      ~String underscore = "";
+      declarationToken : element : imageId {
+        newState.append(underscore);
+        newState.append('element');
+        underscore = "_";
+      }
+      if declarationToken->"width" != null {
+        newState.append("_0");
+      }
+      Entities->'entityName' += ~Images->'imageClassName'->States imageStates = Images->'imageName'.asStates()
+      Entities->'entityName' += Gui->Drawable getDrawable(){
+          if drawable == null {
+            drawable = Drawables.square.image(imageStates);
+            drawable.setVisualWidth(2/13f);
+            drawable.setVisualHeight(2/13f);
+          }
+          return drawable;
+        }
+      Entities->'entityName'->*.appendToBody(|"imageStates".'newState'();|); 
+    }
     declarationToken : element : entity_definition {
       element : atom : affinity_names {
     	Entities->'entityName'->*.appendToBody(| this.gain(new Affinities->'^atom'(), this); |);
@@ -125,10 +169,6 @@ class 'packageName'."entities" Entity \Object Source Loaddable Tickable {
       Tile causalTile = null;
       class TileHasOccupant / Entity->Event->FailedToMove / {
         @Entity->Event->FailedToMove->Id \id = new Entity->Event->FailedToMove->Id();
-        TileHasOccupant *(Tile superCausalTile, Entity initialOccupant){
-          \super(superCausalTile);
-          causalOccupant = initialOccupant;
-        }
         Entity->Event->Id getId(){
           return \id;
         }
@@ -139,10 +179,6 @@ class 'packageName'."entities" Entity \Object Source Loaddable Tickable {
         Entity->Event->Id getId(){
           return \id;
         }
-        TerrainImpassable *(Tile superCausalTile, Tiles->Terrain initialTerrain){
-          \super(superCausalTile);
-          causalTerrain = initialTerrain;
-        }
         Tiles->Terrain causalTerrain = null;
       }
     }
@@ -152,7 +188,7 @@ class 'packageName'."entities" Entity \Object Source Loaddable Tickable {
   String name = null;
   ~Integer status = ALIVE;
   ~Float "weightHeld" = 0f;
-  ~Float "walkingSpeed" = 0.2f;
+  ~Integer "walkingSpeed" = 10;
   ~Tile "spawn" = null;
   ~Item->List "equippedItems" = new Item->List();
   ~Skill focusSkill = null;
@@ -163,6 +199,17 @@ class 'packageName'."entities" Entity \Object Source Loaddable Tickable {
   ~Activity->List activityList = new Activity->List();
   ~ArrayList<Entity\>Event> events = new ArrayList<Entity\>Event>();
   
+  
+  void display(){
+    \getDrawable().display(Renderer.topLayer);
+  }
+  Gui->Drawable getDrawable(){
+    return null;
+  }
+  
+  boolean getIsPlayerAffiliated(){
+    return false;
+  }
   Float getItemDamage(){
     Float "sum" = 0f;
 	for Item "item" : "equippedItems" {
@@ -233,6 +280,11 @@ class 'packageName'."entities" Entity \Object Source Loaddable Tickable {
         }
       }
     }
+    else {
+      if currentActivity != null {
+	    currentActivity.on(new Events->\Tick(this));
+	  }
+	}
     \on(new Events->\Tick(this));
   }
   void listen(Entity->Event event){
@@ -245,6 +297,8 @@ class 'packageName'."entities" Entity \Object Source Loaddable Tickable {
     \on(new Events->\Joined(recruiter, this));
   }
   void start(Activity newActivity){
+    newActivity.setHost(this);
+    newActivity.on(new \Events->\Load(this));
     activityList.add(0,newActivity);
     currentActivityIndex \+= 1;
   }
@@ -272,6 +326,7 @@ class 'packageName'."entities" Entity \Object Source Loaddable Tickable {
   Tiles->Terrain->Corpse getCorpse(){
     return null;
   }
+  
 > void setup(ParseContext data){
 	List<String> namesToAdd = new ArrayList<String>();
 	namesToAdd.add("hit");

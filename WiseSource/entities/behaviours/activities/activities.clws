@@ -18,6 +18,8 @@ class 'packageName'."entities"."behaviours"."activities" Activity \Object Source
   ~Set<Area> exploredAreas = new HashSet<Area>();
   ~Entity targetEntity = null;
   ~Boolean failed = false;
+  void setHost(Entity newHost){
+  }
   Boolean hasTarget() {
     return targetEntity != null;
   }
@@ -194,12 +196,18 @@ class 'packageName'."entities"."behaviours"."activities" Activities {
         Activities->'activityName'->*"getDestination[Entity]".appendToBody(\getBodyElement(atom,getTargetContext));
       }
     }
+    if declarationToken->"step" != null {
+      declarationToken : element : step {
+        Activities->'activityName' += Boolean step(Entity host){}
+        Context stepContext = Activities->'activityName'->*"step".getContext();
+        Activities->'activityName'->*"step".appendToBody(\getBodyElements(element,stepContext));
+      }
+    }
     declarationToken : element : event {
       Context eventContext = Events.getEventContext('element->"event_names"',Activities->'activityName');
       Events.addToEventMethod('element->"event_names"',Activities->'activityName',\getBodyElements(element,eventContext));
     }
     
-    Activities->'activityName'->*.appendToBody({\on(new Events->\Load(host));});
     Activities->'activityName'->*"hasSucceeded[Entity]".appendToBody({return false;});
     Activities->'activityName'->*"hasFailed[Entity]".appendToBody({return false;});
   }

@@ -217,7 +217,7 @@ class 'packageName'."gui"."images" ImageLoader {
     });
     ImageLoader->*"load".prependToBody({'imageLoaderClassName' 'imageLoaderName' = new 'imageLoaderClassName'(''imageFileName'');});
     ImageLoader->*"load".appendToBody({
-      'imageLoaderName'.attachTextures(Images->'imageName');
+      'imageLoaderName'.attachTextures(Images->'imageName',null);
     });
     if declaredImageLoaders.add(imageLoaderClassName) == false {
       return void;
@@ -227,6 +227,7 @@ class 'packageName'."gui"."images" ImageLoader {
     ImageLoader += class imageLoaderClassName / Thread / {
       String fileName = null;
       ~ByteBuffer pixelBuffer = null;
+      ~ByteBuffer flippedPixelBuffer = null;
       ~Boolean failed = false;
       void run(){
         BufferedImage bufferedImage = null;
@@ -240,30 +241,52 @@ class 'packageName'."gui"."images" ImageLoader {
             jpixels = flipPixels(jpixels, imgw, imgh);
         }#
         'byteArrayType' bytes = "new byte["+'totalByteSize'+"]";
+        'byteArrayType' flippedBytes = "new byte["+'totalByteSize'+"]";
         \int p = 0;
         \int r = 0;
         \int g = 0;
         \int b = 0;
         \int a = 0;
-        \int j = 0;
-        for Integer i < 'totalSize' {
-          p = "pixels[i]"; a = "(p >> 24) & 0xFF"; r = "(p >> 16) & 0xFF";  g = "(p >> 8) & 0xFF"; b = "(p >> 0) & 0xFF";
-          "bytes[j+0] = (byte)r";  "bytes[j+1] = (byte)g";  "bytes[j+2] = (byte)b"; "bytes[j+3] = (byte)a";
-          j += 4;
+        int i = 0;
+        int j = 0;
+        int k = 0;
+        for int y < 'imageHeight' {
+          for int x < 'imageWidth' {
+            i = (256 * y) \+ x;
+            j = i * 4;
+            k = 4*(256*(y\+1)-x-1) ;
+            p = pixels[i]; 
+            a = (p >> 24) & 0xFF; r = (p >> 16) & 0xFF;  g = (p >> 8) & 0xFF; b = (p >> 0) & 0xFF;
+            bytes[j\+0] = (byte)r;  bytes[j\+1] = (byte)g;  bytes[j\+2] = (byte)b; bytes[j\+3] = (byte)a;
+            flippedBytes[k\+0] = (byte)r;  
+            flippedBytes[k\+1] = (byte)g; 
+            flippedBytes[k\+2] = (byte)b; 
+            flippedBytes[k\+3] = (byte)a;
+          }
         }
         pixelBuffer = ByteBuffer.allocateDirect('totalByteSize').order(ByteOrder.nativeOrder());
         pixelBuffer.put(bytes).flip();
+        flippedPixelBuffer = ByteBuffer.allocateDirect('totalByteSize').order(ByteOrder.nativeOrder());
+        flippedPixelBuffer.put(flippedBytes).flip();
       }
-      void attachTextures(Gui->Image imageObject){
+      void attachTextures(Gui->Image imageObject, Gui->Image flippedImageObject){
         try {
           \super.join();
         }
         print catch Interrupted {}
-        \int texture = 0;
         if failed == true {
     	  imageObject.setTexture(0);
           return void;
 		}
+    	
+    	imageObject.setTexture(\getTextureFromPixelBuffer(pixelBuffer));
+    	if flippedImageObject != null {
+    	  flippedImageObject.setTexture(\getTextureFromPixelBuffer(pixelBuffer));  
+    	}
+      }
+      @int getTextureFromPixelBuffer(ByteBuffer pixels){
+        
+        \int texture = 0;
         IntBuffer textureHandle = ByteBuffer.allocateDirect('INT_SIZE').order(ByteOrder.nativeOrder()).asIntBuffer();
         GL11.glGenTextures(textureHandle);
         texture = textureHandle.get(0);
@@ -280,20 +303,18 @@ class 'packageName'."gui"."images" ImageLoader {
           0,						
           GL11.GL_RGBA, 			
           GL11.GL_UNSIGNED_BYTE,	
-          pixelBuffer);
+          pixels);
         GL11.glPopAttrib();
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture);
     	Integer result = GLU.gluBuild2DMipmaps(GL11.GL_TEXTURE_2D, GL11.GL_RGBA8,
     		'imageWidth', 'imageHeight',
-    		GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, pixelBuffer);
+    		GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, pixels);
     	if result != 0 {
     	  \System.err.println(''"GLApp.makeTextureMipMap(): Error occured while building mip map, result="'' \+ result \+ ''" error="'' \+ GLU.gluErrorString(result) );
     	}
     	GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
     	GL11.glTexEnvf(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_MODULATE);
-    	
-    	imageObject.setTexture(texture);
-    	
+    	return texture;
       }
     }
   }
@@ -1184,12 +1205,12 @@ class 'packageName'."gui" Gui {
     }
   }
 > void setup(){
-    Drawable.setup();
+    Gui->Drawable.setup();
   }
 > void importAny(IToken import_any){
 	import_any : import_colours : IMPORT_COLOUR {
       import_colours : element : colour_declaration {
-		Colour.declaration(element);
+		Gui->Colour.declaration(element);
 	  }
 	}
 	import_any : import_animation_types : IMPORT_ANIMATION_TYPE {
@@ -1199,15 +1220,15 @@ class 'packageName'."gui" Gui {
 	}
 	import_any : import_images : IMPORT_IMAGE {
 	  import_images : element : image_declaration {
-		Image.declaration(element);
+		Gui->Image.declaration(element);
 	  }
 	}
 	import_any : import_draws : IMPORT_DRAWABLE {
 	  import_draws : element : drawable_declaration {
-		Drawable.declaration(element);
+		Gui->Drawable.declaration(element);
 	  }
 	  import_draws : element : multiple_drawable_declaration {
-		Drawable.multipleDeclaration(element);
+		Gui->Drawable.multipleDeclaration(element);
 	  }
 	}
 	import_any : import_layers : IMPORT_LAYER {

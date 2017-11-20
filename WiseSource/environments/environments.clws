@@ -13,7 +13,7 @@ class 'packageName'."environments" Environment \Object Loaddable Tickable {
   ~Area\>Generator areaGenerator = null;
   ~List<Tile\>Factory> floorTiles = new ArrayList<Tile\>Factory>(); 
   ~List<Area> areas = new ArrayList<Area>();
-  ~List<Area> activeAreas = new ArrayList<Area>();
+  ~Map<Area,Integer> activeAreas = new HashMap<Area,Integer>();
   ~Map<Tile\>Id, List<Tile>> tiles = new HashMap<Tile\>Id, List<Tile>>();
   ~Map<Area\>Id, List<Area>> areaMap = new HashMap<Area\>Id, List<Area>>();
   void add(Area newArea){
@@ -23,6 +23,25 @@ class 'packageName'."environments" Environment \Object Loaddable Tickable {
     }
     areaMap.get(newArea.getId()).add(newArea);
     newArea.setParent(this);
+  }
+  void addActiveArea(Area area){
+    if activeAreas.containsKey(area){
+      activeAreas.put(area,activeAreas.get(area)\+1);
+    }
+    else {
+      activeAreas.put(area,1);
+    }
+  }
+  void removeActiveArea(Area area){
+    if activeAreas.containsKey(area) {
+      Integer currentAmount = activeAreas.get(area);
+      if currentAmount <= 1 {
+        activeAreas.remove(area);
+      }
+      else {
+        activeAreas.put(area,currentAmount\-1);
+      }
+    }
   }
   Area getArea(Integer index){
     return areas.get(index);
@@ -84,6 +103,25 @@ class 'packageName'."environments" Environment \Object Loaddable Tickable {
         return \Math.atan2(yDirection,xDirection);
       }
     }
+    Direction getDirectionOf(Position otherPosition){
+      Integer xDirection = otherPosition.getX() - \getX() ;
+      if xDirection > 0 {
+        return Direction.right;
+      }
+      else if xDirection < 0{
+        return Direction.left;
+      }
+      Integer yDirection = otherPosition.getX() - \getY();
+      if yDirection > 0 {
+        return Direction.up;
+      }
+      else if yDirection < 0 {
+        return Direction.down;
+      }
+      else {
+        return null;
+      }
+    }
     List<Direction> getDirectionsTo(Position otherPosition){
       Integer xDirection = otherPosition.getX() - \getX() ;
       Integer yDirection = otherPosition.getX() - \getY();
@@ -142,6 +180,9 @@ class 'packageName'."environments" Environment \Object Loaddable Tickable {
     }
   }
   class 'packageName'."environments" Location Environment->Position Environment->Movable {
+    > Float gridFactor = 6f;
+    > Float gridXFactor = gridFactor*1.85f;
+    > Float gridYFactor = gridFactor*3.85f;
     class Event // {
       class Move // Area->Event->Tick {
         Environment->Location actor = null;
@@ -158,7 +199,30 @@ class 'packageName'."environments" Environment \Object Loaddable Tickable {
     ~Float radius = 0.5f;
     ~Float facing = 0f;
     ~Area area = null;
-    ~Tile tile = null;
+    ~Tiles->Floor tile = null;
+    void setX(Integer newX) {
+      \super.setX(newX);
+      if host != null {
+        host.getDrawable().setVisualX(((float)newX\+\getY())/'gridXFactor'+"f");
+        host.getDrawable().setVisualY(((float)\getY()\-newX)/'gridYFactor'+"f"\+0.05f);
+      }
+    }
+    void setY(Integer newY) {
+      \super.setY(newY);
+      if host != null {
+        host.getDrawable().setVisualX(((float)\getX()\+newY)/'gridXFactor'+"f");
+        host.getDrawable().setVisualY(((float)newY\-\getX())/'gridYFactor'+"f"\+0.05f);
+      }
+    }
+    void setArea(Area newArea){
+      if host != null {
+        if area != null {
+          area.remove(host);
+        }
+        newArea.add(host);
+      }
+      area = newArea;
+    }
     Boolean isWithin(Environment->Location otherLocation, Float range, Double angleLeft, Double angleRight){
       Float tFacing = otherLocation.getFacing();
       return \super.isWithin(otherLocation, range, angleLeft \+ tFacing, angleRight \+ tFacing);
@@ -193,10 +257,12 @@ class 'packageName'."environments" Environment \Object Loaddable Tickable {
       }
       return result;
     }
-    Tile getUnexploredPoint(){
+    Tiles->Floor getUnexploredPoint(){
       return area.getUnexploredPoint(host);
     }
-    
+    void step(Integer speed, Environment->Position otherPosition){
+      \step(speed,\getDirectionOf(otherPosition));
+    }
     void step(Integer speed, Direction direction){
       facing = direction.getFloatValue();
       area.addEvent(speed, new Environment->Location->Event->Move(this,direction));
@@ -226,7 +292,7 @@ class 'packageName'."environments" Environment \Object Loaddable Tickable {
         return new Entity->Event->FailedToMove(nextTile);
       }
       else if nextTile.isPassable("-xDirection",0) {
-        return nextTile.acceptEntity(host);
+        return nextTile.accept(host);
       }
       else if nextTile.hasOccupant() {
         return new Entity->Event->FailedToMove->TileHasOccupant(nextTile,nextTile.getOccupant());
@@ -244,7 +310,7 @@ class 'packageName'."environments" Environment \Object Loaddable Tickable {
         return new Entity->Event->FailedToMove(nextTile);
       }
       else if nextTile.isPassable(0,"-yDirection") {
-        return nextTile.acceptEntity(host);
+        return nextTile.accept(host);
       }
       else if nextTile.hasOccupant() {
         return new Entity->Event->FailedToMove->TileHasOccupant(nextTile,nextTile.getOccupant());
@@ -261,13 +327,13 @@ class 'packageName'."environments" Environment \Object Loaddable Tickable {
       y = otherPosition.y;
       parent = otherPosition.getParent();
     }
-    void moveTo(Tile otherTile){
+    void moveTo(Tiles->Floor otherTile){
       x = otherTile.x;
       y = otherTile.y;
       parent = otherTile.getParent();
       area = otherTile.getArea();
       tile = otherTile;
-      otherTile.acceptEntity(host);
+      otherTile.accept(host);
     }
     Boolean moveToAround(Tiles->Floor otherTile){
       if otherTile.hasOccupant() {
@@ -334,6 +400,35 @@ class 'packageName'."environments" Environment \Object Loaddable Tickable {
         return moved;
       }
     }
+    
+    Tiles->Floor->Way getWay(Tiles->Floor endTile){
+      Tiles->Floor->Path path = new Tiles->Floor->Path(null,tile,endTile);
+      Tiles->Floor->Path->Ways ways = new Tiles->Floor->Path->Ways();
+      ways.add(path);
+      Set<Tiles\>Floor> investigated = new HashSet<Tiles\>Floor>();
+      investigated.add(null);
+      ArrayList<Tiles\>Floor\>Path> tried = new ArrayList<Tiles\>Floor\>Path>(); 
+      while path.getTile() != endTile && ways.isEmpty() == false {
+        path = ways.pollLast();
+        tried.add(path);
+        Set<Tiles\>Floor> neighbours = new HashSet<Tiles\>Floor>();
+        neighbours.addAll(path.getTile().getNeighbours());
+        neighbours.removeAll(path);
+        for Tiles->Floor neighbour: neighbours {
+          ways.add(new Tiles->Floor->Path(path,neighbour,endTile));
+        }
+      }
+      if path.getTile() == endTile {
+        return new Tiles->Floor->Way(path.reverse());
+      }
+      else {
+        System.err.println('' "Could not make path!" '');
+        for Tiles->Floor->Path trie: tried {
+          System.out.println(path);
+        }
+        return null;
+      }
+    }
   }
   interface 'packageName'."environments" FactoryHelper {
     void populate(Environment client, Float x, Float y){}
@@ -352,7 +447,7 @@ class 'packageName'."environments" Environment \Object Loaddable Tickable {
     }
   }
   void tick(Double millisSinceLastFrame){
-    for Area activeArea: activeAreas {
+    for Area activeArea: activeAreas.keySet() {
       activeArea.tick(millisSinceLastFrame);
     }
   }

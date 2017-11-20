@@ -12,7 +12,6 @@ class 'packageName'."environments" Area Environment->Position {
   Area->Id getId(){
     return null;
   }
-  Environment environment = null;
   ~ArrayList<Tile> tiles = new ArrayList<Tile>();
   ~Map<Integer, Map<Integer, Tiles\>Floor>> layout = new HashMap<Integer, Map<Integer, Tiles\>Floor>>();
   ~ArrayList<Tiles\>EntryPoint> entryPoints = new ArrayList<Tiles\>EntryPoint>();
@@ -20,7 +19,8 @@ class 'packageName'."environments" Area Environment->Position {
   ~Map<Tiles\>Floor\>Id, ArrayList<Tiles\>Floor>> floorMap = new HashMap<Tiles\>Floor\>Id, ArrayList<Tiles\>Floor>>();
   ~Map<Tiles\>Terrain\>Id, ArrayList<Tiles\>Terrain>> terrainMap = new HashMap<Tiles\>Terrain\>Id, ArrayList<Tiles\>Terrain>>();
   
-  ~Map<Integer, Map<Integer, ArrayList<Tiles\>Floor>>> entryToEntryPaths = new HashMap<Integer, Map<Integer, ArrayList<Tiles\>Floor>>>(); 
+  ~Map<Integer, Map<Integer, ArrayList<Tiles\>Floor>>> entryToEntryPaths = new HashMap<Integer, Map<Integer, ArrayList<Tiles\>Floor>>>();
+  ~Map<Area, Tiles\>EntryPoint> sisterAreas = new HashMap<Area, Tiles\>EntryPoint>(); 
   
   ~Entity->List entities = new Entity->List();
   ~Integer width = 0;
@@ -416,22 +416,34 @@ class 'packageName'."environments" Area Environment->Position {
             terrainCaseBody.add(|return 1;|);
           }
           else {
-            Statement mapHasStartIndex = new Statement ();
-            mapHasStartIndex.set("||");
-            terrainCaseBody.add(|while `mapHasStartIndex` {
-                "startIndex" = Range.getRandom(0,'layoutSize');
-              }|);
+            Statement usableTerrainStatement = new Statement ();
+            terrainCaseBody.add(|"startIndex" = Range.getRandom(0,`usableTerrainStatement`);|);
             
             Integer widthPlus = width\+1;
             Integer heightPlus = height\+1;
             terrainCaseBody.add(|Integer chosenTerrainWidth = Range.getRandom(0,'widthPlus');|);
             terrainCaseBody.add(|Integer chosenTerrainHeight = Range.getRandom(0,'heightPlus');|);
             for Integer w <= width {
+              Body widthIfBody = new Body ();
+              if w == 0 {
+                terrainCaseBody.add(|     if "chosenTerrainWidth" <= 'w' `widthIfBody` |);
+              }
+              else {
+                terrainCaseBody.add(|else if "chosenTerrainWidth" <= 'w' `widthIfBody` |);
+              }
               for Integer h <= height {
-                terrainCaseBody.add(|
-                  if "chosenTerrainWidth" <= 'w' && "chosenTerrainHeight" <= 'h' {
-                    terrainMap.put("map"+'width'+"x"+'height'["startIndex",'w','h'], 'terrainTileNameValue');
-                  }|);
+                if h == 0 {
+                  widthIfBody.add(|
+                    if "chosenTerrainHeight" <= 'h' {
+                      terrainMap.put("map"+'width'+"x"+'height'["startIndex",'w','h'], 'terrainTileNameValue');
+                    }|);
+                }
+                else {
+                  widthIfBody.add(|
+                    else if "chosenTerrainHeight" <= 'h' {
+                      terrainMap.put("map"+'width'+"x"+'height'["startIndex",'w','h'], 'terrainTileNameValue');
+                    }|);
+                }
               }
             }
             ~Boolean hasDimensions = false;
@@ -446,8 +458,10 @@ class 'packageName'."environments" Area Environment->Position {
               terrainMappedDimensions.get(width).add(height);
               Area->TerrainChoice->'mapName'->'areaClassName'->'generateTerrainChoiceName' +=  @int[][][] "map"+'width'+"x"+'height' = new int(`indexParameters`)[][][]
             }
+            ~Integer usableTerrainCount = 0;
             for Integer floorIndex < layoutSize {
               if terrainMap.containsKey(floorIndex) && terrainMap.get(floorIndex).containsKey(width) && terrainMap.get(floorIndex).get(width).containsKey(height) {
+                usableTerrainCount \+= 1;
                 if hasDimensions == false {
                   ~Statement previousRealIndex = |'floorIndex'|;
                   Parameters widthParameters = new Parameters ();
@@ -465,11 +479,9 @@ class 'packageName'."environments" Area Environment->Position {
                   }
                 }
               }
-              else {
-                mapHasStartIndex.add(|"startIndex" == 'floorIndex'|);
-                indexParameters.add(|new int()[][]|);
-              }
             }
+            Integer usableTerrainCountValue = usableTerrainCount;
+            usableTerrainStatement.add(|'usableTerrainCountValue'|);
             terrainCaseBody.add(|return 1; |);
           }
           terrainSwitchBody.add(|
@@ -519,6 +531,9 @@ class 'packageName'."environments" Area Environment->Position {
       return null;
     }
   }
+  Tiles->EntryPoint getEntryPoint(Integer index){
+    return entryPoints.get(index);
+  }
   Tile getTile(Tile->Id findId){
     if tileMap.containsKey(findId) == false || tileMap.get(findId).isEmpty() {
       return null;
@@ -545,7 +560,7 @@ class 'packageName'."environments" Area Environment->Position {
   }
   void load(){
     for Integer currentTickPosition < 'tickEventArrayLength' {
-      'tickEventArrayGetTick' = new Area->Event->Tick->Listener();
+      tickEvents[currentTickPosition] = new Area->Event->Tick->Listener();
     }
     for Tile tile: tiles {
       tile.load();
@@ -568,7 +583,16 @@ class 'packageName'."environments" Area Environment->Position {
     'tickEventArrayGetPut'.add(event);
   }
   Boolean add(Entity entity){
+    if \getParent() != null && entity.getIsPlayerAffiliated() {
+      \getParent().addActiveArea(this);
+    }
     return entities.add(entity);
+  }
+  Boolean remove(Entity entity){
+    if \getParent() != null && entity.getIsPlayerAffiliated() {
+      \getParent().removeActiveArea(this);
+    }
+    return entities.remove(entity);
   }
   Boolean add(Tile newTile){
     newTile.setArea(this);
@@ -648,7 +672,7 @@ class 'packageName'."environments" Area Environment->Position {
     }
     return tiles.remove(oldTile);
   }
-  Tile getUnexploredPoint(Entity explorer){
+  Tiles->Floor getUnexploredPoint(Entity explorer){
     if entryPoints.isEmpty() == false {
       return null;
     }
@@ -739,6 +763,46 @@ class 'packageName'."environments" Area Environment->Position {
   Boolean isWithin(Environment->Position otherPosition){
     return otherPosition.getX() >= 0 && otherPosition.getX() < "width" && otherPosition.getY() >= 0 && otherPosition.getY() < "height";
   }
+  Tiles->EntryPoint getEntryPointToward(Area area){
+    if sisterAreas.containsKey(area) {
+      return sisterAreas.get(area);
+    }
+    else {
+      for Tiles\>EntryPoint entryPoint: entryPoints {
+        if entryPoint.getSister() != null && entryPoint.getSister().getArea() == area {
+          sisterAreas.put(area,entryPoint);
+          return entryPoint;
+        }
+        else if entryPoint.getSister() != null && entryPoint.getSister().getArea() != null {
+          Set<Area> investigated = new HashSet<Area>();
+          if entryPoint.getSister().getArea().canGetToAreaFrom(area,entryPoint.getSister(),investigated) {
+            investigated.add(this);
+            sisterAreas.put(area,entryPoint);
+            return entryPoint;
+          }
+        }
+      }
+    }
+    return null;
+  }
+  Boolean canGetToAreaFrom(Area findArea,Tiles->EntryPoint previousEntryPoint, Set<Area> investigated){
+    if this == findArea {
+      return true;
+    }
+    if investigated.add(this) {
+      for Tiles\>EntryPoint entryPoint: entryPoints {
+        if previousEntryPoint == entryPoint {
+          "continue";
+        }
+        if entryPoint.getSister() != null && entryPoint.getSister().getArea() != null {
+          if entryPoint.getSister().getArea().canGetToAreaFrom(findArea,entryPoint.getSister(),investigated) {
+            return true;
+          }
+        }
+      }
+    }
+    return false;
+  }
   ArrayList<Tiles\>Floor> getAbsolutePathBetweenEntryPoints(Integer startPoint, Integer endPoint){
     if entryToEntryPaths.containsKey(startPoint) {
       if entryToEntryPaths.get(startPoint).containsKey(endPoint) {
@@ -750,12 +814,12 @@ class 'packageName'."environments" Area Environment->Position {
     }
     Tiles->Floor endTile = entryPoints.get(endPoint);
     Tiles->Floor tile = entryPoints.get(startPoint);
-    Path path = new Path(null,tile,endTile);
-    Path->Ways ways = new Path->Ways();
+    Tiles->Floor->Path path = new Tiles->Floor->Path(null,tile,endTile);
+    Tiles->Floor->Path->Ways ways = new Tiles->Floor->Path->Ways();
     ways.add(path);
     Set<Tiles\>Floor> investigated = new HashSet<Tiles\>Floor>();
     investigated.add(null);
-    ArrayList<Path> tried = new ArrayList<Path>(); 
+    ArrayList<Tiles\>Floor\>Path> tried = new ArrayList<Tiles\>Floor\>Path>(); 
     while path.getTile() != endTile && ways.isEmpty() == false {
       path = ways.pollLast();
       tried.add(path);
@@ -763,16 +827,20 @@ class 'packageName'."environments" Area Environment->Position {
         neighbours.addAll(path.getTile().getNeighbours());
         neighbours.removeAll(path);
         for Tiles->Floor neighbour: neighbours {
-          ways.add(new Path(path,neighbour,endTile));
+          ways.add(new Tiles->Floor->Path(path,neighbour,endTile));
         }
     }
     if path.getTile() == endTile {
       entryToEntryPaths.get(startPoint).put(endPoint, path);
+      if entryToEntryPaths.containsKey(endPoint) == false {
+        entryToEntryPaths.put(endPoint, new HashMap<Integer, ArrayList<Tiles\>Floor>>());
+      }
+      entryToEntryPaths.get(endPoint).put(startPoint, path.reverse());
       return path;
     }
     else {
       System.err.println('' "Could not make path!" '');
-      for Path trie: tried {
+      for Tiles->Floor->Path trie: tried {
         System.out.println(path);
       }
       return null;
@@ -784,44 +852,10 @@ class 'packageName'."environments" Area Environment->Position {
         entryToEntryPaths.get(startPoint).remove(endPoint);
       } 
     }
-  }
-  class Path / ArrayList<Tiles\>Floor> / Comparable<Path> {
-    ~int distanceToDestination = 0;
-    ~Tiles->Floor tile = null;
-    Path *(Path parentPath, Tiles->Floor nextTile, Tiles->Floor destination){
-      distanceToDestination = (destination.getX()\-nextTile.getX())\*(destination.getX()\-nextTile.getX())\+(destination.getY()\-nextTile.getY())\*(destination.getY()\-nextTile.getY());
-      
-      if parentPath != null {
-        if nextTile.isPassable(parentPath.tile) == false {
-          distanceToDestination \+= 10000;
-        }
-        \addAll(parentPath);
-      }
-      \add(nextTile);
-      tile = nextTile;
-    }
-    int compareTo(Path otherPath) {
-      return otherPath.distanceToDestination \- distanceToDestination;
-    }
-    String toString(){
-	  StringBuilder builder = new StringBuilder();
-	  builder.append('' "*******\\n" '');
-	  for Integer i < \size() {
-	    Integer j = 0;
-	    while j<4&&i<\size() {
-		  builder.append('' "[" '');
-		  builder.append(\get(i).getX());
-		  builder.append('' "," '');
-		  builder.append(\get(i).getY());
-		  builder.append('' "]" '');
-		  i\+=1;
-		  j\+=1;
-		}
-		i\-=1;
-	  }
-	  return builder.toString();
-    }
-    class Ways / TreeSet<Path> / {
+    if entryToEntryPaths.containsKey(endPoint) {
+      if entryToEntryPaths.get(startPoint).containsKey(startPoint) {
+        entryToEntryPaths.get(endPoint).remove(startPoint);
+      } 
     }
   }
   

@@ -12,9 +12,27 @@ class 'packageName'."environments" Tiles {
     }
     ~Tiles->Terrain terrain = null;
     ~Entity occupant = null;
-    Entity->Event acceptEntity(Entity newOccupant){
+    
+    void load(){
+      if terrain != null {
+        terrain.load();
+      }
+      if occupant != null {
+        occupant.load();
+      }
+    }
+    void tick(Double millisSinceLastFrame){
+      if terrain != null {
+        terrain.tick(millisSinceLastFrame);
+      }
+      if occupant != null {
+        occupant.tick(millisSinceLastFrame);
+      }
+    }
+    Entity->Event accept(Entity newOccupant){
+      newOccupant.getLocation().setTile(this);
       occupant = newOccupant;
-      return \super.acceptEntity(newOccupant);
+      return \super.accept(newOccupant);
     }
     void setTerrain(Tiles->Terrain newTerrain){
       terrain = newTerrain;
@@ -25,6 +43,10 @@ class 'packageName'."environments" Tiles {
     Boolean hasOccupant(){
       return occupant != null;
     }
+    
+    Boolean hasOccupant(Entity otherEntity){
+      return occupant == otherEntity;
+    }
     Boolean isPassable(Integer directionX, Integer directionY){
       if occupant != null {
         return false;
@@ -34,6 +56,66 @@ class 'packageName'."environments" Tiles {
       }
        else {
         return true;
+      }
+    }
+    class Way // {
+      ~Integer currentIndex = 1;
+      ArrayList<Tiles\>Floor> path = null;
+      boolean step(Entity host){
+        if currentIndex < path.size() {
+          host.getLocation().step(host.getWalkingSpeed(), host.getLocation().getDirectionOf(path.get("currentIndex++")));
+          return true;
+        }
+        else {
+          return false;
+        }
+      }
+    }
+    class Path / ArrayList<Tiles\>Floor> / Comparable<Path> {
+      ~int distanceToDestination = 0;
+      ~Tiles->Floor tile = null;
+      Path *(Path parentPath, Tiles->Floor nextTile, Tiles->Floor destination){
+        distanceToDestination = (destination.getX()\-nextTile.getX())\*(destination.getX()\-nextTile.getX())\+(destination.getY()\-nextTile.getY())\*(destination.getY()\-nextTile.getY());
+        if parentPath != null {
+          if nextTile.isPassable(parentPath.tile) == false {
+            distanceToDestination \+= 10000;
+          }
+          \addAll(parentPath);
+        }
+        \add(nextTile);
+        tile = nextTile;
+      }
+      ArrayList<Tiles\>Floor> reverse(){
+        ArrayList<Tiles\>Floor> reversedPath = new ArrayList<Tiles\>Floor>();
+        Integer i = \size()-1;
+        while i >= 0 {
+          reversedPath.add(\get(i));
+          i \-= 1;
+        }
+        return reversedPath;
+      }
+      int compareTo(Path otherPath) {
+        return otherPath.distanceToDestination \- distanceToDestination;
+      }
+      String toString(){
+	    StringBuilder builder = new StringBuilder();
+	    builder.append('' "*******\\n" '');
+	    for Integer i < \size() {
+  	      Integer j = 0;
+	      while j<4&&i<\size() {
+		    builder.append('' "[" '');
+		    builder.append(\get(i).getX());
+		    builder.append('' "," '');
+		    builder.append(\get(i).getY());
+		    builder.append('' "]" '');
+		    i\+=1;
+            j\+=1;
+		  }
+		  i\-=1;
+	    }
+	    return builder.toString();
+      }
+      class Ways / TreeSet<Path> / {
       }
     }
   }
@@ -52,8 +134,8 @@ class 'packageName'."environments" Tiles {
     Boolean isPassable(Integer x, Integer y){
       return false;
     }
-    Entity->Event acceptEntity(Entity newOccupant){
-      return floorTile.acceptEntity(newOccupant);
+    Entity->Event accept(Entity newOccupant){
+      return floorTile.accept(newOccupant);
     }
     class Corpse / Tiles->Terrain / {
     }
@@ -64,8 +146,8 @@ class 'packageName'."environments" Tiles {
     Boolean isPassable(Integer x, Integer y){
       return false;
     }
-    Entity->Event acceptEntity(Entity newOccupant){
-      return "floorTile".acceptEntity(newOccupant);
+    Entity->Event accept(Entity newOccupant){
+      return "floorTile".accept(newOccupant);
     }
   }
   class 'packageName'."environments" Chest Tiles->Terrain {
@@ -74,25 +156,30 @@ class 'packageName'."environments" Tiles {
     Boolean isPassable(Integer x, Integer y){
       return false;
     }
-    Entity->Event acceptEntity(Entity newOccupant){
-      return "floorTile".acceptEntity(newOccupant);
+    Entity->Event accept(Entity newOccupant){
+      return "floorTile".accept(newOccupant);
     }
   }
   class 'packageName'."environments" EntryPoint Tiles->Floor {
     class Id / Tiles->Floor->Id / {
     }
     ~Tiles->EntryPoint sister = null;
-    Entity->Event acceptEntity(Entity newOccupant){
-      if sister.getArea() == null {
-        sister.setArea(\getArea().getParent().getAreaGenerator().generate());
+    Entity->Event accept(Entity newOccupant){
+      if sister != null {
+        if sister.getArea() == null {
+          sister.setArea(\getArea().getParent().getAreaGenerator().generate());
+        }
+        sister.take(newOccupant);
+        return new Entity->Event->MovedToNewArea(area, sister.getArea());
       }
-      newOccupant.getLocation().setArea(sister.getArea());
-      sister.takeEntity(newOccupant);
-      return new Entity->Event->MovedToNewArea(area, sister.getArea());
+      else {
+        return \take(newOccupant);
+      }
     }
-    void takeEntity(Entity newOccupant){
+    Entity->Event take(Entity newOccupant){
+      newOccupant.getLocation().setArea(area);
       newOccupant.explore(area);
-      \super.acceptEntity(newOccupant);
+      return \super.accept(newOccupant);
     }
     Integer getDistanceToUnexploredPaths(Entity explorer){
       return \getDistanceToUnexploredPaths(explorer, new HashSet<EntryPoint>(),0);
@@ -156,8 +243,10 @@ class 'packageName'."environments" Tiles {
       void generate(){
       }
       void load(){
+        super.load();
       }
       void tick(Double millisSinceLastFrame){
+        super.tick(millisSinceLastFrame);
       }
     }
     if tileExtendsClass == Tiles->Floor || tileExtendsClass == Tiles->EntryPoint {
@@ -208,6 +297,9 @@ class 'packageName'."environments" Tiles {
 		    \getDrawable().display(Renderer.botLayer);
 		    if "terrain" != null {
 		      "terrain".display();
+		    }
+		    if "occupant" != null {
+		      "occupant".display();
 		    }
 		  }
       }
@@ -303,7 +395,7 @@ class 'packageName'."environments" Tiles {
     }
     collectionClass->'mapName'->'tileName' += class Placer // Menu->Placable {
       void place(Area area, Integer placeX, Integer placeY){
-        area.add(new collectionClass->'mapName'->'tileName'(placeX,placeY,area.getEnvironment()));
+        area.add(new collectionClass->'mapName'->'tileName'(placeX,placeY,area.getParent()));
       }
     }
 	declarationToken : element : tile_rate {
@@ -315,35 +407,37 @@ class 'packageName'."environments" Tiles {
     if declarationToken->"entity" != null {
 	  ~Integer entityPlusNumber = 0;
       Body switchBody = new Body ();
+      collectionClass->'mapName'->'tileName' += ~Integer numberOfMonsters = "0"
+      collectionClass->'mapName'->'tileName' += ~Integer maxNumberOfMonsters = "0"
       declarationToken : element : entity {
         element : quanta : PLUS {
           entityPlusNumber \+= 1;
         }
       }
       Integer plusNumber = entityPlusNumber;
-      collectionClass->'mapName'->'tileName'->*"tick".prependToBody(|switch Range.getRandom(0,'plusNumber') `switchBody`|);
+      ~Integer numberOfMonsters = 0;
+      declarationToken : element : entity {
+        numberOfMonsters \+= 1; 
+      }
+      collectionClass->'mapName'->'tileName'->*"load".appendToBody({
+        "maxNumberOfMonsters" = Range.getRandom(0,'plusNumber');
+        });
+      collectionClass->'mapName'->'tileName'->*"tick".prependToBody({
+        while "numberOfMonsters" < "maxNumberOfMonsters" {
+          \generateMonster();
+        }
+        });
+      Integer numberOfMonstersValue = numberOfMonsters;
+      collectionClass->'mapName'->'tileName' += void generateMonster(){
+        switch  Range.getRandom(0,'numberOfMonstersValue') `switchBody`
+        "++numberOfMonsters";}
       
-      ~Integer plusNumberInc = 0;
+      ~Integer monsterInc = 0;
       declarationToken : element : entity {            
         Class entityFactory = Entities.declaration(element->"entity_declaration");
-        if element->"PLUS" != null {
-          collectionClass->'mapName'->'tileName' += ~Entity->Factory 'element->"entity_declaration"->"entityName"'+"Factory" = new entityFactory() 
-        }
-        element : quanta : PLUS {
-          Integer currentPlusNumber = plusNumberInc;
-          plusNumberInc \+= 1;
-          String newEntityName = "newEntity"+'element->"entity_declaration"->"entityName"';
-          switchBody.add(|
-            case 'currentPlusNumber' {
-              Entity 'newEntityName' = 'element->"entity_declaration"->"entityName"'+"Factory".create();
-              if 'newEntityName'.getLocation().moveToAround(\getFloorTile()) {
-                'newEntityName'.setSpawn(\getFloorTile());
-                'newEntityName'.add(new Tile->Listener->Die(\getFloorTile()));
-              }
-            }|);
-        }
+        String newEntityName = "newEntity"+'element->"entity_declaration"->"entityName"';
+        
         if element->"MINUS" != null {
-          String newEntityName = "newEntity"+'element->"entity_declaration"->"entityName"';
           collectionClass->'mapName'->'tileName'->*"load".prependToBody(|
             Entity 'newEntityName' = new entityFactory().create();
             if 'newEntityName'.getLocation().moveToAround(\getFloorTile()) {
@@ -351,6 +445,19 @@ class 'packageName'."environments" Tiles {
               'newEntityName'.add(new Tile->Listener->Die(\getFloorTile()));
             }|);
         }
+        else {
+          Integer monsterId = monsterInc;
+          collectionClass->'mapName'->'tileName' += ~Entity->Factory 'element->"entity_declaration"->"entityName"'+"Factory" = new entityFactory()
+          switchBody.add(|
+            case 'monsterId' {
+              Entity 'newEntityName' = 'element->"entity_declaration"->"entityName"'+"Factory".create();
+              if 'newEntityName'.getLocation().moveToAround(\getFloorTile()) {
+                'newEntityName'.setSpawn(\getFloorTile());
+                'newEntityName'.add(new Tile->Listener->Die(\getFloorTile()));
+              }
+            }|);
+        }
+        monsterInc \+= 1;
       } 
     }
     return tileName;
@@ -548,9 +655,8 @@ class 'packageName'."environments" Tile Environment->Position Loaddable Tickable
   }
   void display(){
   }
-  Entity->Event acceptEntity(Entity newOccupant){
+  Entity->Event accept(Entity newOccupant){
     Environment->Location location = newOccupant.getLocation();
-    location.setTile(this);
     location.setX(\getX());
     location.setY(\getY());
     return null;

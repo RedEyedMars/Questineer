@@ -23,6 +23,19 @@ public class EntityDeclaration extends ConcreteRule {
 						AssociationTokens.NAME,"entityName"),
 					new ManyParser(
 							AssociationTokens.NEWLINE),
+					new OptionalParser(
+							
+								new ChainParser(
+									new AddTokenParser(
+										AssociationTokens.NAME,"imageName"),
+									new ManyParser(
+											
+												new ChainParser(
+													TileTokens.TILE_IMAGE_ACCESS,
+													new AddTokenParser(
+														AssociationTokens.NAME,"imageId"))),
+									new ManyParser(
+											AssociationTokens.NEWLINE))),
 					EntityBraces.ENTITY_DEFINITION));
 
 	}

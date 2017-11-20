@@ -19,12 +19,13 @@ image_type
 	PNG
 imageBrace-s are Braced
 	[,.] as IMAGE_FILE with WILD as image_file_name
+	[[,]] as ANIMATION_ID_FLIP with NAME as normal PIPE NAME as reverse
 imageImport-s are Import
 	[><<\"gui/images/\",image_file_name,\".imgs\">>\n] as IMPORT_IMAGE from (NEWLINE|image_declaration)+; with (IMAGE_FILE IMGS)
 image_declaration
 	NAME as imageName in image_names ( INTEGER as frameWidth CROSS INTEGER as frameHeight? ) EQUALSIGN IMAGE_FILE image_type animation_state*
 animation_state
-	NEWTAB NAME as animationId ( IMAGE_STATE_CHANGE NAME as animationId )* COLON NAME as animationTypeName animation_variable_value*
+	NEWTAB NAME as animationId ( IMAGE_STATE_CHANGE NAME as animationId )* ANIMATION_ID_FLIP? COLON NAME as animationTypeName animation_variable_value*
 image_id
 	image_name ( INTEGER as frameWidth (COMMA INTEGER as frameHeight)? )?
 animation

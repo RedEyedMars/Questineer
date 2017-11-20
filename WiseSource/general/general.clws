@@ -150,6 +150,14 @@ class 'packageName'."misc" Criteria<TypeName> {
       return | 'typeName' 'variableDeclarationToken->"variable_header"->"variableName"' = null; |;
     }
   }
+> Variable getVariableFromHeader(IToken variableHeaderToken, Context context){
+    String typeName = \getTypeName(variableHeaderToken->"type_name");
+    Context type = context.getClassContext(typeName);
+    if type == null {
+      throw \Generator.completeTokenErrorMessage(variableHeaderToken) + "Could not find type:" + typeName + "!";
+    }
+    return 'typeName' 'variableHeaderToken->"variableName"';;
+  }
 > Variable addVariableHeader(IToken variableHeaderToken, Class inputClass){
     String typeName = \getTypeName(variableHeaderToken->"type_name");
     Context type = inputClass.getContext().getClassContext(typeName);
@@ -164,19 +172,24 @@ class 'packageName'."misc" Criteria<TypeName> {
     Statement elseHeader = new Statement ();
     Body      body       = new Body ();
     Body      elseBody   = new Body ();
+    body.setParentContext(context);
+    elseBody.setParentContext(context);
     ~Integer   mode       = 0;
     ifStatementToken : element
       : boolean_statement {
         header.add(\getBooleanStatement(element, context));
       }
       : body_element {
-        body.add(\getBodyElement(element, context));
+        body.add(\getBodyElement(element, body.getContext()));
       }
       : else_statement {
         mode = 1;
         element : atom
           : body_element {
-            elseBody.add(\getBodyElement(atom,context));
+            elseBody.add(\getBodyElement(atom,elseBody.getContext()));
+            if atom->"variable_declaration" != null {
+              elseBody.getContext().add(\getVariableFromHeader(atom->"variable_declaration"->"variable_header",elseBody.getContext()));
+            }
           }
           : boolean_statement {
             elseHeader.add(\getBooleanStatement(atom,context));

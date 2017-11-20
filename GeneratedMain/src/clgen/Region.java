@@ -1,4 +1,12 @@
 package clgen;
+import java.util.*;
+import java.io.*;
+import lists.*;
+import com.rem.parser.generation.classwise.*;
+import com.rem.parser.generation.*;
+import com.rem.parser.parser.*;
+import com.rem.parser.token.*;
+import com.rem.parser.*;
 import clgen.Region;
 import com.rem.parser.generation.*;
 import com.rem.parser.generation.classwise.*;
@@ -15,6 +23,10 @@ import java.util.ArrayList;
 import clgen.RegionZone;
 import java.util.Iterator;
 public class  Region   {
+	public static class classes {
+	}
+	public static Region variables = null;
+	public static Region methods = null;
 	//Externals
 
 
@@ -31,40 +43,73 @@ protected Integer pixel = 0;
 protected final Map<Integer,Set<RegionPoint>> pixelMap = new HashMap<Integer,Set<RegionPoint>>();
 protected final Map<Integer,Set<RegionPoint>> horizontals = new HashMap<Integer,Set<RegionPoint>>();
 
-	public int getPIXELZERO() {
+	public int getPIXELZERO()  {
 		return PIXEL_ZERO;
 	}
-	public int getPIXELGREEN() {
+	public int get_PIXEL_ZERO()  {
+		return PIXEL_ZERO;
+	}
+	public int getPIXELGREEN()  {
 		return PIXEL_GREEN;
 	}
-	public int getPIXELRED() {
+	public int get_PIXEL_GREEN()  {
+		return PIXEL_GREEN;
+	}
+	public int getPIXELRED()  {
 		return PIXEL_RED;
 	}
-	public int getPIXELCYAN() {
+	public int get_PIXEL_RED()  {
+		return PIXEL_RED;
+	}
+	public int getPIXELCYAN()  {
 		return PIXEL_CYAN;
 	}
-	public int getPIXELPURPLE() {
+	public int get_PIXEL_CYAN()  {
+		return PIXEL_CYAN;
+	}
+	public int getPIXELPURPLE()  {
 		return PIXEL_PURPLE;
 	}
-	public int getPIXELYELLOW() {
+	public int get_PIXEL_PURPLE()  {
+		return PIXEL_PURPLE;
+	}
+	public int getPIXELYELLOW()  {
 		return PIXEL_YELLOW;
 	}
-	public Integer getX() {
+	public int get_PIXEL_YELLOW()  {
+		return PIXEL_YELLOW;
+	}
+	public Integer getX()  {
 		return x;
 	}
-	public Integer getY() {
+	public Integer get_x()  {
+		return x;
+	}
+	public Integer getY()  {
 		return y;
 	}
-	public Integer getPixel() {
+	public Integer get_y()  {
+		return y;
+	}
+	public Integer getPixel()  {
 		return pixel;
 	}
-	public Map<Integer,Set<RegionPoint>> getPixelMap() {
+	public Integer get_pixel()  {
+		return pixel;
+	}
+	public Map<Integer,Set<RegionPoint>> getPixelMap()  {
 		return pixelMap;
 	}
-	public Map<Integer,Set<RegionPoint>> getHorizontals() {
+	public Map<Integer,Set<RegionPoint>> get_pixelMap()  {
+		return pixelMap;
+	}
+	public Map<Integer,Set<RegionPoint>> getHorizontals()  {
 		return horizontals;
 	}
-public Region (final int ix,final int iy,final int ipixel) {
+	public Map<Integer,Set<RegionPoint>> get_horizontals()  {
+		return horizontals;
+	}
+public Region (final int ix,final int iy,final int ipixel)  {
 	x = ix;
 	y = iy;
 	pixel = ipixel;
@@ -73,7 +118,7 @@ public Region (final int ix,final int iy,final int ipixel) {
 	horizontals.put(y,new HashSet<RegionPoint>());
 	horizontals.get(y).add(new RegionPoint(x,y,pixel));
 }
-public void add(final Region otherRegion) {
+public void add(final Region otherRegion)  {
 	for (final Integer p :  otherRegion.pixelMap.keySet()) {
 		if (pixelMap.containsKey(p) == false) {
 			pixelMap.put(p,new HashSet<RegionPoint>());
@@ -87,7 +132,7 @@ public void add(final Region otherRegion) {
 		horizontals.get(y).addAll(otherRegion.horizontals.get(y));
 	}
 }
-public List<RegionZone> getPoints(final List<List<RegionPoint>> zones) {
+public List<RegionZone> getPoints(final List<List<RegionPoint>> zones)  {
 	final List<RegionZone> points = new ArrayList<RegionZone>();
 	for (final List<RegionPoint> zone :  zones) {
 		final RegionZone zonePoints = new RegionZone();
@@ -115,7 +160,7 @@ public List<RegionZone> getPoints(final List<List<RegionPoint>> zones) {
 	}
 	return points;
 }
-public List<List<RegionPoint>> getZones() {
+public List<List<RegionPoint>> getZones()  {
 	final List<List<RegionPoint>> results = new ArrayList<List<RegionPoint>>();
 	if (pixelMap.containsKey(PIXEL_YELLOW)) {
 		for (final RegionPoint yellowPoint :  pixelMap.get(PIXEL_YELLOW)) {
@@ -126,7 +171,7 @@ public List<List<RegionPoint>> getZones() {
 	}
 	return results;
 }
-public void makeZone(final List<List<RegionPoint>> zones,final List<RegionPoint> zone,final List<RegionPoint> counters,final RegionPoint startPoint) {
+public void makeZone(final List<List<RegionPoint>> zones,final List<RegionPoint> zone,final List<RegionPoint> counters,final RegionPoint startPoint)  {
 	for (final RegionPoint point :  counters) {
 		if (point.getPixel() == PIXEL_YELLOW) {
 			if (point == startPoint) {
@@ -141,7 +186,7 @@ public void makeZone(final List<List<RegionPoint>> zones,final List<RegionPoint>
 		}
 	}
 }
-public List<RegionPoint> getCounterPoints(final RegionPoint point) {
+public List<RegionPoint> getCounterPoints(final RegionPoint point)  {
 	final List<RegionPoint> result = new ArrayList<RegionPoint>();
 	if (point.getPixel() == PIXEL_YELLOW || point.getPixel() == PIXEL_RED || point.getPixel() == PIXEL_GREEN) {
 		if (pixelMap.containsKey(PIXEL_CYAN)) {
@@ -170,13 +215,13 @@ public List<RegionPoint> getCounterPoints(final RegionPoint point) {
 	}
 	return result;
 }
-public Boolean isBlack() {
+public Boolean isBlack()  {
 	return pixel == PIXEL_ZERO;
 }
-public Boolean isWhite() {
+public Boolean isWhite()  {
 	return pixel == -1;
 }
-public Boolean isCompatible(final Region other) {
+public Boolean isCompatible(final Region other)  {
 	if (pixel == PIXEL_ZERO) {
 		if (other.pixel == PIXEL_ZERO) {
 			return true;

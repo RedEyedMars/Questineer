@@ -339,9 +339,6 @@ class 'packageName'."gui" InputHandler Thread{
 		void listen(InputHandler->Events->MouseEvent->Move event){}
 	  }
 	  class Move /InputHandler->Events->MouseEvent/{
-		Move *(Integer cursorX,Integer cursorY) {
-		  \super(cursorX,cursorY);
-		}
 		Boolean isMove() {
 		  return true;
 		}
@@ -420,9 +417,6 @@ class 'packageName'."gui" InputHandler Thread{
 		void listen(InputHandler->Events->KeyboardEvent->Release event){}
 	  }
 	  class Press / InputHandler->Events->KeyboardEvent /{
-		Press *(Integer keyInt,\Character keyChar) {
-		  \super(keyInt,keyChar);
-		}
 		Boolean isPress() {
 		  return true;
 		}

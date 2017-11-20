@@ -18,7 +18,14 @@ public class ImageBraces extends ParseList {
 	public static final BracedParser IMAGE_FILE = new BracedParser(
 							new AddTokenParser(
 								AssociationTokens.WILD,"image_file_name"),"IMAGE_FILE","imageBraces",",.");
+	public static final BracedParser ANIMATION_ID_FLIP = new BracedParser(
+						new ChainParser(
+							new AddTokenParser(
+								AssociationTokens.NAME,"normal"),
+							EntityTokens.PIPE,
+							new AddTokenParser(
+								AssociationTokens.NAME,"reverse")),"ANIMATION_ID_FLIP","imageBraces","[,]");
 
 	public static final ChoiceParser parser = new ChoiceParser(
-				IMAGE_FILE);
+				IMAGE_FILE,ANIMATION_ID_FLIP);
 }

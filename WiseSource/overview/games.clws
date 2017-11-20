@@ -15,6 +15,9 @@ class 'packageName'."game" Game \Object InputHandler->Events->KeyboardEvent->Lis
 	for Environment environment:environments {
 	  environment.load();
 	}
+    Entity hero = new Entities->Hero(Images.male_hero_base);
+	environments.get(0).getArea(0).getEntryPoint(0).accept(hero);
+	hero.start(new Activities->\Exploring(20));
 	InputHandler.addKeyboardListener(this);
 	InputHandler.addMouseListener(this);
   }
@@ -42,6 +45,9 @@ class 'packageName'."game" Game \Object InputHandler->Events->KeyboardEvent->Lis
       focusArea = environments.get(0).getAreas().get(0);
     }
     focusArea.display();
+    if pressedKeys[1] {
+      Gui.isRunning = false;
+    }
     if pressedKeys[17] {
       Gui.renderer.moveView(0.0f, -0.01f);
     }

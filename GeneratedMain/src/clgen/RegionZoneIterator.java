@@ -1,4 +1,12 @@
 package clgen;
+import java.util.*;
+import java.io.*;
+import lists.*;
+import com.rem.parser.generation.classwise.*;
+import com.rem.parser.generation.*;
+import com.rem.parser.parser.*;
+import com.rem.parser.token.*;
+import com.rem.parser.*;
 import clgen.RegionZoneIterator;
 import com.rem.parser.generation.*;
 import com.rem.parser.generation.classwise.*;
@@ -13,6 +21,10 @@ import clgen.RegionPoint;
 import java.util.ArrayList;
 import java.util.Iterator;
 public class  RegionZoneIterator  implements Iterator<RegionPoint> {
+	public static class classes {
+	}
+	public static RegionZoneIterator variables = null;
+	public static RegionZoneIterator methods = null;
 	//Externals
 
 
@@ -22,28 +34,40 @@ protected Integer x = 0;
 protected Integer y = 0;
 protected Map<Integer,Map<Integer,RegionPoint>> map = null;
 
-	public RegionZone getToIterate() {
+	public RegionZone getToIterate()  {
 		return toIterate;
 	}
-	public Integer getX() {
+	public RegionZone get_toIterate()  {
+		return toIterate;
+	}
+	public Integer getX()  {
 		return x;
 	}
-	public Integer getY() {
+	public Integer get_x()  {
+		return x;
+	}
+	public Integer getY()  {
 		return y;
 	}
-	public Map<Integer,Map<Integer,RegionPoint>> getMap() {
+	public Integer get_y()  {
+		return y;
+	}
+	public Map<Integer,Map<Integer,RegionPoint>> getMap()  {
 		return map;
 	}
-public RegionZoneIterator (final RegionZone iIterable) {
+	public Map<Integer,Map<Integer,RegionPoint>> get_map()  {
+		return map;
+	}
+public RegionZoneIterator (final RegionZone iIterable)  {
 	toIterate = iIterable;
 	x = toIterate.getLowerBoundX();
 	y = toIterate.getLowerBoundY();
 	map = toIterate.getMap();
 }
-public boolean hasNext() {
+public boolean hasNext()  {
 	return x <= toIterate.getUpperBoundX() && y <= toIterate.getUpperBoundY();
 }
-public void advanceIndex() {
+public void advanceIndex()  {
 	if (y == toIterate.getUpperBoundY()) {
 		y = toIterate.getLowerBoundY();
 		x += 1;
@@ -52,7 +76,7 @@ public void advanceIndex() {
 		y += 1;
 	}
 }
-public RegionPoint next() {
+public RegionPoint next()  {
 	if (map.containsKey(x)) {
 		if (map.get(x).containsKey(y)) {
 			final RegionPoint point = map.get(x).get(y);
@@ -69,7 +93,7 @@ public RegionPoint next() {
 		return null;
 	}
 }
-public void remove() {
+public void remove()  {
 }
 
 }

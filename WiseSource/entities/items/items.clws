@@ -53,7 +53,7 @@ class 'packageName'."entities"."items" Items {
 > void gain(IToken gainToken, String gainEventName, String loseEventName, Statement subject, Class gainClass, Class itemClass){
 	String specificClassName = ^gainToken;
 	Class specificClass = gainClass->\specificClassName;
-	Class idClass = gainClass->Id;
+	Class idClass = gainClass->\Id;
     String asList = gainClass.getName().toLowerCase();
 	Context gainContext = Events.addToEventMethod(gainEventName, itemClass, new Body ());
 	Context loseContext = Events.addToEventMethod(loseEventName, itemClass, new Body ());

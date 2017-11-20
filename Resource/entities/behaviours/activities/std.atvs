@@ -33,30 +33,30 @@ hunt(EntityCriteria criteriaToTarget, Tile.Id huntingGrounds, Float range, Event
 	}
 	step {
 	  if host->location->area != toHunt {
-	    host.add(0,new Activities.GoToArea(toHunt))
+	    host.start(new Activities.GotoArea(toHunt))
 	  }
 	  else {
-	    EntityList entitiesToTarget = host->location.getEntities(criteriaToTarget)
-	    Entities.sort(entitiesToTarget,new Entities.Comparators.AscendingDistance(host->location))
+	    Entity.List entitiesToTarget = host->location.getEntitiesWithin(50.0,criteriaToTarget)
+	    entitiesToTarget.sort(new Entities.Comparators.AscendingDistance(host->location))
 	    if !entitiesToTarget.isEmpty() {
-	      host.add(0,new Activities.Kill(entitiesToTarget.get(0)))
+	      host.start(new Activities.Kill(entitiesToTarget.get(0)))
 	    }
 	    else {
 	      Tile tileToKill = toHunt.getTile(huntingGrounds)
 	      if tileToKill != null {
-	        host.add(0,new Activities.KillTile(entitiesToTarget.get(0)))
+	        host.start(new Activities.KillTile(entitiesToTarget.get(0)))
 	      }
 	      else if !toHuntLocations.isEmpty() {
 	        huntedLocations.add(toHunt)
   	        toHunt = toHuntLocations.remove(0)
 	      }
 	      else {
-	        Area.List toAdd = event->host->location.getAreasWithTile(huntingGrounds, range)
+	        Area.List toAdd = host->location.getAreasWithTile(huntingGrounds, range)
 	        toAdd.removeAll(huntedLocations)
 	        if !toAdd.isEmpty() {
-	          toAdd.sort(new Area.Comparators.Distance.Ascending(event->host->location))
+	          toAdd.sort(new Area.Comparators.Distance.Ascending(host->location))
 	          toHuntLocations.addAll(toAdd)
-	          on(event)
+	          step(host)
 	        }
 	        else {
 	         failed = true
@@ -103,7 +103,7 @@ chasingEntity(Integer ticks, Entity toChase, Float successRange)
 	fail if ticks <= 0
 	tick { ticks -= 1 }
 	step {
-	  event->host->location.step(event->host->walkingSpeed,toChase->location)
+	  host->location.step(host->walkingSpeed,toChase->location)
 	  return true
 	}
 chasingTile(Integer ticks, Tile toChase, Float successRange)
@@ -115,40 +115,55 @@ chasingTile(Integer ticks, Tile toChase, Float successRange)
 	  host->location.step(host->walkingSpeed,toChase)
 	  return true
 	}
-goto(Tile destination)
+goto(Tiles.Floor destination)
 	Find a particular tile, follow path to get to it.;;
 	succeed if host->location.isCloseAsPossibleTo(destination)
 	+ Area destinationArea = null
-	+ Tile toTile = null
+	+ Tiles.Floor.Way way = null
 	load {
 	  destinationArea = destination->area
 	}
 	step {
 	  if host->location->area != destinationArea {
-	    host.add(0, new Activities.GotoArea(destinationArea))
+	    host.start(new Activities.GotoArea(destinationArea))
 	  }
 	  else {
-	    host->location.stepToward(event->host->walkingSpeed,destination)
+	    if way == null {
+	      way = host->location.getWay(destination)
+	    }
+	    way.step(host)
+	  }
+	  return true
+	}
+gotoArea(Area destination)
+	Find a particular tile, follow path to get to it.;;
+	succeed if host->location.getArea() == destination
+	step {
+	  if host->location->area != destination {
+	    host.start(new Activities.Goto(host->location->area.getEntryPointToward(destination)))
 	  }
 	  return true
 	}
 Exploring(Integer ticks)
 	Go to unexplored parts of the map.;;
-	+ Tile destination = null
+	+ Tiles.Floor destination = null
+	+ Tiles.Floor.Way way = null
 	succeed if ticks <=0
 	load {
 	  destination = event->host->location.getUnexploredPoint()
+	  way = event->host->location.getWay(destination)
 	}
 	idle {
 	  destination = event->host->location.getUnexploredPoint()
+	  way = event->host->location.getWay(destination)
 	}
 	step {
 	  ticks -= 1
-	  if destination.isWithin(event->host->location) {
+	  if destination.hasOccupant(host) {
 	    return false
 	  }
 	  else { 
-	    event->host->location.stepToward(event->host->walkingSpeed,destination)
+	    way.step(host)
 	    return true
 	  }
 	}

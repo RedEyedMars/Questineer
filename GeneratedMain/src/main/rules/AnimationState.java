@@ -26,6 +26,8 @@ public class AnimationState extends ConcreteRule {
 									DrawableTokens.IMAGE_STATE_CHANGE,
 									new AddTokenParser(
 										AssociationTokens.NAME,"animationId"))),
+					new OptionalParser(
+							ImageBraces.ANIMATION_ID_FLIP),
 					PaymentTokens.COLON,
 					new AddTokenParser(
 						AssociationTokens.NAME,"animationTypeName"),
