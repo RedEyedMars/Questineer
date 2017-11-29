@@ -188,10 +188,11 @@ class 'packageName'."environments" Environment \Object Loaddable Tickable {
         Environment->Location actor = null;
         Direction direction = null;
          void tick(Double millisSinceLastFrame){
-          Entity->Event event = direction.move(actor);
-          if event!=null {
-            actor.getHost().addEvent(event);
-          }
+           Entity->Event event = direction.move(actor);
+           actor.getHost().changeState(ImageStates.idle);
+           if event!=null {
+             actor.getHost().addEvent(event);
+           }
         }
       }
     }
@@ -233,10 +234,10 @@ class 'packageName'."environments" Environment \Object Loaddable Tickable {
     Entity->List getEntitiesWithin(Float within){
       return area.getEntitiesWithin(this,within);
     }
-    Entity->List getEntitiesWithin(Float within, \EntityCriteria targetCriteria){
+    Entity->List getEntitiesWithin(Float within, Criteria->Target targetCriteria){
       return area.getEntitiesWithin(this,within,targetCriteria);
     }
-    Entity getClosestEntity(\EntityCriteria criteria){
+    Entity getClosestEntity(Criteria->Target criteria){
       return area.getClosestEntity(this,criteria);
     }
     Area->List getAreasWithTile(Tile->Id tileId, Float range){
@@ -265,6 +266,7 @@ class 'packageName'."environments" Environment \Object Loaddable Tickable {
     }
     void step(Integer speed, Direction direction){
       facing = direction.getFloatValue();
+      host.changeState(ImageStates.walk);
       area.addEvent(speed, new Environment->Location->Event->Move(this,direction));
     }
     Boolean isCloseAsPossibleTo(Tile tile){
@@ -419,7 +421,7 @@ class 'packageName'."environments" Environment \Object Loaddable Tickable {
         }
       }
       if path.getTile() == endTile {
-        return new Tiles->Floor->Way(path.reverse());
+        return new Tiles->Floor->Way(path);
       }
       else {
         System.err.println('' "Could not make path!" '');

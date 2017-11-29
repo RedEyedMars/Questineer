@@ -523,6 +523,14 @@ class 'packageName'."environments" Area Environment->Position {
       return null;
     }
   }
+  Tiles->MonsterDen getMonsterDen(Tile->Id findId){
+    if tileMap.containsKey(findId) == false || tileMap.get(findId).isEmpty() {
+      return null;
+    }
+    else {
+      return (Tiles->MonsterDen)Range.select(tileMap.get(findId));
+    }
+  }
   Tiles->Floor getTile(Integer x, Integer y){
     if layout.containsKey(x) {
       return layout.get(x).get(y);
@@ -673,12 +681,12 @@ class 'packageName'."environments" Area Environment->Position {
     return tiles.remove(oldTile);
   }
   Tiles->Floor getUnexploredPoint(Entity explorer){
-    if entryPoints.isEmpty() == false {
+    if entryPoints.isEmpty() {
       return null;
     }
     else {
       for Tiles\>EntryPoint tile: entryPoints {
-        if explorer.hasExplored(tile.getSister().getArea()) == false {
+        if ( tile.getSister() == null || tile.getSister().getArea() == null || explorer.hasExplored(tile.getSister().getArea()) == false ) && tile.hasOccupant(explorer) == false {
           return tile;
         }
       }
@@ -694,7 +702,7 @@ class 'packageName'."environments" Area Environment->Position {
     }
     return result;
   }
-  Entity->List getEntitiesWithin(Environment->Position position, Float range, \EntityCriteria criteria){
+  Entity->List getEntitiesWithin(Environment->Position position, Float range, Criteria->Target criteria){
     Entity->List result = new Entity->List();
     for Entity entity: entities {
       if entity.getLocation().getDistanceTo(position) <= range && criteria.satisfies(entity) {
@@ -703,7 +711,7 @@ class 'packageName'."environments" Area Environment->Position {
     }
     return result;
   }
-  Entity getClosestEntity(Environment->Position position, \EntityCriteria criteria){
+  Entity getClosestEntity(Environment->Position position, Criteria->Target criteria){
     Entity candidate = null;
     Double distance = Double.MAX_VALUE;
     for Entity entity: entities {

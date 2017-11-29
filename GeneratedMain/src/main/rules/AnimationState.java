@@ -16,23 +16,25 @@ public class AnimationState extends ConcreteRule {
 	@Override
 	public void setup(){
 		set(
-				new ChainParser(
-					AssociationTokens.NEWTAB,
+			new ChoiceParser(
 					new AddTokenParser(
-						AssociationTokens.NAME,"animationId"),
-					new ManyParser(
-							
-								new ChainParser(
-									DrawableTokens.IMAGE_STATE_CHANGE,
-									new AddTokenParser(
-										AssociationTokens.NAME,"animationId"))),
-					new OptionalParser(
-							ImageBraces.ANIMATION_ID_FLIP),
-					PaymentTokens.COLON,
+						
+						new ChainParser(
+							new AddTokenParser(
+								AssociationTokens.NAME,"animationId"),
+							ImageBraces.ANIMATION_SUB_STATES),"parentState"),
 					new AddTokenParser(
-						AssociationTokens.NAME,"animationTypeName"),
-					new ManyParser(
-							Rules.animation_variable_value)));
+						
+						new ChainParser(
+							new AddTokenParser(
+								AssociationTokens.NAME,"animationId"),
+							new OptionalParser(
+									ImageBraces.ANIMATION_ID_FLIP),
+							PaymentTokens.COLON,
+							new AddTokenParser(
+								AssociationTokens.NAME,"animationTypeName"),
+							new ManyParser(
+									Rules.animation_variable_value)),"finalState")));
 
 	}
 

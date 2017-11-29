@@ -25,6 +25,10 @@ import images.clws
 
 > Integer INT_SIZE = 4;
 
+enum  'packageName'."gui"."images" ImageStates {
+  void DEFAULT;
+  void ASCEND;
+}
 class 'packageName'."gui"."images" Images {}
 class 'packageName'."gui"."images" Colours {}
 class 'packageName'."gui"."images" Drawables {}
@@ -388,7 +392,8 @@ class 'packageName'."gui" Gui {
     }
     class States // Renderable Statable {
       ~Gui->Renderable current = null;
-      @Integer DEFAULT = -1;
+      ~ImageStates state = ImageStates.DEFAULT;
+      ~ImageStates parentState = ImageStates.DEFAULT;
       void animate(){
         current.animate();
       }      
@@ -398,7 +403,7 @@ class 'packageName'."gui" Gui {
       Integer getTexture(){
         return current.getTexture();
       }
-      void changeState(Integer newState){
+      void changeState(ImageStates newState){
       }
       Gui->Image->States asStates(){
         return this;
@@ -429,8 +434,14 @@ class 'packageName'."gui" Gui {
       }
     }
 >   Map<String,Set<String>> declaredTextureBuffers = new HashMap<String,Set<String>>();
->   Map<String,Integer> animationStateIndices = new HashMap<String,Integer>();
->   ~Integer animationStateIndex = 0;
+>   Map<String,Set<String>> animationStateFirstSet = new HashMap<String,Set<String>>();
+>   Set<String> animationStatesByImage = new HashSet<String>();
+>   Set<String> animationStates = new HashSet<String>();
+>   Map<String, Body > animationStateAscendBodies = new HashMap<String, Body >();
+>   Map<String, Body > animationStateChangeSwitches = new HashMap<String, Body >();
+>   Map<String,Map<String, Body >> animationStateChangeBodies = new HashMap<String,Map<String, Body >>();
+>   Map<String,Map<String, Statement >> firstOrDefaultFlipMethods = new HashMap<String,Map<String, Statement >>();
+>   Map<String,Map<String, Statement >> firstOrDefaultStateVariables = new HashMap<String,Map<String, Statement >>();
 >   void declaration(IToken input){
       try {
         String imageName = 'input->"imageName"';
@@ -457,8 +468,7 @@ class 'packageName'."gui" Gui {
         String imageLoaderClassName = "ImageData"\+'pWidth'\+"x"\+'pHeight'\+"Loader";
         ImageLoader.declareImageLoader(imageName,imageFileName,pWidth,pHeight);
         Images->'imageClassName' += class States / Gui->Image->States / {
-          ~Integer currentId = "Gui.Image.States.DEFAULT";
-          void changeState(Integer newState){
+          void changeState(ImageStates newState){
           }
         }
         Images->'imageClassName' += Images->'imageClassName'->States asStates() { return new Images->'imageClassName'->States(); }
@@ -466,25 +476,92 @@ class 'packageName'."gui" Gui {
         Images->'imageClassName'->States += Images->'imageClassName'->States asStates() {
           Images->'imageClassName'->States result = new Images->'imageClassName'->States();
           result.setCurrent(current);
-          result.setCurrentId(currentId);
+          result.setState("state");
+          result.setParentState("parentState"); 
           return result;
         }
         Images->'imageClassName'->States += Gui->Drawable asStates(Gui->Drawable drawable) {
           Images->'imageClassName'->States result = new Images->'imageClassName'->States();
           result.setCurrent(current);
-          result.setCurrentId(currentId); 
+          result.setState("state");
+          result.setParentState("parentState"); 
           return drawable.image(result);
         }
         
         Images->'imageClassName' += Gui->Drawable asDrawable(Gui->Drawable drawable) { return drawable.image(this); }
         ~Boolean isFirst = true;
-        ~String firstFlipMethod = null ;
         
         if input->"animation_state" == null {
           Images->'imageClassName'->States += Gui->Renderable "defaultState" = \Images.'imageName' 
           Images->'imageClassName'->States->*.appendToBody({\setCurrent("defaultState");});
         }
+        animationStateFirstSet.put(imageClassName,new HashSet<String>());
+        animationStateChangeBodies.put(imageClassName, new HashMap<String, Body >());
+        firstOrDefaultFlipMethods.put(imageClassName, new HashMap<String, Statement >());
+        firstOrDefaultStateVariables.put(imageClassName, new HashMap<String, Statement >());
+        firstOrDefaultFlipMethods.get(imageClassName).put("", new Statement ());
+        firstOrDefaultStateVariables.get(imageClassName).put("", new Statement ());
+        Body stateAscendBody = new Body ();
+        animationStateAscendBodies.put(imageClassName,stateAscendBody);
+        Body stateSwitchBody = new Body ();
+        animationStateChangeSwitches.put(imageClassName,stateSwitchBody);
+        Body defaultStateBody = new Body ();
+        animationStateChangeBodies.get(imageClassName).put("",defaultStateBody);
+        Images->'imageClassName'->States->*"changeState".appendToBody({
+          if "newState" == ImageStates."ASCEND" {
+            switch "newState" `stateAscendBody`
+            return void;
+          }
+          switch "parentState" `stateSwitchBody`
+          });
+        animationStateChangeSwitches.get(imageClassName).add(|
+              case "DEFAULT" {
+                switch "newState" `defaultStateBody`
+                return void;
+              }|);
         input : atom : animation_state {
+          \getAnimationStateDeclaration(atom,imageName,imageClassName,"");
+        }
+        
+      }
+      print catch  IO {}
+    }
+>   void getAnimationStateDeclaration(IToken declaration, String imageName, String imageClassName, String parentStateName){
+      declaration : atom
+        : parentState {
+          String currentStateName;
+          if parentStateName.equals(""){
+            currentStateName = 'atom->"animationId"';
+          }
+          else {
+            currentStateName = 'atom->"animationId"'\+"_"\+parentStateName;
+          }
+          Body currentSwitchBody = new Body ();
+          animationStateChangeBodies.get(imageClassName).put(currentStateName,currentSwitchBody);
+          animationStateChangeSwitches.get(imageClassName).add(|
+              case 'currentStateName' {
+                switch "newState" `currentSwitchBody`
+                return void;
+              }
+            |);
+          Statement firstOrDefaultVariable = new Statement ();
+          firstOrDefaultStateVariables.get(imageClassName).put(currentStateName,firstOrDefaultVariable);
+          Statement firstOrDefaultMethod = new Statement ();
+          firstOrDefaultFlipMethods.get(imageClassName).put(currentStateName,firstOrDefaultMethod);
+          \declareFlipMethod(animationStatesByImage.add(imageClassName), imageClassName, 'atom->"animationId"', currentStateName, parentStateName, firstOrDefaultStateVariables.get(imageClassName).get(currentStateName));
+          
+          atom : quark : animation_state {
+            \getAnimationStateDeclaration(quark,imageName,imageClassName,currentStateName);
+          }
+          if animationStates.add(currentStateName) {
+            ImageStates += void 'currentStateName'
+          }
+          if animationStates.add('atom->"animationId"') {
+            ImageStates += void 'atom->"animationId"'
+          }
+        }
+        : finalState {
+          ~Boolean isFirst = animationStatesByImage.add(imageClassName);
           ~List< Parameters > arguments = new ArrayList< Parameters >();
           arguments.add( new Parameters () );
           Parameters multipleArguments = new Parameters ();
@@ -543,118 +620,90 @@ class 'packageName'."gui" Gui {
           }
           multipleArguments.add(|"new Gui.Renderable[][]{"+`xArgumentLayer`+"}"|);
           String creationMethod = "create"\+'atom->"animationTypeName"';
-          ~String stateIdFind = "";
-          StringBuilder flipToMethod = new StringBuilder();
-          ~String previousStateIdFind = null;
-          ~String underscore = "";
-          ~Integer previousStateIndex = -1;
-          atom : quark : animationId {
-            previousStateIdFind = 'flipToMethod';
-            if animationStateIndices.containsKey(previousStateIdFind) == true {
-              previousStateIndex = animationStateIndices.get(stateIdFind);
+          
+          String currentStateName;
+          if parentStateName.equals("") {
+            currentStateName = 'atom->"animationId"';
+          }
+          else {
+            currentStateName = parentStateName \+ "_"\+'atom->"animationId"';
+          }
+          if arguments.size() == 1{
+            if animationStates.add('atom->"animationId"') {
+              ImageStates += void 'atom->"animationId"'
             }
-            stateIdFind = 'quark';
-            flipToMethod.append(underscore);
-            flipToMethod.append(stateIdFind);
-            underscore = "_";
-            
-            if arguments.size() == 1{
-              if animationStateIndices.containsKey(stateIdFind) == false {
-                String stateId = stateIdFind;
-                animationStateIndices.put(stateId,animationStateIndex);
-                Gui->Image->States += @Integer 'stateId' = 'animationStateIndex'
-                animationStateIndex \+= 1;
-              }
-              if animationStateIndices.containsKey('flipToMethod') == false {
-                String stateId = 'flipToMethod';
-                animationStateIndices.put(stateId,animationStateIndex);
-                Gui->Image->States += @Integer 'stateId' = 'animationStateIndex'
-                animationStateIndex \+= 1;
-              }
+            if animationStates.add(currentStateName) {
+              ImageStates += void 'currentStateName'
             }
-            else {
-              for Integer i < arguments.size() {
-                if animationStateIndices.containsKey(stateIdFind\+"_"\+i) == false {
-                  String stateId = stateIdFind\+"_"\+i;
-                  animationStateIndices.put(stateId,animationStateIndex);
-                  Gui->Image->States += @Integer 'stateId' = 'animationStateIndex'
-                  animationStateIndex \+= 1;
-                }
-                if animationStateIndices.containsKey('flipToMethod'\+"_"\+i) == false {
-                  String stateId = 'flipToMethod'\+"_"\+i;
-                  animationStateIndices.put(stateId,animationStateIndex);
-                  Gui->Image->States += @Integer 'stateId' = 'animationStateIndex'
-                  animationStateIndex \+= 1;
-                }
+          }
+          else {
+            for Integer i < arguments.size() {
+              if animationStates.add('atom->"animationId"'\+"_"\+i) {
+                ImageStates += void 'atom->"animationId"'+"_"+'i'
+              }
+              if animationStates.add(currentStateName\+"_"\+i) {
+                ImageStates += void 'currentStateName'+"_"+'i'
               }
             }
           }
           if arguments.size() == 1{
-            String stateId = stateIdFind;
-            String previousStateId = previousStateIdFind;
-            Integer animationStateIndexValue = animationStateIndices.get('flipToMethod');
-            Integer previousStateIndexValue = previousStateIndex;
-            Images->'imageClassName'->States += Gui->Renderable 'flipToMethod'+"State" = \Images.'imageName'.'creationMethod'(`arguments.get(0)`)
-            if isFirst {
-              firstFlipMethod = 'flipToMethod';
+            Images->'imageClassName'->States += Gui->Renderable 'currentStateName'+"State" = \Images.'imageName'.'creationMethod'(`arguments.get(0)`)
+            if animationStateFirstSet.get(imageClassName).add(parentStateName) {
+              firstOrDefaultFlipMethods.get(imageClassName).get(parentStateName).add(|'currentStateName'();|);
+              firstOrDefaultStateVariables.get(imageClassName).get(parentStateName).add(|'currentStateName'+"State"|);
             }
-            \declareFlipMethod(isFirst, imageClassName, 'flipToMethod', 'flipToMethod'+"State", stateId, animationStateIndexValue, previousStateId, previousStateIndexValue, firstFlipMethod);
+            \declareFlipMethod(isFirst, imageClassName, 'atom->"animationId"', currentStateName, parentStateName, |'currentStateName'+"State"|);
           }
           else {
             ~Integer realIndex = 0;
             for Parameters args: arguments {
               Integer indexValue = realIndex;
-              String stateId = stateIdFind;
-              String previousStateId = previousStateIdFind;
-              Integer animationStateIndexValue = animationStateIndices.get('flipToMethod'\+"_"\+realIndex);
-              Integer previousStateIndexValue = previousStateIndex;
-              Images->'imageClassName'->States += Gui->Renderable 'flipToMethod'+"State_"+'indexValue' = \Images.'imageName'.'creationMethod'(`args`)
-              yArgumentLayers.get(realIndex / yArgumentLayerSize).add(|'flipToMethod'+"State_"+'indexValue'|);
-              \declareFlipMethod(isFirst, imageClassName, 'flipToMethod'\+"_"\+realIndex, 'flipToMethod'+"State_"+'indexValue', stateId\+"_"\+realIndex, animationStateIndexValue, previousStateId, previousStateIndexValue, firstFlipMethod);
+              if animationStateFirstSet.get(imageClassName).add(parentStateName) {
+                firstOrDefaultFlipMethods.get(imageClassName).get(parentStateName).add(|'currentStateName'+"_"+'realIndex'();|);
+                firstOrDefaultStateVariables.get(imageClassName).get(parentStateName).add(|'currentStateName'+"State_"\+'indexValue'|);
+              }
+              Images->'imageClassName'->States += Gui->Renderable 'currentStateName'+"State_"+'indexValue' = \Images.'imageName'.'creationMethod'(`args`)
+              yArgumentLayers.get(realIndex / yArgumentLayerSize).add(|'currentStateName'+"State_"+'indexValue'|); 
+              \declareFlipMethod(isFirst, imageClassName, 'atom->"animationId"'\+"_"\+realIndex, currentStateName\+"_"\+realIndex, parentStateName, |'currentStateName'+"State_"+'indexValue'|);
               realIndex \+= 1;
+              isFirst = false;
             }
-            #Images->'imageClassName' += Gui->Renderable 'flipToMethod'+"State" = \Images.'imageName'."createMultiple"(`multipleArguments`)
-            #
           }
           isFirst = false;
         }
-      }
-      print catch  IO {}
     }
->   void declareFlipMethod(Boolean isFirst, String imageClassName, String flipToMethod, String realStateName, String stateId, Integer animationStateIndexValue, String previousStateId, Integer previousStateIndexValue, String firstFlipMethod){
-      Images->'imageClassName'->States += void 'flipToMethod'(){
-        \setCurrent('realStateName');
-        "currentId" = 'animationStateIndexValue';
+>   void declareFlipMethod(Boolean isFirst, String imageClassName, String singleStateName, String currentStateName, String parentStateName, Statement currentStateVariable){
+      Statement firstOrDefaultMethod =   firstOrDefaultFlipMethods.get(imageClassName).get(currentStateName);
+      if parentStateName.equals("") {
+        Images->'imageClassName'->States += void 'currentStateName'(){
+          \setCurrent(`currentStateVariable`);
+          "state" = ImageStates->'currentStateName';
+          "parentState" = ImageStates."DEFAULT";
+        }
+        animationStateAscendBodies.get(imageClassName).add(|
+          case 'currentStateName' {
+            `firstOrDefaultMethod`;
+            return void;}|);
+      }
+      else {
+        Images->'imageClassName'->States += void 'currentStateName'(){
+            \setCurrent(`currentStateVariable`);
+            "state" = ImageStates->'currentStateName';
+            "parentState" = ImageStates->'parentStateName';
+          }
+        animationStateAscendBodies.get(imageClassName).add(|
+          case 'currentStateName' {
+            'parentStateName'();
+            return void;}|);
       }
       if isFirst {
-        Images->'imageClassName'->States->*.appendToBody({'flipToMethod'();});
-        Images->'imageClassName'->States->*"changeState".appendToBody({
-          if "currentId" == 'previousStateIndexValue' && "newState"  == 'animationStateIndices.get(stateId)' {
-            'flipToMethod'();
-          }
-        });
-      } 
-      else {
-        Images->'imageClassName'->States->*"changeState".appendToBody({
-          else if "currentId" == 'previousStateIndexValue' && "newState"  == 'animationStateIndices.get(stateId)' {
-            'flipToMethod'();
-          }
-        });
+        Images->'imageClassName'->States->*.appendToBody({'currentStateName'();}); 
       }
-      if previousStateId.equals("") {
-        Images->'imageClassName'->States->*"changeState".appendToBody({
-          else if "currentId" == 'animationStateIndexValue' && "newState"  == 'previousStateIndexValue' {
-            'firstFlipMethod'();
-          }
-        });
-      }
-      else {
-        Images->'imageClassName'->States->*"changeState".appendToBody({
-          else if "currentId" == 'animationStateIndexValue' && "newState"  == 'previousStateIndexValue' {
-           'previousStateId'();
-          }
-        });
-      }
+      animationStateChangeBodies.get(imageClassName).get(parentStateName).add(|
+        case 'singleStateName' {
+          'currentStateName'();
+          return void;}|);
+          
     }
 >   void declareTextureBuffer(String frameWidth, String frameHeight){
       Float width = Float.parseFloat(frameWidth);

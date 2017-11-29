@@ -1,8 +1,11 @@
 class 'packageName'."entities"."behaviours"."quests" Quest Object Usable {
   class Id / Usable->Id / {
   }
-  ~class TargetCriteria /\EntityCriteria / {
-    Boolean satisfies(Entity "user"){
+  ~class TargetCriteria / Criteria->Target / {
+    Boolean satisfies(Entity user){
+      return false;
+    }
+    Boolean satisfies(Tile candidate){
       return false;
     }
   }
@@ -36,7 +39,7 @@ class 'packageName'."entities"."behaviours"."quests" Quest Object Usable {
   Float getRange(Entity user){
     return 0f;
   }
-  \EntityCriteria getTargetCriteria(){
+  Criteria->Target getTargetCriteria(){
     return new Quest->TargetCriteria();
   }
   

@@ -39,6 +39,12 @@ class 'packageName'."entities" Entities {
       }
       return drawable;
     }
+    void changeState(ImageStates newState){
+      imageStates.changeState(newState);
+    }
+    Boolean isIdle(){
+      return imageStates.getState() == ImageStates.idle;
+    }
   }
 > Class declaration(IToken declarationToken){
     StringBuilder entityNameBuilder = new StringBuilder();
@@ -75,6 +81,12 @@ class 'packageName'."entities" Entities {
             drawable.setVisualHeight(2/13f);
           }
           return drawable;
+        }
+      Entities->'entityName' += void changeState(ImageStates newState){
+          imageStates.changeState(newState);
+        }
+      Entities->'entityName' += Boolean isIdle(){
+          return imageStates.getState() == ImageStates.idle;
         }
       Entities->'entityName'->*.appendToBody(|"imageStates".'newState'();|); 
     }
@@ -183,6 +195,22 @@ class 'packageName'."entities" Entity \Object Source Loaddable Tickable {
       }
     }
   }
+  class Comparators // {
+    class Distance // {
+      class Ascending // Comparator<Entity> {
+        Environment->Position origin = null;
+        \int compare(Entity entity1, Entity entity2){
+          return "(int)(float)(origin.getDistanceTo(entity1.location) - origin.getDistanceTo(entity2.location))";
+        }
+      }
+      class Descending // Comparator<Entity> {
+        Environment->Position origin = null;
+        \int compare(Entity entity1, Entity entity2){
+          return "(int)(float)(origin.getDistanceTo(entity2.location) - origin.getDistanceTo(entity1.location))";
+        }
+      }
+    }
+  }
   @Integer ALIVE = 0;
   @Integer DEAD  = 1;
   String name = null;
@@ -257,6 +285,11 @@ class 'packageName'."entities" Entity \Object Source Loaddable Tickable {
     else {
       return false;
     }
+  }
+  Boolean isIdle(){
+    return true;
+  }
+  void changeState(ImageStates newState){
   }
   void load(){
     \on(new Events->\Load(this));

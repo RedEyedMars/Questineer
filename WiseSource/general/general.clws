@@ -20,7 +20,7 @@ interface 'packageName'."misc"."interfaces" Usable {
   Boolean use(Entity user, Activity activity){}
   Boolean canChase(){}
   Float getRange(Entity user){}
-  \EntityCriteria getTargetCriteria(){}
+  Criteria->Target getTargetCriteria(){}
   Usable->Id getId(){}
 }
 class 'packageName'."misc" Range {
@@ -98,6 +98,14 @@ class 'packageName'."misc" ListMaps {
 class 'packageName'."misc" Criteria<TypeName> {
   Boolean satisfies( '"TypeName"' "candidate"){
     return false;
+  }
+  class Target // {
+    Boolean satisfies( Entity candidate){
+      return false;
+    }
+    Boolean satisfies( Tile candidate){
+      return false;
+    }
   }
 }
 

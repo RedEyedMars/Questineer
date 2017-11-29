@@ -143,6 +143,11 @@ class 'packageName'."environments" Tiles {
   class 'packageName'."environments" MonsterDen Tiles->Terrain {
     class Id / Tiles->Terrain->Id / {
     }
+    ~Integer hp = 100;
+    ~Integer maxHp = hp;
+    Boolean isDead(){
+      return hp <= 0;
+    }
     Boolean isPassable(Integer x, Integer y){
       return false;
     }

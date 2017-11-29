@@ -17,7 +17,7 @@ questing Quest
 	  return currentQuest.use(host,null)
 	  
 	}
-hunt(EntityCriteria criteriaToTarget, Tile.Id huntingGrounds, Float range, Events.Die.Listener deathListener, ActivityCriteria toSucceed) Attack
+hunt(Criteria.Target criteriaToTarget, Tile.Id huntingGrounds, Float range, Events.Die.Listener deathListener, ActivityCriteria toSucceed) Attack
 	Hunt monsters until told otherwise.;;
 	+ Area.List toHuntLocations
 	+ Area.List huntedLocations
@@ -37,14 +37,14 @@ hunt(EntityCriteria criteriaToTarget, Tile.Id huntingGrounds, Float range, Event
 	  }
 	  else {
 	    Entity.List entitiesToTarget = host->location.getEntitiesWithin(50.0,criteriaToTarget)
-	    entitiesToTarget.sort(new Entities.Comparators.AscendingDistance(host->location))
 	    if !entitiesToTarget.isEmpty() {
+	      entitiesToTarget.sort(new Entity.Comparators.Distance.Ascending(host->location))
 	      host.start(new Activities.Kill(entitiesToTarget.get(0)))
 	    }
 	    else {
-	      Tile tileToKill = toHunt.getTile(huntingGrounds)
+	      Tiles.MonsterDen tileToKill = toHunt.getMonsterDen(huntingGrounds)
 	      if tileToKill != null {
-	        host.start(new Activities.KillTile(entitiesToTarget.get(0)))
+	        host.start(new Activities.KillDen(tileToKill))
 	      }
 	      else if !toHuntLocations.isEmpty() {
 	        huntedLocations.add(toHunt)
@@ -59,14 +59,17 @@ hunt(EntityCriteria criteriaToTarget, Tile.Id huntingGrounds, Float range, Event
 	          step(host)
 	        }
 	        else {
-	         failed = true
+	          failed = true
+	          return false
 	        }
 	      }
 	    }
 	    else {
 	      failed = true
+	      return false
 	    }
 	  }
+	  return true
 	}
 kill(Entity toKill) Attack
 	Go kill one particular monster.;;
@@ -93,6 +96,26 @@ kill(Entity toKill) Attack
 	  }
 	  if longestRange >= 0 {
 	    chaseActivity = new Activities.ChasingEntity(25,toKill,longestRange)
+	    event->host.start(chaseActivity)
+	  }
+	}
+killDen(Tiles.MonsterDen toKill) Attack
+	Go kill one particular monster den.;;
+	+ Activity chaseActivity = null
+	succeed if toKill.isDead()
+	load {
+	  setTargetDen(toKill)
+	  Float longestRange = -1.0
+	  for Usable usable : getUsables() {
+	    Float potentialRange = usable.getRange(event->host)
+	    if usable.getTargetCriteria().satisfies(toKill) {
+	      if potentialRange > longestRange {
+	        longestRange = potentialRange
+	      }
+	    }
+	  }
+	  if longestRange >= 0 {
+	    chaseActivity = new Activities.ChasingTile(25,toKill,longestRange)
 	    event->host.start(chaseActivity)
 	  }
 	}

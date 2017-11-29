@@ -17,11 +17,12 @@ class 'packageName'."entities"."behaviours"."activities" Activity \Object Source
   ~Set<Tiles\>EntryPoint> exploredPoints = new HashSet<Tiles\>EntryPoint>();
   ~Set<Area> exploredAreas = new HashSet<Area>();
   ~Entity targetEntity = null;
+  ~Tiles->MonsterDen targetDen = null;
   ~Boolean failed = false;
   void setHost(Entity newHost){
   }
   Boolean hasTarget() {
-    return targetEntity != null;
+    return targetEntity != null || targetDen != null;
   }
   void rememberEntryPoint(Tiles->EntryPoint point){
     exploredPoints.add(point);
@@ -32,7 +33,7 @@ class 'packageName'."entities"."behaviours"."activities" Activity \Object Source
   Boolean hasExplored(Area area){
     return exploredAreas.contains(area);
   }
-  Entity getTarget(Entity host, \EntityCriteria targetCriteria){
+  Entity getTarget(Entity host, Criteria->Target targetCriteria){
     return host.getLocation().getClosestEntity(targetCriteria);
   }
   Tile getDestination(Entity host){
@@ -75,8 +76,12 @@ class 'packageName'."entities"."behaviours"."activities" Activity \Object Source
       \on(new Events->\Fail(host,this));
       host.stop(this);
     }
-    else if \step(host)==false {
-      \on(new Events->\Idle(host,this));
+    else {
+      if host.isIdle() {
+        if \step(host)==false {
+          \on(new Events->\Idle(host,this));
+        }
+      }
     }
   }
   Boolean step(Entity host){
@@ -183,7 +188,7 @@ class 'packageName'."entities"."behaviours"."activities" Activities {
       }
     }
     declarationToken : element : getTarget {
-      Activities->'activityName' += Entity getTarget(Entity host, \EntityCriteria targetCriteria){}
+      Activities->'activityName' += Entity getTarget(Entity host, Criteria->Target targetCriteria){}
       Context getTargetContext = Activities->'activityName'->*"getTarget[Entity,EntityCriteria]".getContext();
       element : atom : body_element {
         Activities->'activityName'->*"getTarget[Entity,EntityCriteria]".appendToBody(\getBodyElement(atom,getTargetContext));

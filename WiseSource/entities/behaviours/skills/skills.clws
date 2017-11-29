@@ -3,12 +3,12 @@ import supports/supports.clws
 class 'packageName'."entities"."behaviours"."skills" Skill \Object Source Usable {
   class Id / Usable->Id /{
   }
-  ~Integer "experience" = 0;
-  Integer "cooldown" = -1; 
-  Entity->Modifier "range" = null;
-  Entity->Modifier "cost" = null;
-  ~Boolean "hasEntityFocus" = null;
-  ~\EntityCriteria "targetCriteria" = null;
+  ~Integer experience = 0;
+  Integer cooldown = -1; 
+  Entity->Modifier range = null;
+  Entity->Modifier cost = null;
+  ~Boolean hasEntityFocus = null;
+  ~Criteria->Target targetCriteria = null;
   
   String getName(){ return null; }
   String getDescription(){ return null; }
@@ -80,12 +80,15 @@ class 'packageName'."entities"."behaviours"."skills" Skills {
   }
 > void setup(ParseContext data){
     \createCriteria(Entity);
-    \EntityCriteria += class Free / \EntityCriteria / {
+    Criteria->Target += class Free / Criteria->Target / {
       Boolean satisfies(Entity candidate){
         return true;
       }
+      Boolean satisfies(Tile candidate){
+        return true;
+      }
     }
-    \EntityCriteria += class AngleTo / \EntityCriteria / {
+    Criteria->Target += class AngleTo / Criteria->Target / {
       Environment->Position to = null;
       Double angleLeft = 0.0;
       Double angleRight = 0.0;
@@ -117,8 +120,11 @@ class 'packageName'."entities"."behaviours"."skills" Skills {
       }
       
     }
-    Skills->'skillName' += ~class TargetCriteria /\EntityCriteria / {
+    Skills->'skillName' += ~class TargetCriteria / Criteria->Target / {
         Boolean satisfies(Entity "user"){
+          return true;
+        }
+        Boolean satisfies(Tile "user"){
           return true;
         }
       }
@@ -133,8 +139,8 @@ class 'packageName'."entities"."behaviours"."skills" Skills {
       }
       : require {
         element : atom : boolean_statement {
-          Context canUseContext = Skills->'skillName'->TargetCriteria.getMethod("satisfies").getContext();
-          Skills->'skillName'->TargetCriteria->*"satisfies".prependToBody(| if `\getBooleanStatement(atom,true,canUseContext)` {
+          Context canUseContext = Skills->'skillName'->TargetCriteria.getMethod("satisfies[Entity]").getContext();
+          Skills->'skillName'->TargetCriteria->*"satisfies[Entity]".prependToBody(| if `\getBooleanStatement(atom,true,canUseContext)` {
             return false;
           }|);
         }

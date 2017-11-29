@@ -31,7 +31,10 @@ public class ImageDeclaration extends ConcreteRule {
 					ImageBraces.IMAGE_FILE,
 					Rules.image_type,
 					new ManyParser(
-							Rules.animation_state)));
+							
+								new ChainParser(
+									AssociationTokens.NEWTAB,
+									Rules.animation_state))));
 
 	}
 

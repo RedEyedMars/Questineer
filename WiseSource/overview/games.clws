@@ -15,7 +15,11 @@ class 'packageName'."game" Game \Object InputHandler->Events->KeyboardEvent->Lis
 	for Environment environment:environments {
 	  environment.load();
 	}
+	new Associations().on(new Events->\Load(null));
     Entity hero = new Entities->Hero(Images.male_hero_base);
+    hero.changeState(ImageStates.male);
+	hero.setSpawn(environments.get(0).getArea(0).getEntryPoint(0));
+	hero.load();
 	environments.get(0).getArea(0).getEntryPoint(0).accept(hero);
 	hero.start(new Activities->\Exploring(20));
 	InputHandler.addKeyboardListener(this);
