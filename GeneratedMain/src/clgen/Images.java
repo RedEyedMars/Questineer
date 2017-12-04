@@ -46,6 +46,7 @@ import lists.GeneralTokens;
 import lists.Listnames;
 import javax.swing.JFrame;
 import java.awt.Graphics;
+import java.util.Random;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import java.nio.ByteOrder;
@@ -68,6 +69,33 @@ public class Images extends ExternalClassEntry {
 
 
 
+	public final Flipped FlippedClass = new Flipped();
+	public class Flipped extends ExternalClassEntry {
+
+
+
+
+	public void __INIT__(){
+		super.__SETUP__(
+		null, 
+		new Entry(){
+			public void get(StringBuilder __BUILDER__){
+			}
+		}, new StringEntry("Flipped"), "class ", null, new ArrayList<Entry>(Arrays.asList(new Entry[]{})), 
+		new Entry(){
+		public void get(StringBuilder builder){
+			builder.append("static class ");
+			new StringEntry("Flipped").get(builder);
+			new StringEntry("").get(builder);
+		}
+	});	
+       /* Variables */ 
+	   /* Methods */ 
+	   /* Classes */
+	}
+	
+	
+}
 
 	public void __INIT__(){
 		super.__SETUP__(
@@ -97,7 +125,11 @@ public class Images extends ExternalClassEntry {
        /* Variables */ 
 	   /* Methods */ 
 	   /* Classes */
+		add_subclass_217();
 	}
 	
 	
+		private void add_subclass_217() {
+	 		addSubClass(MainFlow.classes.ImagesClass.FlippedClass);
+	 	}
 }

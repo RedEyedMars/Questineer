@@ -1,4 +1,4 @@
-
+< LinkedList : \java.\util;
 class 'packageName'."gui" Renderer {
   class Layer / Thread / {
     @Integer UNSTARTED = -1;
@@ -20,11 +20,11 @@ class 'packageName'."gui" Renderer {
         layer.remove(toRemove);
       }
     }
-    ~List<ControlEvent> events = new ArrayList<ControlEvent>();
+    ~LinkedList<ControlEvent> events = new LinkedList<ControlEvent>();
     ~Integer status = UNSTARTED;
     void add(Gui->Drawable toAdd){
       synchronized events {
-        events.add(new Layer->Addition(toAdd));
+        events.push(new Layer->Addition(toAdd));
         if status == WAITING_FOR_EVENT {
           events.notifyAll();
         }
@@ -32,7 +32,7 @@ class 'packageName'."gui" Renderer {
     }
     void remove(Gui->Drawable toRemove){
       synchronized events {
-        events.add(new Layer->Removal(toRemove));
+        events.push(new Layer->Removal(toRemove));
         if status == WAITING_FOR_EVENT {
           events.notifyAll();
         }
@@ -41,17 +41,17 @@ class 'packageName'."gui" Renderer {
     void run(){
       try {
         while Gui.isRunning {
-          status = WAITING_FOR_EVENT;
-          while Gui.isRunning && events.isEmpty() {
-            synchronized events {
+          synchronized events {
+            while Gui.isRunning && events.isEmpty() {
+              status = WAITING_FOR_EVENT;
               events.wait();
+              status = PROCESSING_EVENTS;
             }
           }
-          status = PROCESSING_EVENTS;
-          while events.isEmpty()==false {
+          synchronized layer {
             synchronized events {
-              synchronized layer {
-                events.remove(0).act();
+              while events.isEmpty()==false {
+                events.pollFirst().act();
               }
             }
           }
@@ -121,6 +121,9 @@ class 'packageName'."gui" Renderer {
   @void add(Gui->Drawable drawable, Renderer->Layer layer){
     layer.add(drawable);
   }
+  @void remove(Gui->Drawable drawable, Renderer->Layer layer){
+    layer.remove(drawable);
+  }
   @Gui->Drawable add(Gui->Drawable drawable, Gui->Renderable image, Renderer->Layer layer){
     drawable = drawable.image(image);
     layer.add(drawable);
@@ -186,6 +189,7 @@ class 'packageName'."gui" Renderer {
     }
   }
   void load(DisplayMode displayMode){
+    `loadLayersBody`;
     try {
 	  ticksPerSecond=Sys.getTimerResolution();
       if aspectRatio == 0f {
@@ -226,7 +230,6 @@ class 'packageName'."gui" Renderer {
       Display.update();
       animator = new Renderer->Animator();
       animator.start();
-      `loadLayersBody`;
     }
     print catch * {
       \System.err.println(''"Renderer Load Failed"'');

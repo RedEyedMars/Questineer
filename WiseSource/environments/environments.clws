@@ -111,7 +111,7 @@ class 'packageName'."environments" Environment \Object Loaddable Tickable {
       else if xDirection < 0{
         return Direction.left;
       }
-      Integer yDirection = otherPosition.getX() - \getY();
+      Integer yDirection = otherPosition.getY() - \getY();
       if yDirection > 0 {
         return Direction.up;
       }
@@ -265,9 +265,12 @@ class 'packageName'."environments" Environment \Object Loaddable Tickable {
       \step(speed,\getDirectionOf(otherPosition));
     }
     void step(Integer speed, Direction direction){
-      facing = direction.getFloatValue();
-      host.changeState(ImageStates.walk);
-      area.addEvent(speed, new Environment->Location->Event->Move(this,direction));
+      if direction != null {
+        facing = direction.getFloatValue();
+        host.changeState(ImageStates.walk);
+        host.changeState(direction.getStateId());
+        area.addEvent(speed, new Environment->Location->Event->Move(this,direction));
+      }
     }
     Boolean isCloseAsPossibleTo(Tile tile){
       if tile.isPassable(0,0) {
@@ -449,7 +452,9 @@ class 'packageName'."environments" Environment \Object Loaddable Tickable {
     }
   }
   void tick(Double millisSinceLastFrame){
-    for Area activeArea: activeAreas.keySet() {
+    List<Area> currentlyActive = new ArrayList<Area>();
+    currentlyActive.addAll(activeAreas.keySet());
+    for Area activeArea: currentlyActive {
       activeArea.tick(millisSinceLastFrame);
     }
   }
@@ -527,6 +532,9 @@ class 'packageName'."environments" Direction {
   Float getFloatValue(){
     return null;
   }
+  ImageStates getStateId(){
+    return null;
+  }
   @Direction->Right right = new Direction->Right();
   class Right / Direction / {
     Entity->Event move(Environment->Movable movable){
@@ -535,6 +543,9 @@ class 'packageName'."environments" Direction {
     Float getFloatValue(){
       return 0f;
     }
+    ImageStates getStateId(){
+      return ImageStates.right;
+    }
   }
   @Direction->Left left = new Direction->Left();
   class Left / Direction / {
@@ -542,7 +553,10 @@ class 'packageName'."environments" Direction {
       return movable.moveX(-1);
     }
     Float getFloatValue(){
-      return "(float)Math.PI";
+      return (float)Math.PI;
+    }
+    ImageStates getStateId(){
+      return ImageStates.left;
     }
   }
   @Direction->Up up = new Direction->Up();
@@ -551,7 +565,10 @@ class 'packageName'."environments" Direction {
       return movable.moveY(1);
     }
     Float getFloatValue(){
-      return "(float)(Math.PI/2.0)";
+      return (float)(Math.PI/2.0);
+    }
+    ImageStates getStateId(){
+      return ImageStates.right;
     }
   }
   @Direction->Down down = new Direction->Down();
@@ -560,7 +577,10 @@ class 'packageName'."environments" Direction {
       return movable.moveY(-1);
     }
     Float getFloatValue(){
-      return "(float)(Math.PI*1.5)";
+      return (float)(Math.PI*1.5);
+    }
+    ImageStates getStateId(){
+      return ImageStates.left;
     }
   }
 }

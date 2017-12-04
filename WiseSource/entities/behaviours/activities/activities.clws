@@ -50,8 +50,7 @@ class 'packageName'."entities"."behaviours"."activities" Activity \Object Source
   }
   Usable pick(){
     if \getUsables().isEmpty() == false {
-      Double randomIndex = \Math.random();
-	  return \getUsables().get("((int)(double)randomIndex)" \* \getUsables().size());
+	  return Range.select(\getUsables());
 	}
 	else {
 	  failed = true;
@@ -63,8 +62,6 @@ class 'packageName'."entities"."behaviours"."activities" Activity \Object Source
   void remove(Usable newUsable){
   }
   void listen(Entity host, Entity->Event event){
-    if event.getId() == Entity->Event->FailedToMove.id {
-    }
   }
   void on(Events->\Tick event){
   	Entity host = event.getHost();
@@ -78,7 +75,7 @@ class 'packageName'."entities"."behaviours"."activities" Activity \Object Source
     }
     else {
       if host.isIdle() {
-        if \step(host)==false {
+        if failed == false && \step(host)==false {
           \on(new Events->\Idle(host,this));
         }
       }
@@ -206,6 +203,13 @@ class 'packageName'."entities"."behaviours"."activities" Activities {
         Activities->'activityName' += Boolean step(Entity host){}
         Context stepContext = Activities->'activityName'->*"step".getContext();
         Activities->'activityName'->*"step".appendToBody(\getBodyElements(element,stepContext));
+      }
+    }
+    if declarationToken->"listen" != null {
+      declarationToken : element : listen {
+        Activities->'activityName' += void listen(Entity host,Entity->Event event){}
+        Context listenContext = Activities->'activityName'->*"listen".getContext();
+        Activities->'activityName'->*"listen".appendToBody(\getBodyElements(element,listenContext));
       }
     }
     declarationToken : element : event {

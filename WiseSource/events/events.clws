@@ -6,10 +6,13 @@ class 'packageName'."events" Events {
 	String eventName = 'declaration->"eventName"';
 	eventNameSet.add(eventName);
 	String cev = \^eventName;
-    Events += class 'packageName'."events" cev Event {}
+    Events += class 'packageName'."events" cev Event {
+        @Event->Id id = Event->Id->'eventName'; 
+      }
     Events->\cev += class 'packageName'."events" Listener \Object Listenable<Events\>'cev'> {
       void listen(Events->'cev' event){}
     }
+    Event->Id += void 'eventName' = null
     declaration : element : parameter {
 	  element : atom : type_name {
 		Events->\cev += '\getTypeName(atom)' 'element->"name"'
@@ -66,4 +69,5 @@ class 'packageName'."events" Events {
   }
 }
 class 'packageName'."events" Event {
+  enum Id // {}
 }

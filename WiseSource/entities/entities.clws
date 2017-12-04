@@ -43,7 +43,10 @@ class 'packageName'."entities" Entities {
       imageStates.changeState(newState);
     }
     Boolean isIdle(){
-      return imageStates.getState() == ImageStates.idle;
+      return imageStates.getId() == ImageStates.idle;
+    }
+    Gui->Image->States changeTo(){
+      return imageStates;
     }
   }
 > Class declaration(IToken declarationToken){
@@ -86,7 +89,10 @@ class 'packageName'."entities" Entities {
           imageStates.changeState(newState);
         }
       Entities->'entityName' += Boolean isIdle(){
-          return imageStates.getState() == ImageStates.idle;
+          return imageStates.getId() == ImageStates.idle;
+        }
+      Entities->'entityName' += Gui->Image->States changeTo(){
+          return imageStates;
         }
       Entities->'entityName'->*.appendToBody(|"imageStates".'newState'();|); 
     }
@@ -216,7 +222,7 @@ class 'packageName'."entities" Entity \Object Source Loaddable Tickable {
   String name = null;
   ~Integer status = ALIVE;
   ~Float "weightHeld" = 0f;
-  ~Integer "walkingSpeed" = 10;
+  ~Integer "walkingSpeed" = 20;
   ~Tile "spawn" = null;
   ~Item->List "equippedItems" = new Item->List();
   ~Skill focusSkill = null;
@@ -225,16 +231,21 @@ class 'packageName'."entities" Entity \Object Source Loaddable Tickable {
   ~Activity currentActivity = null;
   ~Integer currentActivityIndex = -1;
   ~Activity->List activityList = new Activity->List();
-  ~ArrayList<Entity\>Event> events = new ArrayList<Entity\>Event>();
+  ~LinkedList<Entity\>Event> events = new LinkedList<Entity\>Event>();
   
   
   void display(){
     \getDrawable().display(Renderer.topLayer);
   }
+  void undisplay(){
+    \getDrawable().undisplay(Renderer.topLayer);
+  }
   Gui->Drawable getDrawable(){
     return null;
   }
-  
+  Gui->Image->States changeTo(){
+    return null;
+  }
   boolean getIsPlayerAffiliated(){
     return false;
   }
@@ -266,7 +277,7 @@ class 'packageName'."entities" Entity \Object Source Loaddable Tickable {
 	"item".on(new Events->\Unequip(this,"item"));
   }
   void addEvent(Entity->Event event){
-    events.add(event);
+    events.push(event);
   }
   void exploreEntryPoint(Tiles->EntryPoint point){
     if currentActivity != null {
@@ -302,14 +313,14 @@ class 'packageName'."entities" Entity \Object Source Loaddable Tickable {
     
     if events.isEmpty() == false {
       if currentActivity!=null {
-        for Entity->Event event: events {
-          currentActivity.listen(this,event);
+        while events.isEmpty() == false {
+          currentActivity.listen(this,events.pollFirst());
         }
         currentActivity.on(new Events->\Tick(this));
       }
       else {
-        for Entity->Event event: events {
-          \listen(event);
+        while events.isEmpty() == false {
+          \listen(events.pollFirst());
         }
       }
     }
@@ -429,8 +440,7 @@ class 'packageName'."entities" Entity \Object Source Loaddable Tickable {
     }
     
     Entity += Entity->Stat getRandomStat(){
-      Double "randomIndex" = \Math.random() * 'allStatList.getSize()';
-      switch "(int)(double)randomIndex" `randomStatBody`
+      switch Range.getRandom(0, 'allStatList.getSize()' ) `randomStatBody`
       return null;
     }
   }

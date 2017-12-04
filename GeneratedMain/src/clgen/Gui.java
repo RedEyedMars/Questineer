@@ -46,6 +46,7 @@ import lists.GeneralTokens;
 import lists.Listnames;
 import javax.swing.JFrame;
 import java.awt.Graphics;
+import java.util.Random;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import java.nio.ByteOrder;
@@ -125,19 +126,19 @@ public void importAny(final IToken import_any)  {
 	});	
        /* Variables */ 
 	   /* Methods */
-		add_method_525();
-		add_method_526();
-		add_method_527(); 
+		add_method_545();
+		add_method_546();
+		add_method_547(); 
 	   /* Classes */
 	}
 	
-		private void add_method_525() {
+		private void add_method_545() {
 	 		addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))),"", /*Exac*/new ExternalStatement(new StringEntry("getTexture")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), "", /*Body*/new ExternalStatement.Body()));
 	 	}
-		private void add_method_526() {
+		private void add_method_546() {
 	 		addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))),"", /*Exac*/new ExternalStatement(new StringEntry("render")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), "", /*Body*/new ExternalStatement.Body()));
 	 	}
-		private void add_method_527() {
+		private void add_method_547() {
 	 		addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))),"", /*Exac*/new ExternalStatement(new StringEntry("animate")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), "", /*Body*/new ExternalStatement.Body()));
 	 	}
 	
@@ -164,21 +165,22 @@ public void importAny(final IToken import_any)  {
 	});	
        /* Variables */ 
 	   /* Methods */
-		add_method_528();
-		add_method_529(); 
+		add_method_548();
+		add_method_549(); 
 	   /* Classes */
 	}
 	
-		private void add_method_528() {
+		private void add_method_548() {
 	 		addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Gui")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Image")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("States"))))),"", /*Exac*/new ExternalStatement(new StringEntry("asStates")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), "", /*Body*/new ExternalStatement.Body()));
 	 	}
-		private void add_method_529() {
+		private void add_method_549() {
 	 		addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Gui")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Drawable"))))),"", /*Exac*/new ExternalStatement(new StringEntry("asStates")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Gui")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Drawable"))))),"", /*Name*/new ExternalStatement(new StringEntry("drawable")))}), "", /*Body*/new ExternalStatement.Body()));
 	 	}
 	
 }
 	public final Image ImageClass = new Image();
 	public class Image extends ExternalClassEntry {
+		protected final Map<String,Integer> imageWidths = new HashMap<String,Integer>();
 		protected final Map<String,Set<String>> declaredTextureBuffers = new HashMap<String,Set<String>>();
 		protected final Map<String,Set<String>> animationStateFirstSet = new HashMap<String,Set<String>>();
 		protected final Set<String> animationStatesByImage = new HashSet<String>();
@@ -186,6 +188,9 @@ public void importAny(final IToken import_any)  {
 		protected final Map<String,ExternalStatement.Body> animationStateAscendBodies = new HashMap<String,ExternalStatement.Body>();
 		protected final Map<String,ExternalStatement.Body> animationStateChangeSwitches = new HashMap<String,ExternalStatement.Body>();
 		protected final Map<String,Map<String,ExternalStatement.Body>> animationStateChangeBodies = new HashMap<String,Map<String,ExternalStatement.Body>>();
+		protected final Map<String,Map<String,ExternalStatement>> animationStateChangeCases = new HashMap<String,Map<String,ExternalStatement>>();
+		protected final Map<String,Map<String,Set<String>>> allStatesWithinState = new HashMap<String,Map<String,Set<String>>>();
+		protected final Map<String,Map<String,Set<String>>> allIdsWithinState = new HashMap<String,Map<String,Set<String>>>();
 		protected final Map<String,Map<String,ExternalStatement>> firstOrDefaultFlipMethods = new HashMap<String,Map<String,ExternalStatement>>();
 		protected final Map<String,Map<String,ExternalStatement>> firstOrDefaultStateVariables = new HashMap<String,Map<String,ExternalStatement>>();
 
@@ -198,7 +203,9 @@ public void importAny(final IToken import_any)  {
 			final BufferedImage bimg = ImageIO.read(new File(imageFileName));
 			final Integer pWidth = bimg.getWidth();
 			final Integer pHeight = bimg.getHeight();
+			imageWidths.put(imageClassName,Integer.parseInt(input.get("frameWidth").toString()));
 MainFlow.classes.ImagesClass.addVariable(new ExternalVariableEntry(true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Images")), /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(imageClassName.toString())))))),"", /*Enty*/new ExternalStatement(new StringEntry(imageName.toString())), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Images")), /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(imageClassName.toString())))))),new ExternalStatement.Parameters()))));
+MainFlow.classes.ImagesClass.FlippedClass.addVariable(new ExternalVariableEntry(true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Images")), /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(imageClassName.toString())))))),"", /*Enty*/new ExternalStatement(new StringEntry(imageName.toString())), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Images")), /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(imageClassName.toString())))))),new ExternalStatement.Parameters()))));
 MainFlow.classes.ImagesClass.addSubClass(new ExternalClassEntry(){public void __INIT__(){super.__SETUP__(null, 
 		new Entry(){
 			public void get(StringBuilder __BUILDER__){
@@ -232,6 +239,11 @@ MainFlow.classes.ImagesClass.addSubClass(new ExternalClassEntry(){public void __
 		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
 			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Images")), /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(imageName.toString()))))))), /*Enty*/new ExternalStatement(new StringEntry("setTextureBuffer"))),
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("textureBuffer"))))))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Images")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Flipped")))), /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(imageName.toString()))))))), /*Enty*/new ExternalStatement(new StringEntry("setTextureBuffer"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
 			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("textureBuffer")))))))))));
 			final String imageLoaderClassName = "ImageData" + pWidth.toString() + "x" + pHeight.toString() + "Loader";
 			MainFlow.classes.ImageLoaderClass.declareImageLoader(imageName,imageFileName,pWidth,pHeight);
@@ -249,11 +261,11 @@ MainFlow.classes.ImagesClass.getSubClass(imageClassName.toString()).addSubClass(
 	});
        /* Variables */ 
 	   /* Methods */
-		add_method_534(); 
+		add_method_554(); 
 	   /* Classes */
 	}
 	
-		private void add_method_534() {
+		private void add_method_554() {
 	 		addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))),"", /*Exac*/new ExternalStatement(new StringEntry("changeState")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("ImageStates"))),"", /*Name*/new ExternalStatement(new StringEntry("newState")))}), "", /*Body*/new ExternalStatement.Body()));
 	 	}
 	
@@ -278,11 +290,6 @@ MainFlow.classes.ImagesClass.getSubClass(imageClassName.toString()).getSubClass(
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
 			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("state"))))))))),
 /*BODY*/				
-		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("result"))), /*Enty*/new ExternalStatement(new StringEntry("setParentState"))),
-			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("parentState"))))))))),
-/*BODY*/				
 		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("result"))))))));
 MainFlow.classes.ImagesClass.getSubClass(imageClassName.toString()).getSubClass("StatesClass").addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Gui")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Drawable"))))),"", /*Exac*/new ExternalStatement(new StringEntry("asStates")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Gui")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Drawable"))))),"", /*Name*/new ExternalStatement(new StringEntry("drawable")))}), "", /*Body*/new ExternalStatement.Body(
 		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Images")), /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(imageClassName.toString()))))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("States"))))),"", /*Name*/new ExternalStatement(new StringEntry("result")), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Images")), /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(imageClassName.toString()))))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("States"))))),new ExternalStatement.Parameters())))),
@@ -296,11 +303,6 @@ MainFlow.classes.ImagesClass.getSubClass(imageClassName.toString()).getSubClass(
 			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("result"))), /*Enty*/new ExternalStatement(new StringEntry("setState"))),
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
 			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("state"))))))))),
-/*BODY*/				
-		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("result"))), /*Enty*/new ExternalStatement(new StringEntry("setParentState"))),
-			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("parentState"))))))))),
 /*BODY*/				
 		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
 			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("drawable"))), /*Enty*/new ExternalStatement(new StringEntry("image"))),
@@ -319,6 +321,9 @@ MainFlow.classes.ImagesClass.getSubClass(imageClassName.toString()).getSubClass(
 			}
 			animationStateFirstSet.put(imageClassName,new HashSet<String>());
 			animationStateChangeBodies.put(imageClassName,new HashMap<String,ExternalStatement.Body>());
+			animationStateChangeCases.put(imageClassName,new HashMap<String,ExternalStatement>());
+			allStatesWithinState.put(imageClassName,new HashMap<String,Set<String>>());
+			allIdsWithinState.put(imageClassName,new HashMap<String,Set<String>>());
 			firstOrDefaultFlipMethods.put(imageClassName,new HashMap<String,ExternalStatement>());
 			firstOrDefaultStateVariables.put(imageClassName,new HashMap<String,ExternalStatement>());
 			firstOrDefaultFlipMethods.get(imageClassName).put("",new ExternalStatement());
@@ -336,14 +341,14 @@ MainFlow.classes.ImagesClass.getSubClass(imageClassName.toString()).getSubClass(
 			/*Body*/new ExternalStatement.Body(
 			/*Cond*/new ExternalStatement.Conditional(
 			"switch ", 
-			/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("newState")))),
+			/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("state")))),
 			/*InCl*/new ExternalStatement(stateAscendBody)),
 /*BODY*/				
 			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Exac*/new ExternalStatement(new StringEntry(""))))),
 /*BODY*/				
 		/*Cond*/new ExternalStatement.Conditional(
 			"switch ", 
-			/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("parentState")))),
+			/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("state")))),
 			/*InCl*/new ExternalStatement(stateSwitchBody))));
 			animationStateChangeSwitches.get(imageClassName).add(/*InCl*/new ExternalStatement(
 		/*Case*/new ExternalStatement.Conditional(
@@ -356,12 +361,51 @@ MainFlow.classes.ImagesClass.getSubClass(imageClassName.toString()).getSubClass(
 			/*InCl*/new ExternalStatement(defaultStateBody)),
 /*BODY*/				
 			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Exac*/new ExternalStatement(new StringEntry(""))))).setBraces("",":")));
+			allStatesWithinState.get(imageClassName).put("",new HashSet<String>());
+			allIdsWithinState.get(imageClassName).put("",new HashSet<String>());
 			for(final IToken atom:input.getAllSafely("animation_state")) {
 					getAnimationStateDeclaration(atom,imageName,imageClassName,"");
 			}
+			addAllStateChangesToState(imageClassName,"",new HashSet<String>());
 		}
 		catch (IOException   e0) {
 			e0.printStackTrace();
+		}
+	}
+	
+	public void addAllStateChangesToState(final String imageClassName,final String currentStateName,final Set<String> allStateList)  {
+		for (final String childStateName :  allStatesWithinState.get(imageClassName).get(currentStateName)) {
+			allStateList.add(childStateName);
+		}
+		for (final String childStateName :  allStatesWithinState.get(imageClassName).get(currentStateName)) {
+			final Set<String> childStateList = new HashSet<String>();
+			childStateList.addAll(allStateList);
+			if (allStatesWithinState.get(imageClassName).containsKey(childStateName)) {
+				addAllStateChangesToState(imageClassName,childStateName,childStateList);
+			}
+			else  {
+				final ExternalStatement.Body currentSwitchBody = new ExternalStatement.Body();
+				animationStateChangeBodies.get(imageClassName).put(childStateName,currentSwitchBody);
+				animationStateChangeSwitches.get(imageClassName).add(/*InCl*/new ExternalStatement(
+		/*Case*/new ExternalStatement.Conditional(
+			"case ", 
+			/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(childStateName.toString())))),
+			/*Body*/new ExternalStatement.Body(
+			/*Cond*/new ExternalStatement.Conditional(
+			"switch ", 
+			/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("newState")))),
+			/*InCl*/new ExternalStatement(currentSwitchBody)),
+/*BODY*/				
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Exac*/new ExternalStatement(new StringEntry(""))))).setBraces("",":")));
+				for (final String allChildStateName :  allStateList) {
+					if (allChildStateName.equals(childStateName) == false) {
+						animationStateChangeBodies.get(imageClassName).get(childStateName).add(animationStateChangeCases.get(imageClassName).get(allChildStateName));
+					}
+				}
+			}
+		}
+		for (final String childStateName :  allStateList) {
+			animationStateChangeBodies.get(imageClassName).get(currentStateName).add(animationStateChangeCases.get(imageClassName).get(childStateName));
 		}
 	}
 	
@@ -373,8 +417,12 @@ MainFlow.classes.ImagesClass.getSubClass(imageClassName.toString()).getSubClass(
 				currentStateName = atom.get("animationId").toString();
 				}
 				else  {
-				currentStateName = atom.get("animationId").toString() + "_" + parentStateName;
+				currentStateName = parentStateName + "_" + atom.get("animationId").toString();
 				}
+				allStatesWithinState.get(imageClassName).get(parentStateName).add(currentStateName);
+				allIdsWithinState.get(imageClassName).get(parentStateName).add(atom.get("animationId").toString());
+				allStatesWithinState.get(imageClassName).put(currentStateName,new HashSet<String>());
+				allIdsWithinState.get(imageClassName).put(currentStateName,new HashSet<String>());
 				final ExternalStatement.Body currentSwitchBody = new ExternalStatement.Body();
 				animationStateChangeBodies.get(imageClassName).put(currentStateName,currentSwitchBody);
 				animationStateChangeSwitches.get(imageClassName).add(/*InCl*/new ExternalStatement(
@@ -392,134 +440,269 @@ MainFlow.classes.ImagesClass.getSubClass(imageClassName.toString()).getSubClass(
 				firstOrDefaultStateVariables.get(imageClassName).put(currentStateName,firstOrDefaultVariable);
 				final ExternalStatement firstOrDefaultMethod = new ExternalStatement();
 				firstOrDefaultFlipMethods.get(imageClassName).put(currentStateName,firstOrDefaultMethod);
+				if (parentStateName.equals("")) {
+				declareFlipMethod(animationStatesByImage.add(imageClassName),imageClassName,atom.get("animationId").toString(),currentStateName,currentStateName,firstOrDefaultStateVariables.get(imageClassName).get(currentStateName));
+				}
+				else  {
 				declareFlipMethod(animationStatesByImage.add(imageClassName),imageClassName,atom.get("animationId").toString(),currentStateName,parentStateName,firstOrDefaultStateVariables.get(imageClassName).get(currentStateName));
+				}
 				for(final IToken quark:atom.getAllSafely("animation_state")) {
 					getAnimationStateDeclaration(quark,imageName,imageClassName,currentStateName);
 				}
 				if (animationStates.add(currentStateName)) {
 MainFlow.classes.ImageStatesClass.addVariable(new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))),"", /*Enty*/new ExternalStatement(new StringEntry(currentStateName.toString()))));
+MainFlow.classes.GuiClass.ImageClass.StatesClass.addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(MainFlow.variables.get_finalImageStatesClassName().toString())))),"", /*Enty*/new ExternalStatement(new StringEntry(currentStateName.toString())), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), "", /*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("changeState")),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("ImageStates")), /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(currentStateName.toString())))))))))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("this"))))))));
 				}
 				if (animationStates.add(atom.get("animationId").toString())) {
 MainFlow.classes.ImageStatesClass.addVariable(new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))),"", /*Enty*/new ExternalStatement(new StringEntry(atom.get("animationId").toString()))));
+MainFlow.classes.GuiClass.ImageClass.StatesClass.addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(MainFlow.variables.get_finalImageStatesClassName().toString())))),"", /*Enty*/new ExternalStatement(new StringEntry(atom.get("animationId").toString())), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), "", /*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("changeState")),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("ImageStates")), /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(atom.get("animationId").toString())))))))))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("this"))))))));
 				}
 			}
 			if(__atom__KEY.getName().equals("finalState")){ final IToken atom = declaration.get(__atom__KEY);
 				Boolean isFirst = animationStatesByImage.add(imageClassName);
-				List<ExternalStatement.Parameters> arguments = new ArrayList<ExternalStatement.Parameters>();
-				arguments.add(new ExternalStatement.Parameters());
-				final ExternalStatement.Parameters multipleArguments = new ExternalStatement.Parameters();
-				final ExternalStatement.Parameters xArgumentLayer = new ExternalStatement.Parameters();
-				final List<ExternalStatement.Parameters> yArgumentLayers = new ArrayList<ExternalStatement.Parameters>();
-				Integer yArgumentLayerSize = 0;
-				Integer valueIndex = 0;
-				for(final IToken element:atom.getAllSafely("animation_variable_value")) {
-					for(final IToken value:element.getAllSafely("range")) {
-						final List<ExternalStatement.Parameters> oldArguments = arguments;
-						arguments = new ArrayList<ExternalStatement.Parameters>();
-						final Integer lowerBound = Integer.parseInt(value.get("lowerBound").toString());
-						final Integer upperBound = Integer.parseInt(value.get("upperBound").toString());
-						for (final ExternalStatement.Parameters args :  oldArguments) {
-						if (valueIndex == 1 ) {
-							yArgumentLayerSize = upperBound - lowerBound + 1;
-						}
-						for (Integer i = 0; i <=  upperBound - lowerBound; ++i) {
-							final ExternalStatement.Parameters newArg = new ExternalStatement.Parameters();
-							newArg.addAll(args);
-							final Integer index = i+lowerBound;
-							newArg.add(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(index.toString())))));
-							arguments.add(newArg);
-							if (valueIndex == 0 ) {
-								final ExternalStatement.Parameters yArgumentLayer = new ExternalStatement.Parameters();
-								yArgumentLayers.add(yArgumentLayer);
-								xArgumentLayer.add(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(new StringEntry("new Gui.Renderable[]{")), /*InCl*/new ExternalStatement(yArgumentLayer))), /*Name*/new ExternalStatement(new StringEntry("}")))))));
-							}
-						}
-						}
-					}
-					for(final IToken value:element.getAllSafely("INTEGER")) {
-						for (final ExternalStatement.Parameters args :  arguments) {
-						args.add(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(value.toString())))));
-						}
-						if (valueIndex == 0 ) {
-						final ExternalStatement.Parameters yArgumentLayer = new ExternalStatement.Parameters();
-						yArgumentLayers.add(yArgumentLayer);
-						xArgumentLayer.add(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(new StringEntry("new Gui.Renderable[]{")), /*InCl*/new ExternalStatement(yArgumentLayer))), /*Name*/new ExternalStatement(new StringEntry("}")))))));
-						}
-						else if (valueIndex == 1 ) {
-						yArgumentLayerSize = 1 ;
-						}
-					}
-					for(final IToken value:element.getAllSafely("FLOAT")) {
-						for (final ExternalStatement.Parameters args :  arguments) {
-						args.add(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(value.toString())))));
-						}
-					}
-					for(final IToken value:element.getAllSafely("quote")) {
-						for (final ExternalStatement.Parameters args :  arguments) {
-						args.add(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Quot*/new ExternalStatement(new QuoteEntry(value.toString().toString())))));
-						}
-					}
-					valueIndex += 1;
-				}
-				multipleArguments.add(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(new StringEntry("new Gui.Renderable[][]{")), /*InCl*/new ExternalStatement(xArgumentLayer))), /*Name*/new ExternalStatement(new StringEntry("}")))))));
 				final String creationMethod = "create" + atom.get("animationTypeName").toString();
-				final String currentStateName;
+				String currentStateName;
 				if (parentStateName.equals("")) {
 				currentStateName = atom.get("animationId").toString();
 				}
 				else  {
 				currentStateName = parentStateName + "_" + atom.get("animationId").toString();
 				}
-				if (arguments.size() == 1) {
-				if (animationStates.add(atom.get("animationId").toString())) {
-MainFlow.classes.ImageStatesClass.addVariable(new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))),"", /*Enty*/new ExternalStatement(new StringEntry(atom.get("animationId").toString()))));
-				}
-				if (animationStates.add(currentStateName)) {
-MainFlow.classes.ImageStatesClass.addVariable(new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))),"", /*Enty*/new ExternalStatement(new StringEntry(currentStateName.toString()))));
-				}
+				declareFinalAnimationState(atom,isFirst,imageClassName,imageName,parentStateName,currentStateName,atom.get("animationId").toString(),creationMethod,false);
+				if (atom.get("flipAnimationId") != null) {
+				if (parentStateName.equals("")) {
+					currentStateName = atom.get("flipAnimationId").toString();
 				}
 				else  {
-				for (Integer i = 0; i <  arguments.size(); ++i) {
-					if (animationStates.add(atom.get("animationId").toString() + "_" + i)) {
-MainFlow.classes.ImageStatesClass.addVariable(new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))),"", /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Enty*/new ExternalStatement(new StringEntry(atom.get("animationId").toString())), /*Name*/new ExternalStatement(new StringEntry("_")))), /*Enty*/new ExternalStatement(new StringEntry(i.toString()))))));
-					}
-					if (animationStates.add(currentStateName + "_" + i)) {
-MainFlow.classes.ImageStatesClass.addVariable(new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))),"", /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Enty*/new ExternalStatement(new StringEntry(currentStateName.toString())), /*Name*/new ExternalStatement(new StringEntry("_")))), /*Enty*/new ExternalStatement(new StringEntry(i.toString()))))));
-					}
+					currentStateName = parentStateName + "_" + atom.get("flipAnimationId").toString();
 				}
+				declareFinalAnimationState(atom,false,imageClassName,imageName,parentStateName,currentStateName,atom.get("flipAnimationId").toString(),creationMethod,true);
 				}
-				if (arguments.size() == 1) {
+			}
+		}
+	}
+	
+	public void declareFinalAnimationState(final IToken atom,final boolean isFirstValue,final String imageClassName,final String imageName,final String parentStateName,final String currentStateName,final String currentAnimationId,final String creationMethod,final boolean isFlipped)  {
+		final FlipMethodReturn flipMethodParameters = getFlipMethodParameters(atom,isFlipped,imageClassName);
+		final List<ExternalStatement.Parameters> arguments = flipMethodParameters.getArguments();
+		final Integer yLayerSize = flipMethodParameters.getYLayerSize();
+		boolean isFirst = isFirstValue;
+		if (arguments.size() == 1) {
+			if (animationStates.add(currentAnimationId)) {
+MainFlow.classes.ImageStatesClass.addVariable(new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))),"", /*Enty*/new ExternalStatement(new StringEntry(currentAnimationId.toString()))));
+MainFlow.classes.GuiClass.ImageClass.StatesClass.addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(MainFlow.variables.get_finalImageStatesClassName().toString())))),"", /*Enty*/new ExternalStatement(new StringEntry(currentAnimationId.toString())), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), "", /*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("changeState")),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("ImageStates")), /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(currentAnimationId.toString())))))))))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("this"))))))));
+			}
+			if (animationStates.add(currentStateName)) {
+MainFlow.classes.ImageStatesClass.addVariable(new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))),"", /*Enty*/new ExternalStatement(new StringEntry(currentStateName.toString()))));
+MainFlow.classes.GuiClass.ImageClass.StatesClass.addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(MainFlow.variables.get_finalImageStatesClassName().toString())))),"", /*Enty*/new ExternalStatement(new StringEntry(currentStateName.toString())), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), "", /*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("changeState")),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("ImageStates")), /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(currentStateName.toString())))))))))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("this"))))))));
+			}
+			allStatesWithinState.get(imageClassName).get(parentStateName).add(currentStateName);
+			allIdsWithinState.get(imageClassName).get(parentStateName).add(currentAnimationId);
+		}
+		else  {
+			for (Integer i = 0; i <  arguments.size(); ++i) {
+				final String realCurrentId = currentAnimationId.toString() + "_" + i;
+				final String realCurrentState = currentAnimationId.toString() + "_" + i;
+				if (animationStates.add(realCurrentId)) {
+MainFlow.classes.ImageStatesClass.addVariable(new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))),"", /*Enty*/new ExternalStatement(new StringEntry(realCurrentId.toString()))));
+MainFlow.classes.GuiClass.ImageClass.StatesClass.addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(MainFlow.variables.get_finalImageStatesClassName().toString())))),"", /*Enty*/new ExternalStatement(new StringEntry(realCurrentId.toString())), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), "", /*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("changeState")),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("ImageStates")), /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(realCurrentId.toString())))))))))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("this"))))))));
+				}
+				if (animationStates.add(realCurrentState)) {
+MainFlow.classes.ImageStatesClass.addVariable(new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))),"", /*Enty*/new ExternalStatement(new StringEntry(realCurrentState.toString()))));
+MainFlow.classes.GuiClass.ImageClass.StatesClass.addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(MainFlow.variables.get_finalImageStatesClassName().toString())))),"", /*Enty*/new ExternalStatement(new StringEntry(realCurrentState.toString())), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), "", /*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("changeState")),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("ImageStates")), /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(realCurrentState.toString())))))))))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("this"))))))));
+				}
+				allStatesWithinState.get(imageClassName).get(parentStateName).add(currentStateName + "_" + i);
+				allIdsWithinState.get(imageClassName).get(parentStateName).add(currentAnimationId + "_" + i);
+			}
+		}
+		if (arguments.size() == 1) {
+			if (isFlipped) {
+MainFlow.classes.ImagesClass.getSubClass(imageClassName.toString()).getSubClass("StatesClass").addVariable(new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Gui")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Renderable"))))),"", /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Enty*/new ExternalStatement(new StringEntry(currentStateName.toString())), /*Name*/new ExternalStatement(new StringEntry("State")))), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Images")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Flipped")))), /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(imageName.toString()))))), /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(creationMethod.toString())))))),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*InCl*/new ExternalStatement(arguments.get(0)))))))));
+			}
+			else  {
 MainFlow.classes.ImagesClass.getSubClass(imageClassName.toString()).getSubClass("StatesClass").addVariable(new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Gui")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Renderable"))))),"", /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Enty*/new ExternalStatement(new StringEntry(currentStateName.toString())), /*Name*/new ExternalStatement(new StringEntry("State")))), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
 			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("Images"))), /*Enty*/new ExternalStatement(new StringEntry(imageName.toString()))), /*Enty*/new ExternalStatement(new StringEntry(creationMethod.toString()))),
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
 			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*InCl*/new ExternalStatement(arguments.get(0))))))))));
+			}
+			if (animationStateFirstSet.get(imageClassName).add(parentStateName)) {
+				firstOrDefaultFlipMethods.get(imageClassName).get(parentStateName).add(/*InCl*/new ExternalStatement(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(new StringEntry("change_to_")), /*Enty*/new ExternalStatement(new StringEntry(currentStateName.toString())))),new ExternalStatement.Parameters())))));
+				firstOrDefaultStateVariables.get(imageClassName).get(parentStateName).add(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Enty*/new ExternalStatement(new StringEntry(currentStateName.toString())), /*Name*/new ExternalStatement(new StringEntry("State")))))));
+			}
+			declareFlipMethod(isFirst,imageClassName,currentAnimationId.toString(),currentStateName,parentStateName,/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Enty*/new ExternalStatement(new StringEntry(currentStateName.toString())), /*Name*/new ExternalStatement(new StringEntry("State")))))));
+		}
+		else  {
+			Integer realIndex = 0;
+			for (final ExternalStatement.Parameters args :  arguments) {
+				final Integer indexValue = realIndex;
 				if (animationStateFirstSet.get(imageClassName).add(parentStateName)) {
 					firstOrDefaultFlipMethods.get(imageClassName).get(parentStateName).add(/*InCl*/new ExternalStatement(
-		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Enty*/new ExternalStatement(new StringEntry(currentStateName.toString())),new ExternalStatement.Parameters())))));
-					firstOrDefaultStateVariables.get(imageClassName).get(parentStateName).add(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Enty*/new ExternalStatement(new StringEntry(currentStateName.toString())), /*Name*/new ExternalStatement(new StringEntry("State")))))));
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(new StringEntry("change_to_")), /*Enty*/new ExternalStatement(new StringEntry(currentStateName.toString())))), /*Name*/new ExternalStatement(new StringEntry("_")))), /*Enty*/new ExternalStatement(new StringEntry(realIndex.toString())))),new ExternalStatement.Parameters())))));
+					firstOrDefaultStateVariables.get(imageClassName).get(parentStateName).add(/*Optr*/new ExternalStatement("+", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Enty*/new ExternalStatement(new StringEntry(currentStateName.toString())), /*Name*/new ExternalStatement(new StringEntry("State_")))))), /*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(indexValue.toString())))));
 				}
-				declareFlipMethod(isFirst,imageClassName,atom.get("animationId").toString(),currentStateName,parentStateName,/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Enty*/new ExternalStatement(new StringEntry(currentStateName.toString())), /*Name*/new ExternalStatement(new StringEntry("State")))))));
+				if (isFlipped) {
+MainFlow.classes.ImagesClass.getSubClass(imageClassName.toString()).getSubClass("StatesClass").addVariable(new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Gui")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Renderable"))))),"", /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Enty*/new ExternalStatement(new StringEntry(currentStateName.toString())), /*Name*/new ExternalStatement(new StringEntry("State_")))), /*Enty*/new ExternalStatement(new StringEntry(indexValue.toString())))), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Images")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Flipped")))), /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(imageName.toString()))))), /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(creationMethod.toString())))))),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*InCl*/new ExternalStatement(args))))))));
 				}
 				else  {
-				Integer realIndex = 0;
-				for (final ExternalStatement.Parameters args :  arguments) {
-					final Integer indexValue = realIndex;
-					if (animationStateFirstSet.get(imageClassName).add(parentStateName)) {
-						firstOrDefaultFlipMethods.get(imageClassName).get(parentStateName).add(/*InCl*/new ExternalStatement(
-		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Enty*/new ExternalStatement(new StringEntry(currentStateName.toString())), /*Name*/new ExternalStatement(new StringEntry("_")))), /*Enty*/new ExternalStatement(new StringEntry(realIndex.toString())))),new ExternalStatement.Parameters())))));
-						firstOrDefaultStateVariables.get(imageClassName).get(parentStateName).add(/*Optr*/new ExternalStatement("+", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Enty*/new ExternalStatement(new StringEntry(currentStateName.toString())), /*Name*/new ExternalStatement(new StringEntry("State_")))))), /*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(indexValue.toString())))));
-					}
 MainFlow.classes.ImagesClass.getSubClass(imageClassName.toString()).getSubClass("StatesClass").addVariable(new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Gui")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Renderable"))))),"", /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Enty*/new ExternalStatement(new StringEntry(currentStateName.toString())), /*Name*/new ExternalStatement(new StringEntry("State_")))), /*Enty*/new ExternalStatement(new StringEntry(indexValue.toString())))), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
 			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("Images"))), /*Enty*/new ExternalStatement(new StringEntry(imageName.toString()))), /*Enty*/new ExternalStatement(new StringEntry(creationMethod.toString()))),
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
 			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*InCl*/new ExternalStatement(args)))))))));
-					yArgumentLayers.get(realIndex / yArgumentLayerSize).add(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Enty*/new ExternalStatement(new StringEntry(currentStateName.toString())), /*Name*/new ExternalStatement(new StringEntry("State_")))), /*Enty*/new ExternalStatement(new StringEntry(indexValue.toString())))))));
-					declareFlipMethod(isFirst,imageClassName,atom.get("animationId").toString() + "_" + realIndex,currentStateName + "_" + realIndex,parentStateName,/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Enty*/new ExternalStatement(new StringEntry(currentStateName.toString())), /*Name*/new ExternalStatement(new StringEntry("State_")))), /*Enty*/new ExternalStatement(new StringEntry(indexValue.toString())))))));
-					realIndex += 1;
-					isFirst = false;
 				}
-				}
+				flipMethodParameters.getYLayers().get(realIndex / flipMethodParameters.getYLayerSize()).add(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Enty*/new ExternalStatement(new StringEntry(currentStateName.toString())), /*Name*/new ExternalStatement(new StringEntry("State_")))), /*Enty*/new ExternalStatement(new StringEntry(indexValue.toString())))))));
+				declareFlipMethod(isFirst,imageClassName,currentAnimationId.toString() + "_" + realIndex,currentStateName + "_" + realIndex,parentStateName,/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Enty*/new ExternalStatement(new StringEntry(currentStateName.toString())), /*Name*/new ExternalStatement(new StringEntry("State_")))), /*Enty*/new ExternalStatement(new StringEntry(indexValue.toString())))))));
+				realIndex += 1;
 				isFirst = false;
+			}
+		}
+	}
+	
+	public FlipMethodReturn getFlipMethodParameters(final IToken atom,final boolean isFlipped,final String imageClassName)  {
+		final FlipMethodReturn result = new FlipMethodReturn();
+		result.getArguments().add(new ExternalStatement.Parameters());
+		final ExternalStatement.Parameters multipleArguments = new ExternalStatement.Parameters();
+		final ExternalStatement.Parameters xArgumentLayer = new ExternalStatement.Parameters();
+		for(final IToken element:atom.getAllSafely("animation_variable_value")) {
+				getFlipMethodParameter(element,isFlipped,imageClassName,result,multipleArguments,xArgumentLayer);
+		}
+		multipleArguments.add(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(new StringEntry("new Gui.Renderable[][]{")), /*InCl*/new ExternalStatement(xArgumentLayer))), /*Name*/new ExternalStatement(new StringEntry("}")))))));
+		return result;
+	}
+	
+	public void getFlipMethodParameter(final IToken element,final Boolean isFlipped,final String imageClassName,final FlipMethodReturn result,final ExternalStatement.Parameters multipleArguments,final ExternalStatement.Parameters xArgumentLayer)  {
+		for(IToken.Key __value__KEY:element.keySet()) {
+			if(__value__KEY.getName().equals("range")){ final IToken value = element.get(__value__KEY);
+				final List<ExternalStatement.Parameters> oldArguments = result.getArguments();
+				result.setArguments(new ArrayList<ExternalStatement.Parameters>());
+				final Integer lowerBound = Integer.parseInt(value.get("lowerBound").toString());
+				final Integer upperBound = Integer.parseInt(value.get("upperBound").toString());
+				for (final ExternalStatement.Parameters args :  oldArguments) {
+				if (result.getIndex() == 1 ) {
+					result.setYLayerSize(upperBound - lowerBound + 1);
+				}
+				for (Integer i = 0; i <=  upperBound - lowerBound; ++i) {
+					final ExternalStatement.Parameters newArg = new ExternalStatement.Parameters();
+					newArg.addAll(args);
+					final Integer index = i+lowerBound;
+					newArg.add(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(index.toString())))));
+					result.getArguments().add(newArg);
+					if (result.getIndex() == 0 ) {
+						final ExternalStatement.Parameters yArgumentLayer = new ExternalStatement.Parameters();
+						result.getYLayers().add(yArgumentLayer);
+						xArgumentLayer.add(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(new StringEntry("new Gui.Renderable[]{")), /*InCl*/new ExternalStatement(yArgumentLayer))), /*Name*/new ExternalStatement(new StringEntry("}")))))));
+					}
+				}
+				}
+				result.incrementIndex();
+			}
+			if(__value__KEY.getName().equals("unflippedValue")){ final IToken value = element.get(__value__KEY);
+				if (isFlipped == false) {
+				getFlipMethodParameter(value,isFlipped,imageClassName,result,multipleArguments,xArgumentLayer);
+				result.incrementIndex();
+				}
+			}
+			if(__value__KEY.getName().equals("flippedValue")){ final IToken value = element.get(__value__KEY);
+				if (isFlipped == true) {
+				getFlipMethodParameter(value,isFlipped,imageClassName,result,multipleArguments,xArgumentLayer);
+				result.incrementIndex();
+				}
+			}
+			if(__value__KEY.getName().equals("squareValues")){ final IToken value = element.get(__value__KEY);
+				if (isFlipped) {
+				final Integer lowX = imageWidths.get(imageClassName) - 1 - Integer.parseInt(value.get("highX").toString());
+				final Integer highX = imageWidths.get(imageClassName) - 1 - Integer.parseInt(value.get("lowX").toString());
+				for (final ExternalStatement.Parameters args :  result.getArguments()) {
+					args.add(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(lowX.toString())))));
+					args.add(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(value.get("highY").toString())))));
+					args.add(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(highX.toString())))));
+					args.add(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(value.get("lowY").toString())))));
+				}
+				}
+				else  {
+				for (final ExternalStatement.Parameters args :  result.getArguments()) {
+					args.add(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(value.get("lowX").toString())))));
+					args.add(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(value.get("lowY").toString())))));
+					args.add(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(value.get("highX").toString())))));
+					args.add(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(value.get("highY").toString())))));
+				}
+				}
+				if (result.getIndex() == 0 ) {
+				final ExternalStatement.Parameters yArgumentLayer = new ExternalStatement.Parameters();
+				result.getYLayers().add(yArgumentLayer);
+				xArgumentLayer.add(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(new StringEntry("new Gui.Renderable[]{")), /*InCl*/new ExternalStatement(yArgumentLayer))), /*Name*/new ExternalStatement(new StringEntry("}")))))));
+				result.setYLayerSize(1);
+				}
+				result.incrementIndex();
+				result.incrementIndex();
+				result.incrementIndex();
+				result.incrementIndex();
+			}
+			if(__value__KEY.getName().equals("xValue")){ final IToken value = element.get(__value__KEY);
+				if (isFlipped) {
+				final Integer valueValue = imageWidths.get(imageClassName) - 1 - Integer.parseInt(value.toString());
+				for (final ExternalStatement.Parameters args :  result.getArguments()) {
+					args.add(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(valueValue.toString())))));
+				}
+				}
+				else  {
+				for (final ExternalStatement.Parameters args :  result.getArguments()) {
+					args.add(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(value.toString())))));
+				}
+				}
+				if (result.getIndex() == 0 ) {
+				final ExternalStatement.Parameters yArgumentLayer = new ExternalStatement.Parameters();
+				result.getYLayers().add(yArgumentLayer);
+				xArgumentLayer.add(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(new StringEntry("new Gui.Renderable[]{")), /*InCl*/new ExternalStatement(yArgumentLayer))), /*Name*/new ExternalStatement(new StringEntry("}")))))));
+				}
+				else if (result.getIndex() == 1 ) {
+				result.setYLayerSize(1);
+				}
+				result.incrementIndex();
+			}
+			if(__value__KEY.getName().equals("INTEGER")){ final IToken value = element.get(__value__KEY);
+				for (final ExternalStatement.Parameters args :  result.getArguments()) {
+				args.add(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(value.toString())))));
+				}
+				if (result.getIndex() == 0 ) {
+				final ExternalStatement.Parameters yArgumentLayer = new ExternalStatement.Parameters();
+				result.getYLayers().add(yArgumentLayer);
+				xArgumentLayer.add(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(new StringEntry("new Gui.Renderable[]{")), /*InCl*/new ExternalStatement(yArgumentLayer))), /*Name*/new ExternalStatement(new StringEntry("}")))))));
+				}
+				else if (result.getIndex() == 1 ) {
+				result.setYLayerSize(1);
+				}
+				result.incrementIndex();
+			}
+			if(__value__KEY.getName().equals("FLOAT")){ final IToken value = element.get(__value__KEY);
+				for (final ExternalStatement.Parameters args :  result.getArguments()) {
+				args.add(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(value.toString())))));
+				}
+				result.incrementIndex();
+			}
+			if(__value__KEY.getName().equals("quote")){ final IToken value = element.get(__value__KEY);
+				for (final ExternalStatement.Parameters args :  result.getArguments()) {
+				args.add(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Quot*/new ExternalStatement(new QuoteEntry(value.toString().toString())))));
+				}
+				result.incrementIndex();
 			}
 		}
 	}
@@ -527,12 +710,12 @@ MainFlow.classes.ImagesClass.getSubClass(imageClassName.toString()).getSubClass(
 	public void declareFlipMethod(final Boolean isFirst,final String imageClassName,final String singleStateName,final String currentStateName,final String parentStateName,final ExternalStatement currentStateVariable)  {
 		final ExternalStatement firstOrDefaultMethod = firstOrDefaultFlipMethods.get(imageClassName).get(currentStateName);
 		if (parentStateName.equals("")) {
-MainFlow.classes.ImagesClass.getSubClass(imageClassName.toString()).getSubClass("StatesClass").addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))),"", /*Enty*/new ExternalStatement(new StringEntry(currentStateName.toString())), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), "", /*Body*/new ExternalStatement.Body(
+MainFlow.classes.ImagesClass.getSubClass(imageClassName.toString()).getSubClass("StatesClass").addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))),"", /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(new StringEntry("change_to_")), /*Enty*/new ExternalStatement(new StringEntry(currentStateName.toString())))), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), "", /*Body*/new ExternalStatement.Body(
 		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("setCurrent")),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*InCl*/new ExternalStatement(currentStateVariable))))))),
 /*BODY*/				
-		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("state")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("ImageStates")), /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(currentStateName.toString())))))))))),
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("id")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("ImageStates")), /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(singleStateName.toString())))))))))),
 /*BODY*/				
-		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("parentState")), /*Optr*/new ExternalStatement(".", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("ImageStates"))))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("DEFAULT")))))))));
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("state")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("ImageStates")), /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(currentStateName.toString())))))))))))));
 			animationStateAscendBodies.get(imageClassName).add(/*InCl*/new ExternalStatement(
 		/*Case*/new ExternalStatement.Conditional(
 			"case ", 
@@ -543,33 +726,52 @@ MainFlow.classes.ImagesClass.getSubClass(imageClassName.toString()).getSubClass(
 			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Exac*/new ExternalStatement(new StringEntry(""))))).setBraces("",":")));
 		}
 		else  {
-MainFlow.classes.ImagesClass.getSubClass(imageClassName.toString()).getSubClass("StatesClass").addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))),"", /*Enty*/new ExternalStatement(new StringEntry(currentStateName.toString())), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), "", /*Body*/new ExternalStatement.Body(
+MainFlow.classes.ImagesClass.getSubClass(imageClassName.toString()).getSubClass("StatesClass").addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))),"", /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(new StringEntry("change_to_")), /*Enty*/new ExternalStatement(new StringEntry(currentStateName.toString())))), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), "", /*Body*/new ExternalStatement.Body(
 		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("setCurrent")),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*InCl*/new ExternalStatement(currentStateVariable))))))),
 /*BODY*/				
-		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("state")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("ImageStates")), /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(currentStateName.toString())))))))))),
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("id")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("ImageStates")), /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(singleStateName.toString())))))))))),
 /*BODY*/				
-		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("parentState")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("ImageStates")), /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(parentStateName.toString())))))))))))));
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("state")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("ImageStates")), /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(currentStateName.toString())))))))))))));
 			animationStateAscendBodies.get(imageClassName).add(/*InCl*/new ExternalStatement(
 		/*Case*/new ExternalStatement.Conditional(
 			"case ", 
 			/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(currentStateName.toString())))),
 			/*Body*/new ExternalStatement.Body(
-			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Enty*/new ExternalStatement(new StringEntry(parentStateName.toString())),new ExternalStatement.Parameters()))),
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(new StringEntry("change_to_")), /*Enty*/new ExternalStatement(new StringEntry(parentStateName.toString())))),new ExternalStatement.Parameters()))),
 /*BODY*/				
 			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Exac*/new ExternalStatement(new StringEntry(""))))).setBraces("",":")));
 		}
 		if (isFirst) {
 			MainFlow.classes.ImagesClass.getSubClass(imageClassName.toString()).getSubClass("StatesClass").getMethod("*").appendToBody(/*Body*/new ExternalStatement.Body(
-		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Enty*/new ExternalStatement(new StringEntry(currentStateName.toString())),new ExternalStatement.Parameters())))));
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(new StringEntry("change_to_")), /*Enty*/new ExternalStatement(new StringEntry(currentStateName.toString())))),new ExternalStatement.Parameters())))));
 		}
-		animationStateChangeBodies.get(imageClassName).get(parentStateName).add(/*InCl*/new ExternalStatement(
+		if (currentStateName.equals(singleStateName)) {
+			animationStateChangeCases.get(imageClassName).put(currentStateName,/*InCl*/new ExternalStatement(
 		/*Case*/new ExternalStatement.Conditional(
 			"case ", 
 			/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(singleStateName.toString())))),
 			/*Body*/new ExternalStatement.Body(
-			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Enty*/new ExternalStatement(new StringEntry(currentStateName.toString())),new ExternalStatement.Parameters()))),
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(new StringEntry("change_to_")), /*Enty*/new ExternalStatement(new StringEntry(currentStateName.toString())))),new ExternalStatement.Parameters()))),
 /*BODY*/				
 			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Exac*/new ExternalStatement(new StringEntry(""))))).setBraces("",":")));
+		}
+		else  {
+			animationStateChangeCases.get(imageClassName).put(currentStateName,/*InCl*/new ExternalStatement(
+		/*Case*/new ExternalStatement.Conditional(
+			"case ", 
+			/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(currentStateName.toString())))),
+			/*Body*/new ExternalStatement.Body(
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(new StringEntry("change_to_")), /*Enty*/new ExternalStatement(new StringEntry(currentStateName.toString())))),new ExternalStatement.Parameters()))),
+/*BODY*/				
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Exac*/new ExternalStatement(new StringEntry(""))))).setBraces("",":"),
+		/*Case*/new ExternalStatement.Conditional(
+			"case ", 
+			/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(singleStateName.toString())))),
+			/*Body*/new ExternalStatement.Body(
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(new StringEntry("change_to_")), /*Enty*/new ExternalStatement(new StringEntry(currentStateName.toString())))),new ExternalStatement.Parameters()))),
+/*BODY*/				
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Exac*/new ExternalStatement(new StringEntry(""))))).setBraces("",":")));
+		}
 	}
 	
 	public void declareTextureBuffer(final String frameWidth,final String frameHeight)  {
@@ -619,13 +821,13 @@ MainFlow.classes.ImageLoaderClass.addSubClass(new ExternalClassEntry(){public vo
 	});
        /* Variables */ 
 	   /* Methods */
-		add_method_542(); 
+		add_method_568(); 
 	   /* Classes */
 	}
 	
-		private void add_method_542() {
+		private void add_method_568() {
 	 		addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))),"", /*Exac*/new ExternalStatement(new StringEntry("run")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), "", /*Body*/new ExternalStatement.Body(
-		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(MainFlow.variables.get_floatBufferArray().toString())))),"", /*Name*/new ExternalStatement(new StringEntry("textureBuffer")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(new StringEntry("new FloatBuffer[")), /*Enty*/new ExternalStatement(new StringEntry(frameWidth.toString())))), /*Name*/new ExternalStatement(new StringEntry("][")))), /*Enty*/new ExternalStatement(new StringEntry(frameHeight.toString())))), /*Name*/new ExternalStatement(new StringEntry("]")))))))),
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("FloatBuffer"))),"[][]", /*Name*/new ExternalStatement(new StringEntry("textureBuffer")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(new StringEntry("new FloatBuffer[")), /*Enty*/new ExternalStatement(new StringEntry(frameWidth.toString())))), /*Name*/new ExternalStatement(new StringEntry("][")))), /*Enty*/new ExternalStatement(new StringEntry(frameHeight.toString())))), /*Name*/new ExternalStatement(new StringEntry("]")))))))),
 /*BODY*/				
 		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("ByteBuffer"))),"", /*Name*/new ExternalStatement(new StringEntry("byteBuffer")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null")))))))));
 	 	}
@@ -710,15 +912,15 @@ MainFlow.classes.ImageLoaderClass.addSubClass(new ExternalClassEntry(){public vo
 		}
 	});	
        /* Variables */
-		add_variable_966();
-		add_variable_967(); 
+		add_variable_978();
+		add_variable_979(); 
 	   /* Methods */ 
 	   /* Classes */
 	}
-		private void add_variable_966() {
+		private void add_variable_978() {
 	 		addVariable(new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))),"", /*Name*/new ExternalStatement(new StringEntry("width")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("-1"))))));
 	 	}
-		private void add_variable_967() {
+		private void add_variable_979() {
 	 		addVariable(new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))),"", /*Name*/new ExternalStatement(new StringEntry("height")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("-1"))))));
 	 	}
 	
@@ -745,42 +947,42 @@ MainFlow.classes.ImageLoaderClass.addSubClass(new ExternalClassEntry(){public vo
 		}
 	});	
        /* Variables */
-		add_variable_968();
-		add_variable_969(); 
+		add_variable_980();
+		add_variable_981(); 
 	   /* Methods */
-		add_method_543();
-		add_method_544();
-		add_method_545();
-		add_method_546();
-		add_method_547(); 
+		add_method_569();
+		add_method_570();
+		add_method_571();
+		add_method_572();
+		add_method_573(); 
 	   /* Classes */
 	}
-		private void add_variable_968() {
+		private void add_variable_980() {
 	 		addVariable(new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))),"", /*Name*/new ExternalStatement(new StringEntry("frameX")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0"))))));
 	 	}
-		private void add_variable_969() {
+		private void add_variable_981() {
 	 		addVariable(new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))),"", /*Name*/new ExternalStatement(new StringEntry("frameY")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0"))))));
 	 	}
 	
-		private void add_method_543() {
+		private void add_method_569() {
 	 		addMethod(new ExternalMethodEntry(2, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))),"", /*Exac*/new ExternalStatement(new StringEntry("animate")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), "", /*Body*/new ExternalStatement.Body()));
 	 	}
-		private void add_method_544() {
+		private void add_method_570() {
 	 		addMethod(new ExternalMethodEntry(2, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))),"", /*Exac*/new ExternalStatement(new StringEntry("render")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), "", /*Body*/new ExternalStatement.Body(
 			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
 			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("glTexCoordPointer"))),
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
 			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("2")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("textureBuffer[frameX][frameY]"))))))))))));
 	 	}
-		private void add_method_545() {
+		private void add_method_571() {
 	 		addMethod(new ExternalMethodEntry(2, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))),"", /*Exac*/new ExternalStatement(new StringEntry("setFrameX")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))),"", /*Name*/new ExternalStatement(new StringEntry("newX")))}), "", /*Body*/new ExternalStatement.Body(
 			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("frameX")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("newX")))))))));
 	 	}
-		private void add_method_546() {
+		private void add_method_572() {
 	 		addMethod(new ExternalMethodEntry(2, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))),"", /*Exac*/new ExternalStatement(new StringEntry("setFrameY")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))),"", /*Name*/new ExternalStatement(new StringEntry("newY")))}), "", /*Body*/new ExternalStatement.Body(
 			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("frameY")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("newY")))))))));
 	 	}
-		private void add_method_547() {
+		private void add_method_573() {
 	 		addMethod(new ExternalMethodEntry(2, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))),"", /*Exac*/new ExternalStatement(new StringEntry("getTexture")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), "", /*Body*/new ExternalStatement.Body(
 			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("getImageTexture")),new ExternalStatement.Parameters()))))));
 	 	}
@@ -807,57 +1009,57 @@ MainFlow.classes.ImageLoaderClass.addSubClass(new ExternalClassEntry(){public vo
 		}
 	});	
        /* Variables */
-		add_variable_972();
-		add_variable_973();
-		add_variable_974(); 
+		add_variable_984();
+		add_variable_985();
+		add_variable_986(); 
 	   /* Methods */
-		add_method_548();
-		add_method_549();
-		add_method_550();
-		add_method_551();
-		add_method_552();
-		add_method_553(); 
+		add_method_574();
+		add_method_575();
+		add_method_576();
+		add_method_577();
+		add_method_578();
+		add_method_579(); 
 	   /* Classes */
 	}
-		private void add_variable_972() {
+		private void add_variable_984() {
 	 		addVariable(new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Gui")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Renderable"))))),"", /*Name*/new ExternalStatement(new StringEntry("current")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))));
 	 	}
-		private void add_variable_973() {
+		private void add_variable_985() {
+	 		addVariable(new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("ImageStates"))),"", /*Name*/new ExternalStatement(new StringEntry("id")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("ImageStates")))), /*Enty*/new ExternalStatement(new StringEntry("DEFAULT"))))));
+	 	}
+		private void add_variable_986() {
 	 		addVariable(new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("ImageStates"))),"", /*Name*/new ExternalStatement(new StringEntry("state")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("ImageStates")))), /*Enty*/new ExternalStatement(new StringEntry("DEFAULT"))))));
 	 	}
-		private void add_variable_974() {
-	 		addVariable(new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("ImageStates"))),"", /*Name*/new ExternalStatement(new StringEntry("parentState")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("ImageStates")))), /*Enty*/new ExternalStatement(new StringEntry("DEFAULT"))))));
-	 	}
 	
-		private void add_method_548() {
+		private void add_method_574() {
 	 		addMethod(new ExternalMethodEntry(2, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))),"", /*Exac*/new ExternalStatement(new StringEntry("animate")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), "", /*Body*/new ExternalStatement.Body(
 			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
 			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("current"))), /*Enty*/new ExternalStatement(new StringEntry("animate"))),
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
 			 		new ExternalStatement.Parameters())))))));
 	 	}
-		private void add_method_549() {
+		private void add_method_575() {
 	 		addMethod(new ExternalMethodEntry(2, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))),"", /*Exac*/new ExternalStatement(new StringEntry("render")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), "", /*Body*/new ExternalStatement.Body(
 			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
 			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("current"))), /*Enty*/new ExternalStatement(new StringEntry("render"))),
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
 			 		new ExternalStatement.Parameters())))))));
 	 	}
-		private void add_method_550() {
+		private void add_method_576() {
 	 		addMethod(new ExternalMethodEntry(2, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))),"", /*Exac*/new ExternalStatement(new StringEntry("getTexture")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), "", /*Body*/new ExternalStatement.Body(
 			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
 			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("current"))), /*Enty*/new ExternalStatement(new StringEntry("getTexture"))),
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
 			 		new ExternalStatement.Parameters())))))));
 	 	}
-		private void add_method_551() {
+		private void add_method_577() {
 	 		addMethod(new ExternalMethodEntry(2, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))),"", /*Exac*/new ExternalStatement(new StringEntry("changeState")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("ImageStates"))),"", /*Name*/new ExternalStatement(new StringEntry("newState")))}), "", /*Body*/new ExternalStatement.Body()));
 	 	}
-		private void add_method_552() {
+		private void add_method_578() {
 	 		addMethod(new ExternalMethodEntry(2, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Gui")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Image")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("States"))))),"", /*Exac*/new ExternalStatement(new StringEntry("asStates")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), "", /*Body*/new ExternalStatement.Body(
 			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("this"))))))));
 	 	}
-		private void add_method_553() {
+		private void add_method_579() {
 	 		addMethod(new ExternalMethodEntry(2, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Gui")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Drawable"))))),"", /*Exac*/new ExternalStatement(new StringEntry("asStates")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Gui")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Drawable"))))),"", /*Name*/new ExternalStatement(new StringEntry("drawable")))}), "", /*Body*/new ExternalStatement.Body(
 			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
 			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("drawable"))), /*Enty*/new ExternalStatement(new StringEntry("image"))),
@@ -887,55 +1089,55 @@ MainFlow.classes.ImageLoaderClass.addSubClass(new ExternalClassEntry(){public vo
 		}
 	});	
        /* Variables */
-		add_variable_977();
-		add_variable_978(); 
+		add_variable_989();
+		add_variable_990(); 
 	   /* Methods */
-		add_method_554();
-		add_method_555();
-		add_method_556();
-		add_method_557();
-		add_method_558();
-		add_method_559();
-		add_method_560(); 
+		add_method_580();
+		add_method_581();
+		add_method_582();
+		add_method_583();
+		add_method_584();
+		add_method_585();
+		add_method_586(); 
 	   /* Classes */
 	}
-		private void add_variable_977() {
+		private void add_variable_989() {
 	 		addVariable(new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))),"", /*Name*/new ExternalStatement(new StringEntry("x")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0"))))));
 	 	}
-		private void add_variable_978() {
+		private void add_variable_990() {
 	 		addVariable(new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))),"", /*Name*/new ExternalStatement(new StringEntry("y")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0"))))));
 	 	}
 	
-		private void add_method_554() {
+		private void add_method_580() {
 	 		addMethod(new ExternalMethodEntry(2, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))),"", /*Exac*/new ExternalStatement(new StringEntry("animate")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), "", /*Body*/new ExternalStatement.Body()));
 	 	}
-		private void add_method_555() {
+		private void add_method_581() {
 	 		addMethod(new ExternalMethodEntry(2, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))),"", /*Exac*/new ExternalStatement(new StringEntry("render")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), "", /*Body*/new ExternalStatement.Body(
 			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
 			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("glTexCoordPointer"))),
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
 			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("2")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("textureBuffer[x][y]"))))))))))));
 	 	}
-		private void add_method_556() {
+		private void add_method_582() {
 	 		addMethod(new ExternalMethodEntry(2, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))),"", /*Exac*/new ExternalStatement(new StringEntry("animationRender")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), "", /*Body*/new ExternalStatement.Body(
 			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
 			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("glTexCoordPointer"))),
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
 			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("2")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("textureBuffer[x][y]"))))))))))));
 	 	}
-		private void add_method_557() {
+		private void add_method_583() {
 	 		addMethod(new ExternalMethodEntry(2, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))),"", /*Exac*/new ExternalStatement(new StringEntry("getTexture")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), "", /*Body*/new ExternalStatement.Body(
 			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("getImageTexture")),new ExternalStatement.Parameters()))))));
 	 	}
-		private void add_method_558() {
+		private void add_method_584() {
 	 		addMethod(new ExternalMethodEntry(2, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))),"", /*Exac*/new ExternalStatement(new StringEntry("setFrameX")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))),"", /*Name*/new ExternalStatement(new StringEntry("newX")))}), "", /*Body*/new ExternalStatement.Body(
 			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("x")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("newX")))))))));
 	 	}
-		private void add_method_559() {
+		private void add_method_585() {
 	 		addMethod(new ExternalMethodEntry(2, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))),"", /*Exac*/new ExternalStatement(new StringEntry("setFrameY")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))),"", /*Name*/new ExternalStatement(new StringEntry("newY")))}), "", /*Body*/new ExternalStatement.Body(
 			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("y")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("newY")))))))));
 	 	}
-		private void add_method_560() {
+		private void add_method_586() {
 	 		addMethod(new ExternalMethodEntry(2, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))),"", /*Exac*/new ExternalStatement(new StringEntry("tick")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Double"))),"", /*Name*/new ExternalStatement(new StringEntry("millisSinceLastFrame")))}), "", /*Body*/new ExternalStatement.Body(
 			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("animate")),new ExternalStatement.Parameters()))),
 /*BODY*/				
@@ -961,68 +1163,68 @@ MainFlow.classes.ImageLoaderClass.addSubClass(new ExternalClassEntry(){public vo
 		}
 	});	
        /* Variables */
-		add_variable_939();
-		add_variable_940();
-		add_variable_941();
-		add_variable_942();
-		add_variable_943(); 
+		add_variable_948();
+		add_variable_949();
+		add_variable_950();
+		add_variable_951();
+		add_variable_952(); 
 	   /* Methods */
-		add_method_530();
-		add_method_531();
-		add_method_532();
-		add_method_533(); 
+		add_method_550();
+		add_method_551();
+		add_method_552();
+		add_method_553(); 
 	   /* Classes */
-		add_subclass_228();
-		add_subclass_229();
 		add_subclass_230();
 		add_subclass_231();
+		add_subclass_232();
+		add_subclass_233();
 	}
-		private void add_variable_939() {
+		private void add_variable_948() {
 	 		addVariable(new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("String"))),"", /*Name*/new ExternalStatement(new StringEntry("imageFileName")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))));
 	 	}
-		private void add_variable_940() {
+		private void add_variable_949() {
 	 		addVariable(new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Gui")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Image")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Dimensions"))))),"", /*Name*/new ExternalStatement(new StringEntry("pixels")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))));
 	 	}
-		private void add_variable_941() {
+		private void add_variable_950() {
 	 		addVariable(new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Gui")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Image")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Dimensions"))))),"", /*Name*/new ExternalStatement(new StringEntry("frames")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))));
 	 	}
-		private void add_variable_942() {
+		private void add_variable_951() {
 	 		addVariable(new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))),"", /*Name*/new ExternalStatement(new StringEntry("texture")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("-1"))))));
 	 	}
-		private void add_variable_943() {
-	 		addVariable(new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(MainFlow.variables.get_floatBufferArray().toString())))),"", /*Name*/new ExternalStatement(new StringEntry("textureBuffer")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))));
+		private void add_variable_952() {
+	 		addVariable(new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("FloatBuffer"))),"[][]", /*Name*/new ExternalStatement(new StringEntry("textureBuffer")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))));
 	 	}
 	
-		private void add_method_530() {
+		private void add_method_550() {
 	 		addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))),"", /*Exac*/new ExternalStatement(new StringEntry("getImageTexture")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), "", /*Body*/new ExternalStatement.Body(
 		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("texture"))))))));
 	 	}
-		private void add_method_531() {
+		private void add_method_551() {
 	 		addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))),"", /*Exac*/new ExternalStatement(new StringEntry("animate")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), "", /*Body*/new ExternalStatement.Body()));
 	 	}
-		private void add_method_532() {
+		private void add_method_552() {
 	 		addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))),"", /*Exac*/new ExternalStatement(new StringEntry("render")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), "", /*Body*/new ExternalStatement.Body(
 		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
 			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("glTexCoordPointer"))),
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
 			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("2")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("textureBuffer[0][0]"))))))))))));
 	 	}
-		private void add_method_533() {
+		private void add_method_553() {
 	 		addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Gui")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Image")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Crop"))))),"", /*Exac*/new ExternalStatement(new StringEntry("getCrop")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))),"", /*Name*/new ExternalStatement(new StringEntry("frameX"))),
 /*PARAMS*/				new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))),"", /*Name*/new ExternalStatement(new StringEntry("frameY")))}), "", /*Body*/new ExternalStatement.Body(
 		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Gui")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Image")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Crop"))))),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("frameX")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("frameY")))))))))));
 	 	}
 	
-		private void add_subclass_228() {
+		private void add_subclass_230() {
 	 		addSubClass(MainFlow.classes.GuiClass.ImageClass.DimensionsClass);
 	 	}
-		private void add_subclass_229() {
+		private void add_subclass_231() {
 	 		addSubClass(MainFlow.classes.GuiClass.ImageClass.CropClass);
 	 	}
-		private void add_subclass_230() {
+		private void add_subclass_232() {
 	 		addSubClass(MainFlow.classes.GuiClass.ImageClass.StatesClass);
 	 	}
-		private void add_subclass_231() {
+		private void add_subclass_233() {
 	 		addSubClass(MainFlow.classes.GuiClass.ImageClass.AnimationTypeClass);
 	 	}
 }
@@ -1059,9 +1261,9 @@ MainFlow.classes.ColoursClass.addSubClass(new ExternalClassEntry(){public void _
 				final Float redFloat = Float.parseFloat(element.get("red").toString()) / 256f;
 				final Float greenFloat = Float.parseFloat(element.get("green").toString()) / 256f;
 				final Float blueFloat = Float.parseFloat(element.get("blue").toString()) / 256f;
-MainFlow.classes.ColoursClass.getSubClass(colourName.toString()).addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(MainFlow.variables.get_floatArrayType().toString())))),"", /*Exac*/new ExternalStatement(new StringEntry("asFloatArray")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), "", /*Body*/new ExternalStatement.Body(
+MainFlow.classes.ColoursClass.getSubClass(colourName.toString()).addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))),"[]", /*Exac*/new ExternalStatement(new StringEntry("asFloatArray")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), "", /*Body*/new ExternalStatement.Body(
 		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(new StringEntry("new Float[]{")), /*Enty*/new ExternalStatement(new StringEntry(redFloat.toString())))), /*Name*/new ExternalStatement(new StringEntry("f,")))), /*Enty*/new ExternalStatement(new StringEntry(greenFloat.toString())))), /*Name*/new ExternalStatement(new StringEntry("f,")))), /*Enty*/new ExternalStatement(new StringEntry(blueFloat.toString())))), /*Name*/new ExternalStatement(new StringEntry("f}"))))))))));
-MainFlow.classes.ColoursClass.getSubClass(colourName.toString()).addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(MainFlow.variables.get_intArrayType().toString())))),"", /*Exac*/new ExternalStatement(new StringEntry("asIntArray")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), "", /*Body*/new ExternalStatement.Body(
+MainFlow.classes.ColoursClass.getSubClass(colourName.toString()).addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))),"[]", /*Exac*/new ExternalStatement(new StringEntry("asIntArray")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), "", /*Body*/new ExternalStatement.Body(
 		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(new StringEntry("new Integer[]{")), /*Enty*/new ExternalStatement(new StringEntry(redInt.toString())))), /*Name*/new ExternalStatement(new StringEntry(",")))), /*Enty*/new ExternalStatement(new StringEntry(greenInt.toString())))), /*Name*/new ExternalStatement(new StringEntry(",")))), /*Enty*/new ExternalStatement(new StringEntry(blueInt.toString())))), /*Name*/new ExternalStatement(new StringEntry("}"))))))))));
 MainFlow.classes.ColoursClass.getSubClass(colourName.toString()).addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))),"", /*Exac*/new ExternalStatement(new StringEntry("getRedI")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), "", /*Body*/new ExternalStatement.Body(
 		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(redInt.toString()))))))));
@@ -1121,9 +1323,9 @@ MainFlow.classes.ColoursClass.getSubClass(colourName.toString()).addMethod(new E
 				final Integer redInt = redIntValue.intValue();
 				final Integer greenInt = greenIntValue.intValue();
 				final Integer blueInt = blueIntValue.intValue();
-MainFlow.classes.ColoursClass.getSubClass(colourName.toString()).addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(MainFlow.variables.get_floatArrayType().toString())))),"", /*Exac*/new ExternalStatement(new StringEntry("asFloatArray")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), "", /*Body*/new ExternalStatement.Body(
+MainFlow.classes.ColoursClass.getSubClass(colourName.toString()).addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))),"[]", /*Exac*/new ExternalStatement(new StringEntry("asFloatArray")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), "", /*Body*/new ExternalStatement.Body(
 		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(new StringEntry("new Float[]{")), /*Enty*/new ExternalStatement(new StringEntry(redFloat.toString())))), /*Name*/new ExternalStatement(new StringEntry("f,")))), /*Enty*/new ExternalStatement(new StringEntry(greenFloat.toString())))), /*Name*/new ExternalStatement(new StringEntry("f,")))), /*Enty*/new ExternalStatement(new StringEntry(blueFloat.toString())))), /*Name*/new ExternalStatement(new StringEntry("f}"))))))))));
-MainFlow.classes.ColoursClass.getSubClass(colourName.toString()).addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(MainFlow.variables.get_intArrayType().toString())))),"", /*Exac*/new ExternalStatement(new StringEntry("asIntArray")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), "", /*Body*/new ExternalStatement.Body(
+MainFlow.classes.ColoursClass.getSubClass(colourName.toString()).addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))),"[]", /*Exac*/new ExternalStatement(new StringEntry("asIntArray")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), "", /*Body*/new ExternalStatement.Body(
 		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(/*Concat*/new ExternalStatement("", /*Name*/new ExternalStatement(new StringEntry("new Integer[]{")), /*Enty*/new ExternalStatement(new StringEntry(redInt.toString())))), /*Name*/new ExternalStatement(new StringEntry(",")))), /*Enty*/new ExternalStatement(new StringEntry(greenInt.toString())))), /*Name*/new ExternalStatement(new StringEntry(",")))), /*Enty*/new ExternalStatement(new StringEntry(blueInt.toString())))), /*Name*/new ExternalStatement(new StringEntry("}"))))))))));
 MainFlow.classes.ColoursClass.getSubClass(colourName.toString()).addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))),"", /*Exac*/new ExternalStatement(new StringEntry("getRedI")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), "", /*Body*/new ExternalStatement.Body(
 		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(redInt.toString()))))))));
@@ -1159,60 +1361,60 @@ MainFlow.classes.ColoursClass.getSubClass(colourName.toString()).addMethod(new E
 	});	
        /* Variables */ 
 	   /* Methods */
-		add_method_561();
-		add_method_562();
-		add_method_563();
-		add_method_564();
-		add_method_565();
-		add_method_566();
-		add_method_567();
-		add_method_568();
-		add_method_569();
-		add_method_570();
-		add_method_571(); 
+		add_method_587();
+		add_method_588();
+		add_method_589();
+		add_method_590();
+		add_method_591();
+		add_method_592();
+		add_method_593();
+		add_method_594();
+		add_method_595();
+		add_method_596();
+		add_method_597(); 
 	   /* Classes */
 	}
 	
-		private void add_method_561() {
+		private void add_method_587() {
 	 		addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))),"", /*Exac*/new ExternalStatement(new StringEntry("getRedF")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), "", /*Body*/new ExternalStatement.Body(
 		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))))));
 	 	}
-		private void add_method_562() {
+		private void add_method_588() {
 	 		addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))),"", /*Exac*/new ExternalStatement(new StringEntry("getGreenF")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), "", /*Body*/new ExternalStatement.Body(
 		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))))));
 	 	}
-		private void add_method_563() {
+		private void add_method_589() {
 	 		addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))),"", /*Exac*/new ExternalStatement(new StringEntry("getBlueF")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), "", /*Body*/new ExternalStatement.Body(
 		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))))));
 	 	}
-		private void add_method_564() {
+		private void add_method_590() {
 	 		addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))),"", /*Exac*/new ExternalStatement(new StringEntry("getRedI")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), "", /*Body*/new ExternalStatement.Body(
 		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))))));
 	 	}
-		private void add_method_565() {
+		private void add_method_591() {
 	 		addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))),"", /*Exac*/new ExternalStatement(new StringEntry("getGreenI")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), "", /*Body*/new ExternalStatement.Body(
 		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))))));
 	 	}
-		private void add_method_566() {
+		private void add_method_592() {
 	 		addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))),"", /*Exac*/new ExternalStatement(new StringEntry("getBlueI")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), "", /*Body*/new ExternalStatement.Body(
 		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))))));
 	 	}
-		private void add_method_567() {
-	 		addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(MainFlow.variables.get_floatArrayType().toString())))),"", /*Exac*/new ExternalStatement(new StringEntry("asFloatArray")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), "", /*Body*/new ExternalStatement.Body(
+		private void add_method_593() {
+	 		addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))),"[]", /*Exac*/new ExternalStatement(new StringEntry("asFloatArray")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), "", /*Body*/new ExternalStatement.Body(
 		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))))));
 	 	}
-		private void add_method_568() {
-	 		addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(MainFlow.variables.get_intArrayType().toString())))),"", /*Exac*/new ExternalStatement(new StringEntry("asIntegerArray")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), "", /*Body*/new ExternalStatement.Body(
+		private void add_method_594() {
+	 		addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("int"))),"[]", /*Exac*/new ExternalStatement(new StringEntry("asIntegerArray")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), "", /*Body*/new ExternalStatement.Body(
 		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))))));
 	 	}
-		private void add_method_569() {
+		private void add_method_595() {
 	 		addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))),"", /*Exac*/new ExternalStatement(new StringEntry("getTexture")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), "", /*Body*/new ExternalStatement.Body(
 		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0"))))))));
 	 	}
-		private void add_method_570() {
+		private void add_method_596() {
 	 		addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))),"", /*Exac*/new ExternalStatement(new StringEntry("render")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), "", /*Body*/new ExternalStatement.Body()));
 	 	}
-		private void add_method_571() {
+		private void add_method_597() {
 	 		addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))),"", /*Exac*/new ExternalStatement(new StringEntry("endRender")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), "", /*Body*/new ExternalStatement.Body()));
 	 	}
 	
@@ -1311,16 +1513,16 @@ MainFlow.classes.DrawablesClass.addSubClass(new ExternalClassEntry(){public void
 	});
        /* Variables */ 
 	   /* Methods */
-		add_method_599();
-		add_method_600();
-		add_method_601(); 
+		add_method_627();
+		add_method_628();
+		add_method_629(); 
 	   /* Classes */
 	}
 	
-		private void add_method_599() {
+		private void add_method_627() {
 	 		addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))),"", /*Exac*/new ExternalStatement(new StringEntry("load")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), "", /*Body*/new ExternalStatement.Body()));
 	 	}
-		private void add_method_600() {
+		private void add_method_628() {
 	 		addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Drawables")), /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(drawableClassName.toString())))))),"", /*Name*/new ExternalStatement(new StringEntry("image")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Gui")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Renderable"))))),"", /*Name*/new ExternalStatement(new StringEntry("image")))}), "", /*Body*/new ExternalStatement.Body(
 		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Drawables")), /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(drawableClassName.toString())))))),"", /*Name*/new ExternalStatement(new StringEntry("newImage")), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Drawables")), /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(drawableClassName.toString()))))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Image"))))),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("image"))))))))),
 /*BODY*/				
@@ -1331,7 +1533,7 @@ MainFlow.classes.DrawablesClass.addSubClass(new ExternalClassEntry(){public void
 /*BODY*/				
 		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("newImage"))))))));
 	 	}
-		private void add_method_601() {
+		private void add_method_629() {
 	 		addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Drawables")), /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(drawableClassName.toString())))))),"", /*Name*/new ExternalStatement(new StringEntry("colour")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Gui")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Colour"))))),"", /*Name*/new ExternalStatement(new StringEntry("colour")))}), "", /*Body*/new ExternalStatement.Body(
 		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Drawables")), /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(drawableClassName.toString())))))),"", /*Name*/new ExternalStatement(new StringEntry("newColour")), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Drawables")), /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(drawableClassName.toString()))))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Colour"))))),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("colour"))))))))),
 /*BODY*/				
@@ -1446,18 +1648,18 @@ MainFlow.classes.DrawablesClass.getSubClass(drawableClassName.toString()).addSub
 		}
 	});
        /* Variables */
-		add_variable_1008(); 
+		add_variable_1021(); 
 	   /* Methods */
-		add_method_602();
-		add_method_603();
-		add_method_604(); 
+		add_method_630();
+		add_method_631();
+		add_method_632(); 
 	   /* Classes */
 	}
-		private void add_variable_1008() {
+		private void add_variable_1021() {
 	 		addVariable(new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Gui")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Renderable"))))),"", /*Name*/new ExternalStatement(new StringEntry("image")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))));
 	 	}
 	
-		private void add_method_602() {
+		private void add_method_630() {
 	 		addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))),"", /*Exac*/new ExternalStatement(new StringEntry("render")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), "", /*Body*/new ExternalStatement.Body(
 		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
 			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("image"))), /*Enty*/new ExternalStatement(new StringEntry("render"))),
@@ -1479,14 +1681,14 @@ MainFlow.classes.DrawablesClass.getSubClass(drawableClassName.toString()).addSub
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
 			 		new ExternalStatement.Parameters())))))));
 	 	}
-		private void add_method_603() {
+		private void add_method_631() {
 	 		addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))),"", /*Exac*/new ExternalStatement(new StringEntry("animate")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), "", /*Body*/new ExternalStatement.Body(
 		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
 			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("image"))), /*Enty*/new ExternalStatement(new StringEntry("animate"))),
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
 			 		new ExternalStatement.Parameters())))))));
 	 	}
-		private void add_method_604() {
+		private void add_method_632() {
 	 		addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))),"", /*Exac*/new ExternalStatement(new StringEntry("getTexture")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), "", /*Body*/new ExternalStatement.Body(
 		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
 			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("image"))), /*Enty*/new ExternalStatement(new StringEntry("getTexture"))),
@@ -1508,24 +1710,24 @@ MainFlow.classes.DrawablesClass.getSubClass(drawableClassName.toString()).addSub
 		}
 	});
        /* Variables */
-		add_variable_1009(); 
+		add_variable_1022(); 
 	   /* Methods */
-		add_method_605();
-		add_method_606(); 
+		add_method_633();
+		add_method_634(); 
 	   /* Classes */
 	}
-		private void add_variable_1009() {
+		private void add_variable_1022() {
 	 		addVariable(new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Gui")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Colour"))))),"", /*Name*/new ExternalStatement(new StringEntry("colour")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))));
 	 	}
 	
-		private void add_method_605() {
+		private void add_method_633() {
 	 		addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))),"", /*Exac*/new ExternalStatement(new StringEntry("render")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), "", /*Body*/new ExternalStatement.Body(
 		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
 			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("colour"))), /*Enty*/new ExternalStatement(new StringEntry("render"))),
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
 			 		new ExternalStatement.Parameters())))))));
 	 	}
-		private void add_method_606() {
+		private void add_method_634() {
 	 		addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))),"", /*Exac*/new ExternalStatement(new StringEntry("getTexture")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), "", /*Body*/new ExternalStatement.Body(
 		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
 			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("colour"))), /*Enty*/new ExternalStatement(new StringEntry("getTexture"))),
@@ -1558,23 +1760,23 @@ MainFlow.classes.DrawablesClass.addSubClass(new ExternalClassEntry(){public void
 	});
        /* Variables */ 
 	   /* Methods */
-		add_method_607();
-		add_method_608();
-		add_method_609();
-		add_method_610(); 
+		add_method_635();
+		add_method_636();
+		add_method_637();
+		add_method_638(); 
 	   /* Classes */
 	}
 	
-		private void add_method_607() {
+		private void add_method_635() {
 	 		addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))),"", /*Exac*/new ExternalStatement(new StringEntry("load")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), "", /*Body*/new ExternalStatement.Body()));
 	 	}
-		private void add_method_608() {
+		private void add_method_636() {
 	 		addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))),"", /*Exac*/new ExternalStatement(new StringEntry("render")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), "", /*Body*/new ExternalStatement.Body()));
 	 	}
-		private void add_method_609() {
+		private void add_method_637() {
 	 		addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))),"", /*Exac*/new ExternalStatement(new StringEntry("animate")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), "", /*Body*/new ExternalStatement.Body()));
 	 	}
-		private void add_method_610() {
+		private void add_method_638() {
 	 		addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Drawables")), /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(multipleClassName.toString())))))),"", /*Name*/new ExternalStatement(new StringEntry("image")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Gui")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Renderable"))))),"", /*Name*/new ExternalStatement(new StringEntry("image")))}), "", /*Body*/new ExternalStatement.Body()));
 	 	}
 	
@@ -1593,24 +1795,24 @@ MainFlow.classes.DrawablesClass.getSubClass(multipleClassName.toString()).addSub
 		}
 	});
        /* Variables */
-		add_variable_1012(); 
+		add_variable_1025(); 
 	   /* Methods */
-		add_method_611();
-		add_method_612();
-		add_method_613(); 
+		add_method_639();
+		add_method_640();
+		add_method_641(); 
 	   /* Classes */
 	}
-		private void add_variable_1012() {
+		private void add_variable_1025() {
 	 		addVariable(new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))),"", /*Name*/new ExternalStatement(new StringEntry("imageTexture")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("-1"))))));
 	 	}
 	
-		private void add_method_611() {
+		private void add_method_639() {
 	 		addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))),"", /*Exac*/new ExternalStatement(new StringEntry("render")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), "", /*Body*/new ExternalStatement.Body()));
 	 	}
-		private void add_method_612() {
+		private void add_method_640() {
 	 		addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))),"", /*Exac*/new ExternalStatement(new StringEntry("animate")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), "", /*Body*/new ExternalStatement.Body()));
 	 	}
-		private void add_method_613() {
+		private void add_method_641() {
 	 		addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))),"", /*Exac*/new ExternalStatement(new StringEntry("getTexture")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), "", /*Body*/new ExternalStatement.Body(
 		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("imageTexture"))))))));
 	 	}
@@ -1661,27 +1863,27 @@ MainFlow.classes.DrawablesClass.getSubClass(multipleClassName.toString()).getSub
 	});
        /* Variables */ 
 	   /* Methods */
-		add_method_614();
-		add_method_615();
-		add_method_616();
-		add_method_617();
-		add_method_618(); 
+		add_method_642();
+		add_method_643();
+		add_method_644();
+		add_method_645();
+		add_method_646(); 
 	   /* Classes */
 	}
 	
-		private void add_method_614() {
+		private void add_method_642() {
 	 		addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))),"", /*Exac*/new ExternalStatement(new StringEntry("setVisualX")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))),"", /*Name*/new ExternalStatement(new StringEntry("newX")))}), "", /*Body*/new ExternalStatement.Body()));
 	 	}
-		private void add_method_615() {
+		private void add_method_643() {
 	 		addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))),"", /*Exac*/new ExternalStatement(new StringEntry("setVisualY")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))),"", /*Name*/new ExternalStatement(new StringEntry("newY")))}), "", /*Body*/new ExternalStatement.Body()));
 	 	}
-		private void add_method_616() {
+		private void add_method_644() {
 	 		addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))),"", /*Exac*/new ExternalStatement(new StringEntry("setVisualWidth")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))),"", /*Name*/new ExternalStatement(new StringEntry("newWidth")))}), "", /*Body*/new ExternalStatement.Body()));
 	 	}
-		private void add_method_617() {
+		private void add_method_645() {
 	 		addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))),"", /*Exac*/new ExternalStatement(new StringEntry("setVisualHeight")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))),"", /*Name*/new ExternalStatement(new StringEntry("newHeight")))}), "", /*Body*/new ExternalStatement.Body()));
 	 	}
-		private void add_method_618() {
+		private void add_method_646() {
 	 		addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))),"", /*Exac*/new ExternalStatement(new StringEntry("setAngle")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))),"", /*Name*/new ExternalStatement(new StringEntry("newAngle")))}), "", /*Body*/new ExternalStatement.Body()));
 	 	}
 	
@@ -1875,27 +2077,27 @@ MainFlow.classes.DrawablesClass.getSubClass(multipleClassName.toString()).getSub
 	});	
        /* Variables */ 
 	   /* Methods */
-		add_method_619();
-		add_method_620();
-		add_method_621();
-		add_method_622();
-		add_method_623(); 
+		add_method_647();
+		add_method_648();
+		add_method_649();
+		add_method_650();
+		add_method_651(); 
 	   /* Classes */
 	}
 	
-		private void add_method_619() {
+		private void add_method_647() {
 	 		addMethod(new ExternalMethodEntry(2, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))),"", /*Exac*/new ExternalStatement(new StringEntry("setVisualX")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))),"", /*Name*/new ExternalStatement(new StringEntry("newX")))}), "", /*Body*/new ExternalStatement.Body()));
 	 	}
-		private void add_method_620() {
+		private void add_method_648() {
 	 		addMethod(new ExternalMethodEntry(2, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))),"", /*Exac*/new ExternalStatement(new StringEntry("setVisualY")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))),"", /*Name*/new ExternalStatement(new StringEntry("newY")))}), "", /*Body*/new ExternalStatement.Body()));
 	 	}
-		private void add_method_621() {
+		private void add_method_649() {
 	 		addMethod(new ExternalMethodEntry(2, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))),"", /*Exac*/new ExternalStatement(new StringEntry("setVisualWidth")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))),"", /*Name*/new ExternalStatement(new StringEntry("newWidth")))}), "", /*Body*/new ExternalStatement.Body()));
 	 	}
-		private void add_method_622() {
+		private void add_method_650() {
 	 		addMethod(new ExternalMethodEntry(2, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))),"", /*Exac*/new ExternalStatement(new StringEntry("setVisualHeight")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))),"", /*Name*/new ExternalStatement(new StringEntry("newHeight")))}), "", /*Body*/new ExternalStatement.Body()));
 	 	}
-		private void add_method_623() {
+		private void add_method_651() {
 	 		addMethod(new ExternalMethodEntry(2, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))),"", /*Exac*/new ExternalStatement(new StringEntry("setAngle")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))),"", /*Name*/new ExternalStatement(new StringEntry("newAngle")))}), "", /*Body*/new ExternalStatement.Body()));
 	 	}
 	
@@ -1916,65 +2118,67 @@ MainFlow.classes.DrawablesClass.getSubClass(multipleClassName.toString()).getSub
 		}
 	});	
        /* Variables */
-		add_variable_982();
-		add_variable_983();
-		add_variable_984();
-		add_variable_985();
-		add_variable_986();
-		add_variable_987();
-		add_variable_988();
-		add_variable_989();
-		add_variable_990();
-		add_variable_991();
-		add_variable_992(); 
+		add_variable_994();
+		add_variable_995();
+		add_variable_996();
+		add_variable_997();
+		add_variable_998();
+		add_variable_999();
+		add_variable_1000();
+		add_variable_1001();
+		add_variable_1002();
+		add_variable_1003();
+		add_variable_1004(); 
 	   /* Methods */
-		add_method_590();
-		add_method_591();
-		add_method_592();
-		add_method_593();
-		add_method_594();
-		add_method_595();
-		add_method_596();
-		add_method_597();
-		add_method_598(); 
+		add_method_616();
+		add_method_617();
+		add_method_618();
+		add_method_619();
+		add_method_620();
+		add_method_621();
+		add_method_622();
+		add_method_623();
+		add_method_624();
+		add_method_625();
+		add_method_626(); 
 	   /* Classes */
-		add_subclass_241();
+		add_subclass_243();
 	}
-		private void add_variable_982() {
+		private void add_variable_994() {
 	 		addVariable(new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("FloatBuffer"))),"", /*Name*/new ExternalStatement(new StringEntry("vertexBuffer")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))));
 	 	}
-		private void add_variable_983() {
+		private void add_variable_995() {
 	 		addVariable(new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("List"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Gui")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Drawable")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("ChangeListener"))))))),"", /*Name*/new ExternalStatement(new StringEntry("changeListeners")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))));
 	 	}
-		private void add_variable_984() {
+		private void add_variable_996() {
 	 		addVariable(new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))),"", /*Name*/new ExternalStatement(new StringEntry("visualX")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0f"))))));
 	 	}
-		private void add_variable_985() {
+		private void add_variable_997() {
 	 		addVariable(new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))),"", /*Name*/new ExternalStatement(new StringEntry("visualY")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0f"))))));
 	 	}
-		private void add_variable_986() {
+		private void add_variable_998() {
 	 		addVariable(new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))),"", /*Name*/new ExternalStatement(new StringEntry("visualWidth")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("1f"))))));
 	 	}
-		private void add_variable_987() {
+		private void add_variable_999() {
 	 		addVariable(new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))),"", /*Name*/new ExternalStatement(new StringEntry("visualHeight")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("1f"))))));
 	 	}
-		private void add_variable_988() {
+		private void add_variable_1000() {
 	 		addVariable(new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))),"", /*Name*/new ExternalStatement(new StringEntry("visualRotationPointX")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0f"))))));
 	 	}
-		private void add_variable_989() {
+		private void add_variable_1001() {
 	 		addVariable(new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))),"", /*Name*/new ExternalStatement(new StringEntry("visualRotationPointY")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0f"))))));
 	 	}
-		private void add_variable_990() {
+		private void add_variable_1002() {
 	 		addVariable(new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))),"", /*Name*/new ExternalStatement(new StringEntry("visualAngle")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0f"))))));
 	 	}
-		private void add_variable_991() {
+		private void add_variable_1003() {
 	 		addVariable(new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Float"))),"", /*Name*/new ExternalStatement(new StringEntry("angle")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0f"))))));
 	 	}
-		private void add_variable_992() {
+		private void add_variable_1004() {
 	 		addVariable(new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Renderer")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Layer"))))),"", /*Name*/new ExternalStatement(new StringEntry("displayLayer")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))));
 	 	}
 	
-		private void add_method_590() {
+		private void add_method_616() {
 	 		addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))),"", /*Exac*/new ExternalStatement(new StringEntry("display")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), "", /*Body*/new ExternalStatement.Body(
 		/*Cond*/new ExternalStatement.Conditional(
 			"if ", 
@@ -1987,7 +2191,28 @@ MainFlow.classes.DrawablesClass.getSubClass(multipleClassName.toString()).getSub
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
 			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("this"))))))))))))));
 	 	}
-		private void add_method_591() {
+		private void add_method_617() {
+	 		addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))),"", /*Exac*/new ExternalStatement(new StringEntry("undisplay")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), "", /*Body*/new ExternalStatement.Body(
+		/*Cond*/new ExternalStatement.Conditional(
+			"if ", 
+			/*Optr*/new ExternalStatement("==", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("displayLayer")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null")))),
+			/*Body*/new ExternalStatement.Body(
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Renderer")))), /*Enty*/new ExternalStatement(new StringEntry("botLayer"))), /*Enty*/new ExternalStatement(new StringEntry("remove"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("this"))))))))))),
+/*BODY*/				
+		/*Cond*/new ExternalStatement.Conditional(
+			"else ", null,
+			/*Body*/new ExternalStatement.Body(
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("displayLayer"))), /*Enty*/new ExternalStatement(new StringEntry("remove"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("this"))))))))),
+/*BODY*/				
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("displayLayer")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null")))))))))));
+	 	}
+		private void add_method_618() {
 	 		addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))),"", /*Exac*/new ExternalStatement(new StringEntry("display")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Renderer")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Layer"))))),"", /*Name*/new ExternalStatement(new StringEntry("layer")))}), "", /*Body*/new ExternalStatement.Body(
 		/*Cond*/new ExternalStatement.Conditional(
 			"if ", 
@@ -2016,7 +2241,29 @@ MainFlow.classes.DrawablesClass.getSubClass(multipleClassName.toString()).getSub
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
 			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("this"))))))))))))));
 	 	}
-		private void add_method_592() {
+		private void add_method_619() {
+	 		addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))),"", /*Exac*/new ExternalStatement(new StringEntry("undisplay")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Renderer")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Layer"))))),"", /*Name*/new ExternalStatement(new StringEntry("layer")))}), "", /*Body*/new ExternalStatement.Body(
+		/*Cond*/new ExternalStatement.Conditional(
+			"if ", 
+			/*Optr*/new ExternalStatement("!=", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("displayLayer")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null")))),
+			/*Body*/new ExternalStatement.Body(
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("displayLayer"))), /*Enty*/new ExternalStatement(new StringEntry("remove"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("this"))))))))))),
+/*BODY*/				
+		/*Cond*/new ExternalStatement.Conditional(
+			"if ", 
+			/*Optr*/new ExternalStatement("!=", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("layer")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null")))),
+			/*Body*/new ExternalStatement.Body(
+			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("layer"))), /*Enty*/new ExternalStatement(new StringEntry("remove"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("this"))))))))))),
+/*BODY*/				
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("displayLayer")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null")))))))));
+	 	}
+		private void add_method_620() {
 	 		addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))),"", /*Exac*/new ExternalStatement(new StringEntry("render")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), "", /*Body*/new ExternalStatement.Body(
 		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
 			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("GL11")))), /*Enty*/new ExternalStatement(new StringEntry("glPushMatrix"))),
@@ -2057,25 +2304,25 @@ MainFlow.classes.DrawablesClass.getSubClass(multipleClassName.toString()).getSub
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
 			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("3")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0")))),/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("vertexBuffer"))))))))))));
 	 	}
-		private void add_method_593() {
+		private void add_method_621() {
 	 		addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))),"", /*Exac*/new ExternalStatement(new StringEntry("animate")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), "", /*Body*/new ExternalStatement.Body()));
 	 	}
-		private void add_method_594() {
+		private void add_method_622() {
 	 		addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))),"", /*Exac*/new ExternalStatement(new StringEntry("load")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), "", /*Body*/new ExternalStatement.Body()));
 	 	}
-		private void add_method_595() {
+		private void add_method_623() {
 	 		addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))),"", /*Exac*/new ExternalStatement(new StringEntry("getTexture")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), "", /*Body*/new ExternalStatement.Body(
 		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0"))))))));
 	 	}
-		private void add_method_596() {
+		private void add_method_624() {
 	 		addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Gui")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Drawable"))))),"", /*Name*/new ExternalStatement(new StringEntry("image")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Gui")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Renderable"))))),"", /*Name*/new ExternalStatement(new StringEntry("image")))}), "", /*Body*/new ExternalStatement.Body(
 		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))))));
 	 	}
-		private void add_method_597() {
+		private void add_method_625() {
 	 		addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Gui")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Drawable"))))),"", /*Name*/new ExternalStatement(new StringEntry("colour")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Gui")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Colour"))))),"", /*Name*/new ExternalStatement(new StringEntry("colour")))}), "", /*Body*/new ExternalStatement.Body(
 		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))))));
 	 	}
-		private void add_method_598() {
+		private void add_method_626() {
 	 		addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))),"", /*Exac*/new ExternalStatement(new StringEntry("add")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Gui")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Drawable")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("ChangeListener"))))),"", /*Name*/new ExternalStatement(new StringEntry("changeListener")))}), "", /*Body*/new ExternalStatement.Body(
 		/*Cond*/new ExternalStatement.Conditional(
 			"if ", 
@@ -2089,7 +2336,7 @@ MainFlow.classes.DrawablesClass.getSubClass(multipleClassName.toString()).getSub
 			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("changeListener"))))))))))));
 	 	}
 	
-		private void add_subclass_241() {
+		private void add_subclass_243() {
 	 		addSubClass(MainFlow.classes.GuiClass.DrawableClass.ChangeListenerClass);
 	 	}
 }
@@ -2118,43 +2365,50 @@ MainFlow.classes.DrawablesClass.getSubClass(multipleClassName.toString()).getSub
 		}
 	});
        /* Variables */
-		add_variable_932();
-		add_variable_933();
-		add_variable_934();
-		add_variable_935();
-		add_variable_936();
-		add_variable_937(); 
+		add_variable_941();
+		add_variable_942();
+		add_variable_943();
+		add_variable_944();
+		add_variable_945();
+		add_variable_946(); 
 	   /* Methods */
-		add_method_524(); 
+		add_method_544(); 
 	   /* Classes */
-		add_subclass_223();
-		add_subclass_224();
-		add_subclass_232();
+		add_subclass_225();
+		add_subclass_226();
 		add_subclass_234();
-		add_subclass_242();
+		add_subclass_236();
+		add_subclass_244();
 	}
-		private void add_variable_932() {
+		private void add_variable_941() {
 	 		addVariable(new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("FloatBuffer"))),"", /*Name*/new ExternalStatement(new StringEntry("placeHolder")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))));
 	 	}
-		private void add_variable_933() {
+		private void add_variable_942() {
 	 		addVariable(new ExternalVariableEntry(true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Boolean"))),"", /*Name*/new ExternalStatement(new StringEntry("isRunning")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("true"))))));
 	 	}
-		private void add_variable_934() {
+		private void add_variable_943() {
 	 		addVariable(new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("ImageLoader"))),"", /*Name*/new ExternalStatement(new StringEntry("imageLoader")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))));
 	 	}
-		private void add_variable_935() {
+		private void add_variable_944() {
 	 		addVariable(new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("InputHandler"))),"", /*Name*/new ExternalStatement(new StringEntry("inputHandler")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))));
 	 	}
-		private void add_variable_936() {
+		private void add_variable_945() {
 	 		addVariable(new ExternalVariableEntry(true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Game"))),"", /*Name*/new ExternalStatement(new StringEntry("game")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))));
 	 	}
-		private void add_variable_937() {
+		private void add_variable_946() {
 	 		addVariable(new ExternalVariableEntry(true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Renderer"))),"", /*Name*/new ExternalStatement(new StringEntry("renderer")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))));
 	 	}
 	
-		private void add_method_524() {
+		private void add_method_544() {
 	 		addMethod(new ExternalMethodEntry(0, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))),"", /*Exac*/new ExternalStatement(new StringEntry("load")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), "", /*Body*/new ExternalStatement.Body(
 	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("initializeDisplay")),new ExternalStatement.Parameters()))),
+/*BODY*/				
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("renderer")), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Renderer"))),new ExternalStatement.Parameters())))),
+/*BODY*/				
+	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("renderer"))), /*Enty*/new ExternalStatement(new StringEntry("load"))),
+			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("displayMode"))))))))),
 /*BODY*/				
 	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("inputHandler")), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("InputHandler"))),new ExternalStatement.Parameters())))),
 /*BODY*/				
@@ -2170,13 +2424,6 @@ MainFlow.classes.DrawablesClass.getSubClass(multipleClassName.toString()).getSub
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
 			 		new ExternalStatement.Parameters())))),
 /*BODY*/				
-	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("renderer")), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Renderer"))),new ExternalStatement.Parameters())))),
-/*BODY*/				
-	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("renderer"))), /*Enty*/new ExternalStatement(new StringEntry("load"))),
-			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("displayMode"))))))))),
-/*BODY*/				
 	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("=", /*Name*/new ExternalStatement(new StringEntry("game")), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Game"))),new ExternalStatement.Parameters())))),
 /*BODY*/				
 	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
@@ -2185,19 +2432,19 @@ MainFlow.classes.DrawablesClass.getSubClass(multipleClassName.toString()).getSub
 			 		new ExternalStatement.Parameters())))))));
 	 	}
 	
-		private void add_subclass_223() {
+		private void add_subclass_225() {
 	 		addSubClass(MainFlow.classes.GuiClass.RenderableClass);
 	 	}
-		private void add_subclass_224() {
+		private void add_subclass_226() {
 	 		addSubClass(MainFlow.classes.GuiClass.StatableClass);
 	 	}
-		private void add_subclass_232() {
+		private void add_subclass_234() {
 	 		addSubClass(MainFlow.classes.GuiClass.ImageClass);
 	 	}
-		private void add_subclass_234() {
+		private void add_subclass_236() {
 	 		addSubClass(MainFlow.classes.GuiClass.ColourClass);
 	 	}
-		private void add_subclass_242() {
+		private void add_subclass_244() {
 	 		addSubClass(MainFlow.classes.GuiClass.DrawableClass);
 	 	}
 }

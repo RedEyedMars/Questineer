@@ -29,7 +29,11 @@ public class AnimationState extends ConcreteRule {
 							new AddTokenParser(
 								AssociationTokens.NAME,"animationId"),
 							new OptionalParser(
-									ImageBraces.ANIMATION_ID_FLIP),
+									
+										new ChainParser(
+											EntityTokens.PIPE,
+											new AddTokenParser(
+												AssociationTokens.NAME,"flipAnimationId"))),
 							PaymentTokens.COLON,
 							new AddTokenParser(
 								AssociationTokens.NAME,"animationTypeName"),

@@ -46,6 +46,7 @@ import lists.GeneralTokens;
 import lists.Listnames;
 import javax.swing.JFrame;
 import java.awt.Graphics;
+import java.util.Random;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import java.nio.ByteOrder;
@@ -90,10 +91,14 @@ MainFlow.classes.EventsClass.addSubClass(new ExternalClassEntry(){public void __
 			new StringEntry("").get(builder);
 		}
 	});
-       /* Variables */ 
+       /* Variables */
+		add_variable_758(); 
 	   /* Methods */ 
 	   /* Classes */
 	}
+		private void add_variable_758() {
+	 		addVariable(new ExternalVariableEntry(true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Event")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Id"))))),"", /*Name*/new ExternalStatement(new StringEntry("id")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Event")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Id")))), /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(eventName.toString()))))))))));
+	 	}
 	
 	
 });
@@ -116,15 +121,16 @@ MainFlow.classes.EventsClass.getSubClass(cev).addSubClass(new ExternalClassEntry
 	});
        /* Variables */ 
 	   /* Methods */
-		add_method_435(); 
+		add_method_454(); 
 	   /* Classes */
 	}
 	
-		private void add_method_435() {
+		private void add_method_454() {
 	 		addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))),"", /*Exac*/new ExternalStatement(new StringEntry("listen")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Events")), /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(cev.toString())))))),"", /*Name*/new ExternalStatement(new StringEntry("event")))}), "", /*Body*/new ExternalStatement.Body()));
 	 	}
 	
 });
+MainFlow.classes.EventClass.IdClass.addVariable(new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))),"", /*Enty*/new ExternalStatement(new StringEntry(eventName.toString())), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))));
 	for(final IToken element:declaration.getAllSafely("parameter")) {
 			for(final IToken atom:element.getAllSafely("type_name")) {
 MainFlow.classes.EventsClass.getSubClass(cev).addVariable(new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(MainFlow.methods.getTypeName(atom).toString())))),"", /*Enty*/new ExternalStatement(new StringEntry(element.get("name").toString()))));

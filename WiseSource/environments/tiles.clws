@@ -170,21 +170,27 @@ class 'packageName'."environments" Tiles {
     }
     ~Tiles->EntryPoint sister = null;
     Entity->Event accept(Entity newOccupant){
-      if sister != null {
-        if sister.getArea() == null {
-          sister.setArea(\getArea().getParent().getAreaGenerator().generate());
+      if sister == null {
+        Area newArea = \getArea().getParent().getAreaGenerator().generate();
+        if newArea != null {
+		  newArea.load();
+          \getArea().getParent().add(newArea);
         }
-        sister.take(newOccupant);
-        return new Entity->Event->MovedToNewArea(area, sister.getArea());
+        sister = Range.select(newArea.getEntryPoints());
       }
-      else {
-        return \take(newOccupant);
-      }
+      sister.take(newOccupant);
+      return new Entity->Event->MovedToNewArea(area, sister.getArea());
     }
     Entity->Event take(Entity newOccupant){
       newOccupant.getLocation().setArea(area);
       newOccupant.explore(area);
       return \super.accept(newOccupant);
+    }
+    Boolean hasOccupant(){
+      return occupant != null || ( sister != null && sister.occupant != null);
+    }
+    Boolean hasOccupant(Entity candidate){
+      return occupant == candidate || ( sister != null && sister.occupant == candidate);
     }
     Integer getDistanceToUnexploredPaths(Entity explorer){
       return \getDistanceToUnexploredPaths(explorer, new HashSet<EntryPoint>(),0);
@@ -307,6 +313,15 @@ class 'packageName'."environments" Tiles {
 		      "occupant".display();
 		    }
 		  }
+		collectionClass->'mapName'->'tileName' += void undisplay(){
+		    \getDrawable().undisplay(Renderer.botLayer);
+		    if "terrain" != null {
+		      "terrain".undisplay();
+		    }
+		    if "occupant" != null {
+		      "occupant".undisplay();
+		    }
+		  }
       }
       else {
         stateChangeBody.add(|
@@ -328,6 +343,9 @@ class 'packageName'."environments" Tiles {
           }
         collectionClass->'mapName'->'tileName' += void display(){
 		    \getDrawable().display(Renderer.midLayer);
+		  }
+		collectionClass->'mapName'->'tileName' += void undisplay(){
+		    \getDrawable().undisplay(Renderer.midLayer);
 		  }
       }
       stateChangeBody.add(|"drawable".setVisualWidth("(float)getWidth()/"+'factor'+"f");|);
@@ -659,6 +677,8 @@ class 'packageName'."environments" Tile Environment->Position Loaddable Tickable
   void tick(Double millisSinceLastFrame){
   }
   void display(){
+  }
+  void undisplay(){
   }
   Entity->Event accept(Entity newOccupant){
     Environment->Location location = newOccupant.getLocation();

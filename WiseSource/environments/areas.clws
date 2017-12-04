@@ -515,6 +515,16 @@ class 'packageName'."environments" Area Environment->Position {
       tile.display();
     }
   }
+  void undisplay(){
+    for Tiles->Floor->Id floorId : floorMap.keySet() {
+      for Tiles\>Floor tile : floorMap.get(floorId) {
+        tile.undisplay();
+      }
+    }
+    for Tiles\>EntryPoint tile : entryPoints {
+      tile.undisplay();
+    }
+  }
   Tiles->Floor getFloorTile(Integer x, Integer y){
     if layout.containsKey(x) {
       return layout.get(x).get(y);

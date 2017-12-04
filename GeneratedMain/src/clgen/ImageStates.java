@@ -46,6 +46,7 @@ import lists.GeneralTokens;
 import lists.Listnames;
 import javax.swing.JFrame;
 import java.awt.Graphics;
+import java.util.Random;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import java.nio.ByteOrder;
@@ -95,15 +96,15 @@ public class ImageStates extends ExternalClassEntry {
 		}
 	});
        /* Variables */
-		add_variable_893();
-		add_variable_894(); 
+		add_variable_902();
+		add_variable_903(); 
 	   /* Methods */ 
 	   /* Classes */
 	}
-		private void add_variable_893() {
+		private void add_variable_902() {
 	 		addVariable(new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))),"", /*Name*/new ExternalStatement(new StringEntry("DEFAULT")), /*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))),new ExternalStatement.Parameters())));
 	 	}
-		private void add_variable_894() {
+		private void add_variable_903() {
 	 		addVariable(new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))),"", /*Name*/new ExternalStatement(new StringEntry("ASCEND")), /*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))),new ExternalStatement.Parameters())));
 	 	}
 	

@@ -47,6 +47,7 @@ import lists.GeneralTokens;
 import lists.Listnames;
 import javax.swing.JFrame;
 import java.awt.Graphics;
+import java.util.Random;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import java.nio.ByteOrder;
@@ -140,10 +141,7 @@ public class MainFlow extends FlowController  {
 	protected final String __VAR__TT = "<T>T";
 	protected final String __VAR__mainStringArgs = "String[]";
 	protected final Integer __VAR__INT_SIZE = 4;
-	protected final String __VAR__floatArrayType = "Float[]";
-	protected final String __VAR__intArrayType = "Integer[]";
-	protected final String __VAR__pintArrayType = "int[]";
-	protected final String __VAR__byteArrayType = "byte[]";
+	protected final String __VAR__finalImageStatesClassName = "final Gui.Image.States";
 	protected final String __VAR__floatBufferArray = "FloatBuffer[][]";
 
 	public static void main(final String[] args)  {
@@ -718,10 +716,10 @@ inputClass.addVariable(new ExternalVariableEntry(false, /*TypeName*/new External
 	}
 	public ExternalStatement getChance(final IToken chanceToken)  {
 		final Double value = Double.parseDouble(chanceToken.toString()) / 100.0;
-		return /*Optr*/new ExternalStatement("<=", /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
-			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("Math"))), /*Enty*/new ExternalStatement(new StringEntry("random"))),
+		return /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
+			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Range")))), /*Enty*/new ExternalStatement(new StringEntry("chance"))),
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
-			 		new ExternalStatement.Parameters()))), /*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(value.toString()))));
+			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Enty*/new ExternalStatement(new StringEntry(value.toString()))))))));
 	}
 	public void createList(final ExternalClassEntry listClass)  {
 		final String listName = listClass.getFullName() + "List";
@@ -740,11 +738,11 @@ listClass.addSubClass(new ExternalClassEntry(){public void __INIT__(){super.__SE
 	});
        /* Variables */ 
 	   /* Methods */
-		add_method_23(); 
+		add_method_25(); 
 	   /* Classes */
 	}
 	
-		private void add_method_23() {
+		private void add_method_25() {
 	 		addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("List"))),"", /*Exac*/new ExternalStatement(new StringEntry("*")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry(listClass.getFullName()))),"", new ExternalStatement(new StringEntry("..."), /*Name*/new ExternalStatement(new StringEntry("elements"))))}), "", /*Body*/new ExternalStatement.Body(
 		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("super")),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
 			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Arrays")))), /*Enty*/new ExternalStatement(new StringEntry("asList"))),
@@ -780,11 +778,11 @@ listClass.addSubClass(new ExternalClassEntry(){public void __INIT__(){super.__SE
 	});
        /* Variables */ 
 	   /* Methods */
-		add_method_24(); 
+		add_method_26(); 
 	   /* Classes */
 	}
 	
-		private void add_method_24() {
+		private void add_method_26() {
 	 		addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Boolean"))),"", /*Exac*/new ExternalStatement(new StringEntry("satisfies")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry(critClass.getFullName()))),"", /*Name*/new ExternalStatement(new StringEntry("candidate")))}), "", /*Body*/new ExternalStatement.Body(
 		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("false"))))))));
 	 	}
@@ -855,34 +853,34 @@ MainFlow.classes.ListMapsClass.getSubClass(leftName).addSubClass(new ExternalCla
        /* Variables */
 		add_variable_37(); 
 	   /* Methods */
-		add_method_25();
-		add_method_26();
 		add_method_27();
 		add_method_28();
 		add_method_29();
 		add_method_30();
-		add_method_31(); 
+		add_method_31();
+		add_method_32();
+		add_method_33(); 
 	   /* Classes */
 	}
 		private void add_variable_37() {
 	 		addVariable(new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("LinkedList"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry(rightClass.getFullName()))))),"", /*Name*/new ExternalStatement(new StringEntry("completeList")), /*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("LinkedList"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry(rightClass.getFullName()))))),new ExternalStatement.Parameters())));
 	 	}
 	
-		private void add_method_25() {
+		private void add_method_27() {
 	 		addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Iterator"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry(rightClass.getFullName()))))),"", /*Exac*/new ExternalStatement(new StringEntry("iterator")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), "", /*Body*/new ExternalStatement.Body(
 		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
 			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("completeList"))), /*Enty*/new ExternalStatement(new StringEntry("iterator"))),
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
 			 		new ExternalStatement.Parameters())))))));
 	 	}
-		private void add_method_26() {
+		private void add_method_28() {
 	 		addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("LinkedList"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry(rightClass.getFullName()))))),"", /*Exac*/new ExternalStatement(new StringEntry("getFrom")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry(leftClass.getFullName()))),"", /*Name*/new ExternalStatement(new StringEntry("key")))}), "", /*Body*/new ExternalStatement.Body(
 		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
 			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("super"))), /*Enty*/new ExternalStatement(new StringEntry("get"))),
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
 			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("key"))))))))))));
 	 	}
-		private void add_method_27() {
+		private void add_method_29() {
 	 		addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))),"", /*Exac*/new ExternalStatement(new StringEntry("add")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry(leftClass.getFullName()))),"", /*Name*/new ExternalStatement(new StringEntry("key"))),
 /*PARAMS*/				new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry(rightClass.getFullName()))),"", /*Name*/new ExternalStatement(new StringEntry("element")))}), "", /*Body*/new ExternalStatement.Body(
 		/*Cond*/new ExternalStatement.Conditional(
@@ -910,7 +908,7 @@ MainFlow.classes.ListMapsClass.getSubClass(leftName).addSubClass(new ExternalCla
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
 			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("element"))))))))))));
 	 	}
-		private void add_method_28() {
+		private void add_method_30() {
 	 		addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))),"", /*Exac*/new ExternalStatement(new StringEntry("removeLast")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry(leftClass.getFullName()))),"", /*Name*/new ExternalStatement(new StringEntry("key")))}), "", /*Body*/new ExternalStatement.Body(
 		/*Cond*/new ExternalStatement.Conditional(
 			"if ", 
@@ -936,7 +934,7 @@ MainFlow.classes.ListMapsClass.getSubClass(leftName).addSubClass(new ExternalCla
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
 			 		new ExternalStatement.Parameters())))))))))))));
 	 	}
-		private void add_method_29() {
+		private void add_method_31() {
 	 		addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))),"", /*Exac*/new ExternalStatement(new StringEntry("removeAll")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry(leftClass.getFullName()))),"", /*Name*/new ExternalStatement(new StringEntry("key")))}), "", /*Body*/new ExternalStatement.Body(
 		/*Cond*/new ExternalStatement.Conditional(
 			"if ", 
@@ -961,7 +959,7 @@ MainFlow.classes.ListMapsClass.getSubClass(leftName).addSubClass(new ExternalCla
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
 			 		new ExternalStatement.Parameters())))))))));
 	 	}
-		private void add_method_30() {
+		private void add_method_32() {
 	 		addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))),"", /*Exac*/new ExternalStatement(new StringEntry("remove")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry(leftClass.getFullName()))),"", /*Name*/new ExternalStatement(new StringEntry("key"))),
 /*PARAMS*/				new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry(rightClass.getFullName()))),"", /*Name*/new ExternalStatement(new StringEntry("element")))}), "", /*Body*/new ExternalStatement.Body(
 		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
@@ -977,7 +975,7 @@ MainFlow.classes.ListMapsClass.getSubClass(leftName).addSubClass(new ExternalCla
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
 			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("element"))))))))))));
 	 	}
-		private void add_method_31() {
+		private void add_method_33() {
 	 		addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("List"), new ExternalStatement(new StringEntry("<"), new StringEntry(">"), ",", /*TypeName*/new ExternalStatement.TypeName(new StringEntry(rightClass.getFullName()))))),"", /*Exac*/new ExternalStatement(new StringEntry("getAll")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), "", /*Body*/new ExternalStatement.Body(
 		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("completeList"))))))));
 	 	}
@@ -1050,11 +1048,11 @@ keyNameClass.addSubClass(new ExternalClassEntry(){public void __INIT__(){super._
 	});
        /* Variables */ 
 	   /* Methods */
-		add_method_32(); 
+		add_method_34(); 
 	   /* Classes */
 	}
 	
-		private void add_method_32() {
+		private void add_method_34() {
 	 		addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry(valueClass.getFullName()))),"", /*Exac*/new ExternalStatement(new StringEntry("get")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry(keyClass.getFullName()))),"", /*Name*/new ExternalStatement(new StringEntry("key"))),
 /*PARAMS*/				new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry(valueClass.getFullName())), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Factory"))))),"", /*Name*/new ExternalStatement(new StringEntry("factory")))}), "", /*Body*/new ExternalStatement.Body(
 		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry(valueClass.getFullName()))),"", /*Name*/new ExternalStatement(new StringEntry("result")), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement(null,new StringEntry(")"),"(",/*Name*/new ExternalStatement(new StringEntry("get")),new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("key"))))))))),
@@ -1493,29 +1491,11 @@ MainFlow.classes.GuiClass.addMethod(new ExternalMethodEntry(1, false,/*TypeName*
 	public Integer get_INT_SIZE()  {
 		return __VAR__INT_SIZE;
 	}
-	public String getFloatArrayType()  {
-		return __VAR__floatArrayType;
+	public String getFinalImageStatesClassName()  {
+		return __VAR__finalImageStatesClassName;
 	}
-	public String get_floatArrayType()  {
-		return __VAR__floatArrayType;
-	}
-	public String getIntArrayType()  {
-		return __VAR__intArrayType;
-	}
-	public String get_intArrayType()  {
-		return __VAR__intArrayType;
-	}
-	public String getPintArrayType()  {
-		return __VAR__pintArrayType;
-	}
-	public String get_pintArrayType()  {
-		return __VAR__pintArrayType;
-	}
-	public String getByteArrayType()  {
-		return __VAR__byteArrayType;
-	}
-	public String get_byteArrayType()  {
-		return __VAR__byteArrayType;
+	public String get_finalImageStatesClassName()  {
+		return __VAR__finalImageStatesClassName;
 	}
 	public String getFloatBufferArray()  {
 		return __VAR__floatBufferArray;
@@ -2212,6 +2192,7 @@ MainFlow.classes.GuiClass.addMethod(new ExternalMethodEntry(1, false,/*TypeName*
 		ExternalClassEntry.suppliment("Listnames", "lists");
 		ExternalClassEntry.suppliment("JFrame", "javax.swing");
 		ExternalClassEntry.suppliment("Graphics", "java.awt");
+		ExternalClassEntry.suppliment("Random", "java.util");
 		MainFlow.classes.ListenableClass.__INIT__();
 		MainFlow.classes.SourceClass.__INIT__();
 		MainFlow.classes.LoaddableClass.__INIT__();
@@ -2259,6 +2240,7 @@ MainFlow.classes.GuiClass.addMethod(new ExternalMethodEntry(1, false,/*TypeName*
 		MainFlow.classes.DirectionClass.__INIT__();
 		MainFlow.classes.EventsClass.__INIT__();
 		MainFlow.classes.EventClass.__INIT__();
+		ExternalClassEntry.suppliment("LinkedList", "java.util");
 		MainFlow.classes.RendererClass.__INIT__();
 		MainFlow.classes.InputHandlerClass.__INIT__();
 		ExternalClassEntry.suppliment("BufferedImage", "java.awt.image");

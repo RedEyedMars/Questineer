@@ -5,9 +5,15 @@ class 'packageName'."game" Game \Object InputHandler->Events->KeyboardEvent->Lis
   ~Double thisTick = lastTick;
   ~Tile mosiac = null;
   ~Area focusArea = null;
+  ~Entity hero = null;
   boolean[] pressedKeys = new boolean[128]; 
   @void main('mainStringArgs' args){
     new Gui();
+  }
+  void findSeed(){
+	Long seed = new Random().nextLong();
+	Range.randomizer.setSeed(seed);
+	System.out.println(''"Seed:"''\+seed\+''"L"'');
   }
   void load(){
     environments.add(new Environments->\Forest());
@@ -16,8 +22,9 @@ class 'packageName'."game" Game \Object InputHandler->Events->KeyboardEvent->Lis
 	  environment.load();
 	}
 	new Associations().on(new Events->\Load(null));
-    Entity hero = new Entities->Hero(Images.male_hero_base);
+    hero = new Entities->Hero(Images.male_hero_base);
     hero.changeState(ImageStates.male);
+    hero.changeState(ImageStates.idle);
 	hero.setSpawn(environments.get(0).getArea(0).getEntryPoint(0));
 	hero.load();
 	environments.get(0).getArea(0).getEntryPoint(0).accept(hero);
@@ -45,10 +52,16 @@ class 'packageName'."game" Game \Object InputHandler->Events->KeyboardEvent->Lis
     for Environment environment:environments {
       environment.tick(thisTick-lastTick);
     }
-    if focusArea == null {
-      focusArea = environments.get(0).getAreas().get(0);
+    if focusArea != hero.getLocation().getArea() {
+      if focusArea != null {
+        focusArea.undisplay();
+      }
+      focusArea = hero.getLocation().getArea();
     }
     focusArea.display();
+    if pressedKeys[19] {
+      focusArea.undisplay();
+    }
     if pressedKeys[1] {
       Gui.isRunning = false;
     }

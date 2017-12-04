@@ -1,4 +1,6 @@
 
+< Random : \java.\util;
+
 > Set<String> declaredCritSet = new HashSet<String>();
 > Set<String> declaredListSet = new HashSet<String>();
 > Set<String> declaredMapSet = new HashSet<String>();
@@ -24,27 +26,23 @@ interface 'packageName'."misc"."interfaces" Usable {
   Usable->Id getId(){}
 }
 class 'packageName'."misc" Range {
-  Float "left" = 0f;
-  Float "right" = 0f;
-  
-  >String floatCast = "(float)(int)";
-  @Integer getIntegerBetween(Integer "bottom", Integer "top"){
-    
-    Integer "difference" = "top" - "bottom";
-    Double  "result" = "difference" * \Math.random() + "bottom";
-    return "(int)(double)result";
+  @Random randomizer = new Random();
+  Float left = 0f;
+  Float right = 0f;
+  @Integer getIntegerBetween(Integer bottom, Integer top){
+    return (int)(double)((top - bottom) * randomizer.nextDouble() \+ bottom);
   }
-  Range *(Integer "initialLeft", Integer "initialRight"){
-    "left" = 'floatCast+"initialLeft"';
-    "right" = 'floatCast+"initialRight"';
+  Range *(Integer initialLeft, Integer initialRight){
+    left = (float)initialLeft;
+    right = (float)initialRight;
   } 
-  Range *(Float "initialLeft", Integer "initialRight"){
-    "left" = "initialLeft";
-    "right" = 'floatCast+"initialRight"';
+  Range *(Float initialLeft, Integer initialRight){
+    left = initialLeft;
+    right = (float)initialRight;
   }
-  Range *(Integer "initialLeft", Float "initialRight"){
-    "left" = 'floatCast+"initialLeft"';
-    "right" = "initialRight";
+  Range *(Integer initialLeft, Float initialRight){
+    left = (float)initialLeft;
+    right = initialRight;
   }
   Entity->Modifier getModifier(){
     return new Range->Modifier(\getRandom());
@@ -53,17 +51,23 @@ class 'packageName'."misc" Range {
     if collection.isEmpty(){
 	  return null;
 	}
-	return "collection.get((int)(collection.size()*Math.random()))";
+	return collection.get((int)(collection.size()*randomizer.nextFloat()));
+  }
+  @Boolean chance(Double percent){
+    return randomizer.nextDouble() <= percent;
+  }
+  @Boolean chance(Float percent){
+    return randomizer.nextFloat() <= percent;
   }
   @Float getRandomFloat(){
-    return "(float)Math.random()";
+    return randomizer.nextFloat();
   }
   @Integer getRandom(Integer lowerBound, Integer upperBound){
     if lowerBound >= upperBound {
       return lowerBound;
     }
     else {
-      return "(int)((upperBound-lowerBound)*Math.random())+lowerBound";
+      return (int)((upperBound-lowerBound)*randomizer.nextFloat())+lowerBound;
     }
   }
   @Integer normalize(Double value){
@@ -78,18 +82,16 @@ class 'packageName'."misc" Range {
     }
   }
   class 'packageName'."misc" Modifier \Object Entity->Modifier{
-	Double "value" = 0.0;
-	> String doubleCast = "(float)(double)";
-	void decrease(Entity "inputEntity",Float "amount"){
-	  "value" = "value" - "amount";
+	Double value = 0.0;
+	void decrease(Entity inputEntity,Float amount){
+	  value = value \- amount;
 	}
-	Float use(Entity "inputEntity"){
-	  return 'doubleCast+"value"';
+	Float use(Entity inputEntity){
+	  return (float)(double)value;
 	}
   }
   Double getRandom(){
-    Float "difference" = "right" - "left";
-    return "difference" * \Math.random() + "left";
+    return (right - left) * randomizer.nextDouble() \+ left;
   }
 }
 
@@ -537,7 +539,7 @@ class 'packageName'."misc" Criteria<TypeName> {
 
 > Statement getChance(IToken chanceToken){
     Double value = Double.parseDouble('chanceToken') / 100.0;
-    return |\Math.random() <= 'value' |;
+    return |Range.chance('value') |;
   }
 > void createList(Class listClass) {
 	String listName = listClass.getFullName()+ "List";

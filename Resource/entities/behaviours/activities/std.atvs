@@ -80,9 +80,6 @@ kill(Entity toKill) Attack
 	  on(new Events.Idle(event->host,this))
 	}
 	listen {
-	  if event.getId() == Events.Fail=>id & (Events.Collect<-event)->failed == chaseActivity {
-	    failed = true
-	  }
 	}
 	idle {
 	  Float longestRange = -1.0
@@ -178,7 +175,12 @@ Exploring(Integer ticks)
 	}
 	idle {
 	  destination = event->host->location.getUnexploredPoint()
-	  way = event->host->location.getWay(destination)
+	  if destination != null {
+	    way = event->host->location.getWay(destination)
+	  }
+	  else {
+	    failed = true
+	  }
 	}
 	step {
 	  ticks -= 1
@@ -188,5 +190,11 @@ Exploring(Integer ticks)
 	  else { 
 	    way.step(host)
 	    return true
+	  }
+	}
+	listen {
+	  if event.getId() == Entity.Event.FailedToMove.TileHasOccupant=>id {
+	    
+	    Entity.Event.FailedToMove.TileHasOccupant blocked = Entity.Event.FailedToMove.TileHasOccupant<-event
 	  }
 	}

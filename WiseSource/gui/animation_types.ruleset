@@ -12,6 +12,11 @@ animation_type_variable_declaration
 	NAME as typeName NAME as variableName ANIT_EQUALS animation_variable_value 
 	NAME as variableName ANIT_EQUALS animation_variable_value 
 animation_variable_value
+	ANIMATION_TYPE_COORDINATE_VARIABLE
+	ANIMATION_TYPE_FLIP_VARIABLE
+	ANIMATION_TYPE_SQUARE_VARIABLE
+	animation_variable_value_basic
+animation_variable_value_basic is silent
 	( INTEGER as lowerBound DASH INTEGER as upperBound ) as range | INTEGER | FLOAT | QUOTE as quote
 
 anit_continuation_operator
@@ -38,6 +43,9 @@ animationBrace-s are Braced
 	[(,)] as ANIMATION_TYPE_VARIABLES with animation_type_variable_declaration? ( COMMA animation_type_variable_declaration )*
 	[{,}] as ANIMATION_TYPE_BODY with animation_type_element*
 	[[,]] as ANIMATION_TYPE_FRAME_DATA with NAME as frameName
+	[(,)] as ANIMATION_TYPE_COORDINATE_VARIABLE with INTEGER as xValue COMMA INTEGER
+	[(,)] as ANIMATION_TYPE_SQUARE_VARIABLE with (INTEGER as lowX COMMA INTEGER as lowY INTEGER as highX COMMA INTEGER as highY ) as squareValues
+	[[,]] as ANIMATION_TYPE_FLIP_VARIABLE with animation_variable_value_basic as unflippedValue PIPE animation_variable_value_basic as flippedValue
 	[\",\"] as QUOTE with WILD
 animationImports-s are Import
 	[><<\"gui/\",animation_type_file_name,\".animationTypes\">>\n] as IMPORT_ANIMATION_TYPE from (NEWLINE|COMMENTS|animation_type_declaration)*; with ANIMATION_TYPE_FILE ANIMATION_TYPES
