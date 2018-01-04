@@ -3,8 +3,7 @@ generalToken-s
 	[[a-zA-Z_][a-zA-Z0-9_]*] as NAME
 	[[-]?\\d+\\Q.\\E\\d+] as FLOAT
 	[[-]?\\d+] as INTEGER
-	[.*] as WILD
-	[[<>][=]?] as ORDINAL
+	[.*] as WILD 
 	":" as COLON
 	";" as SEMICOLON
 	".." as DOTDOT
@@ -54,6 +53,10 @@ generalToken-s
 	"/" as QUEST_SEPARATOR
 	"*" as STAR
 	"Entity" as ENTITY
+	"is" as IS_A_IS
+	"a" as IS_A_A
+	"start" as ACTIVITY_START
+	"join" as ASSOCIATION_JOIN
 generalBrace-s are Braced
 	[\",\"] as QUOTE with WILD as quote
 	[{,}] as BODY with (NEWLINE | COMMENTS | body_element)*
@@ -66,7 +69,7 @@ generalBrace-s are Braced
 generalAltBrace-s are CharitableBraced
 	[,\n] as description with WILD as description
 
-num is silent
+number is silent
 	FLOAT
 	INTEGER
 range is silent
@@ -82,6 +85,8 @@ body_element
 	(variable_call acquisition) as acquisition
 	(variable_call imposition) as imposition
 	(variable_call quest_addition) as quest_addition
+	activity_statement
+	association_statement
 	variable_declaration
 	statement
 
@@ -93,6 +98,11 @@ imposition
 	(PLUS|MINUS)+ as operator hero_stat
 quest_addition
 	QUEST_ADD activityname ( statement ( QUEST_SEPARATOR statement )*)?  
+
+activity_statement
+	variable_call COLON? ( ACTIVITY_START ) as method  activityname ( statement | METHOD_ARGUMENTS )
+association_statement
+	variable_call ( ASSOCIATION_JOIN ) as method  association_name METHOD_ARGUMENTS statement as recruiter
 
 if_statement
 	IF boolean_statement NEWLINE* BODY ( NEWLINE* ELSE NEWLINE* ( BODY | IF boolean_statement NEWLINE* BODY ) ) as else_statement*
@@ -107,11 +117,14 @@ boolean_statement
 	(boolean_element ((AND|OR) as operator boolean_element )*
 boolean_element is silent
 	has_chance
+	isA_statement
 	spawn_statement
 	has_statement
 	statement
 has_chance
 	num PERCENT CHANCE
+isA_statement
+	variable_call IS_A_IS IS_A_A  type_name
 spawn_statement
 	SPAWNED IN NAME as environmentName
 has_statement
@@ -136,6 +149,7 @@ return_statement
 statement
 	( ENTITY ENTITY_ID_CHOICE ) as entity_selector
 	(( map_name | STAR ) TILE_ID_CHOICE ) as map_selector
+	activity_statement
 	NOT? variable_call ( operator NEWLINE* statement )*
 
 variable_declaration
@@ -150,7 +164,7 @@ variable_call_element is silent
 	BRACED_STATEMENT as braced
 	( type_name CAST_ARROW  statement ) as cast
 	( type_name STATIC_ACCESS NAME as variableName ) as access_static
-	method | variable_group | NAME as variableName | QUOTE  
+	method | variable_group | NAME as variableName | QUOTE as quote
 variable_group
 	association_name ASSOCIATION?
 	skill_name SKILL?
@@ -166,4 +180,4 @@ method
 	NAME as methodName METHOD_ARGUMENTS
 
 type_name
-	NAME as typeName ( DOT NAME as typeName )*
+	(STAR DOT as findType)? NAME as typeName ( DOT NAME as typeName )*

@@ -123,11 +123,11 @@ public class Event extends ExternalClassEntry {
        /* Variables */ 
 	   /* Methods */ 
 	   /* Classes */
-		add_subclass_193();
+		add_subclass_199();
 	}
 	
 	
-		private void add_subclass_193() {
+		private void add_subclass_199() {
 	 		addSubClass(MainFlow.classes.EventClass.IdClass);
 	 	}
 }

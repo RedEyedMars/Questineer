@@ -1,0 +1,12 @@
+#TRAIT#
+trait_names global list with NAME
+
+import_condition Imports "entities/mods/traits/" FILE_NAME ".trts" = ">" FILE_NAME ".trts" "\n"
+	( "\n" | comments | trait_declaration )*
+trait_declaration
+	NAME as traitName in trait_names "\n"* DESCRIPTION trait_element*
+trait_element silent
+	"\n" | comments 
+	"?" requirement
+	imposition
+	acquisition

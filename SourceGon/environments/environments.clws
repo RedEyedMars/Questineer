@@ -1,0 +1,586 @@
+import tiles.clws
+import areas.clws
+
+class 'packageName'."environments" Environment \Object Loaddable Tickable {
+  interface Movable // {
+    Entity->Event moveX(Integer x){
+    }
+    Entity->Event moveY(Integer y){
+    }
+  }
+  String name = null;
+  ~Area startArea = null;
+  ~Area\>Generator areaGenerator = null;
+  ~List<Tile\>Factory> floorTiles = new ArrayList<Tile\>Factory>(); 
+  ~List<Area> areas = new ArrayList<Area>();
+  ~Map<Area,Integer> activeAreas = new HashMap<Area,Integer>();
+  ~Map<Tile\>Id, List<Tile>> tiles = new HashMap<Tile\>Id, List<Tile>>();
+  ~Map<Area\>Id, List<Area>> areaMap = new HashMap<Area\>Id, List<Area>>();
+  void add(Area newArea){
+    areas.add(newArea);
+    if areaMap.containsKey(newArea.getId()) == false {
+      areaMap.put(newArea.getId(), new ArrayList<Area>());
+    }
+    areaMap.get(newArea.getId()).add(newArea);
+    newArea.setParent(this);
+  }
+  void addActiveArea(Area area){
+    if activeAreas.containsKey(area){
+      activeAreas.put(area,activeAreas.get(area)\+1);
+    }
+    else {
+      activeAreas.put(area,1);
+    }
+  }
+  void removeActiveArea(Area area){
+    if activeAreas.containsKey(area) {
+      Integer currentAmount = activeAreas.get(area);
+      if currentAmount <= 1 {
+        activeAreas.remove(area);
+      }
+      else {
+        activeAreas.put(area,currentAmount\-1);
+      }
+    }
+  }
+  Area getArea(Integer index){
+    return areas.get(index);
+  }
+  List<Area> get(Area->Id id){
+    return areaMap.get(id);
+  }
+  \Tile->List getTilesWithin(Environment->Position position, Float range, Tile->Id tileId){
+    Tile->List result = new Tile->List();
+    for Tile tile: tiles.get(tileId) {
+      if position.getDistanceTo(tile) < range {
+        result.add(tile);
+      }
+    }
+    return result;
+  }
+  void add(Entity newEntity){
+    startArea.add(newEntity);
+  }
+  void add(Tile newTile){
+    if tiles.containsKey(newTile.getId()) == false {
+      tiles.put(newTile.getId(), new ArrayList<Tile>());
+    }
+    tiles.get(newTile.getId()).add(newTile);
+  }
+  class 'packageName'."environments" Position {
+    Integer x = -10000;
+    Integer y = -10000;
+    Environment parent = null;
+    void setX(Integer newX){
+      x = newX;
+    }
+    void setY(Integer newY){
+      y = newY;
+    }
+    void setParent(Environment newParent){
+      parent = newParent;
+    }
+    Double getDistanceTo(Position otherPosition){
+      Integer xDirection = otherPosition.getX() - \getX() ;
+      Integer yDirection = otherPosition.getY() - \getY();
+      return \Math.sqrt(xDirection \* xDirection \+ yDirection \* yDirection);
+    }
+    Double getDirectionTo(Position otherPosition){
+      Integer xDirection = otherPosition.getX() - \getX() ;
+      Integer yDirection = otherPosition.getX() - \getY();
+      if xDirection == 0 {
+        if yDirection > 0 {
+          return \Math.PI / 2.0;
+        }
+        else if yDirection < 0 {
+          return \Math.PI * 3.0 / 2.0;
+        }
+        else {
+          return 0.0;
+        }
+      }
+      else {
+        return \Math.atan2(yDirection,xDirection);
+      }
+    }
+    Direction getDirectionOf(Position otherPosition){
+      Integer xDirection = otherPosition.getX() - \getX() ;
+      if xDirection > 0 {
+        return Direction.right;
+      }
+      else if xDirection < 0{
+        return Direction.left;
+      }
+      Integer yDirection = otherPosition.getY() - \getY();
+      if yDirection > 0 {
+        return Direction.up;
+      }
+      else if yDirection < 0 {
+        return Direction.down;
+      }
+      else {
+        return null;
+      }
+    }
+    List<Direction> getDirectionsTo(Position otherPosition){
+      Integer xDirection = otherPosition.getX() - \getX() ;
+      Integer yDirection = otherPosition.getX() - \getY();
+      List<Direction> result = new ArrayList<Direction>();
+      if xDirection == 0 {
+        result.add(Direction.right);
+        result.add(Direction.left);
+      }
+      else {
+        if xDirection > 0 {
+          result.add(Direction.right);
+        }
+        else {
+          result.add(Direction.left);
+        }
+      }
+      if yDirection == 0 {
+        result.add(Direction.up);
+        result.add(Direction.down);
+      }
+      else {
+        if yDirection > 0 {
+          result.add(Direction.up);
+        }
+        else {
+          result.add(Direction.down);
+        }
+      }
+      return result;
+    }
+    
+    Boolean isWithin(Environment->Position otherPosition, Integer width, Integer height){
+      Integer dX = otherPosition.getX() \- x;
+      Integer dY = otherPosition.getY() \- y;
+      return dX >= 0 && dX <= width && dY >= 0 && dY <= height;
+    }
+    Boolean isWithin(Environment->Position otherPosition, Float range, Double angleLeft, Double angleRight){
+      Integer xDirection = \getX() - otherPosition.getX() ;
+      Integer yDirection = \getY() - otherPosition.getY();
+      Double radius = \Math.sqrt(\Math.pow(xDirection,2.0)+\Math.pow(yDirection,2.0));
+      if xDirection == 0 {
+        if yDirection < 0 {
+          return radius <= range && angleLeft >= \Math.PI * 3.0 / 2.0 && angleRight <= \Math.PI * 3.0 / 2.0;
+        } 
+        else if yDirection > 0 {
+          return radius <= range && angleLeft >= \Math.PI / 2.0 && angleRight <= \Math.PI / 2.0;
+        }
+        else {
+          return true;
+        }
+      }
+      else {
+        Double angle = \Math.atan2(yDirection , xDirection);
+        return radius <= range && angleLeft >= angle && angleRight <= angle;
+      }
+    }
+  }
+  class 'packageName'."environments" Location Environment->Position Environment->Movable {
+    > Float gridFactor = 6f;
+    > Float gridXFactor = gridFactor*1.85f;
+    > Float gridYFactor = gridFactor*3.85f;
+    class Event // {
+      class Move // Area->Event->Tick {
+        Environment->Location actor = null;
+        Direction direction = null;
+         void tick(Double millisSinceLastFrame){
+           Entity->Event event = direction.move(actor);
+           actor.getHost().changeState(ImageStates.idle);
+           if event!=null {
+             actor.getHost().addEvent(event);
+           }
+        }
+      }
+    }
+    Entity host = null;
+    ~Float radius = 0.5f;
+    ~Float facing = 0f;
+    ~Area area = null;
+    ~Tiles->Floor tile = null;
+    void setX(Integer newX) {
+      \super.setX(newX);
+      if host != null {
+        host.getDrawable().setVisualX(((float)newX\+\getY())/'gridXFactor'+"f");
+        host.getDrawable().setVisualY(((float)\getY()\-newX)/'gridYFactor'+"f"\+0.05f);
+      }
+    }
+    void setY(Integer newY) {
+      \super.setY(newY);
+      if host != null {
+        host.getDrawable().setVisualX(((float)\getX()\+newY)/'gridXFactor'+"f");
+        host.getDrawable().setVisualY(((float)newY\-\getX())/'gridYFactor'+"f"\+0.05f);
+      }
+    }
+    void setArea(Area newArea){
+      if host != null {
+        if area != null {
+          area.remove(host);
+        }
+        newArea.add(host);
+      }
+      area = newArea;
+    }
+    Boolean isWithin(Environment->Location otherLocation, Float range, Double angleLeft, Double angleRight){
+      Float tFacing = otherLocation.getFacing();
+      return \super.isWithin(otherLocation, range, angleLeft \+ tFacing, angleRight \+ tFacing);
+    }
+    Boolean isWithin(Environment->Position otherPosition){
+      return \super.isWithin(otherPosition, radius, \Math.PI * 2.0, 0.0);
+    }
+    Entity->List getEntitiesWithin(Float within){
+      return area.getEntitiesWithin(this,within);
+    }
+    Entity->List getEntitiesWithin(Float within, Criteria->Target targetCriteria){
+      return area.getEntitiesWithin(this,within,targetCriteria);
+    }
+    Entity getClosestEntity(Criteria->Target criteria){
+      return area.getClosestEntity(this,criteria);
+    }
+    Area->List getAreasWithTile(Tile->Id tileId, Float range){
+      Area->List result = new Area->List();
+      for Area area: parent.getAreas() {
+        if area.getTileMap().containsKey(tileId) && area.getTileMap().get(tileId).isEmpty() == false {
+          result.add(area);
+        }
+      }
+      return result;
+    }
+    Tile->List getTilesWithin(Float range, Tile->Id id){
+      Tile->List result = new Tile->List();
+      for Tile tile: area.getTileMap().get(id) {
+        if tile.getDistanceTo(this) <= range {
+          result.add(tile);
+        }
+      }
+      return result;
+    }
+    Tiles->Floor getUnexploredPoint(){
+      return area.getUnexploredPoint(host);
+    }
+    void step(Integer speed, Environment->Position otherPosition){
+      \step(speed,\getDirectionOf(otherPosition));
+    }
+    void step(Integer speed, Direction direction){
+      if direction != null {
+        facing = direction.getFloatValue();
+        host.changeState(ImageStates.walk);
+        host.changeState(direction.getStateId());
+        area.addEvent(speed, new Environment->Location->Event->Move(this,direction));
+      }
+    }
+    Boolean isCloseAsPossibleTo(Tile tile){
+      if tile.isPassable(0,0) {
+        return \isWithin(tile);
+      }
+      else {
+        List<Direction> directions = \getDirectionsTo(tile);
+        for Direction direction: directions {
+          Tile neighbour = tile.getNeighbour(direction);
+          if \isCloseAsPossibleTo(neighbour) == true {
+            return true;
+          }
+        }
+        return false;
+      }
+    }
+    void move(Integer xDirection, Integer yDirection){
+      x \+= xDirection;
+      y \+= yDirection;
+    }
+    Entity->Event moveX(Integer xDirection){
+      Tiles->Floor nextTile = area.getFloorTile(x\+xDirection,y);
+      if nextTile == null {
+        return new Entity->Event->FailedToMove(nextTile);
+      }
+      else if nextTile.isPassable("-xDirection",0) {
+        return nextTile.accept(host);
+      }
+      else if nextTile.hasOccupant() {
+        return new Entity->Event->FailedToMove->TileHasOccupant(nextTile,nextTile.getOccupant());
+      }
+      else if nextTile.getTerrain()!=null && nextTile.getTerrain().isPassable("-xDirection",0) == false {
+        return new Entity->Event->FailedToMove->TerrainImpassable(nextTile,nextTile.getTerrain());
+      }
+      else {
+        return new Entity->Event->FailedToMove(nextTile);
+      }
+    }
+    Entity->Event moveY(Integer yDirection){
+      Tiles->Floor nextTile = area.getFloorTile(x,y\+yDirection);
+      if nextTile == null {
+        return new Entity->Event->FailedToMove(nextTile);
+      }
+      else if nextTile.isPassable(0,"-yDirection") {
+        return nextTile.accept(host);
+      }
+      else if nextTile.hasOccupant() {
+        return new Entity->Event->FailedToMove->TileHasOccupant(nextTile,nextTile.getOccupant());
+      }
+      else if nextTile.getTerrain()!=null && nextTile.getTerrain().isPassable(0,"-yDirection") == false {
+        return new Entity->Event->FailedToMove->TerrainImpassable(nextTile,nextTile.getTerrain());
+      }
+      else {
+        return new Entity->Event->FailedToMove(nextTile);
+      }
+    }
+    void moveTo(Environment->Position otherPosition){
+      x = otherPosition.x;
+      y = otherPosition.y;
+      parent = otherPosition.getParent();
+    }
+    void moveTo(Tiles->Floor otherTile){
+      x = otherTile.x;
+      y = otherTile.y;
+      parent = otherTile.getParent();
+      area = otherTile.getArea();
+      tile = otherTile;
+      otherTile.accept(host);
+    }
+    Boolean moveToAround(Tiles->Floor otherTile){
+      if otherTile.hasOccupant() {
+        Set<Tile> investigated = new HashSet<Tile>();
+        Integer extendRadius = 0;
+        Boolean moved = false;
+        while investigated.size() < otherTile.getArea().getTiles().size() {
+          Tiles->Floor investigate = otherTile.getArea().getTile(otherTile.getX()+1,otherTile.getY());
+          if investigate != null {
+            moved = \moveToAround(investigate, investigated, extendRadius);
+          }
+          investigate = otherTile.getArea().getTile(otherTile.getX()-1, otherTile.getY());
+          if moved == false &&investigate != null {
+            moved = \moveToAround(investigate, investigated, extendRadius);
+          }
+          investigate = otherTile.getArea().getTile(otherTile.getX(), otherTile.getY()+1);
+          if moved == false && investigate != null {
+            moved = \moveToAround(investigate, investigated, extendRadius);
+          }
+          investigate = otherTile.getArea().getTile(otherTile.getX(), otherTile.getY()-1);
+          if moved == false && investigate != null {
+            moved = \moveToAround(investigate, investigated, extendRadius);
+          }
+          if moved == true {
+            return true;
+          }
+          extendRadius \+= 1;
+        }
+        return moved;
+      }
+      else {
+        \moveTo(otherTile);
+        return true;
+      }
+    }
+    Boolean moveToAround(Tiles->Floor otherTile, Set<Tile> investigated, Integer extendRadius){
+      if extendRadius == 0 && investigated.add(otherTile) {
+        if otherTile.hasOccupant() == false {
+          \moveTo(otherTile);
+          return true;
+        }
+        else {
+          return false;
+        }
+      }
+      else {
+        Tiles->Floor investigate = otherTile.getArea().getTile(otherTile.getX()+1,otherTile.getY());
+        Boolean moved = false;
+        if investigate != null {
+          moved = \moveToAround(investigate, investigated, extendRadius);
+        }
+        investigate = otherTile.getArea().getTile(otherTile.getX()-1, otherTile.getY());
+        if moved == false &&investigate != null {
+          moved = \moveToAround(investigate, investigated, extendRadius\-1);
+        }
+        investigate = otherTile.getArea().getTile(otherTile.getX(), otherTile.getY()+1);
+        if moved == false && investigate != null {
+          moved = \moveToAround(investigate, investigated, extendRadius\-1);
+        }
+        investigate = otherTile.getArea().getTile(otherTile.getX(), otherTile.getY()-1);
+        if moved == false && investigate != null {
+          moved = \moveToAround(investigate, investigated, extendRadius\-1);
+        }
+        return moved;
+      }
+    }
+    
+    Tiles->Floor->Way getWay(Tiles->Floor endTile){
+      Tiles->Floor->Path path = new Tiles->Floor->Path(null,tile,endTile);
+      Tiles->Floor->Path->Ways ways = new Tiles->Floor->Path->Ways();
+      ways.add(path);
+      Set<Tiles\>Floor> investigated = new HashSet<Tiles\>Floor>();
+      investigated.add(null);
+      ArrayList<Tiles\>Floor\>Path> tried = new ArrayList<Tiles\>Floor\>Path>(); 
+      while path.getTile() != endTile && ways.isEmpty() == false {
+        path = ways.pollLast();
+        tried.add(path);
+        Set<Tiles\>Floor> neighbours = new HashSet<Tiles\>Floor>();
+        neighbours.addAll(path.getTile().getNeighbours());
+        neighbours.removeAll(path);
+        for Tiles->Floor neighbour: neighbours {
+          ways.add(new Tiles->Floor->Path(path,neighbour,endTile));
+        }
+      }
+      if path.getTile() == endTile {
+        return new Tiles->Floor->Way(path);
+      }
+      else {
+        System.err.println('' "Could not make path!" '');
+        for Tiles->Floor->Path trie: tried {
+          System.out.println(path);
+        }
+        return null;
+      }
+    }
+  }
+  interface 'packageName'."environments" FactoryHelper {
+    void populate(Environment client, Float x, Float y){}
+  }
+  interface 'packageName'."environments" Factory {
+    Environment create(){}
+  }
+  void load(){
+    Area newArea = areaGenerator.generate();
+    if startArea == null {
+      startArea = newArea;
+    }
+    if newArea != null {
+      newArea.load();
+      \add(newArea);
+    }
+  }
+  void tick(Double millisSinceLastFrame){
+    List<Area> currentlyActive = new ArrayList<Area>();
+    currentlyActive.addAll(activeAreas.keySet());
+    for Area activeArea: currentlyActive {
+      activeArea.tick(millisSinceLastFrame);
+    }
+  }
+> void setup(ParseContext data){
+    \createList(Tile);
+    \createList(Area);
+  }
+> void declaration(IToken declarationToken){
+    String mapName = 'declarationToken->"map_header"->"mapName"';
+    
+    Environments += class 'packageName'."environments" mapName Environment {
+      void load(){
+        super.load();
+      }
+    }
+    Environments->\mapName += class 'packageName'."environments" Factory \Object Environment->Factory {
+        Environment create(){
+          return new Environments->'mapName'();
+        }
+      }
+    Environments->*"create".prependToBody(|
+      if "environmentName".equals(''mapName'') {
+        return new Environments->'mapName'();
+      }|);
+    List<String> underneathTiles = new ArrayList<String>();
+    List<String> nodeTiles = new ArrayList<String>();
+    List<String> backgroundTiles = new ArrayList<String>();
+    
+    Tiles += class mapName // {}
+    EntryPoints += class mapName // {}
+    declarationToken : element : map_header {
+      element : atom : IMPORT_TILE {
+        atom : quark : tile_declaration {
+          Tiles.declaration(quark, mapName,underneathTiles);
+        }
+      }
+    }
+    for String tileName: underneathTiles {
+      Environments->\mapName->*.prependToBody(|floorTiles.add(new Tiles->'mapName'->'tileName'->Factory());|);
+    }
+    Areas += class mapName / Area / {
+    }
+    Areas->\mapName += class Generator / Area->Generator / {
+      Environment parent = null;
+      Area generate(){
+        Float chance = Range.getRandomFloat();
+      }
+    }
+    Area->Generators += class mapName // {}
+    Area->TerrainChoice += class mapName // {}
+    ~Boolean isFirst = true;
+    ~Double previousChance = 0.0;
+    declarationToken : area : area_declaration {
+      previousChance = Area.declaration(area,mapName, underneathTiles,isFirst,previousChance);
+      isFirst = false;
+    }
+    Areas->\mapName->Generator->*"generate".appendToBody(|return null;|);
+    Environments->\mapName->*.prependToBody(|"areaGenerator" = new Areas->'mapName'->Generator(this);|);
+    Environments->\mapName->*.prependToBody({
+        if name == null {
+          name = ''mapName'';
+        }
+      });
+  }
+}
+class 'packageName'."environments" Environments {
+  @Environment create(String "environmentName"){
+    return null;
+  }
+}
+class 'packageName'."environments" Direction {
+  Entity->Event move(Environment->Movable movable){
+    return null;
+  }
+  Float getFloatValue(){
+    return null;
+  }
+  ImageStates getStateId(){
+    return null;
+  }
+  @Direction->Right right = new Direction->Right();
+  class Right / Direction / {
+    Entity->Event move(Environment->Movable movable){
+      return movable.moveX(1);
+    }
+    Float getFloatValue(){
+      return 0f;
+    }
+    ImageStates getStateId(){
+      return ImageStates.right;
+    }
+  }
+  @Direction->Left left = new Direction->Left();
+  class Left / Direction / {
+    Entity->Event move(Environment->Movable movable){
+      return movable.moveX(-1);
+    }
+    Float getFloatValue(){
+      return (float)Math.PI;
+    }
+    ImageStates getStateId(){
+      return ImageStates.left;
+    }
+  }
+  @Direction->Up up = new Direction->Up();
+  class Up / Direction / {
+    Entity->Event move(Environment->Movable movable){
+      return movable.moveY(1);
+    }
+    Float getFloatValue(){
+      return (float)(Math.PI/2.0);
+    }
+    ImageStates getStateId(){
+      return ImageStates.right;
+    }
+  }
+  @Direction->Down down = new Direction->Down();
+  class Down / Direction / {
+    Entity->Event move(Environment->Movable movable){
+      return movable.moveY(-1);
+    }
+    Float getFloatValue(){
+      return (float)(Math.PI*1.5);
+    }
+    ImageStates getStateId(){
+      return ImageStates.left;
+    }
+  }
+}

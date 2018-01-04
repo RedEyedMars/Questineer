@@ -1,26 +1,24 @@
 
 >physical.asps
+stick
+	hp 100
+	dmg 1
+	def 0
+	value 0
+	weight 5
 dagger
-	sharp if event->item->hp > 6
-	dull  if event->item->hp < 3
-	DaggerThrow if event->host has HandyWithAKnife
+	sharp if hp > 6
+	dull  if hp < 3
+	DaggerThrow if host has HandyWithAKnife
 	hp 10-15
-	dmg 0.15-0.175%STR + 0.1-0.125%DEX
-	def 20-30%DEX
+	dmg 2-3
+	def 1
 	value 50-100
-	post_attack {
-		if event->damage->hit & 10% chance{
-			if event->attacker->dex > event->defender->dex {
-				if 50% chance{
-					event->defender gains bleeding
-				}
-			}
-			else {
-				if event->defender->dex - event->attacker->dex < 10 {
-					if 20% chance{
-						event->defender gains bleeding
-					}
-				}
-			}
+	weight 3
+	hit
+		5% chance if attacker->dex > defender->dex {
+		  defender gains bleeding
 		}
-	}
+		2% chance if defender->dex - attacker->dex < 10 {
+		  defender gains bleeding
+		}

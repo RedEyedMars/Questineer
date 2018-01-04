@@ -3,9 +3,11 @@ Wild
 	join default if spawned in Forest
 HeroesGuild
 	start default on load
-	join default if spawned in Guild
+	join default if host is a *.Hero
 	joined {
-	  event->recruit.join(new Associations.Party(null, event->recruit->name + "\'s Party"))
+	  recruit join Party(recruit->name + "\'s Party") null
+	  recruit gains Swing
+	  recruit.equip(new Items.Stick())
 	}
 Party
 Hive

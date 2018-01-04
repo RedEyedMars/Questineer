@@ -17,6 +17,12 @@ public class TypeName extends ConcreteRule {
 	public void setup(){
 		set(
 				new ChainParser(
+					new OptionalParser(
+							
+								new ChainParser(
+									ConditionTokens.STAR,
+									new AddTokenParser(
+										DrawableTokens.DOT,"findType"))),
 					new AddTokenParser(
 						AssociationTokens.NAME,"typeName"),
 					new ManyParser(

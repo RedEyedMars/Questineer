@@ -70,7 +70,7 @@ public class Relationship extends ExternalClassEntry {
 	
 public void setup(final ParseContext data)  {
 	MainFlow.methods.createListMap(MainFlow.classes.RelationshipClass.ReasonClass,MainFlow.classes.IntClass);
-MainFlow.classes.RelationshipClass.addVariable(new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("ListMaps")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Reasons")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("_Int"))))),"", /*Name*/new ExternalStatement(new StringEntry("influences"))));
+MainFlow.classes.RelationshipClass.addVariable(new ExternalVariableEntry(true,false, false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("ListMaps")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Reasons")))), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("_Int"))))),"", /*Name*/new ExternalStatement(new StringEntry("influences"))));
 }
 	
 public void declaration(final IToken declarationToken)  {
@@ -123,11 +123,11 @@ MainFlow.classes.RelationshipClass.ReasonsClass.getSubClass(reasonName.toString(
 	});
        /* Variables */ 
 	   /* Methods */
-		add_method_188(); 
+		add_method_200(); 
 	   /* Classes */
 	}
 	
-		private void add_method_188() {
+		private void add_method_200() {
 	 		addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Relationship")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Reason"))))),"", /*Exac*/new ExternalStatement(new StringEntry("create")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), "", /*Body*/new ExternalStatement.Body(
 		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Relationship")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Reasons")))), /*TypeName*/new ExternalStatement.TypeName(/*Enty*/new ExternalStatement(new StringEntry(reasonName.toString())))))),new ExternalStatement.Parameters()))))));
 	 	}
@@ -138,7 +138,7 @@ MainFlow.classes.RelationshipClass.ReasonsClass.getSubClass(reasonName.toString(
 		if(__element__KEY.getName().equals("variableIndex")){ final IToken element = declarationToken.get(__element__KEY);
 			final String index = element.toString();
 			final String variableName = "_"+index.toString();
-MainFlow.classes.RelationshipClass.ReasonsClass.addVariable(new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("String"))),"", /*Enty*/new ExternalStatement(new StringEntry(variableName.toString()))));
+MainFlow.classes.RelationshipClass.ReasonsClass.addVariable(new ExternalVariableEntry(false,false, false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("String"))),"", /*Enty*/new ExternalStatement(new StringEntry(variableName.toString()))));
 			descriptionBuilder.append("\"+_"+variableName+"+\"");
 		}
 		if(__element__KEY.getName().equals("description")){ final IToken element = declarationToken.get(__element__KEY);
@@ -175,6 +175,38 @@ MainFlow.classes.RelationshipClass.ReasonsClass.addVariable(new ExternalVariable
 }
 
 
+	public final Factory FactoryClass = new Factory();
+	public class Factory extends ExternalClassEntry {
+
+
+
+
+	public void __INIT__(){
+		super.__SETUP__(
+		null, 
+		new Entry(){
+			public void get(StringBuilder __BUILDER__){
+			}
+		}, new StringEntry("Factory"), "class ", null, new ArrayList<Entry>(Arrays.asList(new Entry[]{})), 
+		new Entry(){
+		public void get(StringBuilder builder){
+			builder.append("static class ");
+			new StringEntry("Factory").get(builder);
+			new StringEntry("").get(builder);
+		}
+	});	
+       /* Variables */ 
+	   /* Methods */
+		add_method_201(); 
+	   /* Classes */
+	}
+	
+		private void add_method_201() {
+	 		addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Relationship"))),"", /*Exac*/new ExternalStatement(new StringEntry("create")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), "", /*Body*/new ExternalStatement.Body(
+		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*NObj*/new ExternalStatement.NewObject(/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Relationship"))),new ExternalStatement.Parameters()))))));
+	 	}
+	
+}
 	public final Reason ReasonClass = new Reason();
 	public class Reason extends ExternalClassEntry {
 
@@ -209,11 +241,11 @@ MainFlow.classes.RelationshipClass.ReasonsClass.addVariable(new ExternalVariable
 	});	
        /* Variables */ 
 	   /* Methods */
-		add_method_191(); 
+		add_method_204(); 
 	   /* Classes */
 	}
 	
-		private void add_method_191() {
+		private void add_method_204() {
 	 		addMethod(new ExternalMethodEntry(2, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Relationship")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Reason"))))),"", /*Exac*/new ExternalStatement(new StringEntry("create")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), "", /*Body*/new ExternalStatement.Body(
 			/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))))));
 	 	}
@@ -242,29 +274,29 @@ MainFlow.classes.RelationshipClass.ReasonsClass.addVariable(new ExternalVariable
 		}
 	});	
        /* Variables */
-		add_variable_257();
-		add_variable_258(); 
+		add_variable_307();
+		add_variable_308(); 
 	   /* Methods */
-		add_method_189();
-		add_method_190(); 
+		add_method_202();
+		add_method_203(); 
 	   /* Classes */
-		add_subclass_87();
+		add_subclass_96();
 	}
-		private void add_variable_257() {
-	 		addVariable(new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("String"))),"", /*Name*/new ExternalStatement(new StringEntry("name")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))));
+		private void add_variable_307() {
+	 		addVariable(new ExternalVariableEntry(true,false, false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("String"))),"", /*Name*/new ExternalStatement(new StringEntry("name")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))));
 	 	}
-		private void add_variable_258() {
-	 		addVariable(new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("String"))),"", /*Name*/new ExternalStatement(new StringEntry("description")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))));
+		private void add_variable_308() {
+	 		addVariable(new ExternalVariableEntry(true,false, false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("String"))),"", /*Name*/new ExternalStatement(new StringEntry("description")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))));
 	 	}
 	
-		private void add_method_189() {
-	 		addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("boolean"))),"", /*Exac*/new ExternalStatement(new StringEntry("equals")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Object"))),"", /*Name*/new ExternalStatement(new StringEntry("otherReason")))}), "", /*Body*/new ExternalStatement.Body(
+		private void add_method_202() {
+	 		addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("boolean"))),"", /*Exac*/new ExternalStatement(new StringEntry("equals")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false,false, false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Object"))),"", /*Name*/new ExternalStatement(new StringEntry("otherReason")))}), "", /*Body*/new ExternalStatement.Body(
 		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Optr*/new ExternalStatement("&&", /*Optr*/new ExternalStatement("!=", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("otherReason")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null")))), /*Call*/new ExternalStatement("",
 			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("((Reason)otherReason)"))), /*Name*/new ExternalStatement(new StringEntry("name"))), /*Enty*/new ExternalStatement(new StringEntry("equals"))),
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
 			 		new ExternalStatement.Parameters(/*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("name"))))))))))));
 	 	}
-		private void add_method_190() {
+		private void add_method_203() {
 	 		addMethod(new ExternalMethodEntry(1, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("int"))),"", /*Exac*/new ExternalStatement(new StringEntry("hashCode")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{}), "", /*Body*/new ExternalStatement.Body(
 		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
 			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("name"))), /*Enty*/new ExternalStatement(new StringEntry("hashCode"))),
@@ -272,7 +304,7 @@ MainFlow.classes.RelationshipClass.ReasonsClass.addVariable(new ExternalVariable
 			 		new ExternalStatement.Parameters())))))));
 	 	}
 	
-		private void add_subclass_87() {
+		private void add_subclass_96() {
 	 		addSubClass(MainFlow.classes.RelationshipClass.ReasonClass.FactoryClass);
 	 	}
 }
@@ -305,12 +337,12 @@ MainFlow.classes.RelationshipClass.ReasonsClass.addVariable(new ExternalVariable
 	});	
        /* Variables */ 
 	   /* Methods */
-		add_method_192(); 
+		add_method_205(); 
 	   /* Classes */
 	}
 	
-		private void add_method_192() {
-	 		addMethod(new ExternalMethodEntry(1, true,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Relationship")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Reason"))))),"", /*Exac*/new ExternalStatement(new StringEntry("create")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("String"))),"", /*Name*/new ExternalStatement(new StringEntry("reasonName")))}), "", /*Body*/new ExternalStatement.Body(
+		private void add_method_205() {
+	 		addMethod(new ExternalMethodEntry(1, true,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Relationship")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Reason"))))),"", /*Exac*/new ExternalStatement(new StringEntry("create")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false,false, false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("String"))),"", /*Name*/new ExternalStatement(new StringEntry("reasonName")))}), "", /*Body*/new ExternalStatement.Body(
 		/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("return ")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("null"))))))));
 	 	}
 	
@@ -342,20 +374,21 @@ MainFlow.classes.RelationshipClass.ReasonsClass.addVariable(new ExternalVariable
 		}
 	});
        /* Variables */
-		add_variable_252(); 
+		add_variable_302(); 
 	   /* Methods */
-		add_method_187(); 
+		add_method_199(); 
 	   /* Classes */
-		add_subclass_88();
-		add_subclass_89();
+		add_subclass_95();
+		add_subclass_97();
+		add_subclass_98();
 	}
-		private void add_variable_252() {
-	 		addVariable(new ExternalVariableEntry(false, true, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))),"", /*Name*/new ExternalStatement(new StringEntry("influence")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0"))))));
+		private void add_variable_302() {
+	 		addVariable(new ExternalVariableEntry(true,false, false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))),"", /*Name*/new ExternalStatement(new StringEntry("influence")), /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("0"))))));
 	 	}
 	
-		private void add_method_187() {
-	 		addMethod(new ExternalMethodEntry(0, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))),"", /*Name*/new ExternalStatement(new StringEntry("influence")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Relationship")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Reason"))))),"", /*Name*/new ExternalStatement(new StringEntry("reason"))),
-/*PARAMS*/				new ExternalVariableEntry(false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))),"", /*Name*/new ExternalStatement(new StringEntry("amount")))}), "", /*Body*/new ExternalStatement.Body(
+		private void add_method_199() {
+	 		addMethod(new ExternalMethodEntry(0, false,/*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("void"))),"", /*Name*/new ExternalStatement(new StringEntry("influence")), /*Parameters*/Arrays.asList(new ExternalVariableEntry[]{new ExternalVariableEntry(false,false, false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new ExternalStatement(".", /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Relationship")), /*TypeName*/new ExternalStatement.TypeName(new StringEntry("Reason"))))),"", /*Name*/new ExternalStatement(new StringEntry("reason"))),
+/*PARAMS*/				new ExternalVariableEntry(false,false, false, /*TypeName*/new ExternalStatement.TypeName(/*TypeName*/new ExternalStatement.TypeName(new StringEntry("Integer"))),"", /*Name*/new ExternalStatement(new StringEntry("amount")))}), "", /*Body*/new ExternalStatement.Body(
 	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Name*/new ExternalStatement(/*Call*/new ExternalStatement("",
 			 	new ExternalStatement(".", /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("influences"))), /*Enty*/new ExternalStatement(new StringEntry("add"))),
 			 	new ExternalStatement(new StringEntry("("),new StringEntry(")"),"",
@@ -364,10 +397,13 @@ MainFlow.classes.RelationshipClass.ReasonsClass.addVariable(new ExternalVariable
 	/*Elem*/new ExternalStatement(new TabEntry(new StringEntry("")), new StringEntry(";"), /*Optr*/new ExternalStatement("+=", /*Name*/new ExternalStatement(/*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("influence")))), /*Acss*/new ExternalStatement(/*Name*/new ExternalStatement(new StringEntry("amount"))))))));
 	 	}
 	
-		private void add_subclass_88() {
+		private void add_subclass_95() {
+	 		addSubClass(MainFlow.classes.RelationshipClass.FactoryClass);
+	 	}
+		private void add_subclass_97() {
 	 		addSubClass(MainFlow.classes.RelationshipClass.ReasonClass);
 	 	}
-		private void add_subclass_89() {
+		private void add_subclass_98() {
 	 		addSubClass(MainFlow.classes.RelationshipClass.ReasonsClass);
 	 	}
 }

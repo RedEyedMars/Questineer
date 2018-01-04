@@ -23,8 +23,10 @@ public class ItemTokens extends ParseList {
 	public static final ExactParser DMG = new ExactParser("DMG","itemTokens","dmg");
 	public static final ExactParser VAL = new ExactParser("VAL","itemTokens","value");
 	public static final ExactParser WEI = new ExactParser("WEI","itemTokens","weight");
+	public static final ExactParser HIT = new ExactParser("HIT","itemTokens","hit");
 	public static final ExactParser NEWTAB = new ExactParser("NEWTAB","itemTokens","\n\t");
+	public static final ExactParser NEWTABTAB = new ExactParser("NEWTABTAB","itemTokens","\n\t\t");
 
 	public static final ChoiceParser parser = new ChoiceParser(
-				NAME,WILD,ITMS,HP,DEF,DMG,VAL,WEI,NEWTAB);
+				NAME,WILD,ITMS,HP,DEF,DMG,VAL,WEI,HIT,NEWTAB,NEWTABTAB);
 }

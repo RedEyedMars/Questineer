@@ -1,0 +1,48 @@
+class 'packageName'."entities"."mods"."traits" Trait \Object Source {
+  class 'packageName'."entities"."mods"."traits" Id {
+  }
+  Trait->Id getId(){
+    return null;
+  }
+  Boolean hasRequirements(Entity "candidate"){
+    return false;
+  }
+  String "name";
+  String "description";
+}
+class 'packageName'."entities"."mods"."traits" Traits {
+  @Trait create(String "traitName"){
+    return null;
+  }
+> Statement getId(String name){
+    return |Traits->'name'.id|;
+  }
+> void declaration(IToken declarationToken){
+    String traitName = ^declarationToken->"traitName";
+	Body gainBody = new Body ();
+	Body lossBody = new Body ();
+	Body requirementsBody = new Body ();
+	Statement eventHost = |"event".getHost()|;
+	Statement candidate = |"candidate"|;
+	declarationToken : element : impose {
+	   gainBody.add(Entity.getImposition(element,true,eventHost));
+	   lossBody.add(Entity.getImposition(element,false,eventHost));
+	}
+	Traits += class 'packageName'."entities"."mods"."traits" traitName Trait {
+	  @Trait->Id "id" = new Trait->Id();
+	  String getName(){
+	    return ''traitName'';
+	  }
+	  Boolean hasRequirements(Entity "candidate"){ return true; }
+	}
+	Map<String, Body > eventBodies = new HashMap<String, Body >();
+	eventBodies.put("gain", gainBody);
+	eventBodies.put("loss", lossBody);
+	Events.addEventMethodsExclusive(Traits->'traitName',eventBodies);
+	declarationToken : element : requirement {
+	   Traits->'traitName'.getMethod("hasRequirements").prependToBody(| if `\getRequirement(element, candidate, false)` { return false; }|);
+	}
+	Traits.getMethod("create").prependToBody(| if ''traitName''.equals("traitName"){
+      return new Traits->'traitName'(); }|);
+  }
+}

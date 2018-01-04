@@ -9,7 +9,9 @@ itemToken-s
 	"dmg" as DMG
 	"value" as VAL
 	"weight" as WEI
+	"hit" as HIT
 	"\n\t" as NEWTAB
+	"\n\t\t" as NEWTABTAB
 itemBrace-s are Braced 
 	[,.] as ITEM_FILE with WILD as item_file_name 
 	[\n\t,;;] as ITEM_DESCRIPTION with WILD as description
@@ -18,12 +20,15 @@ itemImport-s are Import
 item_declaration
 	NAME as itemName in item_names item_parameter* ( NEWTAB item_parameter* )*
 item_parameter is silent
-	HP statRange as hp
-	DMG statRange as attack
-	DEF statRange as defense
-	VAL statRange as value
-	WEI statRange as weight
+	HP stat_range as hp
+	DMG stat_range as attack
+	DEF stat_range as defense
+	VAL stat_range as value
+	WEI stat_range as weight
+	( HIT ( NEWTABTAB item_hit_element)* ) as hit
 	( event_name animation? BODY ) as event
 	( aspect_name ( IF boolean_statement )? ) as gain_aspect
 	( trait_name ( IF boolean_statement )? ) as gain_trait
 	( attack_name ( IF boolean_statement )? ) as gain_attack
+item_hit_element
+	has_chance ( IF boolean_statement )? BODY

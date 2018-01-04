@@ -1,9 +1,9 @@
 attacking(Float range) Attack
-	Attack target;;
+	~Attack target~
 supporting Support
-	Keep everyone safe;;
+	~Keep everyone safe~
 questing Quest
-	Go to certain places, do certain things, and reap their rewards;;
+	~Go to certain places, do certain things, and reap their rewards.~
 	+ Quest currentQuest = null
 	succeed if currentQuest!=null & currentQuest->status == Quest=>SUCCESS
 	fail if failed | currentQuest!=null & currentQuest->status == Quest=>FAIL
@@ -18,7 +18,7 @@ questing Quest
 	  
 	}
 hunt(Criteria.Target criteriaToTarget, Tile.Id huntingGrounds, Float range, Events.Die.Listener deathListener, ActivityCriteria toSucceed) Attack
-	Hunt monsters until told otherwise.;;
+	~Hunt monsters until told otherwise.~
 	+ Area.List toHuntLocations
 	+ Area.List huntedLocations
 	+ Area      toHunt
@@ -33,18 +33,18 @@ hunt(Criteria.Target criteriaToTarget, Tile.Id huntingGrounds, Float range, Even
 	}
 	step {
 	  if host->location->area != toHunt {
-	    host.start(new Activities.GotoArea(toHunt))
+	    host start gotoArea toHunt
 	  }
 	  else {
 	    Entity.List entitiesToTarget = host->location.getEntitiesWithin(50.0,criteriaToTarget)
 	    if !entitiesToTarget.isEmpty() {
 	      entitiesToTarget.sort(new Entity.Comparators.Distance.Ascending(host->location))
-	      host.start(new Activities.Kill(entitiesToTarget.get(0)))
+	      host start kill entitiesToTarget.get(0)
 	    }
 	    else {
 	      Tiles.MonsterDen tileToKill = toHunt.getMonsterDen(huntingGrounds)
 	      if tileToKill != null {
-	        host.start(new Activities.KillDen(tileToKill))
+	        host start killDen tileToKill
 	      }
 	      else if !toHuntLocations.isEmpty() {
 	        huntedLocations.add(toHunt)
@@ -72,53 +72,36 @@ hunt(Criteria.Target criteriaToTarget, Tile.Id huntingGrounds, Float range, Even
 	  return true
 	}
 kill(Entity toKill) Attack
-	Go kill one particular monster.;;
+	~Go kill one particular monster.~
 	+ Activity chaseActivity = null
 	succeed if toKill.isDead()
 	load {
 	  setTargetEntity(toKill)
-	  on(new Events.Idle(event->host,this))
 	}
 	listen {
 	}
 	idle {
-	  Float longestRange = -1.0
-	  for Usable usable : getUsables() {
-	    Float potentialRange = usable.getRange(event->host)
-	    if usable.getTargetCriteria().satisfies(toKill) {
-	      if potentialRange > longestRange {
-	        longestRange = potentialRange
-	      }
-	    }
-	  }
-	  if longestRange >= 0 {
-	    chaseActivity = new Activities.ChasingEntity(25,toKill,longestRange)
-	    event->host.start(chaseActivity)
+	  Usable furthestUsable = getFurthestAvailableUsable(event->host,toKill)
+	  if furthestUsable != null {
+	    chaseActivity = host: start chasingEntity (25, toKill, furthestUsable.getRange(host))
 	  }
 	}
 killDen(Tiles.MonsterDen toKill) Attack
-	Go kill one particular monster den.;;
+	~Go kill one particular monster den.~
 	+ Activity chaseActivity = null
 	succeed if toKill.isDead()
 	load {
 	  setTargetDen(toKill)
-	  Float longestRange = -1.0
-	  for Usable usable : getUsables() {
-	    Float potentialRange = usable.getRange(event->host)
-	    if usable.getTargetCriteria().satisfies(toKill) {
-	      if potentialRange > longestRange {
-	        longestRange = potentialRange
-	      }
-	    }
-	  }
-	  if longestRange >= 0 {
-	    chaseActivity = new Activities.ChasingTile(25,toKill,longestRange)
-	    event->host.start(chaseActivity)
+	}
+	idle {
+	  Usable furthestUsable = getFurthestAvailableUsable(event->host,toKill)
+	  if furthestUsable != null {
+	    chaseActivity = event->host start chasingTile (25, toKill, furthestUsable.getRange(event->host))
 	  }
 	}
 
 chasingEntity(Integer ticks, Entity toChase, Float successRange)
-	Get close to one monster(disregard the path).;;
+	~Get close to one monster(disregard the path).~
 	succeed if host->location.getDistanceTo(toChase->location) <= successRange
 	fail if ticks <= 0
 	tick { ticks -= 1 }
@@ -127,7 +110,7 @@ chasingEntity(Integer ticks, Entity toChase, Float successRange)
 	  return true
 	}
 chasingTile(Integer ticks, Tile toChase, Float successRange)
-	Get close to one particular tile (disregard the path).;;
+	~Get close to one particular tile (disregard the path).~
 	succeed if host->location.getDistanceTo(toChase) <= successRange
 	fail if ticks <= 0
 	tick { ticks -= 1 }
@@ -136,7 +119,7 @@ chasingTile(Integer ticks, Tile toChase, Float successRange)
 	  return true
 	}
 goto(Tiles.Floor destination)
-	Find a particular tile, follow path to get to it.;;
+	~Find a particular tile, follow path to get to it.~
 	succeed if host->location.isCloseAsPossibleTo(destination)
 	+ Area destinationArea = null
 	+ Tiles.Floor.Way way = null
@@ -145,7 +128,7 @@ goto(Tiles.Floor destination)
 	}
 	step {
 	  if host->location->area != destinationArea {
-	    host.start(new Activities.GotoArea(destinationArea))
+	    host start gotoArea destinationArea
 	  }
 	  else {
 	    if way == null {
@@ -156,16 +139,16 @@ goto(Tiles.Floor destination)
 	  return true
 	}
 gotoArea(Area destination)
-	Find a particular tile, follow path to get to it.;;
+	~Find a particular tile, follow path to get to it.~
 	succeed if host->location.getArea() == destination
 	step {
 	  if host->location->area != destination {
-	    host.start(new Activities.Goto(host->location->area.getEntryPointToward(destination)))
+	    host start goto host->location->area.getEntryPointToward(destination)
 	  }
 	  return true
 	}
 Exploring(Integer ticks)
-	Go to unexplored parts of the map.;;
+	~Go to unexplored parts of the map.~
 	+ Tiles.Floor destination = null
 	+ Tiles.Floor.Way way = null
 	succeed if ticks <=0
@@ -193,8 +176,12 @@ Exploring(Integer ticks)
 	  }
 	}
 	listen {
-	  if event.getId() == Entity.Event.FailedToMove.TileHasOccupant=>id {
-	    
-	    Entity.Event.FailedToMove.TileHasOccupant blocked = Entity.Event.FailedToMove.TileHasOccupant<-event
+	  if event is a *.TileHasOccupant  {
+	    *.TileHasOccupant blocked = *.TileHasOccupant<-event
+	    if host.isFriendlyWith(blocked->causalOccupant) {
+	    }
+	    else {
+	      host start kill blocked->causalOccupant
+	    }
 	  }
 	}

@@ -125,11 +125,11 @@ public class Images extends ExternalClassEntry {
        /* Variables */ 
 	   /* Methods */ 
 	   /* Classes */
-		add_subclass_217();
+		add_subclass_223();
 	}
 	
 	
-		private void add_subclass_217() {
+		private void add_subclass_223() {
 	 		addSubClass(MainFlow.classes.ImagesClass.FlippedClass);
 	 	}
 }

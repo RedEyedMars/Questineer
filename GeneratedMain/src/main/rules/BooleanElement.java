@@ -19,6 +19,7 @@ public class BooleanElement extends ConcreteRule {
 		set(
 			new ChoiceParser(
 					Rules.has_chance,
+					Rules.isA_statement,
 					Rules.spawn_statement,
 					Rules.has_statement,
 					Rules.statement));

@@ -29,12 +29,12 @@ public class SkillElement extends ConcreteRule {
 						
 						new ChainParser(
 							SupportTokens.RANGE,
-							Rules.statRange),"range"),
+							Rules.stat_range),"range"),
 					new AddTokenParser(
 						
 						new ChainParser(
 							SupportTokens.COOLDOWN,
-							Rules.statRange),"cooldown"),
+							Rules.stat_range),"cooldown"),
 				new ChainParser(
 					SkillTokens.USE,
 					new AddTokenParser(

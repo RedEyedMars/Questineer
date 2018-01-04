@@ -20,6 +20,7 @@ public class Rulenames extends ParseList {
 	public static final RegexParser aspect_declaration = new RegexParser("aspect_declaration","rulenames","aspect_declaration");
 	public static final RegexParser item_declaration = new RegexParser("item_declaration","rulenames","item_declaration");
 	public static final RegexParser item_parameter = new RegexParser("item_parameter","rulenames","item_parameter");
+	public static final RegexParser item_hit_element = new RegexParser("item_hit_element","rulenames","item_hit_element");
 	public static final RegexParser affinity_declaration = new RegexParser("affinity_declaration","rulenames","affinity_declaration");
 	public static final RegexParser condition_declaration = new RegexParser("condition_declaration","rulenames","condition_declaration");
 	public static final RegexParser condition_element = new RegexParser("condition_element","rulenames","condition_element");
@@ -43,7 +44,7 @@ public class Rulenames extends ParseList {
 	public static final RegexParser association_join = new RegexParser("association_join","rulenames","association_join");
 	public static final RegexParser association_event = new RegexParser("association_event","rulenames","association_event");
 	public static final RegexParser reason_declaration = new RegexParser("reason_declaration","rulenames","reason_declaration");
-	public static final RegexParser statRange = new RegexParser("statRange","rulenames","statRange");
+	public static final RegexParser stat_range = new RegexParser("stat_range","rulenames","stat_range");
 	public static final RegexParser entity_declaration = new RegexParser("entity_declaration","rulenames","entity_declaration");
 	public static final RegexParser entity_definition = new RegexParser("entity_definition","rulenames","entity_definition");
 	public static final RegexParser area_shape_name = new RegexParser("area_shape_name","rulenames","area_shape_name");
@@ -71,12 +72,15 @@ public class Rulenames extends ParseList {
 	public static final RegexParser acquisition = new RegexParser("acquisition","rulenames","acquisition");
 	public static final RegexParser imposition = new RegexParser("imposition","rulenames","imposition");
 	public static final RegexParser quest_addition = new RegexParser("quest_addition","rulenames","quest_addition");
+	public static final RegexParser activity_statement = new RegexParser("activity_statement","rulenames","activity_statement");
+	public static final RegexParser association_statement = new RegexParser("association_statement","rulenames","association_statement");
 	public static final RegexParser if_statement = new RegexParser("if_statement","rulenames","if_statement");
 	public static final RegexParser for_statement = new RegexParser("for_statement","rulenames","for_statement");
 	public static final RegexParser while_statement = new RegexParser("while_statement","rulenames","while_statement");
 	public static final RegexParser boolean_statement = new RegexParser("boolean_statement","rulenames","boolean_statement");
 	public static final RegexParser boolean_element = new RegexParser("boolean_element","rulenames","boolean_element");
 	public static final RegexParser has_chance = new RegexParser("has_chance","rulenames","has_chance");
+	public static final RegexParser isA_statement = new RegexParser("isA_statement","rulenames","isA_statement");
 	public static final RegexParser spawn_statement = new RegexParser("spawn_statement","rulenames","spawn_statement");
 	public static final RegexParser has_statement = new RegexParser("has_statement","rulenames","has_statement");
 	public static final RegexParser requirement = new RegexParser("requirement","rulenames","requirement");
@@ -115,5 +119,5 @@ public class Rulenames extends ParseList {
 	public static final RegexParser layer_declaration = new RegexParser("layer_declaration","rulenames","layer_declaration");
 
 	public static final ChoiceParser parser = new ChoiceParser(
-				base,import_any,aspect_declaration,item_declaration,item_parameter,affinity_declaration,condition_declaration,condition_element,trait_declaration,trait_element,activity_declaration,activity_element,attack_declaration,attack_element,support_declaration,support_element,quest_type_declaration,quest_type_element,quest_destination,quest_tile_description,skill_declaration,skill_element,association_declaration,association_element,association_start,association_join,association_event,reason_declaration,statRange,entity_declaration,entity_definition,area_shape_name,map_header,area_declaration,area_element,patch_element,shape_type,tile_declaration,direction_name,edge_definition,edge_if,edge_if_operator,tile_definition,tile_definition_element,tile_element,tile_rate,tile_cost,payment_type_declaration,event_declaration,num,range,operator,body_element,acquisition,imposition,quest_addition,if_statement,for_statement,while_statement,boolean_statement,boolean_element,has_chance,spawn_statement,has_statement,requirement,requirement_element,return_statement,statement,variable_declaration,variable_header,variable_call,variable_call_element,variable_group,method,type_name,animation_type_declaration,animation_type_element,animation_type_boolean,animation_type_variable_declaration,animation_variable_value,animation_variable_value_basic,anit_continuation_operator,anit_operator,anit_arithmetic_operator,anit_boolean_operator,image_type,image_declaration,animation_state,image_id,animation,multiple_drawable_declaration,drawable_declaration,drawable_grid_element,drawable_multiple_element,drawable_arthmetic_operator,drawable_multiple_value,colour_declaration,layer_declaration);
+				base,import_any,aspect_declaration,item_declaration,item_parameter,item_hit_element,affinity_declaration,condition_declaration,condition_element,trait_declaration,trait_element,activity_declaration,activity_element,attack_declaration,attack_element,support_declaration,support_element,quest_type_declaration,quest_type_element,quest_destination,quest_tile_description,skill_declaration,skill_element,association_declaration,association_element,association_start,association_join,association_event,reason_declaration,stat_range,entity_declaration,entity_definition,area_shape_name,map_header,area_declaration,area_element,patch_element,shape_type,tile_declaration,direction_name,edge_definition,edge_if,edge_if_operator,tile_definition,tile_definition_element,tile_element,tile_rate,tile_cost,payment_type_declaration,event_declaration,num,range,operator,body_element,acquisition,imposition,quest_addition,activity_statement,association_statement,if_statement,for_statement,while_statement,boolean_statement,boolean_element,has_chance,isA_statement,spawn_statement,has_statement,requirement,requirement_element,return_statement,statement,variable_declaration,variable_header,variable_call,variable_call_element,variable_group,method,type_name,animation_type_declaration,animation_type_element,animation_type_boolean,animation_type_variable_declaration,animation_variable_value,animation_variable_value_basic,anit_continuation_operator,anit_operator,anit_arithmetic_operator,anit_boolean_operator,image_type,image_declaration,animation_state,image_id,animation,multiple_drawable_declaration,drawable_declaration,drawable_grid_element,drawable_multiple_element,drawable_arthmetic_operator,drawable_multiple_value,colour_declaration,layer_declaration);
 }

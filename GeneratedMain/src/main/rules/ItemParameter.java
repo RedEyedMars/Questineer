@@ -21,23 +21,32 @@ public class ItemParameter extends ConcreteRule {
 				new ChainParser(
 					ItemTokens.HP,
 					new AddTokenParser(
-						Rules.statRange,"hp")),
+						Rules.stat_range,"hp")),
 				new ChainParser(
 					ItemTokens.DMG,
 					new AddTokenParser(
-						Rules.statRange,"attack")),
+						Rules.stat_range,"attack")),
 				new ChainParser(
 					ItemTokens.DEF,
 					new AddTokenParser(
-						Rules.statRange,"defense")),
+						Rules.stat_range,"defense")),
 				new ChainParser(
 					ItemTokens.VAL,
 					new AddTokenParser(
-						Rules.statRange,"value")),
+						Rules.stat_range,"value")),
 				new ChainParser(
 					ItemTokens.WEI,
 					new AddTokenParser(
-						Rules.statRange,"weight")),
+						Rules.stat_range,"weight")),
+					new AddTokenParser(
+						
+						new ChainParser(
+							ItemTokens.HIT,
+							new ManyParser(
+									
+										new ChainParser(
+											ConditionTokens.NEWTABTAB,
+											Rules.item_hit_element))),"hit"),
 					new AddTokenParser(
 						
 						new ChainParser(

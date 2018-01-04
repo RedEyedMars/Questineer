@@ -1,0 +1,188 @@
+#GENERAL
+generalToken-s
+	[[a-zA-Z_][a-zA-Z0-9_]*] as NAME
+	[[-]?\\d+\\Q.\\E\\d+] as FLOAT
+	[[-]?\\d+] as INTEGER
+	[.*] as WILD
+	[[<>][=]?] as ORDINAL
+	":" as COLON
+	";" as SEMICOLON
+	".." as DOTDOT
+	"->" as ACCESS
+	"=>" as STATIC_ACCESS
+	"." as DOT
+	"for" as FOR
+	"while" as WHILE
+	"if" as IF
+	"else" as ELSE
+	"=" as EQUALSIGN
+	"==" as EQUALS
+	"!=" as NOTEQUALS
+	"+=" as PLUSEQUALS
+	"-=" as MINUSEQUALS
+	"+" as PLUS
+	"-" as MINUS
+	"*" as MULTIPLY
+	"/" as DIVIDE
+	"&" as AND
+	"|" as OR
+	"!" as NOT
+	"%" as PERCENT
+	"\n" as NEWLINE
+	"," as COMMA
+	"-" as DASH
+	"true" as TRUE
+	"false" as FALSE
+	"null" as NULL
+	"chance" as CHANCE
+	"gains" as GAINS
+	"loses" as LOSES
+	"from" as FROM
+	"this" as THIS
+	"on" as ON
+	"in" as IN
+	"of" as OF
+	"with" as WITH
+	"spawned" as SPAWNED
+	"impose" as IMPOSE
+	"release" as RELEASE
+	"has" as HAS
+	"return" as RETURN
+	"new" as NEW
+	"<-" as CAST_ARROW
+	"<<" as QUEST_ADD
+	"/" as QUEST_SEPARATOR
+	"*" as STAR
+	"Entity" as ENTITY
+	"is" as IS_A_IS
+	"a" as IS_A_A
+	"start" as ACTIVITY_START
+	"join" as ASSOCIATION_JOIN
+generalBrace-s are Braced
+	[\",\"] as QUOTE with WILD as quote
+	[{,}] as BODY with (NEWLINE | COMMENTS | body_element)*
+	[(,)] as METHOD_ARGUMENTS with NEWLINE* statement? ( COMMA NEWLINE* statement)*
+	[(,)] as METHOD_PARAMETERS with ( variable_header ( COMMA variable_header)* )?
+	[(,)] as BRACED_STATEMENT with statement
+	[[,]] as TILE_ID_CHOICE with NAME as tileName+ ( PIPE NAME as tileName+ )*
+	[[,]] as ENTITY_ID_CHOICE with NAME as tileName+ ( PIPE NAME as tileName+ )*
+
+generalAltBrace-s are CharitableBraced
+	[,\n] as description with WILD as description
+
+num is silent
+	FLOAT
+	INTEGER
+range is silent
+	num as left ((DOTDOT|DASH) num as right) PERCENT as percent?
+operator
+	PLUSEQUALS | MINUSEQUALS | PLUS | MINUS | DIVIDE | MULTIPLY | EQUALS | NOTEQUALS | ORDINAL | EQUALSIGN
+
+body_element
+	return_statement
+	if_statement
+	while_statement
+	for_statement
+	(variable_call acquisition) as acquisition
+	(variable_call imposition) as imposition
+	(variable_call quest_addition) as quest_addition
+	activity_statement
+	association_statement
+	variable_declaration
+	statement
+
+acquisition
+	( GAINS | LOSES | PLUS as GAINS | MINUS as LOSES ) as operator ( THIS | aspect_name | condition_name | trait_name | attack_name ) ( FROM NAME as source_name )? 
+imposition
+	IMPOSE as operator INTEGER as amount ON hero_stat
+	RELEASE as operator hero_stat
+	(PLUS|MINUS)+ as operator hero_stat
+quest_addition
+	QUEST_ADD activityname ( statement ( QUEST_SEPARATOR statement )*)?  
+
+activity_statement
+	variable_call COLON? ( ACTIVITY_START ) as method  activityname ( statement | METHOD_ARGUMENTS )
+association_statement
+	variable_call ( ASSOCIATION_JOIN ) as method  association_name METHOD_ARGUMENTS statement as recruiter
+
+if_header silent
+    IF boolean_statement
+if_statement
+	IF boolean_statement NEWLINE* BODY ( NEWLINE* ELSE NEWLINE* ( BODY | IF boolean_statement NEWLINE* BODY ) ) as else_statement*
+
+for_statement
+	(FOR variable_header COLON statement   NEWLINE* ) as fromList BODY
+	(FOR variable_header ORDINAL statement NEWLINE* ) as fromVariable BODY
+while_statement
+	WHILE statement NEWLINE* BODY
+
+boolean_statement
+	(boolean_element ((AND|OR) as operator boolean_element )*
+boolean_element is silent
+	has_chance
+	isA_statement
+	spawn_statement
+	has_statement
+	statement
+has_chance
+	number PERCENT CHANCE
+conditional_chance silent
+	has_chance if_header?
+isA_statement
+	variable_call IS_A_IS IS_A_A  type_name
+spawn_statement
+	SPAWNED IN NAME as environmentName
+has_statement
+	NOT? variable_call HAS requirement
+requirement
+	requirement_element ( OR requirement_element )*
+requirement_element is silent
+	( NOT? (STAT IN NAME as variableName          ) ORDINAL INTEGER ) as require_stat
+	( NOT? (ATTACK NAME as variableName           ) EXP ORDINAL INTEGER ) as require_exp
+	( NOT? (ATTACK NAME as variableName           ) ) as require_attack
+	( NOT? (TRAIT OF NAME as variableName         ) ) as require_trait
+	( NOT? (ASSOCIATION WITH NAME as variableName ) ) as require_association
+	( NOT? hero_stat ORDINAL INTEGER ) as require_stat
+	( NOT? attack_name EXP ORDINAL INTEGER ) as require_exp
+	( NOT? attack_name ) as require_attack
+	( NOT? trait_name ) as require_trait
+	( NOT? association_name ) as require_association
+
+return_statement
+	RETURN statement
+
+statement
+	( ENTITY ENTITY_ID_CHOICE ) as entity_selector
+	(( map_name | STAR ) TILE_ID_CHOICE ) as map_selector
+	activity_statement
+	NOT? variable_call ( operator NEWLINE* statement )*
+
+variable_declaration
+	variable_header ( EQUALSIGN statement )?
+variable_header
+	type_name NAME as variableName
+variable_call
+	range as range ( ACCESS NAME as variableName | DOT method )*
+	( TRUE | FALSE | NULL | FLOAT | INTEGER ) as exact
+	variable_call_element  ( ACCESS NAME as variableName | DOT method )*
+variable_call_element is silent
+	BRACED_STATEMENT as braced
+	( type_name CAST_ARROW  statement ) as cast
+	( type_name STATIC_ACCESS NAME as variableName ) as access_static
+	method | variable_group | NAME as variableName | QUOTE as quote
+variable_group
+	association_name ASSOCIATION?
+	skill_name SKILL?
+	affinity_name AFFINITY
+	attack_name ATTACK?
+	trait_name TRAIT?
+	condition_name CONDITION?
+	activityname ACTIVITY?
+	map_name NAME as symbolName? MAP? TILE?
+
+method
+	NEW type_name METHOD_ARGUMENTS
+	NAME as methodName METHOD_ARGUMENTS
+
+type_name
+	(STAR DOT as findType)? NAME as typeName ( DOT NAME as typeName )*

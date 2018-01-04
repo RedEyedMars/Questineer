@@ -24,12 +24,12 @@ public class AttackElement extends ConcreteRule {
 						
 						new ChainParser(
 							SupportTokens.RANGE,
-							Rules.statRange),"range"),
+							Rules.stat_range),"range"),
 					new AddTokenParser(
 						
 						new ChainParser(
 							SupportTokens.COOLDOWN,
-							Rules.statRange),"cooldown"),
+							Rules.stat_range),"cooldown"),
 					new AddTokenParser(
 						
 						new ChainParser(
@@ -43,7 +43,7 @@ public class AttackElement extends ConcreteRule {
 							
 							new ChoiceParser(
 									new AddTokenParser(
-										Rules.statRange,"by_stat"),
+										Rules.stat_range,"by_stat"),
 									GeneralBraces.BODY)),"damage"),
 					new AddTokenParser(
 						

@@ -1,0 +1,22 @@
+#ITEMS#
+item_names global list with NAME
+
+import_item Imports "entities/items/" FILE_NAME ".itms" = ">" FILE_NAME ".itms" "\n"
+	( comments | import_any |  item_declaration )*
+
+
+item_declaration
+	NAME as itemName in item_names "\n"* DESCRIPTION? item_parameter* ( "\n\t" item_parameter* )*
+item_parameter silent
+	"hp" stat_range as hp
+	"dmg" stat_range as attack
+	"def" stat_range as defense
+	"value" stat_range as value
+	"weight" stat_range as weight
+	( "hit" ( "\n\t\t" item_hit_element)* ) as hit
+	( event_names animation? std_body ) as event
+	( aspect_names if_header? ) as gain_aspect
+	( trait_names  if_header? ) as gain_trait
+	( attack_names if_header? ) as gain_attack
+item_hit_element
+	has_chance if_header? std_body

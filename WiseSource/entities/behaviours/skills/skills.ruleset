@@ -23,7 +23,7 @@ skill_element is silent
 	NEWLINE
 	COMMENTS
 	(REQUIRE boolean_statement) as require
-	(RANGE statRange) as range
-	(COOLDOWN statRange)as cooldown
+	(RANGE stat_range) as range
+	(COOLDOWN stat_range)as cooldown
 	USE BODY as use
 	(MISS (NEWLINE* has_chance ( IF boolean_statement)?) as option* ) as miss

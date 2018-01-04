@@ -7,8 +7,9 @@ hero_stat-s
 	"KNW" as KNW
 	"MND" as MND
 	"CRM" as CRM
-statRange is silent
-	range hero_stat? ( (COMMA|PLUS) range hero_stat? ) as extra*
+stat_range
+	BRACED_STATEMENT hero_stat?      ((PLUS|MULTIPLY|DIVIDE|MINUS) as operator stat_range)?
+	num as left ((DASH|DOTDOT) num as right)? PERCENT as percent? hero_stat?  ((PLUS|MULTIPLY|DIVIDE|MINUS) as operator stat_range)?
 
 entityToken-s
 	[[a-zA-Z_][a-zA-Z0-9_]*] as NAME
@@ -24,7 +25,7 @@ entity_declaration
 entity_definition
 	NEWLINE
 	COMMENTS
-	(hero_stat INTEGER as left (DASH INTEGER as right)?) as statRange (PIPE hero_stat INTEGER as left (DASH INTEGER as right)?) as statRange*
+	(hero_stat INTEGER as left (DASH INTEGER as right)?) as stat_range (PIPE hero_stat INTEGER as left (DASH INTEGER as right)?) as stat_range*
 	( event_name BODY ) as event
 	( skill_name METHOD_ARGUMENTS? ) as skill
 	affinity_name

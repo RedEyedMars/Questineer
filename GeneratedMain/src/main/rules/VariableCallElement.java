@@ -37,7 +37,8 @@ public class VariableCallElement extends ConcreteRule {
 					Rules.variable_group,
 					new AddTokenParser(
 						AssociationTokens.NAME,"variableName"),
-					AnimationBraces.QUOTE));
+					new AddTokenParser(
+						AnimationBraces.QUOTE,"quote")));
 
 	}
 

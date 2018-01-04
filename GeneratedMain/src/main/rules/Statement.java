@@ -30,6 +30,7 @@ public class Statement extends ConcreteRule {
 									new ListNameElementParser("map_names"),
 									ConditionTokens.STAR),
 							GeneralBraces.TILE_ID_CHOICE),"map_selector"),
+					Rules.activity_statement,
 				new ChainParser(
 					new OptionalParser(
 							ConditionTokens.NOT),

@@ -1,0 +1,19 @@
+
+#QUEST#
+import_quest Imports "entities/behaviours/quests/" FILE_NAME ".qsts" = ">" FILE_NAME ".qsts" "\n"
+	( "\n" | comments | quest_type_declaration )*
+
+quest_type_declaration
+	"type" NAME as questName "\n"* DESCRIPTION quest_type_element*
+quest_type_element silent
+	comments
+	"+" variable_declaration
+	( "listen" std_body ) as listen
+	( ( "start" | event_names ) as event_names std_body ) as event_statement
+	"\n"
+quest_destination
+	"goto" ( quest_tile_description ( "|" quest_tile_description )* ) "reach" std_body
+quest_tile_description
+	map_names select_tile_name ORDINAL INTEGER
+
+select_tile_name Braced [ ] = [.*]

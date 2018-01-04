@@ -23,7 +23,7 @@ attack_declaration
 attack_element is silent
 	NEWLINE
 	COMMENTS
-	(RANGE statRange) as range
-	(COOLDOWN statRange)as cooldown
-	((BODY_DMG|MIND_DMG)? as dmg_type DAMAGE ( statRange as by_stat | BODY)) as damage
+	(RANGE stat_range) as range
+	(COOLDOWN stat_range)as cooldown
+	((BODY_DMG|MIND_DMG)? as dmg_type DAMAGE ( stat_range as by_stat | BODY)) as damage
 	(MISS (NEWLINE* has_chance ( IF boolean_statement)?) as option* ) as miss

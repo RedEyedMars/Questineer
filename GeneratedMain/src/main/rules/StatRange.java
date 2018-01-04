@@ -11,27 +11,55 @@ public class StatRange extends ConcreteRule {
 	public static final IRule parser = new StatRange();
 
 	public StatRange(){
-		super("statRange");
+		super("stat_range");
 	}
 	@Override
 	public void setup(){
-		isSilent(true);
 		set(
+			new ChoiceParser(
 				new ChainParser(
-					Rules.range,
+					GeneralBraces.BRACED_STATEMENT,
 					new OptionalParser(
 							new ListNameElementParser("hero_stats")),
-					new ManyParser(
-							new AddTokenParser(
-								
+					new OptionalParser(
+							
+								new ChainParser(
+									new AddTokenParser(
+										
+									new ChoiceParser(
+											ConditionTokens.PLUS,
+											DrawableTokens.MULTIPLY,
+											DrawableTokens.DIVIDE,
+											ConditionTokens.MINUS),"operator"),
+									Rules.stat_range))),
+				new ChainParser(
+					new AddTokenParser(
+						Rules.num,"left"),
+					new OptionalParser(
+							
 								new ChainParser(
 									
 									new ChoiceParser(
-											AnimationTokens.COMMA,
-											ConditionTokens.PLUS),
-									Rules.range,
-									new OptionalParser(
-											new ListNameElementParser("hero_stats"))),"extra"))));
+											PaymentTokens.DASH,
+											GeneralTokens.DOTDOT),
+									new AddTokenParser(
+										Rules.num,"right"))),
+					new OptionalParser(
+							new AddTokenParser(
+								GeneralTokens.PERCENT,"percent")),
+					new OptionalParser(
+							new ListNameElementParser("hero_stats")),
+					new OptionalParser(
+							
+								new ChainParser(
+									new AddTokenParser(
+										
+									new ChoiceParser(
+											ConditionTokens.PLUS,
+											DrawableTokens.MULTIPLY,
+											DrawableTokens.DIVIDE,
+											ConditionTokens.MINUS),"operator"),
+									Rules.stat_range)))));
 
 	}
 

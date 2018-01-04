@@ -36,6 +36,8 @@ public class BodyElement extends ConcreteRule {
 						new ChainParser(
 							Rules.variable_call,
 							Rules.quest_addition),"quest_addition"),
+					Rules.activity_statement,
+					Rules.association_statement,
 					Rules.variable_declaration,
 					Rules.statement));
 
