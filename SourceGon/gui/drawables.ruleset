@@ -15,4 +15,4 @@ drawable_grid_element
 drawable_multiple_element
 	"\n\t" NAME as drawableName ( "*" as defaultState | ( "->" NAME as newStateName )+ ) ( drawable_dimensions ( drawable_arthmetic_operator drawable_multiple_value ) as supplementary* ) as position ( drawable_dimensions ( drawable_arthmetic_operator drawable_multiple_value ) as supplementary* ) as dimensions "&"  ( drawable_dimensions ( drawable_arthmetic_operator drawable_multiple_value ) as supplementary* ) as rotation? "&" ( drawable_multiple_value  ( drawable_arthmetic_operator drawable_multiple_value )* ) as angle
 drawable_arthmetic_operator = "+" as plus | "-" as minus | "/" as divide | "*" as multiply
-drawable_multiple_value = "X" | "Y" | "Width" | "Height" | Float | Integer
+drawable_multiple_value = "X" | "Y" | "Width" | "Height" | FLOAT | INTEGER

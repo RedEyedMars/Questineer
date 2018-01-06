@@ -18,21 +18,21 @@ direction_name = "North" | "East" | "South" | "West"
 edge_if_operator =  "==" | "!=" 
 
 edge_definition
-	"/" NAME as edgeTileName ( PIPE NAME as edgeTileName )* direction_name ("|" direction_name)* ( "\n" edge_if )*
+	"/" NAME as edgeTileName ( "|" NAME as edgeTileName )* direction_name ("|" direction_name)* ( "\n" edge_if )*
 edge_if
 	( "if" "Neighbour" ("in" "direction" | INTEGER INTEGER ) edge_if_operator ( "null" ) ) as neighbourIf
 
 tile_definition
-	( (tile_names as floorParentName ("," tile_name as floorParentName)*) "::" )? NAME as tileName in tile_names tile_definition_element* tile_element*
+	( (tile_names as floorParentName ("," tile_names as floorParentName)*) "::" )? NAME as tileName in tile_names tile_definition_element* tile_element*
 tile_definition_element silent
 	tile_dimensions
 	( "Impassable" | "Passable" ) as passability  ";"
-	( tile_cost ( PIPE tile_cost)* ) as tile_rate ";"
+	( tile_cost ( "|" tile_cost)* ) as tile_rate ";"
 	NAME as imageName ("->" NAME as imageId)* ";" 
 tile_element silent
 	comments
 	"\n\t" edge_definition
 	"\n\t" ( ("+"|"-")+ entity_declaration ) as entity
-	NEWLINE+
+	"\n"
 tile_cost = "Free" | INTEGER as payment? tile_payment_type ( "&" tile_cost )?
 tile_payment_type = payment_long_type_names | payment_short_type_names | item_names

@@ -4,7 +4,7 @@ activity_names global list with NAME
 import_activity Imports "entities/behaviours/activities/" FILE_NAME ".atvs" = ">" FILE_NAME ".atvs" "\n"
 	( "\n" | comments | activity_declaration )*
 activity_declaration
-	NAME as activityName in activity_names method_parameters? ( NAME as className ( COMMA NAME as className )* )? "\n"* DESCRIPTION activity_element*
+	NAME as activityName in activity_names method_parameters? ( NAME as className ( "," NAME as className )* )? "\n"* DESCRIPTION activity_element*
 activity_element silent
 	comments
 	"+" variable_declaration

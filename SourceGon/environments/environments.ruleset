@@ -12,11 +12,11 @@ map_header
 area_declaration
 	NAME as areaName INTEGER as chance "%" ":" ( "\n\t" TITLE as bluePrintName ( "\n\t\t" area_element)* )*
 area_element
-	( "Entry" tile_names ( "|" tile_name )* ( INTEGER as lowerBound ( "-" INTEGER as upperBound )? "Exits" ) as range? ) as  entryPointGeneration
+	( "Entry" tile_names ( "|" tile_names )* ( INTEGER as lowerBound ( "-" INTEGER as upperBound )? "Exits" ) as range? ) as  entryPointGeneration
 	( "Patches" patch_probability ":" ( "\n\t\t\t" patch_element )* ) as terrainGeneration
 patch_probability Braced ( )
 	probability_element ( "," probability_element )*
 probability_element silent
 	( INTEGER as amount ":" INTEGER as percent "%" ) as probability
 patch_element
-	tile_name ( INTEGER as patchWidth [[xX]] INTEGER as patchHeight )?
+	tile_names ( INTEGER as patchWidth [[xX]] INTEGER as patchHeight )?

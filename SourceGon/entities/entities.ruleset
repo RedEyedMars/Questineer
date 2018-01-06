@@ -13,7 +13,7 @@ import relations/reasons/reasons.ruleset
 
 #HEROES#
 
-hero_stat list
+hero_stat list with NAME
 	"STR", "DEX", "CON", "KNW", "MND", "CRM"
 stat_range 
 	state_range_element  (("+" as PLUS|"*" as MULTIPLY|"/" as DIVIDE|"-" as MINUS) as operator stat_range)?
@@ -29,7 +29,7 @@ entity_image_specification silent
 entity_definition
 	"\n"
 	comments
-	(hero_stat INTEGER as left ("-" INTEGER as right)?) as stat_range ("|" hero_stat INTEGER as left (DASH INTEGER as right)?) as stat_range*
+	(hero_stat INTEGER as left ("-" INTEGER as right)?) as stat_range ("|" hero_stat INTEGER as left ("-" INTEGER as right)?) as stat_range*
 	event_statement
 	( skill_names method_arguments? ) as skill
 	affinity_names

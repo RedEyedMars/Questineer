@@ -5,7 +5,7 @@ import_support Imports "entities/behaviours/skills/supports/" FILE_NAME ".sups" 
 support_declaration
 	NAME as supportName in support_names DESCRIPTION support_element*
 support_element silent
-	coments
+	comments
 	("range" stat_range) as range
 	("cd" stat_range)as cooldown
 	("miss" ("\n"* conditional_chance) as option* ) as miss

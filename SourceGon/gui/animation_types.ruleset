@@ -7,7 +7,7 @@ animation_type_arithmetic_operator = "+" | "-" | "/" | "*"
 animation_type_boolean_operator = "==" | "!=" | "<=" | ">=" | "<" | ">"
 
 animation_type_declaration
-	NAME as animationTypeName animation_type_varaibles? animation_type_body
+	NAME as animationTypeName animation_type_variables? animation_type_body
 animation_type_element
 	comments
 	( NAME as variableName ( "=" | "+=" ) animation_type_value animation_type_condition? ) as statement
@@ -17,7 +17,7 @@ animation_type_condition = "if" animation_type_boolean (animation_type_continuat
 animation_type_value = INTEGER | FLOAT | NAME | animation_frame_data
 
 animation_type_boolean
-	NAME as leftName anit_boolean_operator animation_type_value ( anit_arithmetic_operator animation_type_value )*
+	NAME as leftName animation_type_boolean_operator animation_type_value ( animation_type_arithmetic_operator animation_type_value )*
 animation_type_variable_declaration
 	NAME as typeName NAME as variableName "=" animation_variable_value 
 	NAME as variableName "=" animation_variable_value

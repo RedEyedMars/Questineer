@@ -9,6 +9,6 @@ attack_element silent
 	comments
 	("range" stat_range) as range
 	("cd" stat_range)as cooldown
-	(("body"|"mind")? as dmg_type "damage" ( stat_range as by_stat | std_body)) as damage
+	(("body"|"mind") as dmg_type? "damage" ( stat_range as by_stat | std_body)) as damage
 	("miss" ("\n"* conditional_chance) as option* ) as miss
 	"\n"
