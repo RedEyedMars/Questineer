@@ -1,4 +1,4 @@
-class 'packageName'."entities"."relations"."associations" Association Object Source {
+class 'packageName'.entities.relations.associations Association Object Source {
   class Id // {
   }
   interface Factory // {
@@ -22,7 +22,7 @@ class 'packageName'."entities"."relations"."associations" Association Object Sou
   }
   
 }
-class 'packageName'."entities"."relations"."associations" Associations {
+class 'packageName'.entities.relations.associations  Associations {
   @Map<String,Association> complete = new HashMap<String,Association>();
   @Association create(String associationName){
     return null;
@@ -33,13 +33,13 @@ class 'packageName'."entities"."relations"."associations" Associations {
   @Association get(String associationName){
     return complete.get(associationName);
   }
-> void declaration(IToken declarationToken){
+> void declaration(%T declarationToken){
 	StringBuilder nameBuilder = new StringBuilder();
 	declarationToken : element : associationName {
 	  nameBuilder.append(^element);
 	}
     String associationName = 'nameBuilder';
-    Associations += class 'packageName'."entities"."relations"."associations" associationName Association {
+    Associations += class associationName /Association/ {
       @Association->Id "id" = new Association->Id();
       @~Integer productNumber = 0;
       Association->Id getId(){
@@ -47,15 +47,15 @@ class 'packageName'."entities"."relations"."associations" Associations {
       }
       
     }
-    Associations->'associationName' += class 'packageName'."entities"."relations"."associations" Factory \Object Association->Factory {
+    Associations->'associationName' += class Factory /Object/ Association->Factory {
         Association create(){
           return new Associations->'associationName'();
         }
       }
     Associations->'associationName'->*.prependToBody({
-        if name == null {
-          name = ''associationName'' \+ productNumber;
-          productNumber \+= 1;
+        if \name == null {
+          \name = ''associationName'' \+ \productNumber;
+          \productNumber \+= 1;
         }
       });
     Associations->*"create".prependToBody({
@@ -67,7 +67,7 @@ class 'packageName'."entities"."relations"."associations" Associations {
       String specificName = 'element->"specificName"'+'associationName';
 	  element : atom : onEvent {
 	    Events.addToEventMethod('atom->"event_names"',Associations,{
-	      Associations.add(new Associations->'associationName'(''specificName''));
+	      Associations.add(new Associations->'associationName'('' 'specificName' ''));
 	    });
 	  }
 	}
@@ -76,17 +76,19 @@ class 'packageName'."entities"."relations"."associations" Associations {
 	  Context eventContext = Events.addToEventMethod("load",Entity,{});
 	  Events.addToEventMethod("load",Entity,{
 	    if `\getBooleanStatement(element->"boolean_statement",eventContext)` {
-	      \join(null, Associations.get(''specificName''));
+	      \join(null, Associations.get('' 'specificName' ''));
 	    }
 	  });
 	}
 	declarationToken : element : association_event {
-	  Body bodyElementList = new Body ();
-	  Context eventContext = Events.addToEventMethod('element->"event_names"',Associations->'associationName',{});
-	  element : atom : body_element {
-		bodyElementList.add(\getBodyElement(atom, eventContext));
+	  declarationToken : atom : event_statement {
+	    Body bodyElementList = new Body ();
+	    Context eventContext = Events.addToEventMethod('atom->"event_names"',Associations->'associationName',{});
+	    atom : quark : body_element {
+		  bodyElementList.add(\getBodyElement(quark, eventContext));
+	    }
+	    Events.addToEventMethod('atom->"event_names"',Associations->'associationName',bodyElementList);
 	  }
-	  Events.addToEventMethod('element->"event_names"',Associations->'associationName',bodyElementList);
 	}
   }
 > Statement getId(String name){

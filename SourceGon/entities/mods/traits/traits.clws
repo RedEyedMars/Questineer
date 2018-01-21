@@ -1,23 +1,23 @@
-class 'packageName'."entities"."mods"."traits" Trait \Object Source {
+class 'packageName'.entities.mods.traits Trait \Object Source {
   class 'packageName'."entities"."mods"."traits" Id {
   }
   Trait->Id getId(){
     return null;
   }
-  Boolean hasRequirements(Entity "candidate"){
+  Boolean hasRequirements(Entity candidate){
     return false;
   }
-  String "name";
-  String "description";
+  String name;
+  String description;
 }
-class 'packageName'."entities"."mods"."traits" Traits {
-  @Trait create(String "traitName"){
+class 'packageName'.entities.mods.traits Traits {
+  @Trait create(String traitName){
     return null;
   }
 > Statement getId(String name){
     return |Traits->'name'.id|;
   }
-> void declaration(IToken declarationToken){
+> void declaration(%T declarationToken){
     String traitName = ^declarationToken->"traitName";
 	Body gainBody = new Body ();
 	Body lossBody = new Body ();
@@ -28,7 +28,7 @@ class 'packageName'."entities"."mods"."traits" Traits {
 	   gainBody.add(Entity.getImposition(element,true,eventHost));
 	   lossBody.add(Entity.getImposition(element,false,eventHost));
 	}
-	Traits += class 'packageName'."entities"."mods"."traits" traitName Trait {
+	Traits += class traitName /Trait/ {
 	  @Trait->Id "id" = new Trait->Id();
 	  String getName(){
 	    return ''traitName'';

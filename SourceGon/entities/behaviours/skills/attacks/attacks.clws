@@ -1,4 +1,4 @@
-class 'packageName'."entities"."behaviours"."skills"."attacks" Attack Skill {
+class 'packageName'.entities.behaviours.skills.attacks  Attack Skill {
   class Id //{
   }
   class Damage //{
@@ -22,7 +22,7 @@ class 'packageName'."entities"."behaviours"."skills"."attacks" Attack Skill {
   Boolean isOffCooldown(){
 	return "cooldown" == 0;
   }
-  void on(Events->\Tick "event"){
+  void on(Events->\Tick event){
 	if "cooldown">0 {
 	   "cooldown" -= 1;
 	}
@@ -51,17 +51,17 @@ class 'packageName'."entities"."behaviours"."skills"."attacks" Attack Skill {
     return null;
   }
 }
-class 'packageName'."entities"."behaviours"."skills"."attacks" Attacks {
+class 'packageName'.entities.behaviours.skills.attacks  Attacks {
   @Attack create(String "attackName"){
     return null;
   }
 > Statement getId(String name){
     return |Attacks->'name'.id|;
   }
-> void declaration(IToken declarationToken){
+> void declaration(%T declarationToken){
     String attackName = ^declarationToken->"attackName";
     Statement description = new Statement ("+");
-    declarationToken : element : description {
+    declarationToken : element : DESCRIPTION {
 	  description.add(|''element''|);
 	}
     Attacks += class attackName / Attack / {
@@ -98,7 +98,7 @@ class 'packageName'."entities"."behaviours"."skills"."attacks" Attacks {
             Attacks->'attackName'->*"getDamage" += | "damage".setValue(`Entity.getStatRange(atom->"stat_range",damageContext)`.getValue("attacker") * "attacker".getItemDamage()); |
           }
           : body_element {
-            Attacks->'attackName'->*"getDamage" += |`\getBodyElement(damageContext)`|
+            Attacks->'attackName'->*"getDamage" += |`\getBodyElement(element,damageContext)`|
           }
       }
       : miss {

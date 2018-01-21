@@ -14,7 +14,7 @@ area_declaration
 area_element
 	( "Entry" tile_names ( "|" tile_names )* ( INTEGER as lowerBound ( "-" INTEGER as upperBound )? "Exits" ) as range? ) as  entryPointGeneration
 	( "Patches" patch_probability ":" ( "\n\t\t\t" patch_element )* ) as terrainGeneration
-patch_probability Braced ( )
+patch_probability Braced ( ) , silent
 	probability_element ( "," probability_element )*
 probability_element silent
 	( INTEGER as amount ":" INTEGER as percent "%" ) as probability

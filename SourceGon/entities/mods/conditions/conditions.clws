@@ -1,23 +1,23 @@
-class 'packageName'."entities"."mods"."conditions" Condition \Object Source {
+class 'packageName'.entities.mods.conditions  Condition \Object Source {
   class 'packageName'."entities"."mods"."conditions" Id {
   }
   Condition->Id getId(){
     return null;
   }
-  String "name";
-  String "description";
+  String name = null;
+  String description = null;
 }
-class 'packageName'."entities"."mods"."conditions" Conditions {
+class 'packageName'.entities.mods.conditions  Conditions {
   @Condition create(String "conditionName"){
     return null;
   }
-> void setup(ParseContext data){
+> void setup(%Pass data){
     Events.addEventMethods(Condition,new HashMap<String, Body >());
   }
-> void declaration(IToken declarationToken){
+> void declaration(%T declarationToken){
     String conditionName = ^declarationToken->"conditionName";
-	String conditionDescription = 'declarationToken->"description"';
-	Conditions += class 'packageName'."entities"."mods"."conditions" conditionName Condition Source {
+	String conditionDescription = 'declarationToken->"DESCRIPTION"';
+	Conditions += class conditionName /Condition/ Source {
 	  @Condition->Id "id" = new Condition->Id();
 	  String getName(){
 	    return ''conditionName'';
@@ -39,9 +39,9 @@ class 'packageName'."entities"."mods"."conditions" Conditions {
 	  gainBody.add(Entity.getImposition(element,true, eventHost));
 	  lossBody.add(Entity.getImposition(element,false, eventHost));
 	}
-	Context gainContext = Events.addToEventMethod("gain",Conditions->\conditionName,{});
-	Context loseContext = Events.addToEventMethod("loss",Conditions->\conditionName,{});
-	Context tickContext = Events.addToEventMethod("tick",Conditions->\conditionName,{});
+	Context gainContext = Events.addToEventMethod("gain",Conditions->'conditionName',{});
+	Context loseContext = Events.addToEventMethod("loss",Conditions->'conditionName',{});
+	Context tickContext = Events.addToEventMethod("tick",Conditions->'conditionName',{});
 	declarationToken : element : acquisition {
 	  gainBody.add(\getAcquisition(element,true,eventHost,gainContext));
 	  gainBody.add(\getAcquisition(element,false,eventHost,loseContext));
@@ -86,13 +86,13 @@ class 'packageName'."entities"."mods"."conditions" Conditions {
 	requirementsBody.add(|return true;|);
 	
 	HashMap<String, Body > eventBodies = new HashMap<String, Body >();
-	declarationToken : element : event {
+	declarationToken : element : event_statement {
 	  ~Body eventBody = new Body ();
 	  ~String eventName = 'element->"event_names"';
 	  if eventName.equals("lose"){
 	    eventName = "loss";
 	  }
-	  ~Context eventContext = Events.addToEventMethod(eventName,Conditions->\conditionName,{});
+	  ~Context eventContext = Events.addToEventMethod(eventName,Conditions->'conditionName',{});
 	  if eventName.equals("gain"){
 	    eventBody = gainBody;
 	  }
@@ -110,9 +110,9 @@ class 'packageName'."entities"."mods"."conditions" Conditions {
 	eventBodies.put("gain",gainBody);
 	eventBodies.put("loss",lossBody);
 	eventBodies.put("tick",tickBody);
-    Events.addEventMethodsExclusive(Conditions->\conditionName,eventBodies);
-    Conditions->\conditionName += Boolean hasRequirements(Entity "candidate"){}
-    Conditions->\conditionName.getMethod("hasRequirements").appendToBody(requirementsBody);
+    Events.addEventMethodsExclusive(Conditions->'conditionName',eventBodies);
+    Conditions->'conditionName' += Boolean hasRequirements(Entity "candidate"){}
+    Conditions->'conditionName'.getMethod("hasRequirements").appendToBody(requirementsBody);
     Conditions.getMethod("create").prependToBody(| if ''conditionName''.equals("conditionName"){
       return new Conditions->'conditionName'(); }|);
   }

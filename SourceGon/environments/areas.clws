@@ -1,12 +1,8 @@
 import area_regions.clws
-class 'packageName'."environments" Areas {
+class 'packageName'.environments Areas {
 }
-class 'packageName'."environments" Area Environment->Position {
-  > String tickEventArray = "Area.Event.Tick.Listener[]";
-  > String tickEventArrayDeclaration = "new Area.Event.Tick.Listener[256]";
-  > String tickEventArrayGetTick = "tickEvents[currentTickPosition++]";
-  > String tickEventArrayGetPut = "tickEvents[putIndex]";
-  > String tickEventArrayLength = "256";
+class 'packageName'.environments Area Environment->Position {
+> Integer tickEventArrayLength = 256;
   class Id // {
   }
   Area->Id getId(){
@@ -27,7 +23,7 @@ class 'packageName'."environments" Area Environment->Position {
   ~Integer height = 0;
   ~Integer currentTickPosition = 0;
   
-  ~'tickEventArray' tickEvents = 'tickEventArrayDeclaration'; 
+  ~Area->Event->\Tick->Listener[] tickEvents = new Area->Event->\Tick->Listener['tickEventArrayLength']; 
   
   class Event // {
     interface Tick // {
@@ -66,9 +62,9 @@ class 'packageName'."environments" Area Environment->Position {
       }
     }
   }
-> void setup(ParseContext data){
+> void setup(%Pass data){
   }
-> Double declaration(IToken declarationToken, String mapName, List<String> floorTiles, Boolean isFirst, Double previousChance){
+> Double declaration(%T declarationToken, String mapName, List<String> floorTiles, Boolean isFirst, Double previousChance){
     String areaClassName = ^declarationToken->"areaName";
     String areaName = areaClassName.toLowerCase();
     Double chance = Double.parseDouble('declarationToken->"chance"')/100.0\+previousChance;
@@ -86,8 +82,8 @@ class 'packageName'."environments" Area Environment->Position {
          Tiles->EntryPoint result = null;
        }
      }
-    Areas->'mapName'->Generator += ~Area->Generators->\mapName->\areaClassName 'areaName' = null
-    Areas->'mapName'->Generator->*.appendToBody(|'areaName' = new Area->Generators->\mapName->\areaClassName("parent");|);
+    Areas->'mapName'->Generator += ~Area->Generators->'mapName'->'areaClassName' 'areaName' = null;
+    Areas->'mapName'->Generator->*.appendToBody(|'areaName' = new Area->Generators->'mapName'->'areaClassName'("parent");|);
     if isFirst {
       Areas->'mapName'->Generator->*"generate".appendToBody(|
         if "chance" <= 'chance' {
@@ -114,7 +110,7 @@ class 'packageName'."environments" Area Environment->Position {
       upperEntryBound = upperEntryBound \+ 1;
     }
     
-    \readBlueprint(declarationToken,'declarationToken->"AREA_BLUEPRINT"',mapName, areaClassName,lowEntryBound,upperEntryBound, entryPointTileName);
+    \readBlueprint(declarationToken,'declarationToken->"bluePrintName"',mapName, areaClassName,lowEntryBound,upperEntryBound, entryPointTileName);
     Body floorSwitchBody = new Body ();
     Integer numberOfFloorTiles = floorTiles.size();
     Area->Generators->'mapName'->'areaClassName'->*"generateFloor".appendToBody(|switch Range.getRandom(0,'numberOfFloorTiles') `floorSwitchBody`|);
@@ -129,7 +125,7 @@ class 'packageName'."environments" Area Environment->Position {
     Area->Generators->'mapName'->'areaClassName'->*"generateEntryPoint".appendToBody(|return "result";|);
     return chance;
   }
-> void readBlueprint(IToken decTok, String fileName, String mapName, String areaClassName, Integer lowEntryBound, Integer upperEntryBound, String entryPointTileName ){
+> void readBlueprint(%T decTok, String fileName, String mapName, String areaClassName, Integer lowEntryBound, Integer upperEntryBound, String entryPointTileName ){
 	ByteBuffer pixelBuffer = null;
 	~BufferedImage bufferedImage = null;
 	try {
@@ -212,7 +208,7 @@ class 'packageName'."environments" Area Environment->Position {
 	    caseBody.add(|
 	      Integer terrainsGenerated = 0;
 	      Map<Integer, TerrainChoice > chosenTerrainPoints = new HashMap<Integer, TerrainChoice>();
-	      while terrainsGenerated < numberOfTerrainPoints `terrainWhileBody` |);
+	      while terrainsGenerated < \numberOfTerrainPoints `terrainWhileBody` |);
 	    Map<Integer, Map<Integer, Map<Integer, Statement >>> terrainMap = new HashMap<Integer, Map<Integer, Map<Integer, Statement >>>();
         Map<Integer, Map<Integer, Integer >>               terrainIndexMap = new HashMap<Integer, Map<Integer, Integer >>();
         
@@ -349,7 +345,7 @@ class 'packageName'."environments" Area Environment->Position {
     }
   }
 > ~Integer terrainChoiceMakerIndex = 0;
-> String makeTerrainBody(IToken declarationToken, String mapName, String areaClassName, Body terrainChanceBody, Map<Integer, Map<Integer, Map<Integer, Statement >>> terrainMap, Integer layoutSize){
+> String makeTerrainBody(%T declarationToken, String mapName, String areaClassName, Body terrainChanceBody, Map<Integer, Map<Integer, Map<Integer, Statement >>> terrainMap, Integer layoutSize){
     Map<Integer, Set<Integer>> terrainMappedDimensions = new HashMap<Integer, Set<Integer>>(); 
     Integer terrainChoiceMakerIndexValue = terrainChoiceMakerIndex;
     terrainChoiceMakerIndex \+= 1;
@@ -396,7 +392,7 @@ class 'packageName'."environments" Area Environment->Position {
           Body terrainCaseBody = new Body ();
           Area->TerrainChoice->'mapName'->'areaClassName'->'generateTerrainChoiceName' +=  @TerrainChoice 'terrainTileNameValue' = new TerrainChoice(
                  new Tiles->'mapName'->'terrainTileName'->\FloorFactory(),
-                 new Tiles->'mapName'->'terrainTileName'->Factory())
+                 new Tiles->'mapName'->'terrainTileName'->Factory());
           Integer width;
           if quark->"patchHeight" != null {
             width = Integer.parseInt('quark->"patchWidth"')\-1;
@@ -456,7 +452,7 @@ class 'packageName'."environments" Area Environment->Position {
                 terrainMappedDimensions.put(width, new HashSet<Integer>());
               }
               terrainMappedDimensions.get(width).add(height);
-              Area->TerrainChoice->'mapName'->'areaClassName'->'generateTerrainChoiceName' +=  @int[][][] "map"+'width'+"x"+'height' = new int(`indexParameters`)[][][]
+              Area->TerrainChoice->'mapName'->'areaClassName'->'generateTerrainChoiceName' +=  @int[][][] "map"+'width'+"x"+'height' = new int(`indexParameters`)[][][];
             }
             ~Integer usableTerrainCount = 0;
             for Integer floorIndex < layoutSize {
@@ -588,7 +584,7 @@ class 'packageName'."environments" Area Environment->Position {
     for Tile tile: tiles {
       tile.tick(millisSinceLastFrame);
     }
-    'tickEventArrayGetTick'.tick(millisSinceLastFrame);
+    tickEvents["currentTickPosition++"].tick(millisSinceLastFrame);
     if currentTickPosition >= 'tickEventArrayLength' {
       currentTickPosition = 0;
     }
@@ -598,7 +594,7 @@ class 'packageName'."environments" Area Environment->Position {
     if putIndex >= 'tickEventArrayLength' {
       putIndex \-= 'tickEventArrayLength';
     }
-    'tickEventArrayGetPut'.add(event);
+    tickEvents[putIndex].add(event);
   }
   Boolean add(Entity entity){
     if \getParent() != null && entity.getIsPlayerAffiliated() {
@@ -643,8 +639,8 @@ class 'packageName'."environments" Area Environment->Position {
       }
       terrainMap.get(newTile.getId()).add("(Tiles.Terrain)newTile");
     }
-    if parent != null {
-      parent.add(newTile);
+    if \parent != null {
+      \parent.add(newTile);
     }
     return tiles.add(newTile);
   }

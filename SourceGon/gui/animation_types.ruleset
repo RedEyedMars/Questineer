@@ -1,6 +1,6 @@
 #ANIMATION TYPES#
 import_animation_type Imports "gui/" FILE_NAME ".animationTypes" = ">" FILE_NAME ".animationTypes" "\n"
-	( "\n" | comments | animation_type_declaration )*
+	( comments | animation_type_declaration | "\n" )*
 
 animation_type_continuation_operator = "&" | "|"
 animation_type_arithmetic_operator = "+" | "-" | "/" | "*"
@@ -10,7 +10,7 @@ animation_type_declaration
 	NAME as animationTypeName animation_type_variables? animation_type_body
 animation_type_element
 	comments
-	( NAME as variableName ( "=" | "+=" ) animation_type_value animation_type_condition? ) as statement
+	( NAME as variableName ( "=" | "+=" ) as animation_type_operator  animation_type_value  animation_type_condition? ) as statement
 	animation_type_declaration
 	"\n"
 animation_type_condition = "if" animation_type_boolean (animation_type_continuation_operator animation_type_boolean)*
@@ -22,19 +22,22 @@ animation_type_variable_declaration
 	NAME as typeName NAME as variableName "=" animation_variable_value 
 	NAME as variableName "=" animation_variable_value
 
-animation_type_coordinate_variable Braced ( ) = INTEGER as xValue "," INTEGER as yValue
-animation_type_flip_variable Braced [ ] = animation_variable_value_basic as unflippedValue "|" animation_variable_value_basic as flippedValue 
-animation_type_square_variable Braced [ ] = INTEGER as lowX "," INTEGER as lowY INTEGER as highX "," INTEGER as highY
+animation_type_coordinate_variable Braced ( ) = INTEGER as lowX "," INTEGER as lowY ( INTEGER as highX "," INTEGER as highY )?
+animation_type_flip_variable Braced [ ] , silent = animation_variable_value_basic as unflippedValue "|" animation_variable_value_basic as flippedValue
 animation_variable_value
 	animation_type_coordinate_variable
 	animation_type_flip_variable
-	animation_type_square_variable
 	animation_variable_value_basic
 
 animation_variable_value_basic silent
-	( INTEGER as lowerBound "-" INTEGER as upperBound ) as range | INTEGER | FLOAT | QUOTE as quote
+	animation_variable_value_range as range
+	INTEGER
+	FLOAT
+	QUOTE as quote
+animation_variable_value_range silent
+	INTEGER as lowerBound "-" INTEGER as upperBound
 
-animation_type_variables Braced ( ) = animation_type_variable_declaration? ("," animation_type_variable_declaration)*
-animation_type_body      Braced { } = animation_type_element*
-animation_frame_data     Braced [ ] ,silent = NAME as frameName
+animation_type_variables Braced ( ) , silent = animation_type_variable_declaration? ("," animation_type_variable_declaration)*
+animation_type_body      Braced { } , silent = animation_type_element*
+animation_frame_data     Braced [ ] , silent = NAME as frameName
 

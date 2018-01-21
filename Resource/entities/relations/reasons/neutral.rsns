@@ -1,4 +1,4 @@
 Within Territory
-	$1 is within $2's territory;;
+	~$1 is within $2's territory~
 Attacked Fellow Member
-	$1 is attack $2's $3mate;;
+	~$1 is attack $2's $3mate~

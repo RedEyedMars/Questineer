@@ -2,16 +2,11 @@
 import headers.clws
 import gui/loaders.clws
 < Game : \com.\rem.\qstnr.game ;
-> void assignListElementNames(ParseContext context, IToken root){
+> void setup(%Pass data){
   }
-> String getDirectory(String fileName, String knownDirectory){
-	return "../Resource/";
-  }
-> void setup(ParseContext data){
-  }
-> void generate(ParseContext data){
+> void generate(Pass data){
 	\setup("../Questineer/src");
-	IToken root = data.getRoot();
+	%T root = data.getRoot();
 	\setupGui();
 	root : imports : import_any {
 		Gui.importAny(imports);

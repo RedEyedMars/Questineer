@@ -1,5 +1,5 @@
 #COLOURS#
-import_colour Imports "gui/" FIlE_NAME ".colours" = ">" FILE_NAME ".colours" "\n"
+import_colour Imports "gui/" FILE_NAME ".colours" = ">" FILE_NAME ".colours" "\n"
 	( "\n" | "comments" | colour_declaration )*
 colour_declaration
 	NAME as colourName ((INTEGER as red INTEGER as blue INTEGER as green) as asInt | ((FLOAT|INTEGER) as red (FLOAT|INTEGER) as blue (FLOAT|INTEGER) as green) as asFloat) 

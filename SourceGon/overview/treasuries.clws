@@ -1,4 +1,4 @@
-class 'packageName'."overview"."treasuries" Treasury {
+class 'packageName'.overview.treasuries Treasury {
   class PaymentType // {
     class Id // {
     }
@@ -27,12 +27,11 @@ class 'packageName'."overview"."treasuries" Treasury {
     }
     "idMap".get(id).setValue("idMap".get(id).getValue() \+ amount);
   }
-> void setup(ParseContext data){
+> void setup(%Pass data){
     Class idClass = Treasury->PaymentType->Id;
-    Treasury += ~Map<idClass,Int> "idMap" = new HashMap<idClass,Int>()
-    
+    Treasury += ~Map<idClass,Int> "idMap" = new HashMap<idClass,Int>();
   }
-> void paymentTypeDec(IToken typeToken){
+> void paymentTypeDec(%T typeToken){
     if typeToken->"typeName" != null {
       \paymentTypeDec(^typeToken->"typeName",^typeToken->"shortForm",^typeToken->"longForm");
     }
@@ -53,7 +52,7 @@ class 'packageName'."overview"."treasuries" Treasury {
     longForms.put(longForm,typeName);
     shortForms.put(shortForm,typeName);
   }
-> String getTypeName(IToken typeNameToken){
+> String getTypeName(%T typeNameToken){
     if typeNameToken->"item_names" != null{
       return ^typeNameToken->"item_names";
     }

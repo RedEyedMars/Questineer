@@ -1,5 +1,5 @@
 type Wolf_Pelt_Hunt
-	Go out into the @Forest to find the wolves(@Wolf), kill them, and bring back their pelts.;;
+	~Go out into the @Forest to find the wolves(@Wolf), kill them, and bring back their pelts.~
 	+ Integer peltsCollected = 0
 	start {
 	  event->host.add(new Quest.Listeners.Collect(event->quest))

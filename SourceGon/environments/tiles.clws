@@ -1,10 +1,12 @@
-class 'packageName'."environments" EntryPoints {
+class 'packageName'.environments EntryPoints {
+  Drawables dwbs = null;
 }
-class 'packageName'."environments" Tiles {
+class 'packageName'.environments Tiles {
+  Drawables dwbs = null;
   @Tile create(String tileName){
     return null;
   }
-  class 'packageName'."environments" Floor Tile {
+  class Floor / Tile     /{
     class Id / Tile->Id / {
     }
     interface Factory / Tile->Factory / {
@@ -102,7 +104,7 @@ class 'packageName'."environments" Tiles {
 	    builder.append('' "*******\\n" '');
 	    for Integer i < \size() {
   	      Integer j = 0;
-	      while j<4&&i<\size() {
+	      while j<4&&i < \size() {
 		    builder.append('' "[" '');
 		    builder.append(\get(i).getX());
 		    builder.append('' "," '');
@@ -119,8 +121,8 @@ class 'packageName'."environments" Tiles {
       }
     }
   }
-  class 'packageName'."environments" Terrain Tile {
-    class Id / Tile->Id / {
+  class Terrain /  Tile    /{
+    class Id   / Tile->Id / {
     }
     interface Factory / Tile->Factory /  {
       Tiles->Terrain create(Tiles->Floor parentFloor){}
@@ -140,8 +142,8 @@ class 'packageName'."environments" Tiles {
     class Corpse / Tiles->Terrain / {
     }
   }
-  class 'packageName'."environments" MonsterDen Tiles->Terrain {
-    class Id / Tiles->Terrain->Id / {
+  class MonsterDen / Tiles->Terrain     / {
+    class Id      / Tiles->Terrain->Id / {
     }
     ~Integer hp = 100;
     ~Integer maxHp = hp;
@@ -155,7 +157,7 @@ class 'packageName'."environments" Tiles {
       return "floorTile".accept(newOccupant);
     }
   }
-  class 'packageName'."environments" Chest Tiles->Terrain {
+  class Chest / Tiles->Terrain     /{
     class Id / Tiles->Terrain->Id / {
     }
     Boolean isPassable(Integer x, Integer y){
@@ -165,8 +167,8 @@ class 'packageName'."environments" Tiles {
       return "floorTile".accept(newOccupant);
     }
   }
-  class 'packageName'."environments" EntryPoint Tiles->Floor {
-    class Id / Tiles->Floor->Id / {
+  class EntryPoint / Tiles->Floor     / {
+    class Id      / Tiles->Floor->Id / {
     }
     ~Tiles->EntryPoint sister = null;
     Entity->Event accept(Entity newOccupant){
@@ -179,25 +181,25 @@ class 'packageName'."environments" Tiles {
         sister = Range.select(newArea.getEntryPoints());
       }
       sister.take(newOccupant);
-      return new Entity->Event->MovedToNewArea(area, sister.getArea());
+      return new Entity->Event->MovedToNewArea(\area, sister.getArea());
     }
     Entity->Event take(Entity newOccupant){
-      newOccupant.getLocation().setArea(area);
-      newOccupant.explore(area);
+      newOccupant.getLocation().setArea(\area);
+      newOccupant.explore(\area);
       return \super.accept(newOccupant);
     }
     Boolean hasOccupant(){
-      return occupant != null || ( sister != null && sister.occupant != null);
+      return \occupant != null || ( sister != null && sister.occupant != null);
     }
     Boolean hasOccupant(Entity candidate){
-      return occupant == candidate || ( sister != null && sister.occupant == candidate);
+      return \occupant == candidate || ( sister != null && sister.occupant == candidate);
     }
     Integer getDistanceToUnexploredPaths(Entity explorer){
       return \getDistanceToUnexploredPaths(explorer, new HashSet<EntryPoint>(),0);
     }
     Integer getDistanceToUnexploredPaths(Entity explorer,Set<EntryPoint> investigated, Integer distance){
       if investigated.add(this) {
-        if explorer.hasExplored(area) {
+        if explorer.hasExplored(\area) {
           Integer minimum = Integer.MAX_VALUE;
           for Tile entryPoint: sister.getArea().getEntryPoints() {
             Integer sisterDistance = "((EntryPoint)entryPoint)".getDistanceToUnexploredPaths(explorer,investigated,distance\+1);
@@ -217,7 +219,7 @@ class 'packageName'."environments" Tiles {
     }
   }
 > ~Integer costIndex = 0;
-> void declaration(IToken declarationToken, String mapName, List<String> floorTiles){
+> void declaration(%T declarationToken, String mapName, List<String> floorTiles){
     \createList(Treasury->Cost);
     if declarationToken->"floor_declaration" != null {
       declarationToken->"floor_declaration" : element : tile_definition {
@@ -241,9 +243,9 @@ class 'packageName'."environments" Tiles {
       }
     }
   }
-> String definition(IToken declarationToken, String mapName, Class tileExtendsClass, Class collectionClass){
+> String definition(%T declarationToken, String mapName, Class tileExtendsClass, Class collectionClass){
     String tileName = ^declarationToken->"tileName";
-    collectionClass->'mapName' += class 'packageName'."environments" tileName tileExtendsClass {
+    collectionClass->'mapName' += class tileName / tileExtendsClass / {
       @Tile->Id id = new tileExtendsClass->Id();
       Tile->Id getId(){
         return id;
@@ -280,11 +282,10 @@ class 'packageName'."environments" Tiles {
       }
     }
     if declarationToken->"imageId" != null {
-      collectionClass->'mapName'->'tileName' += ~Gui->Drawable drawable = null
+      collectionClass->'mapName'->'tileName' += ~Gui->Drawable drawable = null;
       Body stateChangeBody = new Body ();
       String imageName = 'declarationToken->"imageName"';
       String imageClassName = ^declarationToken->"imageName";  
-      stateChangeBody.add(|Images->'imageClassName'->States imageStates = Images->'imageName'.asStates();|);
       StringBuilder newState = new StringBuilder();
       ~String underscore = "";
       declarationToken : element : imageId {
@@ -295,13 +296,27 @@ class 'packageName'."environments" Tiles {
       if declarationToken->"width" != null {
         newState.append("_0");
       }
-      stateChangeBody.add(|imageStates.'newState'();|);
+      String drawableSuperType;
+      if tileExtendsClass == Tiles->Floor || tileExtendsClass == Tiles->EntryPoint {
+        drawableSuperType = "isosquare";
+      }
+      else {
+        drawableSuperType = "square";
+      }
+      if Gui.Image.multiElementImages.containsKey(imageClassName) && Gui.Image.multiElementImages.get(imageClassName).contains('newState') {
+        stateChangeBody.add(|"drawable" = Images->'imageName'."getAs"+'^newState'(Drawables->'drawableSuperType');|);
+      }
+      else { 
+      	stateChangeBody.add(|Images->'imageClassName'->States imageStates = Images->'imageName'.asStates();|);
+        stateChangeBody.add(|\imageStates.'newState'();|);
+        stateChangeBody.add(|"drawable" = Drawables->'drawableSuperType'.image("imageStates");|);
+          
+      }
       Float factor = 6f;
       Float xFactor = factor*1.85f;
       Float yFactor = factor*3.85f;
       if tileExtendsClass == Tiles->Floor || tileExtendsClass == Tiles->EntryPoint {
         stateChangeBody.add(|
-          "drawable" = Drawables.isosquare.image("imageStates");
           "drawable".setVisualX("(float)(getX()+getY())/"+'xFactor'+"f");
           "drawable".setVisualY("(float)(getY()-getX())/"+'yFactor'+"f");|);
         collectionClass->'mapName'->'tileName' += void display(){
@@ -325,10 +340,9 @@ class 'packageName'."environments" Tiles {
       }
       else {
         stateChangeBody.add(|
-          "drawable" = Drawables.square.image("imageStates");
           if "floorTile" != null {
-            drawable.setVisualX(floorTile.getDrawable().getVisualX());
-            drawable.setVisualY(floorTile.getDrawable().getVisualY()\+0.025f);
+            drawable.setVisualX(\floorTile.getDrawable().getVisualX());
+            drawable.setVisualY(\floorTile.getDrawable().getVisualY()\+0.025f);
           }
           else {
             "drawable".setVisualX("(float)(getX()+getY())/"+'xFactor'+"f");
@@ -336,10 +350,10 @@ class 'packageName'."environments" Tiles {
           }|);
         collectionClass->'mapName'->'tileName' += void setFloorTile(Tiles->Floor newFloorTile){
             if "drawable"!=null {
-			  "drawable".setVisualX(newFloorTile.getDrawable().getVisualX());
-			  "drawable".setVisualY(newFloorTile.getDrawable().getVisualY());
+			  "drawable".setVisualX(\newFloorTile.getDrawable().getVisualX());
+			  "drawable".setVisualY(\newFloorTile.getDrawable().getVisualY());
 	        }
-		    \super.setFloorTile(newFloorTile);
+		    \super.setFloorTile(\newFloorTile);
           }
         collectionClass->'mapName'->'tileName' += void display(){
 		    \getDrawable().display(Renderer.midLayer);
@@ -361,7 +375,7 @@ class 'packageName'."environments" Tiles {
       }
     });
     if tileExtendsClass == Tiles->Floor || tileExtendsClass == Tiles->EntryPoint {
-      collectionClass->'mapName'->'tileName' += class 'packageName'."environments" Factory \Object Tiles->Floor->Factory {
+      collectionClass->'mapName'->'tileName' += class Factory /Object/ Tiles->Floor->Factory {
         Tiles->Floor create(Integer x, Integer y, Environment parent){
           return new collectionClass->'mapName'->'tileName'(x,y,parent);
         }
@@ -371,7 +385,7 @@ class 'packageName'."environments" Tiles {
       }
     }
     else {
-      collectionClass->'mapName'->'tileName' += class 'packageName'."environments" Factory \Object Tiles->Terrain->Factory {
+      collectionClass->'mapName'->'tileName' += class Factory /Object/ Tiles->Terrain->Factory {
         Tiles->Terrain create(Tiles->Floor parentTile){
           Tiles->Terrain newTile = new collectionClass->'mapName'->'tileName'();
           newTile.setFloorTile(parentTile);
@@ -386,13 +400,13 @@ class 'packageName'."environments" Tiles {
       Body parentSwitchBodyTwo = new Body ();
       declarationToken : floorParent : floorParentName{
         Integer parentCountValue = parentCount;
-        parentSwitchBodyOne.add(|case 'parentCountValue' { return new Tiles->'mapName'->'floorParent'(x,y,parent); }|);
+        parentSwitchBodyOne.add(|case 'parentCountValue' { return new Tiles->'mapName'->'floorParent'(\x,\y,\parent); }|);
         parentSwitchBodyTwo.add(|case 'parentCountValue' { return new Tiles->'mapName'->'floorParent'(); }|);
         parentCount \+= 1;
       }
       if parentCount > 1 {
         Integer parentCountValue = parentCount;
-        collectionClass->'mapName'->'tileName' += class 'packageName'."environments" FloorFactory \Object Tiles->Floor->Factory {
+        collectionClass->'mapName'->'tileName' += class FloorFactory /Object/ Tiles->Floor->Factory {
           Tiles->Floor create(Integer x, Integer y, Environment parent){
             switch Range.getRandom(0,'parentCountValue') `parentSwitchBodyOne`
             return null;
@@ -405,7 +419,7 @@ class 'packageName'."environments" Tiles {
       }
       else {
         declarationToken : floorParent : floorParentName {
-          collectionClass->'mapName'->'tileName' += class 'packageName'."environments" FloorFactory \Object Tiles->Floor->Factory {
+          collectionClass->'mapName'->'tileName' += class FloorFactory /Object/ Tiles->Floor->Factory {
             Tiles->Floor create(Integer x, Integer y, Environment parent){
               return new Tiles->'mapName'->'floorParent'(x,y,parent);
             }
@@ -430,8 +444,8 @@ class 'packageName'."environments" Tiles {
     if declarationToken->"entity" != null {
 	  ~Integer entityPlusNumber = 0;
       Body switchBody = new Body ();
-      collectionClass->'mapName'->'tileName' += ~Integer numberOfMonsters = "0"
-      collectionClass->'mapName'->'tileName' += ~Integer maxNumberOfMonsters = "0"
+      collectionClass->'mapName'->'tileName' += ~Integer numberOfMonsters = "0";
+      collectionClass->'mapName'->'tileName' += ~Integer maxNumberOfMonsters = "0";
       declarationToken : element : entity {
         element : quanta : PLUS {
           entityPlusNumber \+= 1;
@@ -462,15 +476,16 @@ class 'packageName'."environments" Tiles {
         
         if element->"MINUS" != null {
           collectionClass->'mapName'->'tileName'->*"load".prependToBody(|
-            Entity 'newEntityName' = new entityFactory().create();
             if 'newEntityName'.getLocation().moveToAround(\getFloorTile()) {
               'newEntityName'.setSpawn(\getFloorTile());
               'newEntityName'.add(new Tile->Listener->Die(\getFloorTile()));
             }|);
+          collectionClass->'mapName'->'tileName'->*"load".prependToBody(|
+            Entity 'newEntityName' = new entityFactory().create();|);
         }
         else {
           Integer monsterId = monsterInc;
-          collectionClass->'mapName'->'tileName' += ~Entity->Factory 'element->"entity_declaration"->"entityName"'+"Factory" = new entityFactory()
+          collectionClass->'mapName'->'tileName' += ~Entity->Factory 'element->"entity_declaration"->"entityName"'+"Factory" = new entityFactory();
           switchBody.add(|
             case 'monsterId' {
               Entity 'newEntityName' = 'element->"entity_declaration"->"entityName"'+"Factory".create();
@@ -486,7 +501,7 @@ class 'packageName'."environments" Tiles {
     return tileName;
   }
 
-> Statement getTileCost(IToken tileCostToken,Class collectionClass, String mapName, String tileName){
+> Statement getTileCost(%T tileCostToken,Class collectionClass, String mapName, String tileName){
     String costName = "Cost" \+ costIndex;
     costIndex \+= 1;
     if tileCostToken->"FREE" != null {
@@ -509,7 +524,7 @@ class 'packageName'."environments" Tiles {
       return |new collectionClass->'mapName'->'tileName'->'costName'()|;
     }
     else {
-      String paymentType = Treasury.getTypeName(tileCostToken->"paymentType");
+      String paymentType = Treasury.getTypeName(tileCostToken->"tile_payment_type");
       if tileCostToken->"payment" != null {
         collectionClass->'mapName'->'tileName' += class costName / Treasury->Cost / {
           Integer getAmount(){
@@ -545,7 +560,7 @@ class 'packageName'."environments" Tiles {
     }
   }
 }
-class 'packageName'."environments" Tile Environment->Position Loaddable Tickable  {
+class 'packageName'.environments  Tile   Environment->Position   Loaddable Tickable  {
   class Id // {
   }
   class Comparators // {
@@ -564,11 +579,11 @@ class 'packageName'."environments" Tile Environment->Position Loaddable Tickable
       }
     }
   }
-  interface 'packageName'."environments" Factory {
+  interface Factory // {
     Tile create(){}
   }
-  class 'packageName'."environments" Listener {
-    class 'packageName'."environments" Die Events->Die->Listener {
+  class Listener // {
+    class Die   / Events->Die->Listener /{
       Tiles->Floor host = null;
       void listen(Events->Die event){
         
@@ -683,9 +698,9 @@ class 'packageName'."environments" Tile Environment->Position Loaddable Tickable
   String toString(){
 	return '' "(" '' \+ \getX() \+ '' "," '' \+ \ getY() \+ '' ")" '';
   }
-> void setup(ParseContext data){
+> void setup(%Pass data){
     \createList(Entity->Factory);
     \createMap(Association->Id,Association);
-    Tile += ~\IdMap->\_Association "associations"
+    Tile += ~\IdMap->\_Association "associations";
   }
 }

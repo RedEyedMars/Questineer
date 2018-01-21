@@ -34,7 +34,3 @@
 < Graphics		: \java.\awt;
 
 > String packageName = "com.rem.qstnr";
-> IParser rootParser = Rules.base;
-> List listnames = Listnames.parser;
-> List rules = Rules.parser;
-> RegexParser lazyNameParser = GeneralTokens.NAME;

@@ -1,6 +1,6 @@
 import attacks/attacks.clws
 import supports/supports.clws
-class 'packageName'."entities"."behaviours"."skills" Skill \Object Source Usable {
+class 'packageName'.entities.behaviours.skills  Skill \Object Source Usable {
   class Id / Usable->Id /{
   }
   ~Integer experience = 0;
@@ -27,13 +27,13 @@ class 'packageName'."entities"."behaviours"."skills" Skill \Object Source Usable
   Boolean isOffCooldown(){
     return "cooldown" == 0;
   }
-  void on(Events->\Tick "event"){
-	if "cooldown" > 0 {
-	  "cooldown" \+= 1;
+  void on(Events->\Tick event){
+	if cooldown > 0 {
+	  cooldown \+= 1;
 	}
   }
-  void setFocus(Boolean "newFocus"){
-    "hasEntityFocus" = "newFocus";
+  void setFocus(Boolean newFocus){
+    hasEntityFocus = newFocus;
   }
   Integer compareTo(Skill "otherSkill"){
 	if "cooldown" == "otherSkill"."cooldown" {
@@ -78,7 +78,7 @@ class 'packageName'."entities"."behaviours"."skills" Skills {
   @Skill create(String skillName){
     return null;
   }
-> void setup(ParseContext data){
+> void setup(%Pass data){
     \createCriteria(Entity);
     Criteria->Target += class Free / Criteria->Target / {
       Boolean satisfies(Entity candidate){
@@ -99,10 +99,10 @@ class 'packageName'."entities"."behaviours"."skills" Skills {
     }
     \createList(Entity);
   }
-> void declaration(IToken declarationToken){
+> void declaration(%T declarationToken){
     String skillName = ^declarationToken->"skillName";
     Statement description = new Statement ("+");
-    declarationToken : element : description {
+    declarationToken : element : DESCRIPTION {
 	  description.add(|''element''|);
 	}
     Skills += class skillName / Skill / {
@@ -134,8 +134,10 @@ class 'packageName'."entities"."behaviours"."skills" Skills {
     Context useContext = Skills->'skillName'.getMethod("use").getContext();
     ~Boolean isFirst = true;
     declarationToken : element
-      : variable_header {
-        \addVariableHeader(element,Skills->'skillName');
+      : method_parameters {
+        element : atom : variable_header {
+          \addVariableHeader(atom,Skills->'skillName');
+        }
       }
       : require {
         element : atom : boolean_statement {
@@ -154,7 +156,7 @@ class 'packageName'."entities"."behaviours"."skills" Skills {
       : use {
         element : atom 
           : body_element {
-            Skills->'skillName'->*"use" += |`\getBodyElement(useContext)`|
+            Skills->'skillName'->*"use" += |`\getBodyElement(atom,useContext)`|
           }
       }
       : miss {

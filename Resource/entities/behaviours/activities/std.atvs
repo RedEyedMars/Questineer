@@ -178,6 +178,7 @@ Exploring(Integer ticks)
 	listen {
 	  if event is a *.TileHasOccupant  {
 	    *.TileHasOccupant blocked = *.TileHasOccupant<-event
+	    destination.hasOccupant(host)
 	    if host.isFriendlyWith(blocked->causalOccupant) {
 	    }
 	    else {

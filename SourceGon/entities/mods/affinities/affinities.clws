@@ -1,4 +1,4 @@
-class 'packageName'."entities"."mods"."affinities" Affinity \Object Source {
+class 'packageName'.entities.mods.affinities  Affinity \Object Source {
   class 'packageName'."entities"."mods"."affinities" Id {
   }
   Affinity->Id getId(){
@@ -9,35 +9,44 @@ class 'packageName'."entities"."mods"."affinities" Affinity \Object Source {
     return 0.0;
   }
 }
-class 'packageName'."entities"."mods"."affinities" Affinities {
+class 'packageName'.entities.mods.affinities Affinities {
   @Affinity create(String "affinityName"){
     return null;
   }
-> void declaration(IToken declarationToken){
+> void declaration(%T declarationToken){
     String affinityName = 'declarationToken->"affinityName"';
     String affinityClassName = ^affinityName;
-    Statement weaknesses = new Statement("||");
-    Statement strengths = new Statement("||");
+    Statement weaknesses = new Statement();
+    Statement strengths = new Statement();
     declarationToken : element : strength_name {
+      strengths.set("||");
       strengths.add(\hasAffinity(^element));
     }
     declarationToken : element : weakness_name {
+      weaknesses.set("||");
       weaknesses.add(\hasAffinity(^element));
     }
-    Affinities += class 'packageName'."entities"."mods"."affinities" affinityClassName Affinity {
+    Affinities += class affinityClassName /Affinity/ {
 	  @Affinity->Id "id" = new Affinity->Id();
       String getName(){
         return ''affinityName'';
       }
       Double modify(Entity "defender", Double "damage"){
-        if `strengths` {
-		  "damage" *= 2.0;
-		}
-		if `weaknesses` {
-		  "damage" /= 2.0;
-		}
+        
 		return "damage";
       }
+    }
+    if weaknesses.isEmpty() == false {
+      Affinities->'affinityClassName'->*"modify".prependToBody({
+		if `weaknesses` {
+		  "damage" /= 2.0;
+		}});
+    }
+    if strengths.isEmpty() == false {
+      Affinities->'affinityClassName'->*"modify".prependToBody({
+        if `strengths` {
+		  "damage" *= 2.0;
+		}});
     }
     Affinities.getMethod("create").prependToBody(|if ''affinityClassName''.equals("affinityName"){ return new Affinities->'affinityClassName'();} |);
   }

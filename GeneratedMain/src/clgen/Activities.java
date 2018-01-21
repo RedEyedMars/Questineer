@@ -143,7 +143,7 @@ MainFlow.classes.ActivitiesClass.addSubClass(new ExternalClassEntry(){public voi
 	}
 	for(final IToken element:declarationToken.getAllSafely("variable_declaration")) {
 			final ExternalVariableEntry variable = MainFlow.methods.addVariableHeader(element.get("variable_header"),MainFlow.classes.ActivitiesClass.getSubClass(activityName.toString()));
-			variable.setIsWeak(true);
+			variable.setIsFinal(false);
 			if (element.get("statement") != null) {
 			variable.setAssignment(MainFlow.methods.getStatement(element.get("statement"),MainFlow.classes.ActivitiesClass.getSubClass(activityName.toString()).getContext()));
 			}

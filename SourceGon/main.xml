@@ -24,8 +24,8 @@
         </java>
     </target>
     <target name="make_main_gen">
-        <java jar="../rclwg.jar" fork="true">
-            <arg line="${dir.srcs}/main.clws" />
+        <java jar="../cclws.jar" fork="true">
+            <arg line="${dir.srcs}/questineer_source.clws" />
         </java>
     </target>
     <target name="make_gui_ruleset">
@@ -69,6 +69,14 @@
                	<attribute name="Class-Path" value="."/>
            	</manifest>
            	<fileset dir="../../RemLang/GeneratedCargon/bin"/>
+           	<zipfileset excludes="META-INF/*.SF" src="../../RemLang/engraver.jar"/>
+        </jar>
+        <jar destfile="${dir.buildfile}/cclws.jar" filesetmanifest="mergewithoutmain">
+           	<manifest>
+               	<attribute name="Main-Class" value="com.rem.gen.parser.Main"/>
+               	<attribute name="Class-Path" value="."/>
+           	</manifest>
+           	<fileset dir="../../RemLang/GeneratedClasswise/bin"/>
            	<zipfileset excludes="META-INF/*.SF" src="../../RemLang/engraver.jar"/>
         </jar>
     </target>

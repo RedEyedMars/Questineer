@@ -1,24 +1,24 @@
 
 > void setupGui() {
     Gui.setup();
-	Gui += @StringBuilder _log = new StringBuilder()
+	Gui += @StringBuilder _log = new StringBuilder();
 	Gui += @void log(String toLog) {
 		_log.append(toLog);
 		_log.append(''"\\n"'');
 	}
-	Gui += ~Integer finishedKey = Keyboard.KEY_ESCAPE
-	Gui += String window_title = ''"OpenGL Window"''
-	Gui += ~Boolean VSyncEnabled = true
-	Gui += ~Boolean useCurrentDisplay = false
-	Gui += ~Boolean fullScreen = false
-	Gui += ~Boolean showMessages = true
-	Gui += ~Integer displayWidth = "1024"
-	Gui += Integer displayHeight = "786"
-	Gui += Integer displayColorBits = "-1"
-	Gui += Integer displayFrequency = "-1"
-	Gui += Integer depthBufferBits = "24"
-	Gui += DisplayMode originalDisplayMode = null
-	Gui += DisplayMode displayMode = null
+	Gui += ~Integer finishedKey = Keyboard.KEY_ESCAPE;
+	Gui += String window_title = ''"OpenGL Window"'';
+	Gui += ~Boolean VSyncEnabled = true;
+	Gui += ~Boolean useCurrentDisplay = false;
+	Gui += ~Boolean fullScreen = false;
+	Gui += ~Boolean showMessages = true;
+	Gui += ~Integer displayWidth = 1024;
+	Gui += Integer displayHeight = 786;
+	Gui += Integer displayColorBits = -1;
+	Gui += Integer displayFrequency = -1;
+	Gui += Integer depthBufferBits = 24;
+	Gui += DisplayMode originalDisplayMode = null;
+	Gui += DisplayMode displayMode = null;
 	Gui->*.appendToBody({
 	  \load();
 	  \run();
@@ -122,7 +122,7 @@
 	}
   }
 
-class 'packageName'."gui" InputHandler Thread{
+class 'packageName'.gui InputHandler Thread{
   @Integer UNSTARTED = -1;
   @Integer WAITING_FOR_EVENTS = 0;
   @Integer PROCESSING_EVENTS = 1;

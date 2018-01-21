@@ -2,7 +2,7 @@
 QUOTE             Braced " " , Ignore None = [.*]
 NOT = "!"
 
-std_body          Braced { }               = ( "\n" | comments | body_element )*
+std_body          Braced { } ,silent       = ( "\n" | comments | body_element )*
 method_arguments  Braced ( )               = "\n"* statement? ( "," "\n"* statement )*
 method_parameters Braced ( )               = ( variable_header ( "," variable_header )* )?
 braced_statement  Braced ( )               = statement
@@ -38,7 +38,7 @@ quest_addition
 	"<<" activity_names ( statement ( "/" statement )*)?  
 
 activity_statement
-	variable_call ":"? ( "start" ) as method  activity_names ( statement | method_arguments )
+	variable_call ":"? ( "start" ) as method  activity_names (  method_arguments | statement )
 association_statement
 	variable_call ( "join" ) as method  association_names method_arguments statement as recruiter
 
@@ -89,7 +89,7 @@ return_statement
 	"return" statement
 
 statement
-	( "entity" entity_id_choice ) as entity_selector
+	( "Entity" entity_id_choice ) as entity_selector
 	(( map_names | "*" ) tile_id_choice ) as map_selector
 	activity_statement
 	NOT? variable_call ( operator "\n"* statement )*
@@ -118,7 +118,7 @@ variable_group
 	map_names NAME as symbolName? "map"? "tile"?
 
 method
-	"new" type_name    method_arguments
+	"new" as NEW type_name    method_arguments
 	NAME as methodName method_arguments
 
 type_name

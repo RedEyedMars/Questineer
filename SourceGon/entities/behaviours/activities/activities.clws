@@ -1,4 +1,4 @@
-class 'packageName'."entities"."behaviours"."activities" Activity \Object Source{
+class 'packageName'.entities.behaviours.activities  Activity Object Source{
   class Id // {
   }
   interface Factory // {
@@ -171,20 +171,20 @@ class 'packageName'."entities"."behaviours"."activities" Activity \Object Source
     return null;
   }
 }
-class 'packageName'."entities"."behaviours"."activities" Activities {
+class 'packageName'.entities.behaviours.activities  Activities {
   @Activity create(String activityName){
     return null;
   }
-> void setup(ParseContext data){
+> void setup(%Pass data){
     \createCriteria(Activity);
     Events.addToEventMethod("load",Activity,{});
     Events.addToEventMethod("idle",Activity,{});
     Events.addToEventMethod("success",Activity,{});
     Events.addToEventMethod("fail",Activity,{});
   }
-> void declaration(IToken declarationToken){
+> void declaration(%T declarationToken){
     String activityName = ^declarationToken->"activityName";
-    String description = 'declarationToken->"description"';
+    String description = 'declarationToken->"DESCRIPTION"';
     
     
     Activities += class activityName / Activity / {
@@ -208,12 +208,15 @@ class 'packageName'."entities"."behaviours"."activities" Activities {
         return id;
       }
     }
-    declarationToken : element : variable_header {
-      \addVariableHeader(element, Activities->'activityName');
+    if declarationToken->"method_parameters" != null {
+      declarationToken->"method_parameters" : element : variable_header {
+        \addVariableHeader(element, Activities->'activityName');
+      }
     }
     declarationToken : element : variable_declaration {
       Variable variable = \addVariableHeader(element->"variable_header", Activities->'activityName');
-      variable.setIsWeak(true);
+      variable.setIsFinal(false);
+      variable.setHasSetMethod(true);
       if element->"statement" != null {
         variable.setAssignment(\getStatement(element->"statement",Activities->'activityName'.getContext()));
       }
@@ -276,7 +279,7 @@ class 'packageName'."entities"."behaviours"."activities" Activities {
         Activities->'activityName'->*"listen".appendToBody(\getBodyElements(element,listenContext));
       }
     }
-    declarationToken : element : event {
+    declarationToken : element : event_statement {
       Context eventContext = Events.getEventContext('element->"event_names"',Activities->'activityName');
       Events.addToEventMethod('element->"event_names"',Activities->'activityName',\getBodyElements(element,eventContext));
     }

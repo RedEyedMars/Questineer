@@ -8,7 +8,7 @@ import mods/conditions/conditions.clws
 import mods/traits/traits.clws
 import relations/relations.clws
 
-class 'packageName'."misc" Int {
+class 'packageName'.misc Int {
   Integer value = 0;
   void setValue(Integer newValue){
     value = newValue;
@@ -17,11 +17,13 @@ class 'packageName'."misc" Int {
     value \+= amount;
   }
 }
-class 'packageName'."entities" Entities {
+class 'packageName'.entities Entities {
   @Entity createEntity(String "entityName"){
     return null;
   }
   class Hero / Entity / {
+    ~Gui->Image->States imageStates = null;
+    ~Gui->Drawable drawable = null;
     Hero *(Gui->Statable image){
       imageStates = image.asStates();
     }
@@ -29,8 +31,6 @@ class 'packageName'."entities" Entities {
     boolean getIsPlayerAffiliated(){
       return true;
     }
-    ~Gui->Image->States imageStates = null;
-    ~Gui->Drawable drawable = null;
     Gui->Drawable getDrawable(){
       if drawable == null {
         drawable = Drawables.square.image(imageStates);
@@ -49,16 +49,16 @@ class 'packageName'."entities" Entities {
       return imageStates;
     }
   }
-> Class declaration(IToken declarationToken){
+> Class declaration(%T declarationToken){
     StringBuilder entityNameBuilder = new StringBuilder();
 	declarationToken : element : entityName {
 	  entityNameBuilder.append('element');
 	}
 	String entityName = entityNameBuilder.toString();
-    Entities += class 'packageName'."entities" entityName Entity {
+    Entities += class entityName /Entity/ {
       ~Gui->Drawable drawable = null;
     }
-    Entities->\entityName += class 'packageName'."entities" Factory \Object Entity->Factory {
+    Entities->'entityName' += class Factory /Object/ Entity->Factory {
         Entity create(){
           return new Entities->'entityName'();
         }
@@ -76,14 +76,14 @@ class 'packageName'."entities" Entities {
       if declarationToken->"width" != null {
         newState.append("_0");
       }
-      Entities->'entityName' += ~Images->'imageClassName'->States imageStates = Images->'imageName'.asStates()
+      Entities->'entityName' += ~Images->'imageClassName'->States imageStates = Images->'imageName'.asStates();
       Entities->'entityName' += Gui->Drawable getDrawable(){
-          if drawable == null {
-            drawable = Drawables.square.image(imageStates);
-            drawable.setVisualWidth(2/13f);
-            drawable.setVisualHeight(2/13f);
+          if \drawable == null {
+            \drawable = Drawables.square.image(imageStates);
+            \drawable.setVisualWidth(2/13f);
+            \drawable.setVisualHeight(2/13f);
           }
-          return drawable;
+          return \drawable;
         }
       Entities->'entityName' += void changeState(ImageStates newState){
           imageStates.changeState(newState);
@@ -98,9 +98,10 @@ class 'packageName'."entities" Entities {
     }
     declarationToken : element : entity_definition {
       element : atom : affinity_names {
-    	Entities->'entityName'->*.appendToBody(| this.gain(new Affinities->'^atom'(), this); |);
+        String affinitySubType = ^atom;
+    	Entities->'entityName'->*.appendToBody(| this.gain(new Affinities->'affinitySubType'(), this); |);
       }
-      element : atom : event {
+      element : atom : event_statement {
         Context eventContext = Events.addToEventMethod('atom->"event_names"', Entities->'entityName', {});
         Body eventBody = new Body ();
         atom : quark : body_element {
@@ -115,10 +116,11 @@ class 'packageName'."entities" Entities {
         atom : quark : statement {
           arguments.add(\getStatement(quark,bodyContext));
         }
-    	Entities->'entityName'->*.appendToBody(| this.gain(new Skills->'^atom->"skill_names"'(`arguments`), this); |);
+        String subSkillName = ^atom->"skill_names";
+    	Entities->'entityName'->*.appendToBody(| this.gain(new Skills->'subSkillName'(`arguments`), this); |);
       }
       element : atom : statRange {
-        String heroStatName = 'atom->"hero_stats"'.toLowerCase();
+        String heroStatName = 'atom->"hero_stat"'.toLowerCase();
         String leftBound = 'atom->"left"';
         String rightBound;
         if atom->"right" != null {
@@ -133,11 +135,11 @@ class 'packageName'."entities" Entities {
     return Entities->'entityName'->Factory;
   }
 }
-class 'packageName'."entities" Entity \Object Source Loaddable Tickable {
-  interface 'packageName'."entities" Factory {
+class 'packageName'.entities  Entity  Object  Source Loaddable Tickable {
+  interface Factory //{
     Entity create(){}
   }
-  interface 'packageName'."entities" Stat {
+  interface  Stat //{
     Integer getValue(){}
     Integer getValue(Entity user){}
 	void setValue(Integer "newValue"){}
@@ -207,7 +209,7 @@ class 'packageName'."entities" Entity \Object Source Loaddable Tickable {
   ~Item->List "equippedItems" = new Item->List();
   ~Skill focusSkill = null;
   ~Environment->Location location = new Environment->Location(this);
-  ~\EntityMap->\_Relationship relationships;
+  ~\EntityMap->\_Relationship relationships = new \EntityMap->\_Relationship();
   ~LinkedList<Activity> activityList = new LinkedList<Activity>();
   ~LinkedList<Entity\>Event> events = new LinkedList<Entity\>Event>();
   
@@ -355,8 +357,11 @@ class 'packageName'."entities" Entity \Object Source Loaddable Tickable {
   Tiles->Terrain->Corpse getCorpse(){
     return null;
   }
+  void influence(Entity otherEntity, Relationship->Reason reason, Integer amount){
+    \relationships.get(otherEntity, new Relationship.Factory()).influence(reason,amount);
+  }
   
-> void setup(ParseContext data){
+> void setup(%Pass data){
 	List<String> namesToAdd = new ArrayList<String>();
 	namesToAdd.add("hit");
 	Map<String, Body > bodiesToAdd = new HashMap<String, Body >();
@@ -379,12 +384,12 @@ class 'packageName'."entities" Entity \Object Source Loaddable Tickable {
     \createListMap(Source, Int);
     \createMap(Entity, Relationship);
     
-    Set<String> statNames = data.getListElements("hero_stats");
+    Set<String> statNames = data.getHeroStat();
     Parameters allStatList = new Parameters ();
     Body randomStatBody = {};
     for String statName : statNames {
       String vName = statName.toLowerCase();
-      Entity += class 'packageName'."entities" statName \Object Entity->Stat {
+      Entity += class statName /Object/ Entity->Stat {
         Integer value = 0;
         ~ListMaps->\Sources->\_Int "history";
         Integer getValue(Entity user){
@@ -409,7 +414,7 @@ class 'packageName'."entities" Entity \Object Source Loaddable Tickable {
 		  return ''statName'';
 		}
       }
-      Entity += ~Entity->'statName' 'vName' = new Entity->'statName'() 
+      Entity += ~Entity->'statName' 'vName' = new Entity->'statName'();
       randomStatBody.add(|case 'allStatList.getSize()' {return 'vName';}|);
       allStatList.add(|'vName'|);
       Entity->'statName'.getContext().setEnder(|\getValue()|);
@@ -454,10 +459,10 @@ class 'packageName'."entities" Entity \Object Source Loaddable Tickable {
 	  }
 	};
   }
-> Statement getStatRange(IToken range, Context context){
+> Statement getStatRange(%T range, Context context){
     return \getStatRange(range, context, null, new Parameters ());
   }
-> Statement getStatRange(IToken range, Context context, Statement previous, Parameters previousParameters){
+> Statement getStatRange(%T range, Context context, Statement previous, Parameters previousParameters){
     ~Statement result = null;
     if range->"statement" != null {
       result = |new Operators->Value(`\getStatement(range->"statement",context)`)|;
@@ -547,17 +552,17 @@ class 'packageName'."entities" Entity \Object Source Loaddable Tickable {
       }
     }
   }
-> Statement getImposition(IToken impositionToken, Boolean forGainBody, Statement subject){
+> Statement getImposition(%T impositionToken, Boolean forGainBody, Statement subject){
     ~Boolean useImpose = false;
-    IToken operator = impositionToken->"operator";
-    if forGainBody && operator->"IMPOSE" == null {
+    %T operator = impositionToken->"operator";
+    if forGainBody && operator->"impose" == null {
       useImpose = true;
     }
-    else if operator->"IMPOSE" != null &&! forGainBody{
+    else if operator->"impose" != null &&! forGainBody{
       useImpose = true;
     }
-    String impositionStat = 'impositionToken->"hero_stats"'.toLowerCase();
-    String statGetMethod = "get"+^impositionStat;
+    String impositionStat = 'impositionToken->"hero_stat"'.toLowerCase();
+    String statGetMethod = "get"+'^impositionStat';
     if useImpose {
       ~Integer count = 0;
       impositionToken : element : PLUS { count = count + 1; }
@@ -610,7 +615,6 @@ class 'packageName'."entities" Entity \Object Source Loaddable Tickable {
 	  void gain(inputClass 'asVariable'){
 	    'asList'.add(this, 'asVariable');
 	  }
-	String errorMessage = inputClass.getName() + ":\"+removeId+\"  not found!";
 	outputClass +=
 	  void lose(inputClass->Id "removeId", Source "source"){
 	    ~inputClass "toRemove" = null;
@@ -620,7 +624,7 @@ class 'packageName'."entities" Entity \Object Source Loaddable Tickable {
 	      }
 	    }
 	    if "toRemove" == null {
-	      throw 'errorMessage';
+	      throw '' 'inputClass.getName()' + ":"''\+removeId\+''"  not found!" '';
 	    }
 	    else {
 	      'asList'.remove("source","toRemove");
@@ -628,6 +632,6 @@ class 'packageName'."entities" Entity \Object Source Loaddable Tickable {
 	  }
 	\createListMap(Source, inputClass);
 	String inputName = "_" + inputClass.getName();
-	outputClass += ~ListMaps->\Sources->\inputName 'asList' = new ListMaps->\Sources->\inputName()
+	outputClass += ~ListMaps->\Sources->'inputName' 'asList' = new ListMaps->\Sources->'inputName'();
   }
 }

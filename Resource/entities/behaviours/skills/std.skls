@@ -3,7 +3,7 @@ TerritorialAggression
 	cd 20-25
 	range 3.0-4.0
 	use {
-	  user->relationships.influence(new Relationship.Reasons.WithinTerritory(victim->name,user->name),-50)
+	  user.influence(victim,new Relationship.Reasons.WithinTerritory(victim->name,user->name),-50)
 	}
 DefendMemberOf (Association group)
 	~This monster defends other monsters of the same group as them~
@@ -11,5 +11,5 @@ DefendMemberOf (Association group)
 	cd 5-10
 	range 8.0-10.0
 	use {
-	  user->relationships.influence(new Relationship.Reasons.AttackedFellowMember(victim->name,user->name, group->name),-50)
+	  user.influence(victim,new Relationship.Reasons.AttackedFellowMember(victim->name,user->name, group->name),-50)
 	}

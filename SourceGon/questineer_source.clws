@@ -1,7 +1,6 @@
 import headers.clws
 
-< HeroStats 	: \lists;
-#import images/image.clws#
+< ExternalClassEntry : com.rem.parser.generation.classwise;
 
 import general/general.clws
 import overview/games.clws
@@ -12,19 +11,14 @@ import environments/environments.clws
 import events/events.clws
 import gui/loaders.clws
 
-> void assignListElementNames(ParseContext context, IToken root){
-		context.retainList(new HeroStats());
-	}
-> String getDirectory(String fileName, String knownDirectory){
->		return "../Resource/";
-	}
-> void setup(ParseContext data){
+
+> void setup(%Pass data){
   }
-> void generate(ParseContext data){
-	\setup("../Questineer/src");
-	IToken root = data.getRoot();
+> void generate(%Pass data){
+	\setupRootDirectory("../Questineer.");
+	%T root = data.getRoot();
 	root : imports : import_any {
-		imports : import_events : IMPORT_EVENT {
+		imports : import_events : import_event {
 			import_events : element : event_declaration { 
 				Events.declaration(element);
 			}
@@ -42,24 +36,26 @@ import gui/loaders.clws
 	Treasury.setup(data);
 	Environment.setup(data);
 	Tile.setup(data);
+	
 	root : imports : import_any {
-		\importAny(imports);
 		Gui.importAny(imports);
 	}
-	\output(data);
+	root : imports : import_any {
+		\importAny(imports);
+	}
 }
-> void importAny(IToken import_any){
-    import_any : import_payment_types : IMPORT_PAYMENT_TYPE {
+> void importAny(%T import_any){
+    import_any : import_payment_types : import_payment_type {
 		import_payment_types : element : payment_type_declaration {
 			Treasury.paymentTypeDec(element);
 		}
 	}
-	import_any : import_events : IMPORT_EVENT {
+	import_any : import_events : import_event {
 		import_events : element : event_declaration {
 			Events.declaration(element);
 		}
 	}
-	import_any : import_items : IMPORT_ITEM {
+	import_any : import_items : import_item {
 		import_items : element : import_any {
 			\importAny(element);
 		}
@@ -67,70 +63,70 @@ import gui/loaders.clws
 			Items.declaration(element);
 		}
 	}
-	import_any : import_reason : IMPORT_REASON {
+	import_any : import_reason : import_reason {
 		import_reason : element : reason_declaration {
 			Relationship.declaration(element);
 		}
 	}
-	import_any : import_aspects : IMPORT_ASPECT {
+	import_any : import_aspects : import_aspect {
 		import_aspects : element : aspect_declaration {
 			Aspects.declaration(element);
 		}
 	}
-	import_any : import_affinities : IMPORT_AFFINITY {
+	import_any : import_affinities : import_affinity {
 		import_affinities : element : affinity_declaration {
 			Affinities.declaration(element);
 		}
 	}
-	import_any : import_traits : IMPORT_TRAIT {
+	import_any : import_traits : import_trait {
 		import_traits : element : trait_declaration {
 			Traits.declaration(element);
 		}
 	}
-	import_any : import_conditions : IMPORT_CONDITION {
+	import_any : import_conditions : import_condition {
 		import_conditions : element : condition_declaration {
 			Conditions.declaration(element);
 		}
 	}
-	import_any : import_activities : IMPORT_ACTIVITY {
+	import_any : import_activities : import_activity {
 		import_activities : element : activity_declaration{
 			Activities.declaration(element);
 		}
 	}
-	import_any : import_skills : IMPORT_SKILL {
+	import_any : import_skills : import_skill {
 		import_skills : element : skill_declaration{
 			Skills.declaration(element);
 		}
 	}
-	import_any : import_attacks : IMPORT_ATTACK {
+	import_any : import_attacks : import_attack {
 		import_attacks : element : attack_declaration{
 			Attacks.declaration(element);
 		}
 	}
-	import_any : import_supports : IMPORT_SUPPORT {
+	import_any : import_supports : import_support {
 		import_supports : element : support_declaration{
 			Supports.declaration(element);
 		}
 	}
-	import_any : import_association : IMPORT_ASSOCIATION {
+	import_any : import_association : import_association {
 		import_association : element : association_declaration {
 			Associations.declaration(element);
 		}
 	}
-	import_any : import_map : IMPORT_MAP {
+	import_any : import_map : import_map {
 		Environment.declaration(import_map);
 	}
-	import_any : import_quests : IMPORT_QUEST {
+	import_any : import_quests : import_quest {
 		import_quests : element : quest_declaration{
 			Quests.typeDeclaration(element);
 		}
 	}
  }
-> String getTypeName(IToken nameToken){
+> String getTypeName(%T nameToken){
 	StringBuilder nameBuilder = new StringBuilder();
 	if nameToken->"findType" != null {
 	  ~String findName = ^nameToken->"typeName";
-	  for Class subClass: \ExternalClassEntry.allClasses {
+	  for Class subClass: ExternalClassEntry.allClasses {
 		if subClass.getName().equals(findName) {
 		  return subClass.getFullName();
 		}

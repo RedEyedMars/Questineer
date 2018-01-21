@@ -1,5 +1,5 @@
 
-class 'packageName'."entities"."behaviours"."skills"."supports" Support Skill {
+class 'packageName'.entities.behaviours.skills.supports  Support Skill {
   class Id //{
   }
   void on(Events->\Tick "event"){
@@ -11,17 +11,17 @@ class 'packageName'."entities"."behaviours"."skills"."supports" Support Skill {
     return null;
   }
 }
-class 'packageName'."entities"."behaviours"."skills"."supports" Supports {
+class 'packageName'.entities.behaviours.skills.supports  Supports {
   @Support create(String "supportName"){
     return null;
   }
 > Statement getId(String name){
     return |Supports->'name'.id|;
   }
-> void declaration(IToken declarationToken){
+> void declaration(%T declarationToken){
     String supportName = ^declarationToken->"supportName";
     Statement description = new Statement ("+");
-    declarationToken : element : description {
+    declarationToken : element : DESCRIPTION {
 	  description.add(|''element''|);
 	}
     Supports += class supportName / Support / {

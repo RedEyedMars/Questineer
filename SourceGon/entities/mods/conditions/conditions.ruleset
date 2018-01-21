@@ -2,11 +2,11 @@
 #CONDITION#
 condition_names global list with NAME
 import_condition Imports "entities/mods/conditions/" FILE_NAME ".cnds" = ">" FILE_NAME ".cnds" "\n"
-	( "\n" | comments | condition_declaration )*
+	( comments | condition_declaration | "\n" )*
 condition_declaration
 	NAME as conditionName in condition_names "\n"* DESCRIPTION? condition_element*
 #chance pair-> conditionalChance#
-condition_element silent , Ignore [ ]
+condition_element silent , Ignore [ ][\t]
 	"\n"
 	comments
 	"?" requirement

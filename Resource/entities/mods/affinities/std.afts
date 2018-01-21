@@ -6,4 +6,4 @@ earth +water +fire	 -ice    -wild
 
 ethereal 	+light 		-dark
 light 		+dark		-ethereal 	
-dark 		+ethereal 	-light
+dark 		+ethereal   -light

@@ -1,4 +1,4 @@
-class 'packageName'."entities"."behaviours"."quests" Quest Object Usable {
+class 'packageName'.entities.behaviours.quests  Quest Object Usable {
   class Id / Usable->Id / {
   }
   ~class TargetCriteria / Criteria->Target / {
@@ -70,25 +70,25 @@ class 'packageName'."entities"."behaviours"."quests" Quest Object Usable {
     }
   }
 }
-class 'packageName'."entities"."behaviours"."quests" Quests {
-> void setup(ParseContext data){
+class 'packageName'.entities.behaviours.quests Quests {
+> void setup(%Pass data){
     Events.addToEventMethod("startQuest",Quest,{
       if "activities".isEmpty()==false {
-        currentActivity = activities.get(0);
-        currentActivityIndex = 0;
-        status = IN_PROGRESS;
+        \currentActivity = \activities.get(0);
+        \currentActivityIndex = 0;
+        \status = \IN_PROGRESS;
       }
       else {
-        status = FAIL;
+        \status = \FAIL;
       }
     });
     Events.addToEventMethod("fail",Quest,{
-      status = FAIL;
+      \status = \FAIL;
     });
   }
-> void typeDeclaration(IToken declarationToken){
+> void typeDeclaration(%T declarationToken){
     String questName = 'declarationToken->"questName"';
-    String description = 'declarationToken->"description"';
+    String description = 'declarationToken->"DESCRIPTION"';
     Quests += class questName / Quest / {
       void generateDestinations(Entity quester){}
       Boolean fulfill(Entity quester, Area destinationReached){
@@ -102,8 +102,8 @@ class 'packageName'."entities"."behaviours"."quests" Quests {
       Statement tileClause = new Statement();
       tileClause.brace();
       tileClause.set("||");
-      Quests->'questName' += ~Set<Area> '"visited"+tileCount' = new HashSet<Area>()
-      Quests->'questName' += ~Set<Area> '"toVisit"+tileCount' = new HashSet<Area>()
+      Quests->'questName' += ~Set<Area> '"visited"+tileCount' = new HashSet<Area>();
+      Quests->'questName' += ~Set<Area> '"toVisit"+tileCount' = new HashSet<Area>();
       element : atom : quest_tile_description {
         String tileName = 'atom->"tileName"'.replace(" ","");
         String mapName = 'atom->"mapName"'.replace(" ","");
@@ -133,7 +133,7 @@ class 'packageName'."entities"."behaviours"."quests" Quests {
         }
       });
     }
-    declarationToken : element : event {
+    declarationToken : element : event_statement {
       Body eventBody = new Body ();
       ~String eventName = 'element->"event_names"';
       if eventName == "start" || eventName == "load" {

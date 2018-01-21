@@ -7,7 +7,7 @@ import images.clws
 < BufferedImage : \java.\awt.\image;
 < ImageIO : \javax.\imageio;
 < ByteOrder : \java.\nio;
-< ByteBuffer : \java.\nio;
+< ByteBuffer : java.nio;
 < FloatBuffer : \java.\nio;
 < IntBuffer : \java.\nio;
 < GL11        : \org.\lwjgl.\opengl;
@@ -26,23 +26,23 @@ import images.clws
 > Integer INT_SIZE = 4;
 > String finalImageStatesClassName = "final Gui.Image.States";
 
-enum  'packageName'."gui"."images" ImageStates {
+enum  'packageName'.gui.images  ImageStates {
   void DEFAULT;
   void ASCEND;
 }
-class 'packageName'."gui"."images" Images {
+class 'packageName'.gui.images  Images {
   class Flipped // {
   }
 }
-class 'packageName'."gui"."images" Colours {}
-class 'packageName'."gui"."images" Drawables {}
-class 'packageName'."gui"."images" ImageLoader {
+class 'packageName'.gui.images Colours {}
+class 'packageName'.gui.images Drawables {}
+class 'packageName'.gui.images ImageLoader {
 > Map<Class , Parameters > animationCreationParameters = new HashMap< Class , Parameters >();
 > Map<Class , Parameters > animationCreationArguments = new HashMap< Class , Parameters >();
   FloatBuffer placeHolder = null;
   void load(){
   }
-> void declaration(IToken input, Class enclosingClass){
+> void declaration(%T input, Class enclosingClass){
     String animationTypeName = ^input->"animationTypeName";
     if enclosingClass == Gui->Image->AnimationType {
       enclosingClass += ~class animationTypeName // Gui->Renderable{
@@ -72,15 +72,15 @@ class 'packageName'."gui"."images" ImageLoader {
       variable : element : animation_variable_value {
         arguments.add(|'variable->"variableName"'|);
         element : value : INTEGER {
-          enclosingClass->'animationTypeName' += Integer 'variable->"variableName"' = 'value'
+          enclosingClass->'animationTypeName' += Integer 'variable->"variableName"' = 'value';
           parameters.add(Integer 'variable->"variableName"' = 'value';);
         }
         element : value : FLOAT {
-          enclosingClass->'animationTypeName' += Float 'variable->"variableName"' = 'value'+"f"
+          enclosingClass->'animationTypeName' += Float 'variable->"variableName"' = 'value'+"f";
           parameters.add(Integer 'variable->"variableName"' = 'value';);
         }
         element : value : quote {
-          enclosingClass->'animationTypeName' += String 'variable->"variableName"' = ''value''
+          enclosingClass->'animationTypeName' += String 'variable->"variableName"' = ''value'';
           parameters.add(Integer 'variable->"variableName"' = 'value';);
         }
       }
@@ -165,21 +165,21 @@ class 'packageName'."gui"."images" ImageLoader {
       element : atom : statement {
         Statement statement = new Statement ();
         statement.add(|'atom->"variableName"'|);
-        statement.set('atom->"anit_operator"');
-        atom : quark : value {
+        statement.set('atom->"animation_type_operator"');
+        atom : quark : animation_type_value {
           statement.add(|'quark'|);
         }
-        : anit_arithmetic_operator {
+        : animation_type_arithmetic_operator {
           statement.set('quark'.trim());
         }
         
-        if atom->"animation_type_boolean" != null {
+        if atom->"animation_type_condition" != null {
           Statement header = new Statement ();
-          atom : quark : animation_type_boolean {
+          atom->"animation_type_condition" : quark : animation_type_boolean {
             Statement headerElement = new Statement();
             headerElement.add(|'quark->"leftName"'|);
-            headerElement.set('quark->"anit_boolean_operator"');
-            quark : energy : value {
+            headerElement.set('quark->"animation_type_boolean_operator"');
+            quark : energy : animation_type_value {
               energy : quanta : INTEGER {
                 headerElement.add(|'quanta'|);
               }
@@ -195,12 +195,12 @@ class 'packageName'."gui"."images" ImageLoader {
               }
               
             }
-            : anit_arithmetic_operator {
+            : animation_type_arithmetic_operator {
               headerElement.set('energy'.trim());
             }
             header.add(headerElement);
           }
-          : anit_continuation_operator {
+          : animation_type_continuation_operator {
             if 'quark'.contains("&") {
               header.set("&&");
             }
@@ -223,7 +223,7 @@ class 'packageName'."gui"."images" ImageLoader {
     ImageLoader->*"load".prependToBody({
       'imageLoaderName'.start();
     });
-    ImageLoader->*"load".prependToBody({'imageLoaderClassName' 'imageLoaderName' = new 'imageLoaderClassName'(''imageFileName'');});
+    ImageLoader->*"load".prependToBody({'imageLoaderClassName' 'imageLoaderName' = new 'imageLoaderClassName'('' 'imageFileName' '');});
     ImageLoader->*"load".appendToBody({
         'imageLoaderName'.attachTextures(Images->'imageName',Images->Flipped->'imageName');
       });
@@ -327,7 +327,7 @@ class 'packageName'."gui"."images" ImageLoader {
 }
 
 > String floatBufferArray = "FloatBuffer[][]";
-class 'packageName'."gui" Gui {
+class 'packageName'.gui Gui {
   FloatBuffer placeHolder = null;
   @Boolean isRunning = true;
   ImageLoader imageLoader = null;
@@ -366,7 +366,7 @@ class 'packageName'."gui" Gui {
     }
     void animate(){}
     void render(){
-      GL11.glTexCoordPointer(2, 0, "textureBuffer[0][0]");
+      GL11.glTexCoordPointer(2, 0, textureBuffer[0][0]);
     }
     class Dimensions // {
       Integer width = -1;
@@ -380,7 +380,7 @@ class 'packageName'."gui" Gui {
       Integer frameY = 0;
       void animate(){}
       void render(){
-        GL11.glTexCoordPointer(2, 0, "textureBuffer[frameX][frameY]");
+        GL11.glTexCoordPointer(2, 0, textureBuffer[frameX][frameY]);
       }
       void setFrameX(Integer newX){ frameX = newX; }
       void setFrameY(Integer newY){ frameY = newY; }
@@ -415,10 +415,10 @@ class 'packageName'."gui" Gui {
       Integer y = 0;
       void animate(){ }      
       void render(){
-        GL11.glTexCoordPointer(2, 0, "textureBuffer[x][y]");
+        GL11.glTexCoordPointer(2, 0, textureBuffer[x][y]);
       }
       void animationRender(){
-        GL11.glTexCoordPointer(2, 0, "textureBuffer[x][y]");
+        GL11.glTexCoordPointer(2, 0, textureBuffer[x][y]);
       }
       Integer getTexture(){
         return \getImageTexture();
@@ -431,7 +431,9 @@ class 'packageName'."gui" Gui {
         \setFrameY(y);
       }
     }
+>@  Map<String, Set<String>> multiElementImages = new HashMap<String, Set<String>>();
 >    Map<String,Integer> imageWidths = new HashMap<String,Integer>();
+>    Map<String,Integer> imageHeights = new HashMap<String,Integer>();
 >   Map<String,Set<String>> declaredTextureBuffers = new HashMap<String,Set<String>>();
 >   Map<String,Set<String>> animationStateFirstSet = new HashMap<String,Set<String>>();
 >   Set<String> animationStatesByImage = new HashSet<String>();
@@ -444,17 +446,18 @@ class 'packageName'."gui" Gui {
 >   Map<String, Map<String, Set<String>>> allIdsWithinState = new HashMap<String, Map<String, Set<String>>>();
 >   Map<String,Map<String, Statement >> firstOrDefaultFlipMethods = new HashMap<String,Map<String, Statement >>();
 >   Map<String,Map<String, Statement >> firstOrDefaultStateVariables = new HashMap<String,Map<String, Statement >>();
->   void declaration(IToken input){
+>   void declaration(%T input){
       try {
         String imageName = 'input->"imageName"';
         String imageClassName = ^input->"imageName";
-        String imageFileName = "../Resource/gui/images/"\+'input->"image_file_name"'\+"."\+'input->"image_type"';
+        String imageFileName = "../Resource/gui/images/"\+'input->"imageFile"'\+'input->"image_type"';
         BufferedImage bimg = ImageIO.read(new File(imageFileName));
         Integer pWidth = bimg.getWidth();
         Integer pHeight = bimg.getHeight();
         imageWidths.put(imageClassName,Integer.parseInt('input->"frameWidth"'));
-        Images += @Images->'imageClassName' 'imageName' = new Images->'imageClassName'()
-        Images->Flipped += @Images->'imageClassName' 'imageName' = new Images->'imageClassName'()
+        imageHeights.put(imageClassName,Integer.parseInt('input->"frameHeight"'));
+        Images += @Images->'imageClassName' 'imageName' = new Images->'imageClassName'();
+        Images->Flipped += @Images->'imageClassName' 'imageName' = new Images->'imageClassName'();
         Images += class imageClassName / Gui->Image / Gui->Statable {
         }
         Images->'imageClassName'->*.appendToBody({
@@ -480,14 +483,14 @@ class 'packageName'."gui" Gui {
         Images->'imageClassName' += Gui->Drawable asStates(Gui->Drawable drawable) { return drawable.image(new Images->'imageClassName'->States()); }
         Images->'imageClassName'->States += Images->'imageClassName'->States asStates() {
           Images->'imageClassName'->States result = new Images->'imageClassName'->States();
-          result.setCurrent(current);
-          result.setState("state");
+          result.setCurrent(\current);
+          result.setState(\state);
           return result;
         }
         Images->'imageClassName'->States += Gui->Drawable asStates(Gui->Drawable drawable) {
           Images->'imageClassName'->States result = new Images->'imageClassName'->States();
-          result.setCurrent(current);
-          result.setState("state");
+          result.setCurrent(\current);
+          result.setState(\state);
           return drawable.image(result);
         }
         
@@ -495,7 +498,7 @@ class 'packageName'."gui" Gui {
         ~Boolean isFirst = true;
         
         if input->"animation_state" == null {
-          Images->'imageClassName'->States += Gui->Renderable "defaultState" = \Images.'imageName' 
+          Images->'imageClassName'->States += Gui->Renderable "defaultState" = \Images.'imageName';
           Images->'imageClassName'->States->*.appendToBody({\setCurrent("defaultState");});
         }
         animationStateFirstSet.put(imageClassName,new HashSet<String>());
@@ -566,7 +569,7 @@ class 'packageName'."gui" Gui {
           animationStateChangeCases.get(imageClassName).get(childStateName));
       }
     }
->   void getAnimationStateDeclaration(IToken declaration, String imageName, String imageClassName, String parentStateName){
+>   void getAnimationStateDeclaration(%T declaration, String imageName, String imageClassName, String parentStateName){
       declaration : atom
         : parentState {
           String currentStateName;
@@ -603,16 +606,17 @@ class 'packageName'."gui" Gui {
             \getAnimationStateDeclaration(quark,imageName,imageClassName,currentStateName);
           }
           if animationStates.add(currentStateName) {
-            ImageStates += void 'currentStateName'
+            ImageStates += void 'currentStateName';
             Gui->Image->States += 'finalImageStatesClassName' 'currentStateName'(){
               \changeState(ImageStates->'currentStateName');
               return this;
             }
           }
           if animationStates.add('atom->"animationId"') {
-            ImageStates += void 'atom->"animationId"'
+            String animationIdName = 'atom->"animationId"'; 
+            ImageStates += void 'animationIdName';
             Gui->Image->States += 'finalImageStatesClassName' 'atom->"animationId"'(){
-              \changeState(ImageStates->'atom->"animationId"');
+              \changeState(ImageStates.'animationIdName');
               return this;
             }
           }
@@ -639,21 +643,21 @@ class 'packageName'."gui" Gui {
           }
         }
     }
->   void declareFinalAnimationState(IToken atom, boolean isFirstValue, String imageClassName, String imageName, String parentStateName, String currentStateName, String currentAnimationId, String creationMethod, boolean isFlipped){
+>   void declareFinalAnimationState(%T atom, boolean isFirstValue, String imageClassName, String imageName, String parentStateName, String currentStateName, String currentAnimationId, String creationMethod, boolean isFlipped){
       FlipMethodReturn flipMethodParameters = \getFlipMethodParameters(atom,isFlipped,imageClassName);
       List< Parameters > arguments = flipMethodParameters.getArguments();
       Integer yLayerSize = flipMethodParameters.getYLayerSize();
       ~boolean isFirst = isFirstValue;
       if arguments.size() == 1{
         if animationStates.add(currentAnimationId) {
-          ImageStates += void 'currentAnimationId'
+          ImageStates += void 'currentAnimationId';
           Gui->Image->States += 'finalImageStatesClassName' 'currentAnimationId'(){
               \changeState(ImageStates->'currentAnimationId');
               return this;
             }
         }
         if animationStates.add(currentStateName) {
-          ImageStates += void 'currentStateName'
+          ImageStates += void 'currentStateName';
           Gui->Image->States += 'finalImageStatesClassName' 'currentStateName'(){
               \changeState(ImageStates->'currentStateName');
               return this;
@@ -662,19 +666,19 @@ class 'packageName'."gui" Gui {
         allStatesWithinState.get(imageClassName).get(parentStateName).add(currentStateName);
         allIdsWithinState.get(imageClassName).get(parentStateName).add(currentAnimationId);
       }
-      else {
+      else if arguments.size() > 1{
         for Integer i < arguments.size() {
           String realCurrentId = 'currentAnimationId'\+"_"\+i;
           String realCurrentState = 'currentAnimationId'\+"_"\+i;
           if animationStates.add(realCurrentId) {
-            ImageStates += void 'realCurrentId'
+            ImageStates += void 'realCurrentId';
             Gui->Image->States += 'finalImageStatesClassName' 'realCurrentId'(){
                 \changeState(ImageStates->'realCurrentId');
                 return this;
               }
           }
           if animationStates.add(realCurrentState) {
-            ImageStates += void 'realCurrentState'
+            ImageStates += void 'realCurrentState';
             Gui->Image->States += 'finalImageStatesClassName' 'realCurrentState'(){
                 \changeState(ImageStates->'realCurrentState');
                 return this;
@@ -683,13 +687,14 @@ class 'packageName'."gui" Gui {
           allStatesWithinState.get(imageClassName).get(parentStateName).add(currentStateName\+"_"\+i);
           allIdsWithinState.get(imageClassName).get(parentStateName).add(currentAnimationId\+"_"\+i);
         }
+        
       }
       if arguments.size() == 1{
         if isFlipped {
-          Images->'imageClassName'->States += Gui->Renderable 'currentStateName'+"State" = Images->Flipped->'imageName'->'creationMethod'(`arguments.get(0)`)
+          Images->'imageClassName'->States += Gui->Renderable 'currentStateName'+"State" = Images->Flipped->'imageName'->'creationMethod'(`arguments.get(0)`);
         }
         else {
-          Images->'imageClassName'->States += Gui->Renderable 'currentStateName'+"State" = \Images.'imageName'.'creationMethod'(`arguments.get(0)`)
+          Images->'imageClassName'->States += Gui->Renderable 'currentStateName'+"State" = \Images.'imageName'.'creationMethod'(`arguments.get(0)`);
         }
         if animationStateFirstSet.get(imageClassName).add(parentStateName) {
           firstOrDefaultFlipMethods.get(imageClassName).get(parentStateName).add(|"change_to_"+'currentStateName'();|);
@@ -697,7 +702,7 @@ class 'packageName'."gui" Gui {
         }
         \declareFlipMethod(isFirst, imageClassName, 'currentAnimationId', currentStateName, parentStateName, |'currentStateName'+"State"|);
       }
-      else {
+      else if arguments.size() > 1{
         ~Integer realIndex = 0;
         for Parameters args: arguments {
           Integer indexValue = realIndex;
@@ -706,10 +711,10 @@ class 'packageName'."gui" Gui {
             firstOrDefaultStateVariables.get(imageClassName).get(parentStateName).add(|'currentStateName'+"State_"\+'indexValue'|);
           }
           if isFlipped {
-            Images->'imageClassName'->States += Gui->Renderable 'currentStateName'+"State_"+'indexValue' = Images->Flipped->'imageName'->'creationMethod'(`args`)
+            Images->'imageClassName'->States += Gui->Renderable 'currentStateName'+"State_"+'indexValue' = Images->Flipped->'imageName'->'creationMethod'(`args`);
           }
           else {
-            Images->'imageClassName'->States += Gui->Renderable 'currentStateName'+"State_"+'indexValue' = \Images.'imageName'.'creationMethod'(`args`)
+            Images->'imageClassName'->States += Gui->Renderable 'currentStateName'+"State_"+'indexValue' = \Images.'imageName'.'creationMethod'(`args`);
           }
           
           flipMethodParameters.getYLayers().get(realIndex / flipMethodParameters.getYLayerSize()).add(|'currentStateName'+"State_"+'indexValue'|); 
@@ -717,9 +722,28 @@ class 'packageName'."gui" Gui {
           realIndex \+= 1;
           isFirst = false;
         }
+        int xLayerSize = arguments.size()/yLayerSize;
+        Parameters stateRenderablesAsImageArray = new Parameters ();
+        ~Parameters currentLayer = new Parameters ();
+        for Integer indexValue < arguments.size() {
+          currentLayer.add(|"drawable".image("states".'currentStateName'+"State_"+'indexValue')|);
+          if indexValue%xLayerSize == xLayerSize-1 {
+            Parameters currentLayerValue = currentLayer;
+            stateRenderablesAsImageArray.add(|new Gui->Drawable(`currentLayerValue`)[]|);
+            currentLayer = new Parameters ();
+          }
+        }
+        Images->'imageClassName' += Gui->Drawable "getAs"+'^currentStateName'(Gui->Drawable drawable){
+            Images->'imageClassName'->States states = new Images->'imageClassName'->States();
+            return new Gui->Drawable->Multi->Image(new Gui->Drawable(`stateRenderablesAsImageArray`)[][]);
+          }
+        if multiElementImages.containsKey(imageClassName) == false {
+          multiElementImages.put(imageClassName, new HashSet<String>());
+        }
+        multiElementImages.get(imageClassName).add(currentStateName);
       }
     }
->   FlipMethodReturn getFlipMethodParameters(IToken atom, boolean isFlipped, String imageClassName){
+>   FlipMethodReturn getFlipMethodParameters(%T atom, boolean isFlipped, String imageClassName){
       FlipMethodReturn result = new FlipMethodReturn();
       result.getArguments().add( new Parameters () );
       Parameters multipleArguments = new Parameters ();
@@ -730,7 +754,7 @@ class 'packageName'."gui" Gui {
       multipleArguments.add(|"new Gui.Renderable[][]{"+`xArgumentLayer`+"}"|);
       return result;
     }
->   void getFlipMethodParameter(IToken element, Boolean isFlipped, String imageClassName, FlipMethodReturn result, Parameters multipleArguments, Parameters xArgumentLayer){
+>   void getFlipMethodParameter(%T element, Boolean isFlipped, String imageClassName, FlipMethodReturn result, Parameters multipleArguments, Parameters xArgumentLayer){
       element : value : range {
         List< Parameters > oldArguments = result.getArguments();
         result.setArguments(new ArrayList<Parameters >());
@@ -767,23 +791,41 @@ class 'packageName'."gui" Gui {
           result.incrementIndex();
         }
       }
-      : squareValues {
-        if isFlipped {
-          Integer lowX = imageWidths.get(imageClassName)\-1\-Integer.parseInt('value->"highX"');
-          Integer highX = imageWidths.get(imageClassName)\-1\-Integer.parseInt('value->"lowX"');
-          for Parameters args: result.getArguments() {
-            args.add(|'lowX'|);
-            args.add(|'value->"highY"'|);
-            args.add(|'highX'|);
-            args.add(|'value->"lowY"'|);
+      : animation_type_coordinate_variable {
+        if value->"highX" != null {
+          if isFlipped {
+            Integer lowX  = imageWidths.get(imageClassName)\-1\-Integer.parseInt('value->"highX"');
+            Integer highX = imageWidths.get(imageClassName)\-1\-Integer.parseInt('value->"lowX"');
+            for Parameters args: result.getArguments() {
+              args.add(|'lowX'|);
+              args.add(|'value->"highY"'|);
+              args.add(|'highX'|);
+              args.add(|'value->"lowY"'|);
+            }
+          }
+          else {
+            for Parameters args: result.getArguments() {
+              args.add(|'value->"lowX"'|);
+              args.add(|'value->"lowY"'|);
+              args.add(|'value->"highX"'|);
+              args.add(|'value->"highY"'|);
+            }
           }
         }
         else {
-          for Parameters args: result.getArguments() {
-            args.add(|'value->"lowX"'|);
-            args.add(|'value->"lowY"'|);
-            args.add(|'value->"highX"'|);
-            args.add(|'value->"highY"'|);
+        
+          if isFlipped {
+            Integer lowX  = imageWidths.get(imageClassName)\-1\-Integer.parseInt('value->"lowX"');
+            for Parameters args: result.getArguments() {
+              args.add(|'lowX'|);
+              args.add(|'value->"lowY"'|);
+            }
+          }
+          else {
+            for Parameters args: result.getArguments() {
+              args.add(|'value->"lowX"'|);
+              args.add(|'value->"lowY"'|);
+            }
           }
         }
         if result.getIndex() == 0 {
@@ -791,34 +833,16 @@ class 'packageName'."gui" Gui {
           result.getYLayers().add(yArgumentLayer);
           xArgumentLayer.add(|"new Gui.Renderable[]{"+`yArgumentLayer`+"}"|);
           result.setYLayerSize(1) ;
-        }
-        
-        result.incrementIndex();
-        result.incrementIndex();
-        result.incrementIndex();
-        result.incrementIndex();
-      }
-      : xValue {
-        if isFlipped {
-          Integer valueValue = imageWidths.get(imageClassName)\-1\-Integer.parseInt('value');
-          for Parameters args: result.getArguments() {
-            args.add(|'valueValue'|);
-          }
-        }
-        else {
-          for Parameters args: result.getArguments() {
-            args.add(|'value'|);
-          }
-        }
-        if result.getIndex() == 0 {
-          Parameters yArgumentLayer = new Parameters ();
-          result.getYLayers().add(yArgumentLayer);
-          xArgumentLayer.add(|"new Gui.Renderable[]{"+`yArgumentLayer`+"}"|);
         }
         else if result.getIndex() == 1 {
           result.setYLayerSize(1) ;
         }
         result.incrementIndex();
+        result.incrementIndex();
+        if value->"highX" != null {
+          result.incrementIndex();
+          result.incrementIndex();
+        }
       }
       : INTEGER {
         for Parameters args: result.getArguments() {
@@ -902,7 +926,7 @@ class 'packageName'."gui" Gui {
       String textureBufferMethodLoaderName = "loadTextureBuffer"\+'frameWidth'\+"x"\+'frameHeight'+"Loader";
       String textureBufferName = "textureBuffer"\+'frameWidth'\+"x"\+'frameHeight';
 	  if declaredTextureBuffers.isEmpty() {
-	    ImageLoader += Map<Integer,Map<Integer,'floatBufferArray'>> textureBuffers = new HashMap<Integer,Map<Integer,'floatBufferArray'>>()
+	    ImageLoader += Map<Integer,Map<Integer,'floatBufferArray'>> textureBuffers = new HashMap<Integer,Map<Integer,'floatBufferArray'>>();
       }
       ImageLoader->*"load".prependToBody({
 	    'textureBufferMethodLoaderName'.start();
@@ -913,7 +937,7 @@ class 'packageName'."gui" Gui {
 	    }
 	    print catch Interrupted {} 
       });
-      ImageLoader += Thread 'textureBufferMethodLoaderName' = new ImageLoader->'textureBufferMethodLoaderClassName'()
+      ImageLoader += Thread 'textureBufferMethodLoaderName' = new ImageLoader->'textureBufferMethodLoaderClassName'();
       ImageLoader += ~class textureBufferMethodLoaderClassName / Thread / {
         void run(){
 	      FloatBuffer[][] textureBuffer = "new FloatBuffer["+'frameWidth'+"]["+'frameHeight'+"]";
@@ -980,7 +1004,7 @@ class 'packageName'."gui" Gui {
     }
     void render(){}
     void endRender(){}
->   void declaration(IToken input){
+>   void declaration(%T input){
       String colourName = ^input->"colourName";
       Colours += class colourName / Gui->Colour / {
       }
@@ -1128,6 +1152,119 @@ class 'packageName'."gui" Gui {
       void setAngle(Float newAngle){
       }
     }
+    class Multi // {
+      class Image /Drawable/ {
+        Gui->Drawable[][] images = null;
+        void setVisualX(Float newVisualX){
+          for int i < images.length {
+            for int j < images[i].length {
+              images[i][j].setVisualX(newVisualX\+j*visualWidth);
+            }
+          }
+        }
+        void setVisualY(Float newVisualY){
+          for int i < images.length {
+            for int j < images[i].length {
+              images[i][j].setVisualY(newVisualY\+i*visualHeight);
+            }
+          }
+        }
+        void setVisualWidth(Float newVisualWidth){
+          for int i < images.length {
+            for int j < images[i].length {
+              images[i][j].setVisualWidth(newVisualWidth);
+            }
+          }
+        }
+        void setVisualHeight(Float newVisualHeight){
+          for int i < images.length {
+            for int j < images[i].length {
+              images[i][j].setVisualHeight(newVisualHeight);
+            }
+          }
+        }
+        void setVisualRotationPointX(Float newVisualRotationPointX){
+          for int i < images.length {
+            for int j < images[i].length {
+              images[i][j].setVisualRotationPointX(newVisualRotationPointX);
+            }
+          }
+        }
+        void setVisualRotationPointY(Float newVisualRotationPointY){
+          for int i < images.length {
+            for int j < images[i].length {
+              images[i][j].setVisualRotationPointY(newVisualRotationPointY);
+            }
+          }
+        }
+        void setVisualAngle(Float newVisualAngle){
+          for int i < images.length {
+            for int j < images[i].length {
+              images[i][j].setVisualAngle(newVisualAngle);
+            }
+          }
+        }
+        void setAngle(Float newAngle){
+          for int i < images.length {
+            for int j < images[i].length {
+              images[i][j].setAngle(newAngle);
+            }
+          }
+        }
+        void display(){
+          for int i < images.length {
+            for int j < images[i].length {
+              images[i][j].display();
+            }
+          }
+        }
+        void undisplay(){
+          for int i < images.length {
+            for int j < images[i].length {
+              images[i][j].undisplay();
+            }
+          }
+        }
+        void display(Renderer->Layer layer){
+          for int i < images.length {
+            for int j < images[i].length {
+              images[i][j].display(layer);
+            }
+          }
+        }
+        void undisplay(Renderer->Layer layer){
+          for int i < images.length {
+            for int j < images[i].length {
+              images[i][j].undisplay(layer);
+            }
+          }
+        }
+        void render(){
+          for int i < images.length {
+            for int j < images[i].length {
+              images[i][j].render();
+            }
+          }
+        }
+        void animate(){
+          for int i < images.length {
+            for int j < images[i].length {
+              images[i][j].animate();
+            }
+          }
+        }
+        void load(){
+          for int i < images.length {
+            for int j < images[i].length {
+              images[i][j].load();
+            }
+          }
+        }
+        Integer getTexture(){
+          return images[0][0].getTexture();
+        }
+      }
+    }
 >   void setup(){
       Gui->Drawable->*"setVisualX".appendToBody({
         if changeListeners != null {
@@ -1168,7 +1305,7 @@ class 'packageName'."gui" Gui {
         "visualAngle" = "(float)(newAngle" * 180.0 / "Math.PI)"; 
       });
     }
->   void declaration(IToken input){
+>   void declaration(%T input){
       String drawableName = 'input->"drawableName"';
       String drawableClassName = ^input->"drawableName";
       Drawables += class drawableClassName / Gui->Drawable / {
@@ -1185,7 +1322,7 @@ class 'packageName'."gui" Gui {
           return newColour;
         }
       }
-      Drawables += @Drawables->'drawableClassName' 'drawableName' = new Drawables->'drawableClassName'()  
+      Drawables += @Drawables->'drawableClassName' 'drawableName' = new Drawables->'drawableClassName'();  
       ImageLoader->*"load".prependToBody({ \Drawables.'drawableName'.load(); });
       
       StringBuilder vertexArray = new StringBuilder();
@@ -1249,7 +1386,7 @@ class 'packageName'."gui" Gui {
         Gui->Renderable image = null;
         void render(){
           image.render();
-          \super.render();
+          super.render();
           GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, 'numberOfElementsValue');
 		  GL11.glPopMatrix();
         }
@@ -1273,7 +1410,7 @@ class 'packageName'."gui" Gui {
         colour.endRender();
       });
     }
->   void multipleDeclaration(IToken input){
+>   void multipleDeclaration(%T input){
       String multipleName = 'input->"multipleName"';
       String multipleClassName = ^multipleName;
       Drawables += class multipleClassName / Gui->Drawable / {
@@ -1286,7 +1423,7 @@ class 'packageName'."gui" Gui {
         Drawables->'multipleClassName' image(Gui->Renderable image){
         }
       }
-      Drawables += @Drawables->'multipleClassName' 'multipleName' = new Drawables->'multipleClassName'() 
+      Drawables += @Drawables->'multipleClassName' 'multipleName' = new Drawables->'multipleClassName'(); 
       Drawables->'multipleClassName' += class Image / 'multipleClassName' / {
         Integer imageTexture = -1;
         void render(){
@@ -1330,14 +1467,14 @@ class 'packageName'."gui" Gui {
           void setAngle(Float newAngle){
           }
         }
-        \addChangeListener(element->"angle",Drawables->'multipleClassName'->Image,imageName,NORMAL, "setAngle");
+        \addChangeListener(element->"angle",Drawables->'multipleClassName'->Image,imageName,\NORMAL, "setAngle");
         \addChangeListener(element->"position",Drawables->'multipleClassName'->Image,imageName,"setVisualX","setVisualY");
         \addChangeListener(element->"dimensions",Drawables->'multipleClassName'->Image,imageName,"setVisualWidth","setVisualHeight");
         if element->"rotation" != null {
           \addChangeListener(element->"rotation",Drawables->'multipleClassName'->Image,imageName,"setVisualRotationPointX","setVisualRotationPointY");
         }
         
-        Drawables->'multipleClassName'->Image += Gui->Drawable 'imageName' = null
+        Drawables->'multipleClassName'->Image += Gui->Drawable 'imageName' = null;
         Drawables->'multipleClassName'->Image->*"render".appendToBody({'imageName'.render();});
         Drawables->'multipleClassName'->Image->*"animate".appendToBody({'imageName'.animate();});
         
@@ -1362,7 +1499,7 @@ class 'packageName'."gui" Gui {
 >   Integer LEFT_SUPPLEMENTARY = 1;
 >   Integer RIGHT_SUPPLEMENTARY = 2;
 >   Integer NORMAL = 3;
->   Statement getMultipleValue(IToken input, Integer status){
+>   Statement getMultipleValue(%T input, Integer status){
       ~Statement result = null;
       if input->"DRAWABLE_ANGLE" != null {
         if status == LEFT_SUPPLEMENTARY {
@@ -1398,11 +1535,11 @@ class 'packageName'."gui" Gui {
       return null;
     }
         
->   void addChangeListener(IToken input, Class masterClass, String drawableToChange, String leftParameterSetMethod, String rightParameterSetMethod){
+>   void addChangeListener(%T input, Class masterClass, String drawableToChange, String leftParameterSetMethod, String rightParameterSetMethod){
       \addChangeListener(input->"leftParameter",masterClass,drawableToChange, LEFT_SUPPLEMENTARY, leftParameterSetMethod);
       \addChangeListener(input->"rightParameter",masterClass,drawableToChange, RIGHT_SUPPLEMENTARY, rightParameterSetMethod);
     }
->   void addChangeListener(IToken input, Class masterClass, String drawableToChange, Integer status, String setMethod){
+>   void addChangeListener(%T input, Class masterClass, String drawableToChange, Integer status, String setMethod){
       String changeListenerClassName = ^drawableToChange \+ "ChangeListener";
       Statement statement = new Statement ();
       Set<String> toChangeMethods = new HashSet<String>();
@@ -1460,23 +1597,23 @@ class 'packageName'."gui" Gui {
 > void setup(){
     Gui->Drawable.setup();
   }
-> void importAny(IToken import_any){
-	import_any : import_colours : IMPORT_COLOUR {
+> void importAny(%T import_any){
+	import_any : import_colours : import_colour {
       import_colours : element : colour_declaration {
 		Gui->Colour.declaration(element);
 	  }
 	}
-	import_any : import_animation_types : IMPORT_ANIMATION_TYPE {
+	import_any : import_animation_types : import_animation_type {
 	  import_animation_types : element : animation_type_declaration {
 		ImageLoader.declaration(element,Gui->Image->AnimationType);
 	  }
 	}
-	import_any : import_images : IMPORT_IMAGE {
+	import_any : import_images : import_image {
 	  import_images : element : image_declaration {
 		Gui->Image.declaration(element);
 	  }
 	}
-	import_any : import_draws : IMPORT_DRAWABLE {
+	import_any : import_draws : import_drawable {
 	  import_draws : element : drawable_declaration {
 		Gui->Drawable.declaration(element);
 	  }
@@ -1484,7 +1621,7 @@ class 'packageName'."gui" Gui {
 		Gui->Drawable.multipleDeclaration(element);
 	  }
 	}
-	import_any : import_layers : IMPORT_LAYER {
+	import_any : import_layers : import_layer {
 	  import_layers : element : layer_declaration {
 		Renderer.addLayer('element->"layerName"');
 	  }
@@ -1492,7 +1629,7 @@ class 'packageName'."gui" Gui {
   }
 }
 
-> class 'packageName'."misc" FlipMethodReturn {
+> class 'packageName'.misc FlipMethodReturn {
   ~List< Parameters > arguments = new ArrayList< Parameters >();
   ~List< Parameters > yLayers = new ArrayList< Parameters >();
   ~Integer yLayerSize = 0;

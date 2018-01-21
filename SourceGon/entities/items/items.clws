@@ -1,59 +1,59 @@
 import aspects/aspects.clws
 
 
-class 'packageName'."entities"."items" Items {
+class 'packageName'.entities.items  Items {
   class 'packageName'."entities"."items" Id {
   }
   @Item create(String "itemName"){
   	return null;
   }
-> void setup(ParseContext data){
+> void setup(%Pass data){
 	\createList(Aspect);
 	Entity.addGainLoss(Aspect, Item);
   }
-> void declaration(IToken itemToken){
+> void declaration(%T itemToken){
 	String className = ^itemToken->"itemName";
 	Items += class 'packageName'."entities"."items" className Item {
 		  @Items->Id \id = new Items->Id();
 		}
 	Treasury.paymentTypeDec(className,className,className);
-	Items->\className->*.appendToBody({ "name" = ''itemToken->"itemName"''; });
+	Items->'className'->*.appendToBody({ "name" = ''itemToken->"itemName"''; });
 	Items->*"create".prependToBody({
 			if "itemName".equals(''className'') {
-				return new Items->\className();
+				return new Items->'className'();
 			}
 		});
 	Context itemContext = Items->'className'.getContext();
-#>	itemToken : element : animation { > Items->\className->* += { \image = `Images.animation(element)`;} }#
+#>	itemToken : element : animation { > Items->'className'->* += { \image = `Images.animation(element)`;} }#
 	itemToken : element : hp { 
- 		Items->\className->* += { "hp"    = (int) `Entity.getStatRange(element->"stat_range",itemContext)`.getValue(null); }
-		Items->\className->* += { "maxHp" = "hp"; } }
-	itemToken : element : attack { Items->\className->* += { "dmg"    = `Entity.getStatRange(element->"stat_range",itemContext)`; } }
-	itemToken : element : defense { Items->\className->* += { "def"    = `Entity.getStatRange(element->"stat_range",itemContext)`; } }
-	itemToken : element : value  { Items->\className->* += { "value"  = (int) `Entity.getStatRange(element->"stat_range",itemContext)`.getValue(null); } }
-	itemToken : element : weight { Items->\className->* += { "weight" = (int) `Entity.getStatRange(element->"stat_range",itemContext)`.getValue(null); } }
+ 		Items->'className'->* += { "hp"    = (int) `Entity.getStatRange(element->"stat_range",itemContext)`.getValue(null); }
+		Items->'className'->* += { "maxHp" = "hp"; } }
+	itemToken : element : attack { Items->'className'->* += { "dmg"    = `Entity.getStatRange(element->"stat_range",itemContext)`; } }
+	itemToken : element : defense { Items->'className'->* += { "def"    = `Entity.getStatRange(element->"stat_range",itemContext)`; } }
+	itemToken : element : value  { Items->'className'->* += { "value"  = (int) `Entity.getStatRange(element->"stat_range",itemContext)`.getValue(null); } }
+	itemToken : element : weight { Items->'className'->* += { "weight" = (int) `Entity.getStatRange(element->"stat_range",itemContext)`.getValue(null); } }
 	itemToken : element : gain_aspect {
-	   this.gain(element, "change_item","change_item", |\getItem()|, Aspects, Items->\className);
+	   this.gain(element, "change_item","change_item", |\getItem()|, Aspects, Items->'className');
     }
 	itemToken : element : gain_trait {
-	  \this.gain(element, "equip","unequip", |\getHost()|, Traits, Items->\className);
+	  \this.gain(element, "equip","unequip", |\getHost()|, Traits, Items->'className');
     }
 	itemToken : element : gain_attack {
-	   \this.gain(element, "equip","unequip", |\getHost()|, Attacks, Items->\className);
+	   \this.gain(element, "equip","unequip", |\getHost()|, Attacks, Items->'className');
     }
-   itemToken : element : event {
+   itemToken : element : event_statement {
 	  Body bodyElementList = new Body ();
-	  Context context = Events.addToEventMethod('element', Items->\className, bodyElementList); 
+	  Context context = Events.addToEventMethod('element', Items->'className', bodyElementList); 
       element : atom : body_element {
 		bodyElementList.add(\getBodyElement(atom, context));
 	  }
-	  Events.addToEventMethod('element', Items->\className, bodyElementList);
+	  Events.addToEventMethod('element', Items->'className', bodyElementList);
     }
   }
-> void gain(IToken gainToken, String gainEventName, String loseEventName, Statement subject, Class gainClass, Class itemClass){
+> void gain(%T gainToken, String gainEventName, String loseEventName, Statement subject, Class gainClass, Class itemClass){
 	String specificClassName = ^gainToken;
-	Class specificClass = gainClass->\specificClassName;
-	Class idClass = gainClass->\Id;
+	Class specificClass = gainClass->'specificClassName';
+	Class idClass = gainClass->Id;
     String asList = gainClass.getName().toLowerCase();
 	Context gainContext = Events.addToEventMethod(gainEventName, itemClass, new Body ());
 	Context loseContext = Events.addToEventMethod(loseEventName, itemClass, new Body ());
@@ -83,7 +83,7 @@ class 'packageName'."entities"."items" Items {
 	}
   }
 }
-class 'packageName'."entities"."items" Item \Object Source {
+class 'packageName'.entities.items Item \Object Source {
   String name = null;
   Entity equipper = null;
   Integer hp = null;

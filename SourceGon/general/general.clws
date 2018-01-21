@@ -1,22 +1,22 @@
 
-< Random : \java.\util;
+< Random : java.util;
 
 > Set<String> declaredCritSet = new HashSet<String>();
 > Set<String> declaredListSet = new HashSet<String>();
 > Set<String> declaredMapSet = new HashSet<String>();
 > String TT = "<T>T";
-interface 'packageName'."misc"."interfaces" Listenable <TypeName> {
+interface 'packageName'.misc.interfaces Listenable <TypeName> {
   void listen('"TypeName"' "event"){}
 }
-interface 'packageName'."misc"."interfaces" Source {
+interface 'packageName'.misc.interfaces Source {
 }
-interface 'packageName'."misc"."interfaces" Loaddable {
+interface 'packageName'.misc.interfaces Loaddable {
   void load(){}
 }
-interface 'packageName'."misc"."interfaces" Tickable {
+interface 'packageName'.misc.interfaces Tickable {
   void tick(Double "millisSinceLastFrame"){}
 }
-interface 'packageName'."misc"."interfaces" Usable {
+interface 'packageName'.misc.interfaces Usable {
   class Id // {
   }
   Boolean use(Entity user, Activity activity){}
@@ -25,7 +25,7 @@ interface 'packageName'."misc"."interfaces" Usable {
   Criteria->Target getTargetCriteria(){}
   Usable->Id getId(){}
 }
-class 'packageName'."misc" Range Object Evaluable{
+class 'packageName'.misc Range Object Evaluable{
   @Random randomizer = new Random();
   Float left = 0f;
   Float right = 0f;
@@ -86,7 +86,7 @@ class 'packageName'."misc" Range Object Evaluable{
   }
 }
 
-class 'packageName'."misc" Operators {
+class 'packageName'.misc Operators {
   class Plus / / Evaluable{
     Evaluable left = null;
     Evaluable right = null;
@@ -131,13 +131,13 @@ class 'packageName'."misc" Operators {
     }
   }
 }
-interface 'packageName'."misc" Evaluable {
+interface 'packageName'.misc Evaluable {
   float getValue(Entity user){}
 }
 
-class 'packageName'."misc" ListMaps {
+class 'packageName'.misc ListMaps {
 }
-class 'packageName'."misc" Criteria<TypeName> {
+class 'packageName'.misc Criteria<TypeName> {
   Boolean satisfies( '"TypeName"' "candidate"){
     return false;
   }
@@ -151,7 +151,7 @@ class 'packageName'."misc" Criteria<TypeName> {
   }
 }
 
-> Body getBodyElements(IToken elementsToken, Context context){
+> Body getBodyElements(%T elementsToken, Context context){
     Body result = new Body ();
     result.setParentContext(context);
     elementsToken : element : body_element {
@@ -159,7 +159,7 @@ class 'packageName'."misc" Criteria<TypeName> {
     }
     return result;
   }
-> Statement getBodyElement(IToken elementToken, Context context){
+> Statement getBodyElement(%T elementToken, Context context){
     elementToken : element
       : statement {
         return | `\getStatement(element, context)` ; | ;
@@ -193,11 +193,11 @@ class 'packageName'."misc" Criteria<TypeName> {
       }
     return null;
   }
-> Statement getVariableDeclaration(IToken variableDeclarationToken, Context context){
+> Statement getVariableDeclaration(%T variableDeclarationToken, Context context){
 	String typeName = \getTypeName(variableDeclarationToken->"variable_header"->"type_name");
     Context type = context.getClassContext(typeName);
     if type == null {
-      throw \Generator.completeTokenErrorMessage(variableDeclarationToken) + "Could not find type:" + typeName + "!";
+      throw variableDeclarationToken.err() + "Could not find type:" + typeName + "!";
     }
     if variableDeclarationToken->"statement" != null {
       return | 'typeName' 'variableDeclarationToken->"variable_header"->"variableName"' = `\getStatement(variableDeclarationToken->"statement", context)`; |;
@@ -206,24 +206,24 @@ class 'packageName'."misc" Criteria<TypeName> {
       return | 'typeName' 'variableDeclarationToken->"variable_header"->"variableName"' = null; |;
     }
   }
-> Variable getVariableFromHeader(IToken variableHeaderToken, Context context){
+> Variable getVariableFromHeader(%T variableHeaderToken, Context context){
     String typeName = \getTypeName(variableHeaderToken->"type_name");
     Context type = context.getClassContext(typeName);
     if type == null {
-      throw \Generator.completeTokenErrorMessage(variableHeaderToken) + "Could not find type:" + typeName + "!";
+      throw variableHeaderToken.err() + "Could not find type:" + typeName + "!";
     }
     return 'typeName' 'variableHeaderToken->"variableName"';;
   }
-> Variable addVariableHeader(IToken variableHeaderToken, Class inputClass){
+> Variable addVariableHeader(%T variableHeaderToken, Class inputClass){
     String typeName = \getTypeName(variableHeaderToken->"type_name");
     Context type = inputClass.getContext().getClassContext(typeName);
     if type == null {
-      throw \Generator.completeTokenErrorMessage(variableHeaderToken) + "Could not find type:" + typeName + "!";
+      throw variableHeaderToken.err() + "Could not find type:" + typeName + "!";
     }
-    inputClass += 'typeName' 'variableHeaderToken->"variableName"'
+    inputClass += 'typeName' 'variableHeaderToken->"variableName"';
     return inputClass.getVariable('variableHeaderToken->"variableName"');
   }
-> Statement getIfStatement(IToken ifStatementToken, Context context){
+> Statement getIfStatement(%T ifStatementToken, Context context){
     Statement header     = new Statement ();
     Statement elseHeader = new Statement ();
     Body      body       = new Body ();
@@ -257,14 +257,14 @@ class 'packageName'."misc" Criteria<TypeName> {
     else if mode == 2 { return |if `header` `body` else if `elseHeader` `elseBody` |; }
     else              { return null;                                              }
   }
-> Statement getForStatement(IToken forStatementToken, Context context){
+> Statement getForStatement(%T forStatementToken, Context context){
     
     if forStatementToken->"fromList" != null {
-      IToken variableHeaderToken = forStatementToken->"fromList"->"variable_header";
+      %T variableHeaderToken = forStatementToken->"fromList"->"variable_header";
       String typeName = \getTypeName(variableHeaderToken->"type_name");
       Context type = context.getClassContext(typeName);
       if type == null {
-        throw \Generator.completeTokenErrorMessage(variableHeaderToken) + "Could not find type:" + typeName + "!";
+        throw variableHeaderToken.err() + "Could not find type:" + typeName + "!";
       }
       context.add('typeName' 'variableHeaderToken->"variableName"';);
       Statement right = \getStatement(forStatementToken->"fromList"->"statement", context) ;
@@ -275,10 +275,10 @@ class 'packageName'."misc" Criteria<TypeName> {
   }
 
 
-> Statement getBooleanStatement(IToken booleanStatement, Context context){
+> Statement getBooleanStatement(%T booleanStatement, Context context){
     return \getBooleanStatement(booleanStatement, false, context);
   }
-> Statement getBooleanStatement(IToken booleanStatement, Boolean negate, Context context){
+> Statement getBooleanStatement(%T booleanStatement, Boolean negate, Context context){
     Statement operator = new Statement();
     booleanStatement : element
     	: has_chance {
@@ -321,14 +321,14 @@ class 'packageName'."misc" Criteria<TypeName> {
     	  }
      return operator;
   }
-> Statement getIsAStatement(IToken element, Context context){
+> Statement getIsAStatement(%T element, Context context){
     Statement result = new Statement ();
     result.set(" instanceof ");
     result.add(\getVariableCall(element->"variable_call",context));
     result.add(|'\getTypeName(element->"type_name")'|);
     return result;
   }
-> Statement getRequirement(IToken requirementToken, Statement candidate, Boolean showAsTrue){
+> Statement getRequirement(%T requirementToken, Statement candidate, Boolean showAsTrue){
     Statement requireHeader = new Statement();
  	~String delimiter = "&&";
  	if showAsTrue {
@@ -336,8 +336,8 @@ class 'packageName'."misc" Criteria<TypeName> {
 	} 
  	requireHeader.set(delimiter);
  	requirementToken : quanta : require_stat {
- 	  String statName = 'quanta->"hero_stats"'.toLowerCase();
- 	  String methodName = "get"+^statName;
+ 	  String statName = 'quanta->"hero_stat"'.toLowerCase();
+ 	  String methodName = "get"+'^statName';
  	  Statement innerHead = |`candidate`.'methodName'()."getValue"()|;
  	  ~String operator = 'quanta->"ORDINAL"';
  	  if quanta->"NOT" != null && showAsTrue || quanta->"NOT" == null &&! showAsTrue{
@@ -378,17 +378,17 @@ class 'packageName'."misc" Criteria<TypeName> {
     }
 	return requireHeader;
   }
-> Statement getActivityStatement(IToken element, Context context){
+> Statement getActivityStatement(%T element, Context context){
     Statement subject = \getVariableCall(element->"variable_call",context);
     String method = 'element->"method"';
-    String activityName = ^element->"activitynames";
+    String activityName = ^element->"activity_names";
     Parameters arguments = new Parameters ();
     element : atom : statement {
         arguments.add(\getStatement(atom,context));
       }
     return |`subject`.'method'(new Activities->'activityName'(`arguments`))|;
   }
-> Statement getAssociationStatement(IToken element, Context context){
+> Statement getAssociationStatement(%T element, Context context){
     Statement subject = \getVariableCall(element->"variable_call",context);
     String method = 'element->"method"';
     String associationName = ^element->"association_names";
@@ -399,10 +399,10 @@ class 'packageName'."misc" Criteria<TypeName> {
     Statement recruiter = \getStatement(element->"recruiter"->"statement",context);
     return |`subject`.'method'(`recruiter`,new Associations->'associationName'(`arguments`))|;
   }
-> Statement getStatement(IToken statementToken, Context context){
+> Statement getStatement(%T statementToken, Context context){
     return \getStatement(statementToken,false,context);
   }
-> Statement getStatement(IToken statementToken,Boolean initialNegate, Context context){
+> Statement getStatement(%T statementToken,Boolean initialNegate, Context context){
 	Statement ret = new Statement();
 	~Boolean negate = initialNegate;
 	statementToken : element
@@ -437,14 +437,14 @@ class 'packageName'."misc" Criteria<TypeName> {
 	return ret;
   }
 
-> Statement getVariableCall(IToken variableCallToken, Context context){
+> Statement getVariableCall(%T variableCallToken, Context context){
 	~Context currentContext = context;
 	Statement ret = new Statement(".");
 	variableCallToken : element
 	  : range {
 	    ret.add(|new Range('element->"left"','element->"right"')|);
 	  }
-	  : braced {
+	  : braced_statement {
 		Statement subStatement = \getStatement(element,context);
 		subStatement.brace();
 		ret.add(subStatement);
@@ -503,7 +503,7 @@ class 'packageName'."misc" Criteria<TypeName> {
 		      throw "Could not find "+'element'+" variable in context!";
 		    }
 		    else {
-		      ret.add(|"event".'"get"+^element'()|);
+		      ret.add(|"event"."get"+'^element'()|);
 		    }
 		  }
 		}
@@ -513,7 +513,7 @@ class 'packageName'."misc" Criteria<TypeName> {
   		    ret.add(|'element'|);
 		  }
 		  else {
-		    ret.add(|'"get"+^element'()|); #MIGHT HAVE TO IMPLEMENT ^'X'#
+		    ret.add(|"get"+'^element'()|);
 		  }
 		}
 	  }
@@ -526,10 +526,11 @@ class 'packageName'."misc" Criteria<TypeName> {
 		  methodName = \getTypeName(element->"type_name");
 		}
 		Parameters parameters = new Parameters();
-		element : atom
-		  : statement {
+		if element->"method_arguments" != null {
+		  element->"method_arguments" : atom : statement {
 			parameters.add(\getStatement(atom,context));
 		  }
+		}
 		if element->"NEW" != null {
           currentContext = currentContext.getClassContext(methodName);
 		  if currentContext == null {
@@ -550,7 +551,7 @@ class 'packageName'."misc" Criteria<TypeName> {
 	}
 	return ret;
   }
-> Statement getIdFromName(IToken nameToken){
+> Statement getIdFromName(%T nameToken){
     nameToken : element
       : association_names { return Associations.getId(^element); }
       : affinity_names    { return Affinities.getId(^element); }
@@ -561,7 +562,7 @@ class 'packageName'."misc" Criteria<TypeName> {
     return null;
   }
 
-> Statement getAcquisition(IToken acquisitionToken, Boolean forGainBody, Statement subject, Context context){
+> Statement getAcquisition(%T acquisitionToken, Boolean forGainBody, Statement subject, Context context){
     ~Context source;
     String sourceName;
     if acquisitionToken->"source_name" != null {
@@ -571,7 +572,9 @@ class 'packageName'."misc" Criteria<TypeName> {
       sourceName = "this";
     }
     source = context.link(sourceName);
-    if source == null {> throw "Could not find "+sourceName+" source in context!"; }
+    if source == null {
+      throw "Could not find "+sourceName+" source in context!";
+    }
     Statement gainObj;
     Statement id;
     if acquisitionToken->"THIS" != null {
@@ -580,22 +583,22 @@ class 'packageName'."misc" Criteria<TypeName> {
     }
     else if acquisitionToken->"aspect_names" != null {
  	  String className = ^acquisitionToken->"aspect_names"; 
- 	  gainObj = |new Aspects->\className()|;
+ 	  gainObj = |new Aspects->'className'()|;
  	  id = |Aspects->'className'."id"|;
     }
     else if acquisitionToken->"trait_names" != null {
  	  String className = ^acquisitionToken->"trait_names"; 
- 	  gainObj = |new Traits->\className()|;
+ 	  gainObj = |new Traits->'className'()|;
  	  id = |Traits->'className'."id"|;
     }
     else if acquisitionToken->"attack_names" != null {
  	  String className = ^acquisitionToken->"attack_names"; 
- 	  gainObj = |new Attacks->\className()|;
+ 	  gainObj = |new Attacks->'className'()|;
  	  id = |Attacks->'className'."id"|;
     }
     else if acquisitionToken->"condition_names" != null {
  	  String className = ^acquisitionToken->"condition_names"; 
- 	  gainObj = |new Conditions->\className()|;
+ 	  gainObj = |new Conditions->'className'()|;
  	  id = |Conditions->'className'."id"|;
     }
     else {
@@ -620,7 +623,7 @@ class 'packageName'."misc" Criteria<TypeName> {
 	}
   }
 
-> Statement primeRange(IToken rangeToken){
+> Statement primeRange(%T rangeToken){
     ~String left = 'rangeToken->"left"';
     ~String right = 'rangeToken->"right"';
     if rangeToken->"percent" != null {
@@ -630,7 +633,7 @@ class 'packageName'."misc" Criteria<TypeName> {
  	return |new Range('left'+"f",'right'+"f")|;
   }
 
-> Statement getChance(IToken chanceToken){
+> Statement getChance(%T chanceToken){
     Double value = Double.parseDouble('chanceToken') / 100.0;
     return |Range.chance('value') |;
   }
@@ -647,7 +650,7 @@ class 'packageName'."misc" Criteria<TypeName> {
 > void createCriteria(Class critClass) {
 	String critName = critClass.getName()+"Criteria";
 	if declaredCritSet.add(critName) {
-	  class 'packageName'."misc"."criteria" critName Criteria<critClass> {
+	  ~class 'packageName'."misc"."criteria" critName Criteria<critClass> {
 	    Boolean satisfies(critClass "candidate"){
 	      return false;
 	    }
@@ -660,12 +663,12 @@ class 'packageName'."misc" Criteria<TypeName> {
 	String rightName = "_"+rightClass.getName();
 	String fullName  = "Maps."+leftName+"."+rightName;
 	if declaredListSet.add(fullName) {
-	  if ListMaps->\leftName == null{
+	  if ListMaps->'leftName' == null{
 	    ListMaps += class 'packageName'."misc" leftName {}
 	  }
-	  ListMaps->\leftName  +=	
+	  ListMaps->'leftName'  +=	
 	    class 'packageName'."misc" rightName HashMap<leftClass, LinkedList<rightClass>> \Iterable<rightClass>{
-	      LinkedList<rightClass> "completeList";
+	      LinkedList<rightClass> "completeList" = new LinkedList<rightClass>();
 	      \Iterator<rightClass> iterator(){
 	        return "completeList".iterator();
 	      }
@@ -705,9 +708,9 @@ class 'packageName'."misc" Criteria<TypeName> {
 	String valueName = "_"+valueClass.getName();
 	String fullName  = "Maps."+keyName+"."+valueName;
 	if declaredMapSet.add(fullName) {
-	  class 'packageName'."misc"."maps" keyName {
+	  ~class 'packageName'."misc"."maps" keyName {
 	  }
-	  keyName += class 'packageName'."misc"."maps" valueName HashMap<keyClass, valueClass> {
+	  \keyNameClass += class 'packageName'."misc"."maps" valueName HashMap<keyClass, valueClass> {
 	    valueClass get(keyClass "key", valueClass->Factory "factory"){
 	      valueClass "result" = \get("key");
 	      if "result" == null {
@@ -726,7 +729,7 @@ class 'packageName'."misc" Criteria<TypeName> {
 	Double result = Double.parseDouble(input) / 100.0;
 	return 'result';
   }
-> String percentify(IToken input){
+> String percentify(%T input){
 	return \percentify('input');
   }
 > String negateOperator(String operator){
