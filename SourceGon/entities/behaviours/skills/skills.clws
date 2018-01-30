@@ -3,12 +3,16 @@ import supports/supports.clws
 class 'packageName'.entities.behaviours.skills  Skill \Object Source Usable {
   class Id / Usable->Id /{
   }
+  class Imports // {
+    Tile tile = null;
+  }
   ~Integer experience = 0;
   Integer cooldown = -1; 
   Evaluable range = null;
   Evaluable cost = null;
   ~Boolean hasEntityFocus = null;
-  ~Criteria->Target targetCriteria = null;
+  ~Predicate<Entity> targetCriteria = "(T)->true";
+  ~Predicate<Tile> destinationCriteria = new Criteria->Destination();
   
   String getName(){ return null; }
   String getDescription(){ return null; }
@@ -53,7 +57,7 @@ class 'packageName'.entities.behaviours.skills  Skill \Object Source Usable {
       return false;
     }
     if targetCriteria == null || activity.hasTarget() {
-      if targetCriteria == null || targetCriteria.satisfies(activity.getTargetEntity()) {
+      if targetCriteria == null || targetCriteria.test(activity.getTargetEntity()) {
         \use(user, activity.getTargetEntity());
 	    return true;
       }
@@ -81,10 +85,7 @@ class 'packageName'."entities"."behaviours"."skills" Skills {
 > void setup(%Pass data){
     \createCriteria(Entity);
     Criteria->Target += class Free / Criteria->Target / {
-      Boolean satisfies(Entity candidate){
-        return true;
-      }
-      Boolean satisfies(Tile candidate){
+      boolean test(Tile candidate){
         return true;
       }
     }
@@ -92,7 +93,7 @@ class 'packageName'."entities"."behaviours"."skills" Skills {
       Environment->Position to = null;
       Double angleLeft = 0.0;
       Double angleRight = 0.0;
-      Boolean satisfies(Entity candidate){
+      boolean test(Entity candidate){
         Double direction = candidate.getLocation().getDirectionTo(to);
         return direction <= angleLeft & direction >= angleRight ;
       }
@@ -121,10 +122,12 @@ class 'packageName'."entities"."behaviours"."skills" Skills {
       
     }
     Skills->'skillName' += ~class TargetCriteria / Criteria->Target / {
-        Boolean satisfies(Entity "user"){
+        boolean test(Entity "user"){
           return true;
         }
-        Boolean satisfies(Tile "user"){
+      }
+    Skills->'skillName' += ~class DestinationCriteria / Criteria->Destination / {
+        boolean test(Tile "user"){
           return true;
         }
       }
@@ -141,8 +144,8 @@ class 'packageName'."entities"."behaviours"."skills" Skills {
       }
       : require {
         element : atom : boolean_statement {
-          Context canUseContext = Skills->'skillName'->TargetCriteria.getMethod("satisfies[Entity]").getContext();
-          Skills->'skillName'->TargetCriteria->*"satisfies[Entity]".prependToBody(| if `\getBooleanStatement(atom,true,canUseContext)` {
+          Context canUseContext = Skills->'skillName'->TargetCriteria.getMethod("test[Entity]").getContext();
+          Skills->'skillName'->TargetCriteria->*"test[Entity]".prependToBody(| if `\getBooleanStatement(atom,true,canUseContext)` {
             return false;
           }|);
         }

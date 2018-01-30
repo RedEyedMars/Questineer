@@ -34,6 +34,11 @@ die
 	Source source
 	Entity deceased
 
+collect
+	Source source
+	Entity host
+	Item item
+
 joined
 	Entity recruiter
 	Entity recruit

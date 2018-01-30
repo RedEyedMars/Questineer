@@ -18,11 +18,12 @@ class 'packageName'.entities.behaviours.activities  Activity Object Source{
   ~Set<Area> exploredAreas = new HashSet<Area>();
   ~Entity targetEntity = null;
   ~Tiles->MonsterDen targetDen = null;
+  ~Tiles->Terrain targetTerrain = null;
   ~Boolean failed = false;
   void setHost(Entity newHost){
   }
   Boolean hasTarget() {
-    return targetEntity != null || targetDen != null;
+    return targetEntity != null || targetDen != null || targetTerrain != null;
   }
   void rememberEntryPoint(Tiles->EntryPoint point){
     exploredPoints.add(point);
@@ -95,7 +96,7 @@ class 'packageName'.entities.behaviours.activities  Activity Object Source{
     Entity->List entitiesToTarget = event.getHost().getLocation().getEntitiesWithin(20f);
 	for Entity candidate : entitiesToTarget {
 	  for Usable usable : \getUsables() {
-	    if usable.getTargetCriteria().satisfies(candidate) {
+	    if usable.getTargetCriteria().test(candidate) {
 	      event.getHost().start( new Activities->\ChasingEntity(25, candidate, usable.getRange(event.getHost())) );
 	      return void;
 	    }
@@ -108,7 +109,7 @@ class 'packageName'.entities.behaviours.activities  Activity Object Source{
     Double distanceToTarget = host.getLocation().getDistanceTo(toTarget.getLocation());
     for Usable usable : \getUsables() {
 	  Float potentialRange = usable.getRange(host);
-	  if potentialRange <= distanceToTarget && usable.getTargetCriteria().satisfies(toTarget) {
+	  if potentialRange <= distanceToTarget && usable.getTargetCriteria().test(toTarget) {
 	    result.add(usable);
 	  }
 	}
@@ -117,7 +118,7 @@ class 'packageName'.entities.behaviours.activities  Activity Object Source{
   Usable->List getAvailableUsables(Entity host, Entity toTarget){
     Usable->List result = new Usable->List();
     for Usable usable : \getUsables() {
-	  if usable.getTargetCriteria().satisfies(toTarget) {
+	  if usable.getTargetCriteria().test(toTarget) {
 	    result.add(usable);
 	  }
 	}
@@ -128,7 +129,7 @@ class 'packageName'.entities.behaviours.activities  Activity Object Source{
     Float longestRange = -1f;
     for Usable usable : \getUsables() {
 	  Float potentialRange = usable.getRange(host);
-	  if potentialRange > longestRange && usable.getTargetCriteria().satisfies(toTarget) {
+	  if potentialRange > longestRange && usable.getTargetCriteria().test(toTarget) {
 	    longestRange = potentialRange;
 	    result = usable;
 	  }
@@ -140,7 +141,7 @@ class 'packageName'.entities.behaviours.activities  Activity Object Source{
     Double distanceToTarget = host.getLocation().getDistanceTo(toTarget);
     for Usable usable : \getUsables() {
 	  Float potentialRange = usable.getRange(host);
-	  if potentialRange <= distanceToTarget && usable.getTargetCriteria().satisfies(toTarget) {
+	  if potentialRange <= distanceToTarget && usable.getDestinationCriteria().test(toTarget) {
 	    result.add(usable);
 	  }
 	}
@@ -149,7 +150,7 @@ class 'packageName'.entities.behaviours.activities  Activity Object Source{
   Usable->List getAvailableUsables(Entity host, Tile toTarget){
     Usable->List result = new Usable->List();
     for Usable usable : \getUsables() {
-	  if usable.getTargetCriteria().satisfies(toTarget) {
+	  if usable.getDestinationCriteria().test(toTarget) {
 	    result.add(usable);
 	  }
 	}
@@ -160,7 +161,7 @@ class 'packageName'.entities.behaviours.activities  Activity Object Source{
     Float longestRange = -1f;
     for Usable usable : \getUsables() {
 	  Float potentialRange = usable.getRange(host);
-	  if potentialRange > longestRange && usable.getTargetCriteria().satisfies(toTarget) {
+	  if potentialRange > longestRange && usable.getDestinationCriteria().test(toTarget) {
 	    longestRange = potentialRange;
 	    result = usable;
 	  }
@@ -192,10 +193,10 @@ class 'packageName'.entities.behaviours.activities  Activities {
       @Usable->List allUsables = new Usable->List();
       ~Entity host = null;
       String getName(){
-        return ''activityName'';
+        return '' 'activityName' '';
       }
       String getDescription(){
-        return ''description'';
+        return '' 'description' '';
       }
       Usable->List getUsables(){
         return allUsables;
@@ -222,7 +223,7 @@ class 'packageName'.entities.behaviours.activities  Activities {
       }
     }
     Activities->*"create".prependToBody({
-      if "activityName".equals(''activityName'') {
+      if "activityName".equals('' 'activityName' '') {
         return new Activities->'activityName'(); 
       }
     });

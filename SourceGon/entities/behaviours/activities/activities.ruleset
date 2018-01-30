@@ -9,7 +9,7 @@ activity_element silent
 	comments
 	"+" variable_declaration
 	"get" ( ("target" std_body) as getTarget | ("destination" std_body) as getDestination )
-	(( "succeed" | "fail" ) if_header ) as endState
+	(( "succeed" as SUCCEED | "fail" as FAIL ) if_header ) as endState
 	( "listen" std_body ) as listen
 	( "step" std_body ) as step
 	event_statement

@@ -12,11 +12,14 @@ class 'packageName'.environments Area Environment->Position {
   ~Map<Integer, Map<Integer, Tiles\>Floor>> layout = new HashMap<Integer, Map<Integer, Tiles\>Floor>>();
   ~ArrayList<Tiles\>EntryPoint> entryPoints = new ArrayList<Tiles\>EntryPoint>();
   ~Map<Tile\>Id, ArrayList<Tile>> tileMap = new HashMap<Tile\>Id, ArrayList<Tile>>();
+  ~ArrayList<Tiles\>Floor> floorTiles = new ArrayList<Tiles\>Floor>();
   ~Map<Tiles\>Floor\>Id, ArrayList<Tiles\>Floor>> floorMap = new HashMap<Tiles\>Floor\>Id, ArrayList<Tiles\>Floor>>();
   ~Map<Tiles\>Terrain\>Id, ArrayList<Tiles\>Terrain>> terrainMap = new HashMap<Tiles\>Terrain\>Id, ArrayList<Tiles\>Terrain>>();
   
   ~Map<Integer, Map<Integer, ArrayList<Tiles\>Floor>>> entryToEntryPaths = new HashMap<Integer, Map<Integer, ArrayList<Tiles\>Floor>>>();
-  ~Map<Area, Tiles\>EntryPoint> sisterAreas = new HashMap<Area, Tiles\>EntryPoint>(); 
+  ~Map<Area, Tiles\>EntryPoint> sisterAreas = new HashMap<Area, Tiles\>EntryPoint>();
+  ~Map<Integer, Set<Area>> areaDistances = new HashMap<Integer, Set<Area>>();
+  ~int furthestDistanceToArea = 0; 
   
   ~Entity->List entities = new Entity->List();
   ~Integer width = 0;
@@ -537,6 +540,16 @@ class 'packageName'.environments Area Environment->Position {
       return (Tiles->MonsterDen)Range.select(tileMap.get(findId));
     }
   }
+  Tiles->MonsterDen getMonsterDen(Predicate<Tile> findId){
+    Collectors collects = null;
+    '"java.util.List<Tile>"' list = tiles.parallelStream().filter(findId).collect(Collectors.toList());
+    if list.isEmpty() {
+      return null;
+    }
+    else {
+      return (Tiles->MonsterDen)Range.select(list);
+    }
+  }
   Tiles->Floor getTile(Integer x, Integer y){
     if layout.containsKey(x) {
       return layout.get(x).get(y);
@@ -544,6 +557,44 @@ class 'packageName'.environments Area Environment->Position {
     else {
       return null;
     }
+  }
+  int getDistanceToArea(Area area){
+    if this == area {
+      return 0;
+    }
+    for Integer i : areaDistances.keySet() {
+      if areaDistances.get(i).contains(area) {
+        return i;
+      }
+    }
+    return -1;
+  }
+  void findDistance(Area findArea){
+    for Tiles->EntryPoint entryPoint: entryPoints {
+      if entryPoint.getSister() != null && entryPoint.getSister().getArea() == findArea {
+        \setDistanceToArea(1,findArea);
+        return void;
+      }
+    }
+    for Integer i : areaDistances.keySet() {
+      for Area area : areaDistances.get(i) {
+        for Tiles->EntryPoint entryPoint: area.entryPoints {
+          if entryPoint.getSister().getArea() == findArea {
+            \setDistanceToArea(i\+1,findArea);
+            return void;
+          }
+        }
+      }
+    }
+  }
+  void setDistanceToArea(int distance, Area area){
+    if areaDistances.containsKey(distance) == false {
+      areaDistances.put(distance,new HashSet<Area>());
+      if distance > furthestDistanceToArea {
+        furthestDistanceToArea = distance;
+      }
+    }
+    areaDistances.get(distance).add(area);
   }
   Tiles->EntryPoint getEntryPoint(Integer index){
     return entryPoints.get(index);
@@ -624,6 +675,7 @@ class 'packageName'.environments Area Environment->Position {
       entryPoints.add("((Tiles.EntryPoint)newTile)");
     }
     if "newTile.getId() instanceof Tiles.Floor.Id" {
+      floorTiles.add((Tiles->Floor)newTile);
       if floorMap.containsKey(newTile.getId()) == false {
         floorMap.put("(Tiles.Floor.Id)newTile.getId()",new ArrayList<Tiles\>Floor>());
       }
@@ -686,6 +738,9 @@ class 'packageName'.environments Area Environment->Position {
     }
     return tiles.remove(oldTile);
   }
+  boolean has(Predicate<Tile> criteria){
+    return tiles.parallelStream().anyMatch(criteria);
+  }
   Tiles->Floor getUnexploredPoint(Entity explorer){
     if entryPoints.isEmpty() {
       return null;
@@ -708,21 +763,21 @@ class 'packageName'.environments Area Environment->Position {
     }
     return result;
   }
-  Entity->List getEntitiesWithin(Environment->Position position, Float range, Criteria->Target criteria){
+  Entity->List getEntitiesWithin(Environment->Position position, Float range, Predicate<Entity> criteria){
     Entity->List result = new Entity->List();
     for Entity entity: entities {
-      if entity.getLocation().getDistanceTo(position) <= range && criteria.satisfies(entity) {
+      if entity.getLocation().getDistanceTo(position) <= range && criteria.test(entity) {
         result.add(entity);
       }
     }
     return result;
   }
-  Entity getClosestEntity(Environment->Position position, Criteria->Target criteria){
+  Entity getClosestEntity(Environment->Position position, Predicate<Entity> criteria){
     Entity candidate = null;
     Double distance = Double.MAX_VALUE;
     for Entity entity: entities {
       Double candidateDistance = entity.getLocation().getDistanceTo(position);
-      if candidateDistance < distance && criteria.satisfies(entity) {
+      if candidateDistance < distance && criteria.test(entity) {
         candidate = entity;
         distance = candidateDistance;
       }
@@ -743,6 +798,29 @@ class 'packageName'.environments Area Environment->Position {
       }
     }
     return candidate;
+  }
+  Tile getClosestTile(Environment->Position position, Predicate<Tile> criteria){
+    for Integer distance < furthestDistanceToArea {
+      ArrayList<Tile> tiles = new ArrayList<Tile>();
+      \getAllTiles(distance,tiles);
+      Tile result = tiles.parallelStream().filter(criteria).sorted(new Tile->Comparators->Distance->Ascending->Complex(position)).findFirst().orElse(null);
+      if result != null {
+        return result;
+      }
+    }
+    return null;
+  }
+  void getAllTiles(int distance,ArrayList<Tile> collector){
+    if distance == 0 {
+      collector.addAll(tiles);
+    }
+    else {
+      if areaDistances.containsKey(distance) {
+        for Area area: areaDistances.get(distance) {
+          collector.addAll(area.tiles);
+        }
+      }
+    }
   }
   Tile getClosestTile(Environment->Position position, Tiles->Terrain->Id terrainId){
     if terrainMap.containsKey(terrainId) == false {
@@ -833,16 +911,16 @@ class 'packageName'.environments Area Environment->Position {
     ways.add(path);
     Set<Tiles\>Floor> investigated = new HashSet<Tiles\>Floor>();
     investigated.add(null);
+    investigated.add(tile);
     ArrayList<Tiles\>Floor\>Path> tried = new ArrayList<Tiles\>Floor\>Path>(); 
     while path.getTile() != endTile && ways.isEmpty() == false {
-      path = ways.pollLast();
+      path = ways.pollFirst();
       tried.add(path);
-      Set<Tiles\>Floor> neighbours = new HashSet<Tiles\>Floor>();
-        neighbours.addAll(path.getTile().getNeighbours());
-        neighbours.removeAll(path);
-        for Tiles->Floor neighbour: neighbours {
+      for Tiles->Floor neighbour: path.getTile().getNeighbours() {
+        if investigated.add(neighbour) {
           ways.add(new Tiles->Floor->Path(path,neighbour,endTile));
         }
+      }
     }
     if path.getTile() == endTile {
       entryToEntryPaths.get(startPoint).put(endPoint, path);

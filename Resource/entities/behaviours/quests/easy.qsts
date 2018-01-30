@@ -3,21 +3,21 @@ type Wolf_Pelt_Hunt
 	+ Integer peltsCollected = 0
 	start {
 	  event->host.add(new Quest.Listeners.Collect(event->quest))
-	  if event->host->location->parent == "Town" {
-        event->quest << goto Town[Forest Entry]
+	  if event->host->location->parent == Town {
+        event->quest << findAndGo Forest[Entry]
 	  }
-	  else if event->host->location->parent != "Forest" {
-	    event->quest << goto *[Town Entry]
-	    event->quest << goto Town[Forest Entry]
+	  else if event->host->location->parent != Forest {
+	    event->quest << findAndGo Town[Entry]
+	    event->quest << findAndGo Forest[Entry]
 	  }
-	  event->quest << hunt Entity[Wolf | Dire Wolf] / Forest[Lone Rock] / 6f / new Quest.Listeners.Die(event->quest) / new Quest.Criteria.Success(event->quest)
+	  event->quest << hunt Entity[Wolf | Dire Wolf] , Forest[Lone Rock] , 6.0 , new Quest.Listeners.Die(event->quest) , new Quest.QuestCriteria.Success(event->quest)
 	}
 	idle {
-	  event->host.start(new Activities.Explore(200))
-	  event->host->location->parent.add(new Entity.Listeners.Spawn.ResumeActivity(event->host, Questing, Wolf, 250.0))
+	  event->host start Exploring(200)
+	  #event->host->location->parent.add(new Entity.Listeners.ResumeActivity(event->host, Questing, Wolf, 250.0))#
 	}
 	listen {
-	  if event.getId() == Events.Collect=>id & (Events.Collect<-event)->item == Items.WolfPelt=>id {
+	  if event.getId() == Events.Collect=>id & (Events.Collect<-event)->item->id == Items.WolfPelt=>id {
 	    peltsCollected += 1
 	  }
 	}

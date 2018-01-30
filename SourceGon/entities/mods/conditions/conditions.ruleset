@@ -10,7 +10,7 @@ condition_element silent , Ignore [ ][\t]
 	"\n"
 	comments
 	"?" requirement
-	( "loss" conditional_chance ( "\n" conditional_chance )* ) as to_lose
+	( "loss" conditional_chance as chance_pair ( "\n" conditional_chance as chance_pair)* ) as to_lose
 	( ("*"|"accumulate") (imposition|acquisition)) as accumulation
 	imposition
 	acquisition

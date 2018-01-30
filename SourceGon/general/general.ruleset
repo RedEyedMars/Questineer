@@ -6,8 +6,8 @@ std_body          Braced { } ,silent       = ( "\n" | comments | body_element )*
 method_arguments  Braced ( )               = "\n"* statement? ( "," "\n"* statement )*
 method_parameters Braced ( )               = ( variable_header ( "," variable_header )* )?
 braced_statement  Braced ( )               = statement
-tile_id_choice    Braced [ ]               = NAME as tileName+ ( "|" NAME as tileName+ )*
-entity_id_choice  Braced [ ]               = NAME as tileName+ ( "|" NAME as tileName+ )*
+tile_id_choice    Braced [ ]               = ( NAME as namePart+ ) as tileName ( "|" ( NAME as namePart+ ) as tileName )*
+entity_id_choice  Braced [ ]               = ( NAME as namePart+ ) as entityName ( "|" ( NAME as namePart+ ) as entityName )*
 
 number silent = ( FLOAT | INTEGER )
 range  silent
@@ -20,22 +20,28 @@ body_element
 	if_statement
 	while_statement
 	for_statement
-	(variable_call acquisition) as acquisition
-	(variable_call imposition ) as imposition
-	(variable_call quest_addition) as quest_addition
-	activity_statement
-	association_statement
+	body_defined_statement
 	variable_declaration
 	statement
 
+body_defined_statement silent
+	(variable_call acquisition) as acquisition
+	(variable_call imposition ) as imposition
+	(variable_call influence ) as influence
+	(variable_call quest_addition) as quest_addition
+	activity_statement
+	association_statement
+
 acquisition
-	( ("gains"|"+") as GAINS | ("loses"|"-") as LOSES ) as operator ( "this" | aspect_names | condition_names | trait_names | attack_names ) ( "from" NAME as source_names )? 
+	( ("gains"|"equip"|"+") as GAINS | ("loses"|"unequip"|"-") as LOSES ) as operator ( "this" as THIS | aspect_names | condition_names | trait_names | attack_names | item_names ) ( "from" NAME as source_name )? 
 imposition
-	"impose" as operator INTEGER as amount "on" hero_stat
-	"release" as operator hero_stat
+	("impose" as impose) as operator INTEGER as amount "on" hero_stat
+	("release" as release) as operator hero_stat
 	(("+"|"-")+) as operator hero_stat
+influence
+	"influence" variable_call INTEGER as amount ("because" reason_names method_arguments )?
 quest_addition
-	"<<" activity_names ( statement ( "/" statement )*)?  
+	"<<" activity_names ( statement ( "," statement )*)?  
 
 activity_statement
 	variable_call ":"? ( "start" ) as method  activity_names (  method_arguments | statement )
@@ -90,7 +96,7 @@ return_statement
 
 statement
 	( "Entity" entity_id_choice ) as entity_selector
-	(( map_names | "*" ) tile_id_choice ) as map_selector
+	( map_names tile_id_choice ) as map_selector
 	activity_statement
 	NOT? variable_call ( operator "\n"* statement )*
 
@@ -110,6 +116,7 @@ variable_call_element silent
 variable_group
 	association_names "association"?
 	skill_names       "skill"?
+	association_names "group"?
 	affinity_names    "affinity"
 	attack_names      "attack"?
 	trait_names       "trait"?

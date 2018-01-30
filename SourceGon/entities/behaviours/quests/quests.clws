@@ -1,14 +1,6 @@
 class 'packageName'.entities.behaviours.quests  Quest Object Usable {
   class Id / Usable->Id / {
   }
-  ~class TargetCriteria / Criteria->Target / {
-    Boolean satisfies(Entity user){
-      return false;
-    }
-    Boolean satisfies(Tile candidate){
-      return false;
-    }
-  }
   class Listeners // {
     class Success / Events->Success->Listener / {
       Quest host = null;
@@ -23,12 +15,34 @@ class 'packageName'.entities.behaviours.quests  Quest Object Usable {
         host.on( "(Events.Fail)event" );
       }
     }
+    class Collect / Events->Collect->Listener / {
+      Quest host = null;
+      void listen(Events->\Collect event){
+        host.on( event );
+      }
+    }
+    class Die / Events->Die->Listener / {
+      Quest host = null;
+      void listen(Events->\Die event){
+        host.on( event );
+      }
+    }
   }
-  @Integer UNSTARTED   = -1;
-  @Integer IN_PROGRESS = 0;
-  @Integer SUCCESS     = 1;
-  @Integer FAIL        = 2;
-  ~Integer    status             = UNSTARTED;
+  class QuestCriteria // {
+    class Success / \ActivityCriteria / {
+      Quest host = null;
+      boolean test(Activity event){
+        return host.getStatus() == Quest->Status.SUCCESS;
+      }
+    }
+  }
+  enum Status// {
+    void UNSTARTED;
+    void IN_PROGRESS;
+    void SUCCESS;
+    void FAIL;
+  }
+  ~Quest->Status    status             = Quest->Status.UNSTARTED;
   ~Activity currentActivity      = null;
   ~Integer currentActivityIndex  = -1;
   ~Activity->List activities      = new Activity->List();
@@ -40,11 +54,14 @@ class 'packageName'.entities.behaviours.quests  Quest Object Usable {
     return 0f;
   }
   Criteria->Target getTargetCriteria(){
-    return new Quest->TargetCriteria();
+    return new Criteria->Target();
+  }
+  Criteria->Destination getDestinationCriteria(){
+    return new Criteria->Destination();
   }
   
   Boolean use(Entity user, Activity activity){
-    if status == UNSTARTED {
+    if status == Status.UNSTARTED {
 	  \on(new Events->\StartQuest(this,user));
 	}
 	if currentActivity != null {
@@ -66,24 +83,31 @@ class 'packageName'.entities.behaviours.quests  Quest Object Usable {
       currentActivityIndex = newIndex;
     }
     else {
-      status = SUCCESS;
+      status = Quest->Status.SUCCESS;
     }
+  }
+  void on(Events->\Idle idle){
+  }
+  void on(Events->\Collect idle){
+  }
+  void on(Events->\Die idle){
   }
 }
 class 'packageName'.entities.behaviours.quests Quests {
+  Tile tile = null;
 > void setup(%Pass data){
     Events.addToEventMethod("startQuest",Quest,{
       if "activities".isEmpty()==false {
         \currentActivity = \activities.get(0);
         \currentActivityIndex = 0;
-        \status = \IN_PROGRESS;
+        \status = Quest->Status.IN_PROGRESS;
       }
       else {
-        \status = \FAIL;
+        \status = Quest->Status.FAIL;
       }
     });
     Events.addToEventMethod("fail",Quest,{
-      \status = \FAIL;
+      \status = Quest->Status.FAIL;
     });
   }
 > void typeDeclaration(%T declarationToken){
@@ -146,9 +170,14 @@ class 'packageName'.entities.behaviours.quests Quests {
       eventBody.add(|super.on("event");|);
       Events.addToEventMethod(eventName,Quests->'questName',eventBody);
     }
-    Quests->'questName'->*"fulfill".prependToBody({
-      return true;
-    });
     
+  }
+> Statement getAddition(%T input, Statement subject, Context context) {
+    String activityName = ^input->"activity_names";
+    Parameters arguments = new Parameters ();
+    input : statement : statement {
+      arguments.add(\getStatement(statement,context));
+    }
+    return |\add(new Activities->'activityName'(`arguments`));|;
   }
 }

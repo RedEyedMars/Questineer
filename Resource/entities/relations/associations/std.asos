@@ -7,7 +7,7 @@ HeroesGuild
 	joined {
 	  recruit join Party(recruit->name + "\'s Party") null
 	  recruit gains Swing
-	  recruit.equip(new Items.Stick())
+	  recruit equip stick
 	}
 Party
 Hive

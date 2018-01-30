@@ -1501,7 +1501,7 @@ class 'packageName'.gui Gui {
 >   Integer NORMAL = 3;
 >   Statement getMultipleValue(%T input, Integer status){
       ~Statement result = null;
-      if input->"DRAWABLE_ANGLE" != null {
+      if input->"angle" != null {
         if status == LEFT_SUPPLEMENTARY {
           return |\Math.cos(\getAngle())|;
         }
@@ -1512,16 +1512,16 @@ class 'packageName'.gui Gui {
           return |\getAngle()|;
         }
       }
-      else if input->"DRAWABLE_X" != null {
+      else if input->"x" != null {
         return |\getVisualX()|;
       }
-      else if input->"DRAWABLE_Y" != null {
+      else if input->"y" != null {
         return |\getVisualY()|;
       }
-      else if input->"DRAWABLE_WIDTH" != null {
+      else if input->"width" != null {
         return |\getVisualWidth()|;
       }
-      else if input->"DRAWABLE_HEIGHT" != null {
+      else if input->"height" != null {
         return |\getVisualHeight()|;
       }
       else if input->"FLOAT" != null {
@@ -1545,19 +1545,19 @@ class 'packageName'.gui Gui {
       Set<String> toChangeMethods = new HashSet<String>();
       input : element : drawable_multiple_value {
         statement.add(\getMultipleValue(element,status));
-        if element->"DRAWABLE_WIDTH" != null {
+        if element->"width" != null {
           toChangeMethods.add("setVisualWidth");
         }
-        else if element->"DRAWABLE_HEIGHT" != null {
+        else if element->"height" != null {
           toChangeMethods.add("setVisualHeight");
         }
-        else if element->"DRAWABLE_X" != null {
+        else if element->"x" != null {
           toChangeMethods.add("setVisualX");
         }
-        else if element->"DRAWABLE_Y" != null {
+        else if element->"y" != null {
           toChangeMethods.add("setVisualY");
         }
-        else if element->"DRAWABLE_ANGLE" != null {
+        else if element->"angle" != null {
           toChangeMethods.add("setAngle");
         }
       }
@@ -1567,19 +1567,19 @@ class 'packageName'.gui Gui {
       input : element : supplementary {
         element : atom : drawable_multiple_value {
           statement.add(\getMultipleValue(atom,status));
-          if atom->"DRAWABLE_WIDTH" != null {
+          if atom->"width" != null {
             toChangeMethods.add("setVisualWidth");
           }
-          else if atom->"DRAWABLE_HEIGHT" != null {
+          else if atom->"height" != null {
             toChangeMethods.add("setVisualHeight");
           }
-          else if atom->"DRAWABLE_X" != null {
+          else if atom->"x" != null {
             toChangeMethods.add("setVisualX");
           }
-          else if atom->"DRAWABLE_Y" != null {
+          else if atom->"y" != null {
             toChangeMethods.add("setVisualY");
           }
-          else if atom->"DRAWABLE_ANGLE" != null {
+          else if atom->"angle" != null {
             toChangeMethods.add("setAngle");
           }
         }

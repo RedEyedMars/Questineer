@@ -5,8 +5,8 @@ supporting Support
 questing Quest
 	~Go to certain places, do certain things, and reap their rewards.~
 	+ Quest currentQuest = null
-	succeed if currentQuest!=null & currentQuest->status == Quest=>SUCCESS
-	fail if failed | currentQuest!=null & currentQuest->status == Quest=>FAIL
+	succeed if currentQuest!=null & currentQuest->status == Quest.Status=>SUCCESS
+	fail if failed | currentQuest!=null & currentQuest->status == Quest.Status=>FAIL
 	step {
 	  if currentQuest == null {
 	    currentQuest = Quest<-(pick())
@@ -17,15 +17,14 @@ questing Quest
 	  return currentQuest.use(host,null)
 	  
 	}
-hunt(Criteria.Target criteriaToTarget, Tile.Id huntingGrounds, Float range, Events.Die.Listener deathListener, ActivityCriteria toSucceed) Attack
+hunt(Criteria.Target criteriaToTarget, Criteria.Destination huntingGrounds, Float range, Events.Die.Listener deathListener, ActivityCriteria toSucceed) Attack
 	~Hunt monsters until told otherwise.~
 	+ Area.List toHuntLocations
 	+ Area.List huntedLocations
 	+ Area      toHunt
-	succeed if toSucceed.satisfies(this)
+	succeed if toSucceed.test(this)
 	load {
-	  Area.List toAdd = event->host->location.getAreasWithTile(huntingGrounds, range)
-	  toAdd.sort(new Area.Comparators.Distance.Ascending(event->host->location))
+	  Area.List toAdd = event->host->location.getAreasWith(huntingGrounds,new Area.Comparators.Distance.Ascending(event->host->location), range)
 	  toHuntLocations.addAll(toAdd)
 	  if !toHuntLocations.isEmpty() {
 	    toHunt = toHuntLocations.remove(0)
@@ -51,10 +50,9 @@ hunt(Criteria.Target criteriaToTarget, Tile.Id huntingGrounds, Float range, Even
   	        toHunt = toHuntLocations.remove(0)
 	      }
 	      else {
-	        Area.List toAdd = host->location.getAreasWithTile(huntingGrounds, range)
+	        Area.List toAdd = host->location.getAreasWith(huntingGrounds,new Area.Comparators.Distance.Ascending(host->location), range)
 	        toAdd.removeAll(huntedLocations)
 	        if !toAdd.isEmpty() {
-	          toAdd.sort(new Area.Comparators.Distance.Ascending(host->location))
 	          toHuntLocations.addAll(toAdd)
 	          step(host)
 	        }
@@ -99,6 +97,21 @@ killDen(Tiles.MonsterDen toKill) Attack
 	    chaseActivity = event->host start chasingTile (25, toKill, furthestUsable.getRange(event->host))
 	  }
 	}
+removeTerrain(Tiles.Terrain toKill) Attack
+	~Go kill one particular monster den.~
+	+ Activity chaseActivity = null
+	+ Floor floor = null
+	succeed if floor->terrain != toKill
+	load {
+	  floor = toKill->floorTile
+	  setTargetTerrain(toKill)
+	}
+	idle {
+	  Usable furthestUsable = getFurthestAvailableUsable(event->host,toKill)
+	  if furthestUsable != null {
+	    chaseActivity = event->host start chasingTile (25, toKill, furthestUsable.getRange(event->host))
+	  }
+	}
 
 chasingEntity(Integer ticks, Entity toChase, Float successRange)
 	~Get close to one monster(disregard the path).~
@@ -116,6 +129,33 @@ chasingTile(Integer ticks, Tile toChase, Float successRange)
 	tick { ticks -= 1 }
 	step { 
 	  host->location.step(host->walkingSpeed,toChase)
+	  return true
+	}
+findAndGo(Criteria.Destination target)
+	~Find a particular tile, follow path to get to it.~
+	succeed if host->location.isCloseAsPossibleTo(destination)
+	+ Area destinationArea = null
+	+ Tiles.Floor.Way way = null
+	+ Tiles.Floor destination
+	load {
+	  destination = Tiles.Floor<-host->location.getClosestTile(target)
+	  if destination != null {
+	    destinationArea = destination->area
+	  }
+	  else {
+	    failed = true
+	  }
+	}
+	step {
+	  if host->location->area != destinationArea {
+	    host start gotoArea destinationArea
+	  }
+	  else {
+	    if way == null {
+	      way = host->location.getWay(destination)
+	    }
+	    way.step(host)
+	  }
 	  return true
 	}
 goto(Tiles.Floor destination)
@@ -166,6 +206,9 @@ Exploring(Integer ticks)
 	  }
 	}
 	step {
+	  if destination->area != host->location->area {
+	    return false
+	  }
 	  ticks -= 1
 	  if destination.hasOccupant(host) {
 	    return false
@@ -178,11 +221,14 @@ Exploring(Integer ticks)
 	listen {
 	  if event is a *.TileHasOccupant  {
 	    *.TileHasOccupant blocked = *.TileHasOccupant<-event
-	    destination.hasOccupant(host)
 	    if host.isFriendlyWith(blocked->causalOccupant) {
 	    }
 	    else {
 	      host start kill blocked->causalOccupant
 	    }
+	  }
+	  else if event is a TerrainImpassable {
+	    TerrainImpassable blocked = TerrainImpassable<-event
+	    host start removeTerrain blocked->causalTerrain
 	  }
 	}

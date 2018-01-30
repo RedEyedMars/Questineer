@@ -1,6 +1,6 @@
 
 class 'packageName'.game  Game  Object  InputHandler->Events->KeyboardEvent->Listener  InputHandler->Events->MouseEvent->Listener {
-  ~List<Environment> environments = new ArrayList<Environment>();
+  ~Map<String, Environment> environments = new HashMap<String, Environment>();
   ~Double lastTick = System.currentTimeMillis()/1000.0;
   ~Double thisTick = lastTick;
   ~Tile mosiac = null;
@@ -10,25 +10,25 @@ class 'packageName'.game  Game  Object  InputHandler->Events->KeyboardEvent->Lis
   @void main(String[] args){
     new Gui();
   }
-  void findSeed(){
+  @void findSeed(){
 	Long seed = new Random().nextLong();
 	Range.randomizer.setSeed(seed);
 	Range newRange = new Range(0,0);
 	System.out.println(''"Seed:"''\+seed\+''"L"'');
   }
   void load(){
-    environments.add(new Environments->\Forest());
-    environments.add(new Environments->\Town());
-	for Environment environment:environments {
-	  environment.load();
+    environments.put(''"Forest"'',new Environments->\Forest());
+    environments.put(''"Town"'',new Environments->\Town());
+	for String environmentName: environments.keySet() {
+	  environments.get(environmentName).load();
 	}
 	new Associations().on(new Events->\Load(null));
     hero = new Entities->Hero(Images.male_hero_base);
     hero.changeState(ImageStates.male);
     hero.changeState(ImageStates.idle);
-	hero.setSpawn(environments.get(0).getArea(0).getEntryPoint(0));
+	hero.setSpawn(environments.get(''"Forest"'').getArea(0).getEntryPoint(0));
 	hero.load();
-	environments.get(0).getArea(0).getEntryPoint(0).accept(hero);
+	environments.get(''"Forest"'').getArea(0).getEntryPoint(0).accept(hero);
 	hero.start(new Activities->\Exploring(200));
 	InputHandler.addKeyboardListener(this);
 	InputHandler.addMouseListener(this);
@@ -48,10 +48,13 @@ class 'packageName'.game  Game  Object  InputHandler->Events->KeyboardEvent->Lis
   void listen(InputHandler->Events->MouseEvent->Move event) {
   }
 
+  Environment getEnvironment(String name){
+    return environments.get(name);
+  }
   void update(){
     thisTick = System.currentTimeMillis()/1000.0;
-    for Environment environment:environments {
-      environment.tick(thisTick-lastTick);
+    for String environmentName:environments.keySet() {
+      environments.get(environmentName).tick(thisTick-lastTick);
     }
     if focusArea != hero.getLocation().getArea() {
       if focusArea != null {

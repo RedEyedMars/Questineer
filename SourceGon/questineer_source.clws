@@ -117,7 +117,7 @@ import gui/loaders.clws
 		Environment.declaration(import_map);
 	}
 	import_any : import_quests : import_quest {
-		import_quests : element : quest_declaration{
+		import_quests : element : quest_type_declaration {
 			Quests.typeDeclaration(element);
 		}
 	}
@@ -126,10 +126,9 @@ import gui/loaders.clws
 	StringBuilder nameBuilder = new StringBuilder();
 	if nameToken->"findType" != null {
 	  ~String findName = ^nameToken->"typeName";
-	  for Class subClass: ExternalClassEntry.allClasses {
-		if subClass.getName().equals(findName) {
-		  return subClass.getFullName();
-		}
+	  String fullName = ExternalClassEntry.getFullNameFromSimpleName(findName); 
+	  if fullName!=null {
+		return fullName;
 	  }
 	  throw "Could not find "+findName+" class!";
 	}
@@ -145,5 +144,14 @@ import gui/loaders.clws
 		nameBuilder.append(^element);
 	  }
 	}
-	return 'nameBuilder';
+	if ExternalClassEntry.classMap.containsKey('nameBuilder') {
+	  return 'nameBuilder';
+	}
+	else {
+	  String fullName = ExternalClassEntry.getFullNameFromSimpleName('nameBuilder'); 
+	  if fullName!=null {
+		return fullName;
+	  }
+	  throw "Could not find "+'nameBuilder'+" class!";
+	}
  }

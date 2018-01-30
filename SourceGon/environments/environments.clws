@@ -1,12 +1,13 @@
 import tiles.clws
 import areas.clws
-
+< Collectors : java.util.stream;
 class 'packageName'.environments  Environment  Object Loaddable Tickable {
   interface Movable // {
-    Entity->Event moveX(Integer x){
-    }
-    Entity->Event moveY(Integer y){
-    }
+    Entity->Event moveX(Integer x){}
+    Entity->Event moveY(Integer y){}
+  }
+  interface Areaable // {
+    Area getArea(){}
   }
   String name = null;
   ~Area startArea = null;
@@ -17,6 +18,10 @@ class 'packageName'.environments  Environment  Object Loaddable Tickable {
   ~Map<Tile\>Id, List<Tile>> tiles = new HashMap<Tile\>Id, List<Tile>>();
   ~Map<Area\>Id, List<Area>> areaMap = new HashMap<Area\>Id, List<Area>>();
   void add(Area newArea){
+    for Area area: areas {
+      area.findDistance(newArea);
+      area.getEntryPointToward(newArea);
+    }
     areas.add(newArea);
     if areaMap.containsKey(newArea.getId()) == false {
       areaMap.put(newArea.getId(), new ArrayList<Area>());
@@ -179,7 +184,7 @@ class 'packageName'.environments  Environment  Object Loaddable Tickable {
       }
     }
   }
-  class Location /Environment->Position/ Environment->Movable {
+  class Location /Environment->Position/ Environment->Movable Environment->Areaable {
     > Float gridFactor = 6f;
     > Float gridXFactor = gridFactor*1.85f;
     > Float gridYFactor = gridFactor*3.85f;
@@ -191,6 +196,21 @@ class 'packageName'.environments  Environment  Object Loaddable Tickable {
            Entity->Event event = direction.move(actor);
            actor.getHost().changeState(ImageStates.idle);
            if event!=null {
+             actor.getHost().addEvent(event);
+           }
+        }
+      }
+      class MoveByWay // Area->Event->Tick {
+        Environment->Location actor = null;
+        Direction direction = null;
+        Tiles->Floor->Way way = null;
+         void tick(Double millisSinceLastFrame){
+           Entity->Event event = direction.move(actor);
+           actor.getHost().changeState(ImageStates.idle);
+           if event!=null {
+             if "event instanceof Entity.Event.FailedToMove" {
+               way.fail();
+             }
              actor.getHost().addEvent(event);
            }
         }
@@ -234,11 +254,18 @@ class 'packageName'.environments  Environment  Object Loaddable Tickable {
     Entity->List getEntitiesWithin(Float within){
       return area.getEntitiesWithin(this,within);
     }
-    Entity->List getEntitiesWithin(Float within, Criteria->Target targetCriteria){
+    Entity->List getEntitiesWithin(Float within, Predicate<Entity> targetCriteria){
       return area.getEntitiesWithin(this,within,targetCriteria);
     }
-    Entity getClosestEntity(Criteria->Target criteria){
+    Entity getClosestEntity(Predicate<Entity> criteria){
       return area.getClosestEntity(this,criteria);
+    }
+    Tile getClosestTile(Predicate<Tile> criteria){
+      return area.getClosestTile(this,criteria);
+    }
+    Area->List getAreasWith(Predicate<Tile> criteria,Comparator<Area> comparator, Float range){
+      Collectors collects = null;
+      return Area->List.create(\parent.getAreas().parallelStream().filter("(A)->A.has(criteria)").sorted(comparator).collect(Collectors.toList()));
     }
     Area->List getAreasWithTile(Tile->Id tileId, Float range){
       Area->List result = new Area->List();
@@ -271,6 +298,12 @@ class 'packageName'.environments  Environment  Object Loaddable Tickable {
         host.changeState(direction.getStateId());
         area.addEvent(speed, new Environment->Location->Event->Move(this,direction));
       }
+    }
+    void stepUsingWay(Integer speed, Direction direction, Tiles->Floor->Way way){
+      facing = direction.getFloatValue();
+      host.changeState(ImageStates.walk);
+      host.changeState(direction.getStateId());
+      area.addEvent(speed, new Environment->Location->Event->MoveByWay(this,direction,way));
     }
     Boolean isCloseAsPossibleTo(Tile tile){
       if tile.isPassable(0,0) {
@@ -340,69 +373,21 @@ class 'packageName'.environments  Environment  Object Loaddable Tickable {
       tile = otherTile;
       otherTile.accept(host);
     }
-    Boolean moveToAround(Tiles->Floor otherTile){
+    boolean moveToAround(Tiles->Floor otherTile){
+      Tiles->Floor moveToTile = otherTile;
       if otherTile.hasOccupant() {
-        Set<Tile> investigated = new HashSet<Tile>();
-        Integer extendRadius = 0;
-        Boolean moved = false;
-        while investigated.size() < otherTile.getArea().getTiles().size() {
-          Tiles->Floor investigate = otherTile.getArea().getTile(otherTile.getX()+1,otherTile.getY());
-          if investigate != null {
-            moved = \moveToAround(investigate, investigated, extendRadius);
-          }
-          investigate = otherTile.getArea().getTile(otherTile.getX()-1, otherTile.getY());
-          if moved == false &&investigate != null {
-            moved = \moveToAround(investigate, investigated, extendRadius);
-          }
-          investigate = otherTile.getArea().getTile(otherTile.getX(), otherTile.getY()+1);
-          if moved == false && investigate != null {
-            moved = \moveToAround(investigate, investigated, extendRadius);
-          }
-          investigate = otherTile.getArea().getTile(otherTile.getX(), otherTile.getY()-1);
-          if moved == false && investigate != null {
-            moved = \moveToAround(investigate, investigated, extendRadius);
-          }
-          if moved == true {
-            return true;
-          }
-          extendRadius \+= 1;
-        }
-        return moved;
+        moveToTile = otherTile.getArea().getFloorTiles().parallelStream()
+            .filter(("T")->"!T".hasOccupant())
+            .sorted(new Tile->Comparators->Distance->Ascending(otherTile))
+            .findFirst().orElse(null);
+        
       }
-      else {
-        \moveTo(otherTile);
+      if moveToTile != null {
+        \moveTo(moveToTile);
         return true;
       }
-    }
-    Boolean moveToAround(Tiles->Floor otherTile, Set<Tile> investigated, Integer extendRadius){
-      if extendRadius == 0 && investigated.add(otherTile) {
-        if otherTile.hasOccupant() == false {
-          \moveTo(otherTile);
-          return true;
-        }
-        else {
-          return false;
-        }
-      }
       else {
-        Tiles->Floor investigate = otherTile.getArea().getTile(otherTile.getX()+1,otherTile.getY());
-        Boolean moved = false;
-        if investigate != null {
-          moved = \moveToAround(investigate, investigated, extendRadius);
-        }
-        investigate = otherTile.getArea().getTile(otherTile.getX()-1, otherTile.getY());
-        if moved == false &&investigate != null {
-          moved = \moveToAround(investigate, investigated, extendRadius\-1);
-        }
-        investigate = otherTile.getArea().getTile(otherTile.getX(), otherTile.getY()+1);
-        if moved == false && investigate != null {
-          moved = \moveToAround(investigate, investigated, extendRadius\-1);
-        }
-        investigate = otherTile.getArea().getTile(otherTile.getX(), otherTile.getY()-1);
-        if moved == false && investigate != null {
-          moved = \moveToAround(investigate, investigated, extendRadius\-1);
-        }
-        return moved;
+        return false;
       }
     }
     
@@ -412,15 +397,15 @@ class 'packageName'.environments  Environment  Object Loaddable Tickable {
       ways.add(path);
       Set<Tiles\>Floor> investigated = new HashSet<Tiles\>Floor>();
       investigated.add(null);
+      investigated.add(tile);
       ArrayList<Tiles\>Floor\>Path> tried = new ArrayList<Tiles\>Floor\>Path>(); 
       while path.getTile() != endTile && ways.isEmpty() == false {
-        path = ways.pollLast();
+        path = ways.pollFirst();
         tried.add(path);
-        Set<Tiles\>Floor> neighbours = new HashSet<Tiles\>Floor>();
-        neighbours.addAll(path.getTile().getNeighbours());
-        neighbours.removeAll(path);
-        for Tiles->Floor neighbour: neighbours {
-          ways.add(new Tiles->Floor->Path(path,neighbour,endTile));
+        for Tiles->Floor neighbour: path.getTile().getNeighbours() {
+          if investigated.add(neighbour)&& (neighbour.isPassable(path.getTile()) || neighbour.hasObstruction()) {
+            ways.add(new Tiles->Floor->Path(path,neighbour,endTile));
+          }
         }
       }
       if path.getTile() == endTile {
@@ -523,6 +508,9 @@ class 'packageName'.environments  Environment  Object Loaddable Tickable {
 class 'packageName'.environments Environments {
   @Environment create(String "environmentName"){
     return null;
+  }
+> Statement getId(String name){
+    return |Gui.game.getEnvironment('' 'name' '')|;
   }
 }
 class 'packageName'."environments" Direction {

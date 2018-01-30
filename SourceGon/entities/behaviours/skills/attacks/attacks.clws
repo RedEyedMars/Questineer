@@ -74,7 +74,7 @@ class 'packageName'.entities.behaviours.skills.attacks  Attacks {
         return skillId;
       }
 	  String getName(){
-	    return ''attackName'';
+	    return '' 'attackName' '';
 	  }
 	  String getDescription(){
 	    return `description`;
@@ -128,7 +128,7 @@ class 'packageName'.entities.behaviours.skills.attacks  Attacks {
       }
     Attacks->'attackName'->*"getDamage" += | return "damage"; |
     
-	Attacks.getMethod("create").prependToBody(| if ''attackName''.equals("attackName"){
+	Attacks.getMethod("create").prependToBody(| if '' 'attackName' ''.equals("attackName"){
       return new Attacks->'attackName'(); }|);
   }
 }

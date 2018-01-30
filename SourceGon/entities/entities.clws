@@ -28,6 +28,9 @@ class 'packageName'.entities Entities {
       imageStates = image.asStates();
     }
     
+    Entity->Id getId(){
+      return Entity->Id."Hero";
+    }
     boolean getIsPlayerAffiliated(){
       return true;
     }
@@ -55,8 +58,14 @@ class 'packageName'.entities Entities {
 	  entityNameBuilder.append('element');
 	}
 	String entityName = entityNameBuilder.toString();
+	
+    Entity->Id += void 'entityName';
     Entities += class entityName /Entity/ {
+      @Entity->Id id = Entity->Id.'entityName'; 
       ~Gui->Drawable drawable = null;
+      Entity->Id getId(){
+        return Entity->Id.'entityName';
+      }
     }
     Entities->'entityName' += class Factory /Object/ Entity->Factory {
         Entity create(){
@@ -119,7 +128,7 @@ class 'packageName'.entities Entities {
         String subSkillName = ^atom->"skill_names";
     	Entities->'entityName'->*.appendToBody(| this.gain(new Skills->'subSkillName'(`arguments`), this); |);
       }
-      element : atom : statRange {
+      element : atom : stat_range {
         String heroStatName = 'atom->"hero_stat"'.toLowerCase();
         String leftBound = 'atom->"left"';
         String rightBound;
@@ -136,6 +145,9 @@ class 'packageName'.entities Entities {
   }
 }
 class 'packageName'.entities  Entity  Object  Source Loaddable Tickable {
+  enum Id // {
+    void Hero;
+  }
   interface Factory //{
     Entity create(){}
   }
@@ -213,7 +225,9 @@ class 'packageName'.entities  Entity  Object  Source Loaddable Tickable {
   ~LinkedList<Activity> activityList = new LinkedList<Activity>();
   ~LinkedList<Entity\>Event> events = new LinkedList<Entity\>Event>();
   
-  
+  Entity->Id getId(){
+    return null;
+  }
   void display(){
     \getDrawable().display(Renderer.topLayer);
   }
@@ -391,7 +405,7 @@ class 'packageName'.entities  Entity  Object  Source Loaddable Tickable {
       String vName = statName.toLowerCase();
       Entity += class statName /Object/ Entity->Stat {
         Integer value = 0;
-        ~ListMaps->\Sources->\_Int "history";
+        ~ListMaps->\Sources->\_Int history = new ListMaps->\Sources->\_Int();
         Integer getValue(Entity user){
           return user.'vName'.getValue();
         }
@@ -575,7 +589,40 @@ class 'packageName'.entities  Entity  Object  Source Loaddable Tickable {
       return | `subject`.'statGetMethod'().release(this); |;
     }
   }
-  
+> Statement getInfluence(%T influenceToken, Statement subject, Context currentContext ){
+    if influenceToken->"reason_names" !=null {
+      String reasonClassName = ^influenceToken->"reason_names";
+      Parameters arguments = new Parameters ();
+      influenceToken : method_arguments : method_arguments {
+        method_arguments : statement : statement {
+          arguments.add(\getStatement(statement,currentContext));
+        }
+      }
+      return |`subject`.influence(`\getVariableCall(influenceToken->"variable_call",currentContext)`,new Relationship->Reasons->'reasonClassName'(`arguments`),'influenceToken->"amount"');|;
+    }
+    else {
+      return |`subject`.influence(`\getVariableCall(influenceToken->"variable_call",currentContext)`,null,'influenceToken->"amount"');|;
+    }
+  }
+> Statement getSelector(%T entityIdChoice){
+    Statement selector = new Statement ();
+    Parameters options = new Parameters ("||");
+    selector.add(|new Criteria.Target()|);
+    selector.add(|"{public boolean test(Entity candidate){return "+`options`+";}}"|);
+    entityIdChoice : complete : entityName {
+      StringBuilder entityName = new StringBuilder();
+      ~boolean isFirst = true;
+      complete : part : namePart {
+        if isFirst == false {
+          entityName.append("_");
+        }
+        entityName.append(part);
+        isFirst = false;
+      }
+      options.add(|"candidate".getId() == Entities->'entityName'.id|);
+    }
+    return selector;
+  }
 > void addGainLoss(Class inputClass, Class outputClass){
     String asVariable = inputClass.getName().toLowerCase();
     String asList = asVariable + "s";

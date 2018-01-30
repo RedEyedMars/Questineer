@@ -19,10 +19,15 @@ interface 'packageName'.misc.interfaces Tickable {
 interface 'packageName'.misc.interfaces Usable {
   class Id // {
   }
+  class Imports //{
+    Entity entity = null;
+    Tile tile = null;
+  }
   Boolean use(Entity user, Activity activity){}
   Boolean canChase(){}
   Float getRange(Entity user){}
-  Criteria->Target getTargetCriteria(){}
+  Predicate<Entity> getTargetCriteria(){}
+  Predicate<Tile> getDestinationCriteria(){}
   Usable->Id getId(){}
 }
 class 'packageName'.misc Range Object Evaluable{
@@ -137,17 +142,14 @@ interface 'packageName'.misc Evaluable {
 
 class 'packageName'.misc ListMaps {
 }
-class 'packageName'.misc Criteria<TypeName> {
-  Boolean satisfies( '"TypeName"' "candidate"){
+< Predicate : java.util.function;
+class 'packageName'.misc Criteria<TypeName> Object Predicate<'"TypeName"'> {
+  boolean test( '"TypeName"' "candidate"){
     return false;
   }
-  class Target // {
-    Boolean satisfies( Entity candidate){
-      return false;
-    }
-    Boolean satisfies( Tile candidate){
-      return false;
-    }
+  class Target /Criteria<Entity>/ {
+  }
+  class Destination /Criteria<Tile>/ {
   }
 }
 
@@ -173,8 +175,14 @@ class 'packageName'.misc Criteria<TypeName> {
       }
 	  : imposition {
 	    Statement subject = \getVariableCall(element->"variable_call",context);
-	    Boolean doom = element->"imposition"->"IMPOSE" != null || element->"imposition"->"PLUS" != null;
+	    Boolean doom = element->"imposition"->"impose" != null || element->"imposition"->"PLUS" != null;
 	    return Entity.getImposition(element->"imposition",doom,subject);
+	  }
+	  : quest_addition {
+	    return Quests.getAddition(element->"quest_addition",\getVariableCall(element->"variable_call",context), context);
+	  }
+	  : influence {
+	    return Entity.getInfluence(element->"influence",\getVariableCall(element->"variable_call",context),context);
 	  }
 	  : activity_statement {
 		  return |`\getActivityStatement(element,context)`;|;
@@ -415,9 +423,15 @@ class 'packageName'.misc Criteria<TypeName> {
 		  ret.add(\getActivityStatement(element,context));
 	  }
 	  : statement {
-		  Statement subStatement = \getStatement(element,context);
-		  ret.add(subStatement);
-		}
+		Statement subStatement = \getStatement(element,context);
+		ret.add(subStatement);
+      }
+	  : entity_selector {
+	    ret.add(Entity.getSelector(element->"entity_id_choice"));
+	  }
+	  : map_selector {
+	    ret.add(Tiles.getSelector('element->"map_names"',element->"tile_id_choice"));
+	  }
 	  : operator {
 		  if negate {
 		    ret.set(\negateOperator('element'));
@@ -426,7 +440,7 @@ class 'packageName'.misc Criteria<TypeName> {
 			ret.set('element');
 		  }
 		}
-	  : braced {
+	  : braced_statement {
 		  Statement subStatement = \getStatement(element,context);
 		  subStatement.brace();
 		  ret.add(subStatement);
@@ -553,12 +567,12 @@ class 'packageName'.misc Criteria<TypeName> {
   }
 > Statement getIdFromName(%T nameToken){
     nameToken : element
+      : map_names         { return Environments.getId(^element); }
       : association_names { return Associations.getId(^element); }
       : affinity_names    { return Affinities.getId(^element); }
       : condition_names   { return Conditions.getId(^element); }
       : skill_names       { return Skills.getId(^element); }
       : trait_names       { return Traits.getId(^element); }
-      : association_names { return Associations.getId(^element); }
     return null;
   }
 
@@ -601,24 +615,49 @@ class 'packageName'.misc Criteria<TypeName> {
  	  gainObj = |new Conditions->'className'()|;
  	  id = |Conditions->'className'."id"|;
     }
+    else if acquisitionToken->"item_names" != null {
+ 	  String className = ^acquisitionToken->"item_names"; 
+ 	  gainObj = |new Items->'className'()|;
+ 	  id = |Items->'className'."id"|;
+    }
     else {
       gainObj = null;
       id = null;
     }
  	if acquisitionToken->"operator"->"GAINS" != null {
  	  if forGainBody {
- 	  	return |`subject`.\gain(`gainObj`,'sourceName');|;
+ 	  	if acquisitionToken->"item_names" != null {
+ 	  	  return |`subject`.equip(`gainObj`);|;
+ 	  	}
+ 	  	else {
+ 	  	  return |`subject`.gain(`gainObj`,'sourceName');|;
+ 	  	}
 	  }
  	  else {
- 		return |`subject`.\lose(`id`,'sourceName');|;
+ 	    if acquisitionToken->"item_names" != null {
+ 	  	  return |`subject`.unequip(`gainObj`);|;
+ 	  	}
+ 	  	else {
+ 		  return |`subject`.lose(`id`,'sourceName');|;
+ 		}
 	  }
 	}
 	else {
  	  if forGainBody {
- 		return |`subject`.\lose(`id`,'sourceName');|;
+ 	    if acquisitionToken->"item_names" != null {
+ 	  	  return |`subject`.unequip(`gainObj`);|;
+ 	  	}
+ 	  	else {
+ 		  return |`subject`.lose(`id`,'sourceName');|;
+ 		}
 	  }
  	  else {
- 		return |`subject`.\gain(`gainObj`,'sourceName');|;
+ 	    if acquisitionToken->"item_names" != null {
+ 	  	  return |`subject`.equip(`gainObj`);|;
+ 	  	}
+ 	  	else {
+ 		  return |`subject`.gain(`gainObj`,'sourceName');|;
+ 		}
 	  }
 	}
   }
@@ -641,8 +680,15 @@ class 'packageName'.misc Criteria<TypeName> {
 	String listName = listClass.getFullName()+ "List";
 	if declaredListSet.add(listName) {
 	  listClass += class List / ArrayList<listClass> / {
-	    List *( listClass... "elements" ){
-	      \super(Arrays.asList("elements"));
+	    @List create( listClass... "elements" ){
+	      List newList = new List();
+	      newList.addAll(Arrays.asList("elements"));
+	      return newList;
+	    }
+	    @List create( '"java.util.List<"+listClass.getFullName()+">"' subList ){
+	      List newList = new List();
+	      newList.addAll(subList);
+	      return newList;
 	    }
 	  }
 	}
@@ -651,7 +697,7 @@ class 'packageName'.misc Criteria<TypeName> {
 	String critName = critClass.getName()+"Criteria";
 	if declaredCritSet.add(critName) {
 	  ~class 'packageName'."misc"."criteria" critName Criteria<critClass> {
-	    Boolean satisfies(critClass "candidate"){
+	    boolean test(critClass "candidate"){
 	      return false;
 	    }
 	  }

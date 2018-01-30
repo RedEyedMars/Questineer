@@ -59,7 +59,7 @@ class 'packageName'.entities.relations.associations  Associations {
         }
       });
     Associations->*"create".prependToBody({
-      if "associationName".equals(''associationName'') {
+      if "associationName".equals('' 'associationName' '') {
         return new Associations->'associationName'();
       }
     });
@@ -81,7 +81,7 @@ class 'packageName'.entities.relations.associations  Associations {
 	  });
 	}
 	declarationToken : element : association_event {
-	  declarationToken : atom : event_statement {
+	  element : atom : event_statement {
 	    Body bodyElementList = new Body ();
 	    Context eventContext = Events.addToEventMethod('atom->"event_names"',Associations->'associationName',{});
 	    atom : quark : body_element {

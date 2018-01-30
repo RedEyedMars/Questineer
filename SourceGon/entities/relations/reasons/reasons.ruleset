@@ -1,9 +1,9 @@
 #REASON#
-reason_names global list with TITLE
+reason_names global list with NAME
 import_reason Imports "entities/relations/reasons/" FILE_NAME ".rsns" = ">" FILE_NAME ".rsns" "\n"
 	( "\n" | comments | reason_declaration )*
 reason_declaration
-	TITLE as reasonName in reason_names "\n"+ reason_description
+	NAME as reasonName in reason_names "\n"+ reason_description
 reason_description Braced ~ ~ , silent = reason_description_element*
 reason_description_element silent , Ignore None
 	[[^$]+] as description
