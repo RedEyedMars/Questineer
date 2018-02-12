@@ -10,8 +10,14 @@ class 'packageName'.entities.mods.affinities  Affinity \Object Source {
   }
 }
 class 'packageName'.entities.mods.affinities Affinities {
+> @Parameters affinitiesAsParameter = new Parameters ();
+  @Affinity[] affinities = new Affinity(`affinitiesAsParameter`)[];
   @Affinity create(String "affinityName"){
     return null;
+  }
+> void output(){
+    Affinities.removeVariable("affinities");
+    Affinities += @Affinity[] affinities = new Affinity(`affinitiesAsParameter`)[];
   }
 > void declaration(%T declarationToken){
     String affinityName = 'declarationToken->"affinityName"';
@@ -26,6 +32,8 @@ class 'packageName'.entities.mods.affinities Affinities {
       weaknesses.set("||");
       weaknesses.add(\hasAffinity(^element));
     }
+    Affinities += @Affinities->'affinityClassName' 'affinityName' = new Affinities->'affinityClassName'();
+    affinitiesAsParameter.add(|'affinityName'|);
     Affinities += class affinityClassName /Affinity/ {
 	  @Affinity->Id "id" = new Affinity->Id();
       String getName(){

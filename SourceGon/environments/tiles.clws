@@ -15,21 +15,23 @@ class 'packageName'.environments Tiles {
     ~Tiles->Terrain terrain = null;
     ~Entity occupant = null;
     
-    void load(){
+    Boolean load(){
       if terrain != null {
         terrain.load();
       }
       if occupant != null {
         occupant.load();
       }
+      return true;
     }
-    void tick(Double millisSinceLastFrame){
+    Boolean tick(Double millisSinceLastFrame){
       if terrain != null {
         terrain.tick(millisSinceLastFrame);
       }
       if occupant != null {
         occupant.tick(millisSinceLastFrame);
       }
+      return true;
     }
     Entity->Event accept(Entity newOccupant){
       newOccupant.getLocation().setTile(this);
@@ -193,17 +195,23 @@ class 'packageName'.environments Tiles {
     class Id      / Tiles->Floor->Id / {
     }
     ~Tiles->EntryPoint sister = null;
+    ~Environment sisterGenerator = null;
     Entity->Event accept(Entity newOccupant){
       if sister == null {
-        Area newArea = \getArea().getParent().getAreaGenerator().generate();
+        
+        Area newArea = sisterGenerator.getAreaGenerator().generate();
         if newArea != null {
 		  newArea.load();
-          \getArea().getParent().add(newArea);
+          sisterGenerator.add(newArea);
+          newArea.join(this);
         }
-        sister = Range.select(newArea.getEntryPoints());
       }
       sister.take(newOccupant);
       return new Entity->Event->MovedToNewArea(\area, sister.getArea());
+    }
+    void setArea(Area newArea){
+      super.setArea(newArea);
+      sisterGenerator = \area.getParent();
     }
     Entity->Event take(Entity newOccupant){
       newOccupant.getLocation().setArea(\area);
@@ -296,10 +304,10 @@ class 'packageName'.environments Tiles {
         }
         void generate(){
         }
-        void load(){
+        Boolean load(){
           super.load();
         }
-        void tick(Double millisSinceLastFrame){
+        Boolean tick(Double millisSinceLastFrame){
           super.tick(millisSinceLastFrame);
         }
       }
@@ -424,6 +432,18 @@ class 'packageName'.environments Tiles {
           return new collectionClass->'mapName'->'tileName'();
         }
       }
+      if tileExtendsClass == Tiles->EntryPoint {
+        collectionClass->'mapName'->'tileName' += class JoinGenerator /Object/ Area->TileGenerator {
+          EntryPointJoinable toJoin = null;
+          void generateAt(int x, int y, Area acceptor){
+            Tiles->EntryPoint newEntryPoint = new collectionClass->'mapName'->'tileName'(x,y,acceptor.getParent());
+            acceptor.add(newEntryPoint);
+            if newEntryPoint.getSister() == null || newEntryPoint.getSister().getArea() == null {
+              toJoin.join(newEntryPoint);
+            }
+          }
+        }
+      }
     }
     else {
       collectionClass->'mapName'->'tileName' += class Factory /Object/ Tiles->Terrain->Factory {
@@ -539,6 +559,8 @@ class 'packageName'.environments Tiles {
         monsterInc \+= 1;
       } 
     }
+    collectionClass->'mapName'->'tileName'->*"load".appendToBody(|return true;|);
+    collectionClass->'mapName'->'tileName'->*"tick".appendToBody(|return true;|);
     return tileName;
   }
 
@@ -600,6 +622,7 @@ class 'packageName'.environments Tiles {
       return |new collectionClass->'mapName'->'tileName'->'costName'()|;
     }
   }
+
 }
 class 'packageName'.environments  Tile   Environment->Position   Loaddable Tickable Environment->Areaable  {
   class Id // {
@@ -677,8 +700,8 @@ class 'packageName'.environments  Tile   Environment->Position   Loaddable Ticka
   class Listener // {
     class Die   / Events->Die->Listener /{
       Tiles->Floor host = null;
-      void listen(Events->Die event){
-        
+      Boolean listen(Events->Die event){
+        return true;
       }
     }
   }
@@ -769,10 +792,11 @@ class 'packageName'.environments  Tile   Environment->Position   Loaddable Ticka
   }
   void generate(){
   }
-  void load(){
-    
+  Boolean load(){
+    return true;
   }
-  void tick(Double millisSinceLastFrame){
+  Boolean tick(Double millisSinceLastFrame){
+    return true;
   }
   void display(){
   }
@@ -795,4 +819,7 @@ class 'packageName'.environments  Tile   Environment->Position   Loaddable Ticka
     \createMap(Association->Id,Association);
     Tile += ~\IdMap->\_Association "associations";
   }
+}
+interface 'packageName'.interfaces EntryPointJoinable {
+  Boolean join(Tiles->EntryPoint entryPoint){}
 }

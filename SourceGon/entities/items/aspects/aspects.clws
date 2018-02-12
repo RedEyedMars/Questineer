@@ -27,11 +27,11 @@ class 'packageName'.entities.items.aspects  Aspects {
 	declarationToken : element : event_statement {
 	  String eventName = ^element->"event_names";
 	  Context eventContext = Events.addToEventMethod('element->"event_names"', Aspect, {});
-	  Method eventMethod = void on(Events->'eventName' "event"){};
+	  Body eventBody = new Body ();
 	  element : atom : body_element {
-		eventMethod.appendToBody(\getBodyElement(atom,eventContext));
+		eventBody.add(\getBodyElement(atom,eventContext));
 	  }
-	  Aspects->'aspectName'.addMethod(eventMethod);
+	  Events.addToEventMethod('element->"event_names"', Aspect, eventBody);
 	}
 	Aspects.getMethod("create").prependToBody(
 	  | if ''aspectName''.equals("aspectName") {

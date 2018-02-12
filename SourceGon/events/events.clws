@@ -10,7 +10,7 @@ class 'packageName'.events Events {
         @Event->Id id = Event->Id->'eventName'; 
       }
     Events->'cev' += class Listener /Object/ Listenable<Events\>'cev'> {
-      void listen(Events->'cev' event){}
+      Boolean listen(Events->'cev' event){ return true; }
     }
     Event->Id += void 'eventName' = null;
     declaration : element : parameter {
@@ -25,33 +25,41 @@ class 'packageName'.events Events {
   }
 > Context getEventContext(String eName, Class inputClass){
     String eventClassName = ^eName;
-	Method newMethod = void "on"(Events->'eventClassName' "event") {};
+	Method newMethod = Boolean on(Events->'eventClassName' event) { return true; };
 	String newMethodName = newMethod.getName();
 	if inputClass.getMethod(newMethodName) == null {
-	  inputClass += void "on"(Events->'eventClassName' "event") {}
-	  inputClass += void "add"(Events->'eventClassName'->Listener "newListener") {
-		'eName'+"Listeners".add("newListener");
+	  inputClass += Boolean on(Events->'eventClassName' event) {
+	    }
+	  inputClass += Boolean add(Events->'eventClassName'->Listener newListener) {
+	    if 'eName'+"Listeners" == null {
+	      'eName'+"Listeners" = new Listenable->List();
+	    }
+		return 'eName'+"Listeners".add("newListener");
 	  }
 	  \createList(Listenable);
-	  inputClass += ~Listenable->List 'eName'+"Listeners" = new Listenable->List();
+	  inputClass += ~Listenable->List 'eName'+"Listeners" = null;
 	}
 	return inputClass.getMethod(newMethodName).getContext();
   }
 > Context addToEventMethod(String eName, Class inputClass, Body body){
 
     String eventClassName = ^eName;
-	Method newMethod = void "on"(Events->'eventClassName' "event") {};
+	Method newMethod = Boolean on(Events->'eventClassName' event) {};
 	String newMethodName = newMethod.getName();
 	if inputClass.getMethod(newMethodName) == null {
-	  inputClass += void "on"(Events->'eventClassName' "event") {}
-	  inputClass += void "add"(Events->'eventClassName'->Listener "newListener") {
-		'eName'+"Listeners".add("newListener");
+	  inputClass += Boolean on(Events->'eventClassName' event) {}
+	  inputClass += Boolean add(Events->'eventClassName'->Listener newListener) {
+	    if 'eName'+"Listeners" == null {
+	      'eName'+"Listeners" = new Listenable->List();
+	    }
+		return 'eName'+"Listeners".add("newListener");
 	  }
 	  \createList(Listenable);
-	  inputClass += ~Listenable->List 'eName'+"Listeners" = new Listenable->List();
+	  inputClass += ~Listenable->List 'eName'+"Listeners" = null;
 	}
 	Method establishedMethod = inputClass.getMethod(newMethodName);
 	establishedMethod.appendToBody(body);
+	establishedMethod.setEndWith(|return true;|);
 	return establishedMethod.getContext();
   }
 > void addEventMethods(Class inputClass, Map<String, Body > bodiesToAdd){

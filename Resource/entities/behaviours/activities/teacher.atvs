@@ -1,0 +1,68 @@
+***Learning***
+TeachTrait (Entity pupil, Skill skill)
+	~Teaching an skill~
+	succeed if pupil.has(skill->id)
+	load {
+	  if pupil.has(skill->id) {
+	    failed = true
+	  }
+	}
+	step {
+	  if host has TeachSkills skill {
+	    Skills.TeachSkills teachSkill = Skills.TeachSkills <-host.get(TeachSkills skill)
+	    if teachSkill.get(skill->id).isOffCooldown() {
+	      teachSkill.get(skill->id).use(host,pupil)
+	    }
+	  }
+	  else if 10% chance {
+	    pupil.gain(skill.copy())
+	  }
+	  return true
+	}
+TeachTrait (Entity pupil, Trait trait)
+	~Teaching an trait~
+	succeed if pupil.has(trait->id)
+	load {
+	  if pupil.has(trait->id) {
+	    failed = true
+	  }
+	}
+	step {
+	  if host has TeachTraits skill {
+	    Skills.TeachTraits skill = Skills.TeachTraits <-host.get(TeachTraits skill)
+	    if skill.get(trait->id).isOffCooldown() {
+	      skill.get(trait->id).use(host,pupil)
+	    }
+	  }
+	  else if 10% chance {
+	    pupil.gain(trait)
+	  }
+	  return true
+	}
+TeachAffinity (Entity pupil, Affinity affinity)
+	~Teaching an affinity~
+	succeed if pupil.has(affinity->id)
+	load {
+	  if pupil.has(affinity->id) {
+	    failed = true
+	  }
+	}
+	step {
+	  if host has TeachAffinity skill {
+	    Skills.TeachAffinities skill = Skills.TeachAffinities<-host.get(TeachAffinities skill)
+	    if skill.get(affinity->id).isOffCooldown() {
+	      skill.get(affinity->id).use(host,pupil)
+	    }
+	  }
+	  else if pupil->affinitys.size() == 0 {
+	    if 10% chance {
+	      pupil.gain(affinity)
+	    }
+	  }
+	  else {
+	    if 5% chance {
+	      pupil.gain(affinity)
+	    }
+	  }
+	  return true
+	}

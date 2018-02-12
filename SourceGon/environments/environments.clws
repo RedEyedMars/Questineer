@@ -1,7 +1,8 @@
 import tiles.clws
 import areas.clws
+import buildings.clws
 < Collectors : java.util.stream;
-class 'packageName'.environments  Environment  Object Loaddable Tickable {
+class 'packageName'.environments  Environment  Object Loaddable Tickable EntryPointJoinable {
   interface Movable // {
     Entity->Event moveX(Integer x){}
     Entity->Event moveY(Integer y){}
@@ -54,14 +55,30 @@ class 'packageName'.environments  Environment  Object Loaddable Tickable {
   List<Area> get(Area->Id id){
     return areaMap.get(id);
   }
-  \Tile->List getTilesWithin(Environment->Position position, Float range, Tile->Id tileId){
-    Tile->List result = new Tile->List();
-    for Tile tile: tiles.get(tileId) {
-      if position.getDistanceTo(tile) < range {
-        result.add(tile);
+  Tile getTile(Integer x, Integer y){
+    for Area area : areas {
+      Tile result = area.getTile(x,y);
+      if result != null {
+        return result;
       }
     }
-    return result;
+    return null;
+  }
+  Tile->List collectTiles(Tile->Id tileId,Predicate<Tile> predicate){
+    if tiles.containsKey(tileId) == false {
+      return new Tile->List();
+    }
+    return 
+      tiles.get(tileId).stream()
+        .filter(predicate)
+        .collect(
+           Collector.of(
+              "Tile.List::new", 
+              "Tile.List::add",
+              ("left, right") -> "{ left.addAll(right); return left; }")); 
+  }
+  \Tile->List getTilesWithin(Environment->Position position, Float range, Tile->Id tileId){
+    return \collectTiles(tileId,(\tile)->\position.getDistanceTo(\tile) <= range);
   }
   void add(Entity newEntity){
     startArea.add(newEntity);
@@ -73,8 +90,8 @@ class 'packageName'.environments  Environment  Object Loaddable Tickable {
     tiles.get(newTile.getId()).add(newTile);
   }
   class Position //{
-    Integer x = -10000;
-    Integer y = -10000;
+    Integer x = Integer.MIN_VALUE;
+    Integer y = Integer.MIN_VALUE;
     Environment parent = null;
     void setX(Integer newX){
       x = newX;
@@ -86,8 +103,8 @@ class 'packageName'.environments  Environment  Object Loaddable Tickable {
       parent = newParent;
     }
     Double getDistanceTo(Position otherPosition){
-      Integer xDirection = otherPosition.getX() - \getX() ;
-      Integer yDirection = otherPosition.getY() - \getY();
+      int xDirection = otherPosition.getX() - \getX() ;
+      int yDirection = otherPosition.getY() - \getY();
       return \Math.sqrt(xDirection \* xDirection \+ yDirection \* yDirection);
     }
     Double getDirectionTo(Position otherPosition){
@@ -95,17 +112,17 @@ class 'packageName'.environments  Environment  Object Loaddable Tickable {
       Integer yDirection = otherPosition.getX() - \getY();
       if xDirection == 0 {
         if yDirection > 0 {
-          return \Math.PI / 2.0;
+          return Math.PI / 2.0;
         }
         else if yDirection < 0 {
-          return \Math.PI * 3.0 / 2.0;
+          return Math.PI * 3.0 / 2.0;
         }
         else {
           return 0.0;
         }
       }
       else {
-        return \Math.atan2(yDirection,xDirection);
+        return Math.atan2(yDirection,xDirection);
       }
     }
     Direction getDirectionOf(Position otherPosition){
@@ -127,35 +144,40 @@ class 'packageName'.environments  Environment  Object Loaddable Tickable {
         return null;
       }
     }
-    List<Direction> getDirectionsTo(Position otherPosition){
+    Direction[] getDirectionsOf(Position otherPosition){
       Integer xDirection = otherPosition.getX() - \getX() ;
-      Integer yDirection = otherPosition.getX() - \getY();
-      List<Direction> result = new ArrayList<Direction>();
-      if xDirection == 0 {
-        result.add(Direction.right);
-        result.add(Direction.left);
-      }
-      else {
-        if xDirection > 0 {
-          result.add(Direction.right);
-        }
-        else {
-          result.add(Direction.left);
-        }
-      }
-      if yDirection == 0 {
-        result.add(Direction.up);
-        result.add(Direction.down);
-      }
-      else {
+      Integer yDirection = otherPosition.getY() - \getY();
+      if xDirection > 0 {
         if yDirection > 0 {
-          result.add(Direction.up);
+          return Direction.rightUp;
+        }
+        else if yDirection < 0 {
+          return Direction.rightDown;
         }
         else {
-          result.add(Direction.down);
+          return new Direction(Direction.right)[];
         }
       }
-      return result;
+      else if xDirection < 0{
+        if yDirection > 0 {
+          return Direction.leftUp;
+        }
+        else if yDirection < 0 {
+          return Direction.leftDown;
+        }
+        else {
+          return new Direction(Direction.left)[];
+        }
+      }
+      else if yDirection > 0 {
+        return new Direction(Direction.up)[];
+      }
+      else if yDirection < 0 {
+        return new Direction(Direction.down)[];
+      }
+      else {
+        return new Direction()[];
+      }
     }
     
     Boolean isWithin(Environment->Position otherPosition, Integer width, Integer height){
@@ -246,10 +268,10 @@ class 'packageName'.environments  Environment  Object Loaddable Tickable {
     }
     Boolean isWithin(Environment->Location otherLocation, Float range, Double angleLeft, Double angleRight){
       Float tFacing = otherLocation.getFacing();
-      return \super.isWithin(otherLocation, range, angleLeft \+ tFacing, angleRight \+ tFacing);
+      return super.isWithin(otherLocation, range, angleLeft \+ tFacing, angleRight \+ tFacing);
     }
     Boolean isWithin(Environment->Position otherPosition){
-      return \super.isWithin(otherPosition, radius, \Math.PI * 2.0, 0.0);
+      return super.isWithin(otherPosition, radius, \Math.PI * 2.0, 0.0);
     }
     Entity->List getEntitiesWithin(Float within){
       return area.getEntitiesWithin(this,within);
@@ -264,26 +286,41 @@ class 'packageName'.environments  Environment  Object Loaddable Tickable {
       return area.getClosestTile(this,criteria);
     }
     Area->List getAreasWith(Predicate<Tile> criteria,Comparator<Area> comparator, Float range){
-      Collectors collects = null;
-      return Area->List.create(\parent.getAreas().parallelStream().filter("(A)->A.has(criteria)").sorted(comparator).collect(Collectors.toList()));
+      return 
+        \parent.getAreas().parallelStream()
+          .filter((\A)->\A.getDistanceTo(\area) < range)
+          .filter((\A)->\A.has(criteria))
+          .sorted(comparator)
+          .collect(
+             Collector.of(
+              "Area.List::new", 
+              "Area.List::add",
+              ("left, right") -> "{ left.addAll(right); return left; }")); 
     }
     Area->List getAreasWithTile(Tile->Id tileId, Float range){
-      Area->List result = new Area->List();
-      for Area area: \parent.getAreas() {
-        if area.getTileMap().containsKey(tileId) && area.getTileMap().get(tileId).isEmpty() == false {
-          result.add(area);
-        }
-      }
-      return result;
+      return 
+        \parent.getAreas().parallelStream()
+          .filter((\A)->\A.getDistanceTo(\area) < range)
+          .filter((\A)->\A.getTileMap().containsKey(tileId))
+          .filter((\A)->\A.getTileMap().get(tileId).isEmpty() == false)
+          .collect(
+             Collector.of(
+              "Area.List::new", 
+              "Area.List::add",
+              ("left, right") -> "{ left.addAll(right); return left; }")); 
     }
     Tile->List getTilesWithin(Float range, Tile->Id id){
-      Tile->List result = new Tile->List();
-      for Tile tile: area.getTileMap().get(id) {
-        if tile.getDistanceTo(this) <= range {
-          result.add(tile);
-        }
+      if area.getTileMap().containsKey(id) == false {
+        return new Tile->List();
       }
-      return result;
+      return 
+        \area.getTileMap().get(id).parallelStream()
+          .filter((\T)->\getDistanceTo(\T) <= range)
+          .collect(
+             Collector.of(
+              "Tile.List::new", 
+              "Tile.List::add",
+              ("left, right") -> "{ left.addAll(right); return left; }"));
     }
     Tiles->Floor getUnexploredPoint(){
       return area.getUnexploredPoint(host);
@@ -310,7 +347,7 @@ class 'packageName'.environments  Environment  Object Loaddable Tickable {
         return \isWithin(tile);
       }
       else {
-        List<Direction> directions = \getDirectionsTo(tile);
+        Direction[] directions = \getDirectionsOf(tile);
         for Direction direction: directions {
           Tile neighbour = tile.getNeighbour(direction);
           if \isCloseAsPossibleTo(neighbour) == true {
@@ -426,7 +463,7 @@ class 'packageName'.environments  Environment  Object Loaddable Tickable {
   interface Factory //{
     Environment create(){}
   }
-  void load(){
+  Boolean load(){
     Area newArea = areaGenerator.generate();
     if startArea == null {
       startArea = newArea;
@@ -435,13 +472,42 @@ class 'packageName'.environments  Environment  Object Loaddable Tickable {
       newArea.load();
       \add(newArea);
     }
+    return true;
   }
-  void tick(Double millisSinceLastFrame){
+  Boolean tick(Double millisSinceLastFrame){
     List<Area> currentlyActive = new ArrayList<Area>();
     currentlyActive.addAll(activeAreas.keySet());
-    for Area activeArea: currentlyActive {
-      activeArea.tick(millisSinceLastFrame);
+    currentlyActive.parallelStream().forEach((\A)->\A.tick(millisSinceLastFrame));
+    return true;
+  }
+  Boolean join(Tiles->EntryPoint yourEntryPoint){
+    #Environment self = this;Tiles->EntryPoint myEntryPoint = areas.stream().filter(("A")->"A"!=yourEntryPoint.getArea()).flatMap(("A")->"A".getEntryPoints().stream()).filter(("E")->"E".getSister()==null).findAny().orElse(null);
+      if myEntryPoint != null { myEntryPoint.setSister(yourEntryPoint); yourEntryPoint.setSister(myEntryPoint);  areas.stream().forEach((\A)->\A.findDistance(yourEntryPoint.getArea())); yourEntryPoint.getArea().getParent().areas.stream().forEach((\A)->\A.findDistance(myEntryPoint.getArea())); return true; }  else {} #  
+    yourEntryPoint.setSisterGenerator(this);
+    return true;
+  }
+  Boolean join(Environment otherEnvironment){
+    Tiles->EntryPoint myEntryPoint = areas.stream()
+      .flatMap(("A")->"A".getEntryPoints().stream())
+      .filter(("E")->"E".getSister()==null||"E".getSister().getArea()==null)
+      .findAny().orElse(null);
+    Tiles->EntryPoint yourEntryPoint = otherEnvironment.areas.stream()
+      .flatMap(("A")->"A".getEntryPoints().stream())
+      .filter(("E")->"E".getSister()==null||"E".getSister().getArea()==null)
+      .findAny().orElse(null);
+    if myEntryPoint != null && yourEntryPoint != null {
+      myEntryPoint.setSister(yourEntryPoint);
+      yourEntryPoint.setSister(myEntryPoint);
+      areas.stream()
+        .forEach((\A)->\A.findDistance(yourEntryPoint.getArea()));
+      otherEnvironment.areas.stream()
+        .forEach((\A)->\A.findDistance(myEntryPoint.getArea()));
+      return true;
     }
+    else {
+      return false;
+    }
+    
   }
 > void setup(%Pass data){
     \createList(Tile);
@@ -450,9 +516,10 @@ class 'packageName'.environments  Environment  Object Loaddable Tickable {
 > void declaration(%T declarationToken){
     String mapName = 'declarationToken->"map_header"->"mapName"';
     
+    Game->EnvironmentList.add(mapName);
     Environments += class mapName /Environment/ {
-      void load(){
-        super.load();
+      Boolean load(){
+        return super.load();
       }
     }
     Environments->'mapName' += class Factory /Object/ Environment->Factory {
@@ -482,27 +549,32 @@ class 'packageName'.environments  Environment  Object Loaddable Tickable {
     }
     Areas += class mapName / Area / {
     }
-    Areas->'mapName' += class Generator / Area->Generator / {
-      Environment parent = null;
-      Area generate(){
-        Float chance = Range.getRandomFloat();
+    ~double previousChance = 0.0;
+    declarationToken : area : area_declaration {
+      previousChance = Area.declaration(area,mapName, underneathTiles, previousChance);
+    }
+    if Areas->'mapName'->'"AnyGenerator"' == null {
+      Areas->'mapName' += class AnyGenerator/Area->Generator/ {
+        Environment parent = null;
+        Area generate(){
+        }
       }
     }
-    Area->Generators += class mapName // {}
-    Area->TerrainChoice += class mapName // {}
-    ~Boolean isFirst = true;
-    ~Double previousChance = 0.0;
-    declarationToken : area : area_declaration {
-      previousChance = Area.declaration(area,mapName, underneathTiles,isFirst,previousChance);
-      isFirst = false;
-    }
-    Areas->'mapName'->Generator->*"generate".appendToBody(|return null;|);
-    Environments->'mapName'->*.prependToBody(|"areaGenerator" = new Areas->'mapName'->Generator(this);|);
+    Areas->'mapName'->AnyGenerator->*"generate".appendToBody(|return null;|);
+    Environments->'mapName'->*.prependToBody(|"areaGenerator" = new Areas->'mapName'->AnyGenerator(this);|);
     Environments->'mapName'->*.prependToBody({
         if name == null {
           name = ''mapName'';
         }
       });
+    
+    declarationToken : buildings : structures_declaration {
+      Buildings += class mapName //{}
+      Area.addGeneratorSuperClass(Buildings->'mapName');
+      buildings : building : structure_declaration {
+        Buildings.declaration(building,mapName);
+      }
+    }
   }
 }
 class 'packageName'.environments Environments {
@@ -510,7 +582,7 @@ class 'packageName'.environments Environments {
     return null;
   }
 > Statement getId(String name){
-    return |Gui.game.getEnvironment('' 'name' '')|;
+    return |Gui.game.getEnvironments()."get"+'name'()|;
   }
 }
 class 'packageName'."environments" Direction {
@@ -571,4 +643,8 @@ class 'packageName'."environments" Direction {
       return ImageStates.left;
     }
   }
+  @Direction[] leftDown = new Direction(left,down)[];
+  @Direction[] leftUp = new Direction(left,up)[];
+  @Direction[] rightDown = new Direction(right,down)[];
+  @Direction[] rightUp = new Direction(right,up)[];
 }

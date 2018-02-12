@@ -1,9 +1,12 @@
 Forest > forest.tile
-
+#
 Room 100%:
 	rect_10x10.png
 		Entry Path 1-3 Exits 
-		Patches (0:1%, 1:19%, 2:70%, 3:10%) :
-			Long_Grass 3 x 3
-			Lone_Rock
-			Bear_Den
+		Patches  1:10%  2:70%  3,4:10%
+			Long_Grass 1-2x1-2,	Lone_Rock,	Bear_Den
+	#
+Entrance 100%:
+	4x4 Grass
+	Path [OffSide] -> Forest
+	Path [OffSide] -> Forest

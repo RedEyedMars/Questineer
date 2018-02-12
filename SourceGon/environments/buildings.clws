@@ -1,0 +1,52 @@
+
+class 'packageName'.environments.buildings Building Object {
+  enum Type //{ void NONE; }
+  Area exterior = null;
+  Area interior = new Area();
+  Building->Type getId(){
+    return Type.NONE;
+  }
+  Treasury->Cost->List getCosts(){
+    return null;
+  }
+  void place(Area area, int x, int y){
+    area.add(this);
+    exterior = area;
+    interior.setParent(area.getParent());
+    \generateAt(x,y,area);
+    \generateInterior(interior);
+    area.getParent().add(interior);
+  }
+}
+class 'packageName'.environments.buildings Buildings {
+> void declaration(%T declaration, String mapName){
+    String buildingName = 'declaration->"buildingName"';
+    Building->Type += void 'buildingName';
+    Buildings->'mapName' += class buildingName/Building/ {
+        Building->Type getId(){
+          return Building->Type.'buildingName';
+        }
+      }
+    ~boolean isFirst = true;
+    declaration : element :structure_definition {
+      if isFirst {
+        Integer floorWidth = Integer.parseInt('element->"patch_element"->"simpleTileSpread"->"patchWidth"');
+        Integer floorHeight = Integer.parseInt('element->"patch_element"->"simpleTileSpread"->"patchHeight"');
+        Integer floorSize = floorWidth\*floorHeight;
+        Area.GeneratorMapValues generatorValues = Area.addGeneratorClass(Buildings->'mapName',buildingName,floorWidth,floorHeight,floorSize);
+      }
+      element : atom : patch_element {
+      #
+        Area.addPatchElement(element,Buildings->'buildingName');
+        Buildings->'mapName'->'buildingName'->*"generateAt".appendToBody();
+        Buildings->'mapName'->'buildingName'->*"generateInterior".appendToBody();#
+      }
+      isFirst = false;
+    }
+    Buildings->'mapName'->'buildingName' += class Placer //Menu->Placable {
+        void place(Area area, Integer x, Integer y){
+          new Buildings->'mapName'->'buildingName'().place(area, x, y);
+        }
+      }
+  }
+}

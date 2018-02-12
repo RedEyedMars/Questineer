@@ -1,8 +1,9 @@
+import buildings.cgon
 
 #MAP#
 map_names global list with NAME
 import_map Imports "environments/maps/" FILE_NAME ".maps" = ">" FILE_NAME ".maps" "\n"
-	( "\n" | comments | map_header | area_declaration)*
+	( "\n" | comments | map_header | hints | trails_declaration | structures_declaration |area_declaration)*
 area_shape_name
 	"Rectangle"
 
@@ -10,13 +11,21 @@ area_shape_name
 map_header
 	NAME as mapName in map_names import_tile
 area_declaration
-	NAME as areaName INTEGER as chance "%" ":" ( "\n\t" TITLE as bluePrintName ( "\n\t\t" area_element)* )*
+	NAME as areaName INTEGER as chance "%" ":" ( "\n\t" (patch_dimension as defaultSize (tile_names) as defaultTileName ( "\n\t" patch_element )* | TITLE as bluePrintName ( "\n\t\t" area_element)* )* ) 
 area_element
 	( "Entry" tile_names ( "|" tile_names )* ( INTEGER as lowerBound ( "-" INTEGER as upperBound )? "Exits" ) as range? ) as  entryPointGeneration
-	( "Patches" patch_probability ":" ( "\n\t\t\t" patch_element )* ) as terrainGeneration
-patch_probability Braced ( ) , silent
-	probability_element ( "," probability_element )*
+	( "Patches" patch_probability ( "\n\t\t\t" patch_element ("," patch_element)* )* ) as terrainGeneration
+patch_probability silent
+	probability_element+
 probability_element silent
-	( INTEGER as amount ":" INTEGER as percent "%" ) as probability
+	( INTEGER as amount ("," INTEGER as amount)* ":" INTEGER as percent "%" ) as probability
 patch_element
-	tile_names ( INTEGER as patchWidth [[xX]] INTEGER as patchHeight )?
+	( patch_dimension tile_names ) as simpleTileSpread
+	tile_names ( patch_dimension ( "|" patch_dimension )* )? patch_relative_position? patch_goto? ( "as" NAME as nodeName "in" trail_names )?
+patch_goto
+	"->" (room_names| map_names ) as destination
+patch_relative_position Braced [ ] = ( "OffSide" as offside | patch_range "," patch_range )
+patch_dimension silent
+	patch_range as patchWidth [[xX]] patch_range as patchHeight
+patch_range silent
+	INTEGER as lowerBound? ( "-" INTEGER as upperBound)?

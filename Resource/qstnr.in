@@ -1,6 +1,7 @@
 > std.colours
 > std.animationTypes
 > std.imgs
+> town.imgs
 > std.dwbs
 > std.layers
 
@@ -19,6 +20,16 @@
 >misc.itms
 >dmg.rsns
 >neutral.rsns
+>teacher.skls
+>teacher.atvs
 
 >town.maps
 >forest.maps
+
+load {
+    hero = new Entities.Hero(Images=>male_hero_base)
+    hero spawn at Town 0,0
+    Placer placer = new Buildings.Town.TownHall.Placer()
+    placer.place(Town[0],1,1)
+	#hero start Exploring(200)#
+}

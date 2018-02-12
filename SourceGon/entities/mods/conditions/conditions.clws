@@ -20,10 +20,10 @@ class 'packageName'.entities.mods.conditions  Conditions {
 	Conditions += class conditionName /Condition/ Source {
 	  @Condition->Id "id" = new Condition->Id();
 	  String getName(){
-	    return ''conditionName'';
+	    return '' 'conditionName' '';
 	  }
 	  String getDescription(){
-	    return ''conditionDescription'';
+	    return '' 'conditionDescription' '';
 	  }
 	}
 	Body requirementsBody = new Body ();
@@ -113,7 +113,7 @@ class 'packageName'.entities.mods.conditions  Conditions {
     Events.addEventMethodsExclusive(Conditions->'conditionName',eventBodies);
     Conditions->'conditionName' += Boolean hasRequirements(Entity "candidate"){}
     Conditions->'conditionName'.getMethod("hasRequirements").appendToBody(requirementsBody);
-    Conditions.getMethod("create").prependToBody(| if ''conditionName''.equals("conditionName"){
+    Conditions.getMethod("create").prependToBody(| if '' 'conditionName' ''.equals("conditionName"){
       return new Conditions->'conditionName'(); }|);
   }
   > Statement getId(String name){

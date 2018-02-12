@@ -11,8 +11,10 @@ skill_declaration
 skill_element silent
 	comments
 	("?" boolean_statement) as require
+	"+" variable_declaration
 	("range" stat_range) as range
 	("cd" stat_range) as cooldown
 	"use" std_body as use
+	"load" std_body as load
 	("miss" ("\n"* conditional_chance) as option* ) as miss
 	"\n"

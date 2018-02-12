@@ -217,8 +217,24 @@ class 'packageName'.gui.images ImageLoader {
     }
   }
 > Set<String> declaredImageLoaders = new HashSet<String>();
+> Set<String> declaredLoadingImages = new HashSet<String>();
 > void declareImageLoader(String imageName, String imageFileName, Integer imageWidth, Integer imageHeight){
-    String imageLoaderName = imageName\+"DataLoader";
+    StringBuilder imageLoaderName = new StringBuilder();
+    int lastIndexOfDot = imageFileName.lastIndexOf(".");
+    if lastIndexOfDot > -1 {
+      imageLoaderName.append(imageFileName.substring(0,lastIndexOfDot).replace("/","_").replace("\\","_").replace(".","_"));
+    }
+    else {
+      imageLoaderName.append(imageFileName.replace("/","_").replace("\\","_").replace(".","_"));
+    }
+    imageLoaderName.append("DataLoader");
+    if declaredLoadingImages.add('imageLoaderName') == false {
+      ImageLoader->*"load".appendToBody({
+        'imageLoaderName'.attachTextures(Images->'imageName',Images->Flipped->'imageName');
+      });
+      return void;
+    }
+    
     String imageLoaderClassName = "ImageData"\+'imageWidth'\+"x"\+'imageHeight'\+"Loader";
     ImageLoader->*"load".prependToBody({
       'imageLoaderName'.start();
@@ -461,7 +477,7 @@ class 'packageName'.gui Gui {
         Images += class imageClassName / Gui->Image / Gui->Statable {
         }
         Images->'imageClassName'->*.appendToBody({
-          imageFileName = ''imageFileName'';
+          imageFileName = '' 'imageFileName' '';
           pixels = new Gui->Image->Dimensions('pWidth','pHeight');
           frames = new Gui->Image->Dimensions('input->"frameWidth"','input->"frameHeight"');
         });

@@ -18,7 +18,8 @@ class 'packageName'.entities.relations.associations Association Object Source {
   Association->Id getId(){
     return null;
   }
-  void on(Events->\Joined event){
+  Boolean on(Events->\Joined event){
+    return false;
   }
   
 }

@@ -7,8 +7,9 @@ class 'packageName'.entities.behaviours.activities  Activity Object Source{
   class Listeners // {
     class Fail / Events->\Fail->Listener / {
       Activity host = null;
-      void listen(Events->\Fail event){
+      Boolean listen(Events->\Fail event){
         host.on(event);
+        return true;
       }
     }
   }
@@ -20,6 +21,9 @@ class 'packageName'.entities.behaviours.activities  Activity Object Source{
   ~Tiles->MonsterDen targetDen = null;
   ~Tiles->Terrain targetTerrain = null;
   ~Boolean failed = false;
+  ActivityType getType(){
+    return null;
+  }
   void setHost(Entity newHost){
   }
   Boolean hasTarget() {
@@ -64,22 +68,28 @@ class 'packageName'.entities.behaviours.activities  Activity Object Source{
   }
   void listen(Entity host, Entity->Event event){
   }
-  void on(Events->\Tick event){
+  Boolean on(Events->\Tick event){
   	Entity host = event.getHost();
     if \hasSucceeded(host){
       \on(new Events->\Success(host,this));
       host.stop(this);
+      return true;
     }
     else if \hasFailed(host){
       \on(new Events->\Fail(host,this));
       host.stop(this);
+      return true;
+    }
+    else if host.isIdle() {
+      if failed == false && \step(host)==false {
+        return \on(new Events->\Idle(host,this));
+      }
+      else {
+        return true;
+      }
     }
     else {
-      if host.isIdle() {
-        if failed == false && \step(host)==false {
-          \on(new Events->\Idle(host,this));
-        }
-      }
+      return true;
     }
   }
   Boolean step(Entity host){
@@ -92,13 +102,13 @@ class 'packageName'.entities.behaviours.activities  Activity Object Source{
     }
 	return false;
   }
-  void on(Events->\Idle event){
+  Boolean on(Events->\Idle event){
     Entity->List entitiesToTarget = event.getHost().getLocation().getEntitiesWithin(20f);
 	for Entity candidate : entitiesToTarget {
 	  for Usable usable : \getUsables() {
 	    if usable.getTargetCriteria().test(candidate) {
 	      event.getHost().start( new Activities->\ChasingEntity(25, candidate, usable.getRange(event.getHost())) );
-	      return void;
+	      return true;
 	    }
 	  }
 	}
@@ -187,7 +197,7 @@ class 'packageName'.entities.behaviours.activities  Activities {
     String activityName = ^declarationToken->"activityName";
     String description = 'declarationToken->"DESCRIPTION"';
     
-    
+    String declaredTypeName = ActivityTypes.currentlyDeclaredTypeName;
     Activities += class activityName / Activity / {
       @Activity->Id id = new Activity->Id();
       @Usable->List allUsables = new Usable->List();
@@ -197,6 +207,9 @@ class 'packageName'.entities.behaviours.activities  Activities {
       }
       String getDescription(){
         return '' 'description' '';
+      }
+      ActivityType getType(){
+        return ActivityTypes.'declaredTypeName';
       }
       Usable->List getUsables(){
         return allUsables;
@@ -287,5 +300,60 @@ class 'packageName'.entities.behaviours.activities  Activities {
     
     Activities->'activityName'->*"hasSucceeded[Entity]".appendToBody({return false;});
     Activities->'activityName'->*"hasFailed[Entity]".appendToBody({return false;});
+  }
+> Statement getId(String name){
+    return |Activities->'name'.id|;
+  }
+}
+class 'packageName'.entities.behaviours.activities ActivityType {
+  enum Id // {void None;}
+  String name;
+  ActivityType->Id id;
+}
+class 'packageName'.entities.behaviours.activities ActivityTypes {
+  @ActivityType None = new ActivityType(''"None"'',ActivityType->Id."None");
+>@ Body createSwitchBody = new Body ();
+  @ActivityType create(ActivityType->Id id) {
+    switch id `createSwitchBody`
+    return null;
+  }
+> Set<String> allActivityNames = new HashSet<String>();
+>@~String currentlyDeclaredTypeName = "None";
+> void declaration(%T input) {
+    String activityTypeName = ^input->"activityTypeName";
+    currentlyDeclaredTypeName = activityTypeName;
+    if allActivityNames.add(activityTypeName){
+      ActivityType->Id += void 'activityTypeName';
+      ActivityTypes += @ActivityType 'activityTypeName' = new ActivityType(
+            '' 'activityTypeName' '',
+            ActivityType->Id.'activityTypeName');
+      createSwitchBody.add(|case 'activityTypeName' { return ActivityTypes.'activityTypeName';}|);
+      String variableName = activityTypeName.substring(0,1).toLowerCase()\+activityTypeName.substring(1)\+"Motivation";
+      Entity.motivationForSwitchBody.add(|case 'activityTypeName' {return 'variableName';}|);
+      Entity.motivationSwapSwitchBody1.add(|case 'activityTypeName' {
+          if 'variableName' == 0 {
+            return false;
+          }
+          "break";
+        }|);
+      Entity.motivationSwapSwitchBody2.add(|case 'activityTypeName' {
+          if 'variableName' == 10 {
+            return false;
+          }
+          "break";
+        }|);
+      Entity.motivationSwapSwitchBody3.add(|case 'activityTypeName' {
+          "--"+'variableName';
+          "break";
+        }|);
+      Entity.motivationSwapSwitchBody4.add(|case 'activityTypeName' {
+          "++"+'variableName';
+          "break";
+        }|);
+      Entity += ~int 'variableName' = 5;
+    }
+  }
+> Statement getId(String name){
+    return |ActivityType->Id.'name'|;
   }
 }

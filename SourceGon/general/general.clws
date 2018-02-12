@@ -6,15 +6,15 @@
 > Set<String> declaredMapSet = new HashSet<String>();
 > String TT = "<T>T";
 interface 'packageName'.misc.interfaces Listenable <TypeName> {
-  void listen('"TypeName"' "event"){}
+  Boolean listen('"TypeName"' "event"){}
 }
 interface 'packageName'.misc.interfaces Source {
 }
 interface 'packageName'.misc.interfaces Loaddable {
-  void load(){}
+  Boolean load(){}
 }
 interface 'packageName'.misc.interfaces Tickable {
-  void tick(Double "millisSinceLastFrame"){}
+  Boolean tick(Double "millisSinceLastFrame"){}
 }
 interface 'packageName'.misc.interfaces Usable {
   class Id // {
@@ -54,6 +54,12 @@ class 'packageName'.misc Range Object Evaluable{
 	  return null;
 	}
 	return collection.get((int)(collection.size()*randomizer.nextFloat()));
+  }
+  @$'TT' select(\T[] array){
+    if array.length == 0{
+	  return null;
+	}
+	return array[(int)(array.length*randomizer.nextFloat())];
   }
   @Boolean chance(Double percent){
     return randomizer.nextDouble() <= percent;
@@ -164,7 +170,39 @@ class 'packageName'.misc Criteria<TypeName> Object Predicate<'"TypeName"'> {
 > Statement getBodyElement(%T elementToken, Context context){
     elementToken : element
       : statement {
-        return | `\getStatement(element, context)` ; | ;
+        if elementToken->"inline_if_statement" != null {
+          ~Body body = new Body ();
+          ~Body previousBody = null;
+          ~boolean isFirst = true;
+          ~Statement result = new Statement ();
+          elementToken->"inline_if_statement" : bool : boolean_statement {
+            Body currentBody = body;
+            if isFirst {
+              if elementToken->"inline_if_statement"->"IF" != null {
+                if elementToken->"inline_if_statement"->"ELSE" != null {
+                  result = |else if `\getBooleanStatement(bool,context)` `currentBody`|;
+                }
+                else {
+                  result = |     if `\getBooleanStatement(bool,context)` `currentBody`|;
+                }
+              }
+              else {
+                result =   |   else { if `\getBooleanStatement(bool,context)` `currentBody` } |;
+              }
+              isFirst = false;
+            }
+            else {
+              previousBody.add(|if `\getBooleanStatement(bool,context)` `currentBody`|);
+            }
+            previousBody = body;
+            body = new Body ();
+          }
+          previousBody.add(| `\getStatement(element, context)` ; |);
+          return result;
+        }
+        else {
+          return | `\getStatement(element, context)` ; | ;
+        }
       }
       : return_statement {
         return |return `\getStatement(element, context)`;|;
@@ -189,6 +227,9 @@ class 'packageName'.misc Criteria<TypeName> Object Predicate<'"TypeName"'> {
 	  }
 	  : association_statement {
 		  return |`\getAssociationStatement(element,context)`;|;
+	  }
+	  : spawn_statement {
+		  return |`\getSpawnStatement(element,context)`;|;
 	  }
 	  : variable_declaration {
 	    return \getVariableDeclaration(element, context);
@@ -295,7 +336,7 @@ class 'packageName'.misc Criteria<TypeName> Object Predicate<'"TypeName"'> {
     	: isA_statement {
     	    operator.add(\getIsAStatement(element, context));
     	  }
-    	: spawn_statement {
+    	: spawned_statement {
     		operator.add(|'' 'element->"environmentName"' ''.equals("spawn".getParent().getName())|);
     	  }
     	: has_statement {
@@ -355,13 +396,20 @@ class 'packageName'.misc Criteria<TypeName> Object Predicate<'"TypeName"'> {
  	  innerHead.add(|'quanta->"INTEGER"'|);
       requireHeader.add(innerHead);
     }
-	requirementToken : quanta : require_trait {
+	requirementToken : quanta : require_skill {
+	  Statement id = Skills.getId(^quanta->"skill_names");
+	  Statement innerHead = |`candidate`."has"(`id`)|;
+	  if quanta->"NOT" != null { innerHead.negate();}
+	  if showAsTrue == false { innerHead.negate();}
+	  requireHeader.add(innerHead);
+    }
+    requirementToken : quanta : require_trait {
 	  Statement id = Traits.getId(^quanta->"trait_names");
 	  Statement innerHead = |`candidate`."has"(`id`)|;
 	  if quanta->"NOT" != null { innerHead.negate();}
 	  if showAsTrue == false { innerHead.negate();}
 	  requireHeader.add(innerHead);
-    } 
+    }  
     requirementToken : quanta : require_attack {
 	  Statement id = Attacks.getId(^quanta->"attack_names");
 	  Statement innerHead = |`candidate`."has"(`id`)|;
@@ -391,9 +439,11 @@ class 'packageName'.misc Criteria<TypeName> Object Predicate<'"TypeName"'> {
     String method = 'element->"method"';
     String activityName = ^element->"activity_names";
     Parameters arguments = new Parameters ();
-    element : atom : statement {
+    element : args : method_arguments {
+      args : atom : statement {
         arguments.add(\getStatement(atom,context));
       }
+    }
     return |`subject`.'method'(new Activities->'activityName'(`arguments`))|;
   }
 > Statement getAssociationStatement(%T element, Context context){
@@ -406,6 +456,41 @@ class 'packageName'.misc Criteria<TypeName> Object Predicate<'"TypeName"'> {
       }
     Statement recruiter = \getStatement(element->"recruiter"->"statement",context);
     return |`subject`.'method'(`recruiter`,new Associations->'associationName'(`arguments`))|;
+  }
+> Statement getSpawnStatement(%T element, Context context){
+    ~Statement adder = `Environments.getId('element->"map_names"')`;
+    if element->"tile_names" != null {
+      ~boolean isFirst = true;
+      element : atom : tile_names {
+        Statement current = adder;
+        if isFirst {
+          adder = |`current`.getRandomTile(Tiles->'element->"map_names"'->'atom'.id)|;
+        }
+        else {
+          adder = |((Tiles->EntryPoint)`current`).\getSisterArea().getRandomTile(Tiles->'element->"map_names"'->'atom'.id)|;
+        }
+        isFirst = false;
+      }
+    }
+    else if element->"upperBoundX" != null && element->"upperBoundY" != null {
+      Statement current = adder;
+      adder = |`current`.getTile(Range.getRandom('element->"lowerBoundX"','element->"upperBoundX"'),Range.getRandom('element->"lowerBoundY"','element->"upperBoundY"'))|;
+    }
+    else if element->"upperBoundX" != null{
+      Statement current = adder;
+      adder = |`current`.getTile(Range.getRandom('element->"lowerBoundX"','element->"upperBoundX"'),'element->"lowerBoundY"')|;
+    }
+    else if element->"upperBoundX" != null {
+      Statement current = adder;
+      adder = |`current`.getTile('element->"lowerBoundX"',Range.getRandom('element->"lowerBoundY"','element->"upperBoundY"'))|;
+    }
+    else {
+      Statement current = adder;
+      adder = |`current`.getTile('element->"lowerBoundX"','element->"lowerBoundY"')|;
+    }
+    Statement current = adder;
+    
+    return |`\getVariableCall(element->"variable_call",context)`.spawnAt(`current`)|;
   }
 > Statement getStatement(%T statementToken, Context context){
     return \getStatement(statementToken,false,context);
@@ -430,7 +515,12 @@ class 'packageName'.misc Criteria<TypeName> Object Predicate<'"TypeName"'> {
 	    ret.add(Entity.getSelector(element->"entity_id_choice"));
 	  }
 	  : map_selector {
-	    ret.add(Tiles.getSelector('element->"map_names"',element->"tile_id_choice"));
+	    if element->"tile_id_choice"->"index" != null {
+	      ret.add(|Gui.game."get"+'element->"map_names"'().getAreas().get('element->"tile_id_choice"->"index"')|);
+	    }
+	    else {
+	      ret.add(Tiles.getSelector('element->"map_names"',element->"tile_id_choice"));
+	    }
 	  }
 	  : operator {
 		  if negate {
@@ -503,18 +593,31 @@ class 'packageName'.misc Criteria<TypeName> Object Predicate<'"TypeName"'> {
 		if currentContext == null {
 		    throw "Could not find "+'variableName'+" variable in context!";
 		}
-		ret.add(|'typeName'.'variableName'|);
+		Statement result = |'typeName'.'variableName'|;
+		result.addImport('typeName');
+		ret.add(result);
 	  }
 	  : variableName {
 		if currentContext.hasLink('element') == false {
+	      Context originalContext = currentContext;
 		  currentContext = currentContext.link("event");
 		  if currentContext == null {
-		    throw "Could not find "+'element'+" variable in context!";
+		    if originalContext.hasLink("get"+'^element') == false {
+		      throw "Could not find "+'element'+" variable in context!";
+		    }
+		    else {
+		      ret.add(|"get"+'^element'()|);
+		    }
 		  } 
 		  else {
 		    currentContext = currentContext.link('element');
 		    if currentContext == null {
-		      throw "Could not find "+'element'+" variable in context!";
+		      if originalContext.hasLink("get"+'^element') == false {
+		        throw "Could not find "+'element'+" variable in context!";
+		      }
+		      else {
+		        ret.add(|"get"+'^element'()|);
+		      }
 		    }
 		    else {
 		      ret.add(|"event"."get"+'^element'()|);
@@ -573,6 +676,8 @@ class 'packageName'.misc Criteria<TypeName> Object Predicate<'"TypeName"'> {
       : condition_names   { return Conditions.getId(^element); }
       : skill_names       { return Skills.getId(^element); }
       : trait_names       { return Traits.getId(^element); }
+      : activity_names    { return Activities.getId(^element); }
+      : activity_type_names       { return ActivityTypes.getId(^element); }
     return null;
   }
 

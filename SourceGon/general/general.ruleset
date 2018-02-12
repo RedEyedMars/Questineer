@@ -6,7 +6,7 @@ std_body          Braced { } ,silent       = ( "\n" | comments | body_element )*
 method_arguments  Braced ( )               = "\n"* statement? ( "," "\n"* statement )*
 method_parameters Braced ( )               = ( variable_header ( "," variable_header )* )?
 braced_statement  Braced ( )               = statement
-tile_id_choice    Braced [ ]               = ( NAME as namePart+ ) as tileName ( "|" ( NAME as namePart+ ) as tileName )*
+tile_id_choice    Braced [ ]               = INTEGER as index | ( NAME as namePart+ ) as tileName ( "|" ( NAME as namePart+ ) as tileName )*
 entity_id_choice  Braced [ ]               = ( NAME as namePart+ ) as entityName ( "|" ( NAME as namePart+ ) as entityName )*
 
 number silent = ( FLOAT | INTEGER )
@@ -22,13 +22,14 @@ body_element
 	for_statement
 	body_defined_statement
 	variable_declaration
-	statement
+	statement ( inline_if_statement )?
 
 body_defined_statement silent
 	(variable_call acquisition) as acquisition
 	(variable_call imposition ) as imposition
 	(variable_call influence ) as influence
 	(variable_call quest_addition) as quest_addition
+	spawn_statement
 	activity_statement
 	association_statement
 
@@ -47,11 +48,15 @@ activity_statement
 	variable_call ":"? ( "start" ) as method  activity_names (  method_arguments | statement )
 association_statement
 	variable_call ( "join" ) as method  association_names method_arguments statement as recruiter
+spawn_statement
+	variable_call "spawn" (("around" map_names ( "->" tile_names )* ) |( "at" map_names INTEGER as lowerBoundX ("-" INTEGER as upperBoundX)? "," INTEGER as lowerBoundY ("-" INTEGER as upperBoundY )?))
 
 if_header silent
-	"if" boolean_statement
+	("else" as ELSE "if" as IF|"if" as IF|"else" as ELSE) boolean_statement
 if_statement
 	"if" boolean_statement "\n"* std_body ( "\n"* "else" "\n"* ( std_body | "if" boolean_statement "\n"* std_body ) ) as else_statement*
+inline_if_statement
+	if_header ( "and" boolean_statement )* 
 
 for_statement
 	("for" variable_header ":"     statement "\n"* ) as fromList     std_body
@@ -64,7 +69,7 @@ boolean_statement
 boolean_element silent
 	has_chance
 	isA_statement
-	spawn_statement
+	spawned_statement
 	has_statement
 	statement
 has_chance
@@ -73,7 +78,7 @@ conditional_chance silent
 	has_chance if_header?
 isA_statement
 	variable_call "is" "a" type_name
-spawn_statement
+spawned_statement
 	"spawned" "in" NAME as environmentName
 has_statement
 	NOT? variable_call "has" requirement
@@ -87,6 +92,8 @@ requirement_element silent
 	( NOT? ("association" "with" NAME as variableName ) ) as require_association
 	( NOT? hero_stat ORDINAL INTEGER ) as require_stat
 	( NOT? attack_names "exp" ORDINAL INTEGER ) as require_exp
+	( NOT? skill_names "skill"? ) as require_skill
+	( NOT? skill_names "exp" ORDINAL INTEGER ) as require_exp
 	( NOT? attack_names ) as require_attack
 	( NOT? trait_names ) as require_trait
 	( NOT? association_names ) as require_association
@@ -114,19 +121,23 @@ variable_call_element silent
 	( type_name "=>" NAME as variableName ) as access_static
 	method | variable_group | NAME as variableName | QUOTE as quote
 variable_group
-	association_names "association"?
-	skill_names       "skill"?
-	association_names "group"?
+	association_names "association"
+	skill_names       "skill"
+	association_names "group"
 	affinity_names    "affinity"
-	attack_names      "attack"?
-	trait_names       "trait"?
-	condition_names   "condition"?
-	activity_names    "activity"?
-	map_names NAME as symbolName? "map"? "tile"?
+	attack_names      "attack"
+	trait_names       "trait"
+	condition_names   "condition"
+	activity_names    "activity"
+	activity_type_names "practice"
+	map_names NAME as symbolName? ("map"| "tile")+
+	association_names | skill_names | association_names | affinity_names | attack_names | trait_names | condition_names | activity_names | activity_type_names
+	map_names NAME as symbolName?
 
 method
 	"new" as NEW type_name    method_arguments
 	NAME as methodName method_arguments
 
 type_name
+	( "Map" type_name type_name ) as mapDeclaration
 	("*" "." as findType)? NAME as typeName ( "." NAME as typeName )*

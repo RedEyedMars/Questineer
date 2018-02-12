@@ -4,15 +4,21 @@ class 'packageName'.entities.mods.traits Trait \Object Source {
   Trait->Id getId(){
     return null;
   }
-  Boolean hasRequirements(Entity candidate){
+  boolean hasRequirements(Entity candidate){
     return false;
   }
   String name;
   String description;
 }
 class 'packageName'.entities.mods.traits Traits {
+> @Parameters traitsAsParameter = new Parameters ();
+  @Trait[] traits = new Trait(`traitsAsParameter`)[];
   @Trait create(String traitName){
     return null;
+  }
+> void output(){
+    Traits.removeVariable("traits");
+    Traits += @Trait[] traits = new Trait(`traitsAsParameter`)[];
   }
 > Statement getId(String name){
     return |Traits->'name'.id|;
@@ -31,10 +37,12 @@ class 'packageName'.entities.mods.traits Traits {
 	Traits += class traitName /Trait/ {
 	  @Trait->Id "id" = new Trait->Id();
 	  String getName(){
-	    return ''traitName'';
+	    return '' 'traitName' '';
 	  }
-	  Boolean hasRequirements(Entity "candidate"){ return true; }
+	  boolean hasRequirements(Entity candidate){ return true; }
 	}
+	Traits += @'traitName' 'traitName' = new 'traitName'();
+	traitsAsParameter.add(|'traitName'|);
 	Map<String, Body > eventBodies = new HashMap<String, Body >();
 	eventBodies.put("gain", gainBody);
 	eventBodies.put("loss", lossBody);
@@ -42,7 +50,7 @@ class 'packageName'.entities.mods.traits Traits {
 	declarationToken : element : requirement {
 	   Traits->'traitName'.getMethod("hasRequirements").prependToBody(| if `\getRequirement(element, candidate, false)` { return false; }|);
 	}
-	Traits.getMethod("create").prependToBody(| if ''traitName''.equals("traitName"){
+	Traits.getMethod("create").prependToBody(| if '' 'traitName' ''.equals("traitName"){
       return new Traits->'traitName'(); }|);
   }
 }

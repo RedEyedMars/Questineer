@@ -1,7 +1,10 @@
+***Violent***
 attacking(Float range) Attack
 	~Attack target~
+***Helping***
 supporting Support
 	~Keep everyone safe~
+***Questing***
 questing Quest
 	~Go to certain places, do certain things, and reap their rewards.~
 	+ Quest currentQuest = null
@@ -17,6 +20,7 @@ questing Quest
 	  return currentQuest.use(host,null)
 	  
 	}
+***Tracking***
 hunt(Criteria.Target criteriaToTarget, Criteria.Destination huntingGrounds, Float range, Events.Die.Listener deathListener, ActivityCriteria toSucceed) Attack
 	~Hunt monsters until told otherwise.~
 	+ Area.List toHuntLocations
@@ -69,6 +73,7 @@ hunt(Criteria.Target criteriaToTarget, Criteria.Destination huntingGrounds, Floa
 	  }
 	  return true
 	}
+***Violent***
 kill(Entity toKill) Attack
 	~Go kill one particular monster.~
 	+ Activity chaseActivity = null
@@ -112,7 +117,7 @@ removeTerrain(Tiles.Terrain toKill) Attack
 	    chaseActivity = event->host start chasingTile (25, toKill, furthestUsable.getRange(event->host))
 	  }
 	}
-
+***Tracking***
 chasingEntity(Integer ticks, Entity toChase, Float successRange)
 	~Get close to one monster(disregard the path).~
 	succeed if host->location.getDistanceTo(toChase->location) <= successRange

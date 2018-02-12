@@ -296,10 +296,11 @@ class 'packageName'.entities  Entity  Object  Source Loaddable Tickable {
   }
   void changeState(ImageStates newState){
   }
-  void load(){
+  Boolean load(){
     \on(new Events->\Load(this));
+    return true;
   }
-  void tick(Double millisSinceLastFrame){
+  Boolean tick(Double millisSinceLastFrame){
     
     if events.isEmpty() == false {
       if activityList.isEmpty() == false {
@@ -320,6 +321,19 @@ class 'packageName'.entities  Entity  Object  Source Loaddable Tickable {
 	  }
 	}
     \on(new Events->\Tick(this));
+    return true;
+  }
+  Boolean spawnAt(Tile toSpawn){
+    if toSpawn == null {
+      throw ''"Failed to spawn"'';
+    }
+    \spawn = toSpawn;
+    \changeState(ImageStates.idle);
+    toSpawn.accept(this);
+    if \location.getArea() == null {
+      \location.setArea(toSpawn.getArea());
+    }
+    return \load(); 
   }
   void listen(Entity->Event event){
     if event.getId() == Entity->Event->FailedToMove.id {
@@ -374,7 +388,22 @@ class 'packageName'.entities  Entity  Object  Source Loaddable Tickable {
   void influence(Entity otherEntity, Relationship->Reason reason, Integer amount){
     \relationships.get(otherEntity, new Relationship.Factory()).influence(reason,amount);
   }
-  
+>@ Body motivationForSwitchBody = new Body ();
+>@ Body motivationSwapSwitchBody1 = new Body ();
+>@ Body motivationSwapSwitchBody2 = new Body ();
+>@ Body motivationSwapSwitchBody3 = new Body ();
+>@ Body motivationSwapSwitchBody4 = new Body ();
+  int motivationFor(ActivityType->Id findId){
+    switch findId `motivationForSwitchBody`
+    return -1;
+  }
+  boolean swapMotivations(ActivityType->Id decreaseId, ActivityType->Id increaseId){
+    switch decreaseId `motivationSwapSwitchBody1`
+    switch increaseId `motivationSwapSwitchBody2`
+    switch decreaseId `motivationSwapSwitchBody3`
+    switch increaseId `motivationSwapSwitchBody4`
+    return false;
+  }
 > void setup(%Pass data){
 	List<String> namesToAdd = new ArrayList<String>();
 	namesToAdd.add("hit");
@@ -447,7 +476,7 @@ class 'packageName'.entities  Entity  Object  Source Loaddable Tickable {
     return {
       Float "eventDamage" = "event".getDamage().getTotal();
 	  if "eventDamage" < 0.1f && "eventDamage" > -0.1 {
-		return void;
+		return false;
 	  }
 	  Float "preciseDamage" = "eventDamage" - this.con.getValue() - this.getItemDefense();
 	  Integer "damageToTake" = "(int)(float)preciseDamage";

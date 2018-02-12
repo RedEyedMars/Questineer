@@ -100,12 +100,12 @@
       return x <= toIterate.getUpperBoundX() && y <= toIterate.getUpperBoundY();
     }
     void advanceIndex(){
-      if y == toIterate.getUpperBoundY() {
-        y = toIterate.getLowerBoundY();
-        x \+= 1;
+      if x == toIterate.getUpperBoundX() {
+        x = toIterate.getLowerBoundX();
+        y \+= 1;
       }
       else {
-        y \+= 1;
+        x \+= 1;
       }
     }
     RegionPoint next(){

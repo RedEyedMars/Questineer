@@ -1,0 +1,92 @@
+
+TeachSkill  (Skill skill)
+	~Teach a given skill~
+	cd 1d-2d + -0.15d..-0.25d KNW + -0.5d..-0.10d CRM
+	range 1
+	use {
+	  if user.has(skill->id) {
+	    victim.gain(skill.copy()) if      experience <= 5  and 5% chance
+	    victim.gain(skill.copy()) else if experience <= 15 and 15% chance
+	    victim.gain(skill.copy()) else if experience <= 25 and 25% chance
+	    victim.gain(skill.copy()) else if experience <= 35 and 35% chance
+	    victim.gain(skill.copy()) else if experience <= 50 and 50% chance
+	    victim.gain(skill.copy()) else    experience >  50 and 65% chance
+	  }
+	  else {
+	    victim.gain(skill.copy()) if      experience <= 5  and 5% chance
+	    victim.gain(skill.copy()) else if experience <= 15 and 10% chance
+	    victim.gain(skill.copy()) else if experience <= 25 and 15% chance
+	    victim.gain(skill.copy()) else if experience <= 35 and 20% chance
+	    victim.gain(skill.copy()) else if experience <= 50 and 25% chance
+	    victim.gain(skill.copy()) else    experience >  50 and 35% chance
+	  }
+	}
+TeachSkills
+	~Teach any skill~
+	+Map Skill.Id Skill skills
+	load {
+	  for Skill skill: Skills=>skills {
+	    skills.put(skill->id,new Skills.TeachSkill(skill))
+	  } 
+	}
+
+TeachTrait  (Trait trait)
+	~Teach a given trait~
+	cd 1d-2d + -0.15d..-0.25d KNW + -0.5d..-0.10d CRM
+	range 1
+	use {
+	  if user.has(trait->id) {
+	    victim.gain(trait) if      experience <= 5  and 5% chance
+	    victim.gain(trait) else if experience <= 15 and 15% chance
+	    victim.gain(trait) else if experience <= 25 and 25% chance
+	    victim.gain(trait) else if experience <= 35 and 35% chance
+	    victim.gain(trait) else if experience <= 50 and 50% chance
+	    victim.gain(trait) else    experience >  50 and 65% chance
+	  }
+	  else {
+	    victim.gain(trait) if      experience <= 5  and 5% chance
+	    victim.gain(trait) else if experience <= 15 and 10% chance
+	    victim.gain(trait) else if experience <= 25 and 15% chance
+	    victim.gain(trait) else if experience <= 35 and 20% chance
+	    victim.gain(trait) else if experience <= 50 and 25% chance
+	    victim.gain(trait) else    experience >  50 and 35% chance
+	  }
+	}
+TeachTraits
+	~Teach any trait~
+	+Map Trait.Id Skill skills
+	load {
+	  for Trait trait: Traits=>traits {
+	    skills.put(trait->id,new Skills.TeachTrait(trait))
+	  } 
+	}
+TeachAffinity  (Affinity affinity)
+	~Teach a given affinity~
+	cd 1d-2d + -0.15d..-0.25d KNW + -0.5d..-0.10d CRM
+	range 1
+	use {
+	  if user.has(affinity->id) {
+	    victim.gain(affinity) if      experience <= 5  and 5% chance
+	    victim.gain(affinity) else if experience <= 15 and 15% chance
+	    victim.gain(affinity) else if experience <= 25 and 25% chance
+	    victim.gain(affinity) else if experience <= 35 and 35% chance
+	    victim.gain(affinity) else if experience <= 50 and 50% chance
+	    victim.gain(affinity) else    experience >  50 and 65% chance
+	  }
+	  else {
+	    victim.gain(affinity) if      experience <= 5  and 5% chance
+	    victim.gain(affinity) else if experience <= 15 and 10% chance
+	    victim.gain(affinity) else if experience <= 25 and 15% chance
+	    victim.gain(affinity) else if experience <= 35 and 20% chance
+	    victim.gain(affinity) else if experience <= 50 and 25% chance
+	    victim.gain(affinity) else    experience >  50 and 35% chance
+	  }
+	}
+TeachAffinities
+	~Teach any affinity~
+	+Map Affinity.Id Skill skills
+	load {
+	  for Affinity affinity: Affinities=>affinities {
+	    skills.put(affinity->id,new Skills.TeachAffinity(affinity))
+	  } 
+	}

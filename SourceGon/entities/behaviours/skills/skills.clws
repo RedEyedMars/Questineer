@@ -52,6 +52,8 @@ class 'packageName'.entities.behaviours.skills  Skill \Object Source Usable {
 	  return "otherSkill"."cooldown" - "cooldown";
 	} 
   }
+  void load(){
+  }
   Boolean use(Entity user, Activity activity){
     if \isOffCooldown() {
       return false;
@@ -71,6 +73,7 @@ class 'packageName'.entities.behaviours.skills  Skill \Object Source Usable {
 	}
 	return false;
   }
+  Skill copy(){ return null; }
   void use(Entity "user", Entity "victim"){}
   String getName(){ return null; }
   String getDescription(){ return null; }
@@ -78,9 +81,15 @@ class 'packageName'.entities.behaviours.skills  Skill \Object Source Usable {
     return null;
   }
 }
-class 'packageName'."entities"."behaviours"."skills" Skills {
+class 'packageName'.entities.behaviours.skills Skills {
+> @Parameters skillsAsParameter = new Parameters ();
+  @Skill[] skills = new Skill(`skillsAsParameter`)[];
   @Skill create(String skillName){
     return null;
+  }
+> void output(){
+    Skills.removeVariable("skills");
+    Skills += @Skill[] skills = new Skill(`skillsAsParameter`)[];
   }
 > void setup(%Pass data){
     \createCriteria(Entity);
@@ -99,12 +108,13 @@ class 'packageName'."entities"."behaviours"."skills" Skills {
       }
     }
     \createList(Entity);
+    Entity->*"gain[Skill,Source]".appendToBody({"skill".load();});
   }
 > void declaration(%T declarationToken){
     String skillName = ^declarationToken->"skillName";
     Statement description = new Statement ("+");
     declarationToken : element : DESCRIPTION {
-	  description.add(|''element''|);
+	  description.add(|'' 'element' ''|);
 	}
     Skills += class skillName / Skill / {
       @Skill->Id "id" = new Skill->Id();
@@ -112,14 +122,18 @@ class 'packageName'."entities"."behaviours"."skills" Skills {
         return id;
       }
 	  String getName(){
-	    return ''skillName'';
+	    return '' 'skillName' '';
 	  }
 	  String getDescription(){
 	    return `description`;
 	  }
 	  void use(Entity "user", Entity "victim"){
       }
-      
+      void load(){
+      }
+      Skill copy(){
+        return new Skills->'skillName'();
+      }
     }
     Skills->'skillName' += ~class TargetCriteria / Criteria->Target / {
         boolean test(Entity "user"){
@@ -137,6 +151,32 @@ class 'packageName'."entities"."behaviours"."skills" Skills {
     Context useContext = Skills->'skillName'.getMethod("use").getContext();
     ~Boolean isFirst = true;
     declarationToken : element
+      : variable_declaration {
+        Variable variable = \addVariableHeader(element->"variable_header", Skills->'skillName');
+        variable.setIsFinal(false);
+        variable.setHasSetMethod(true);
+        if element->"statement" != null {
+          variable.setAssignment(\getStatement(element->"statement",Skills->'skillName'.getContext()));
+        }
+        else if(element->"variable_header"->"type_name"->"mapDeclaration"!=null){
+          variable.setAssignment(|new '\getTypeName(element->"variable_header"->"type_name")'()|);
+          ~String keyType = null;
+          ~String entryType = null;
+          element->"variable_header"->"type_name"->"mapDeclaration" : typeName : type_name {
+            if keyType == null {
+              keyType = \getTypeName(typeName);
+            }
+            else {
+              entryType = \getTypeName(typeName);
+            }
+          }
+          String keyTypeValue = keyType;
+          String entryTypeValue = entryType;
+          Skills->'skillName' += 'entryTypeValue' get('keyTypeValue' key){
+              return 'element->"variable_header"->"variableName"'.get(key);
+            }
+        }
+      }
       : method_parameters {
         element : atom : variable_header {
           \addVariableHeader(atom,Skills->'skillName');
@@ -160,6 +200,12 @@ class 'packageName'."entities"."behaviours"."skills" Skills {
         element : atom 
           : body_element {
             Skills->'skillName'->*"use" += |`\getBodyElement(atom,useContext)`|
+          }
+      }
+      : load {
+        element : atom 
+          : body_element {
+            Skills->'skillName'->*"load" += |`\getBodyElement(atom,useContext)`|
           }
       }
       : miss {
@@ -187,10 +233,10 @@ class 'packageName'."entities"."behaviours"."skills" Skills {
         }
       }
     
-	Skills.getMethod("create").prependToBody(| if ''skillName''.equals("skillName"){
+	Skills.getMethod("create").prependToBody(| if '' 'skillName' ''.equals("skillName"){
       return new Skills->'skillName'(); }|);
   }
  > Statement getId(String name){
-    return |Skills->name.id|;
+    return |Skills->'name'.id|;
   }
 }

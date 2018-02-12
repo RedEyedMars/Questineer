@@ -43,6 +43,11 @@ import gui/loaders.clws
 	root : imports : import_any {
 		\importAny(imports);
 	}
+	Affinities.output();
+	Traits.output();
+	Skills.output();
+	Game.loadDeclaration(root->"loadBody");
+	Game.output();
 }
 > void importAny(%T import_any){
     import_any : import_payment_types : import_payment_type {
@@ -88,15 +93,20 @@ import gui/loaders.clws
 			Conditions.declaration(element);
 		}
 	}
-	import_any : import_activities : import_activity {
-		import_activities : element : activity_declaration{
-			Activities.declaration(element);
-		}
-	}
+	
 	import_any : import_skills : import_skill {
 		import_skills : element : skill_declaration{
 			Skills.declaration(element);
 		}
+	}
+	import_any : import_activities : import_activity {
+		import_activities : element 
+		  : activity_type_declaration{
+			ActivityTypes.declaration(element);
+		  }
+		  : activity_declaration{
+			Activities.declaration(element);
+		  }
 	}
 	import_any : import_attacks : import_attack {
 		import_attacks : element : attack_declaration{
@@ -123,6 +133,20 @@ import gui/loaders.clws
 	}
  }
 > String getTypeName(%T nameToken){
+    if nameToken->"mapDeclaration" != null {
+      StringBuilder nameBuilder = new StringBuilder();
+      ~boolean isFirst = true;
+      nameBuilder.append("HashMap<");
+      nameToken->"mapDeclaration" : subType : type_name {
+        if isFirst == false {
+          nameBuilder.append(",");
+        }
+        nameBuilder.append(\getTypeName(subType));
+        isFirst = false;
+      }
+      nameBuilder.append(">");
+      return 'nameBuilder';
+    }
 	StringBuilder nameBuilder = new StringBuilder();
 	if nameToken->"findType" != null {
 	  ~String findName = ^nameToken->"typeName";

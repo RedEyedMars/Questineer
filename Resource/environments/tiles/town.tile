@@ -1,2 +1,23 @@
+
 **Floor**
-Grass  Free;     foliage->grass;
+/ Tree North | West
+	if Neighbour in Direction == null
+Grass              Free;     foliage->grass;
+Path               1FD;      foliage->path;
+StoneFloor		   1S;       town->stone_floor;
+
+**Terrain**
+Grass::Tree             Seed | TreeSeed | 2FD; foliage->tree;
+StoneFloor::SouthWestDoor 2W;				   town->stone_walls;
+StoneFloor::StoneWalls  2S;                    town->stone_walls;
+StoneFloor::WoodWalls   2W;                    town->stone_walls;
+
+**Dens**
+StoneFloor::Bar  10W;          town->bar;
+	-BarTender towns_people->male->bar_tender {
+    	STR 15-20 | DEX 10-15 | CON 50-75 | KNW 40-50 | MND 15-20 | CRM 40-50
+	}
+StoneFloor::MayorsDesk 8W;     town->mayors_desk;
+	-Mayor towns_people->male->mayor {
+    	STR 25-30 | DEX 30-45 | CON 20-25 | KNW 40-50 | MND 25-30 | CRM 75-100
+	}

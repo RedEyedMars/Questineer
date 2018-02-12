@@ -1,1 +1,39 @@
 Town > town.tile
+StartTown 100%:
+	5x5 Grass
+	Path 3x3
+	Path [OffSide] -> Forest as PathNode in Streets
+Hints:
+	~Build a Town Hall~
+	~Build a Beginners Tavern~
+	~Speak with the Mayor to unlock some quests~
+	~Send Recruits on a Quests~
+	~Amass enough Wealth to start Building~
+	~Build Guild Halls~
+	~Train your Recruits in the various Skills~
+	~Form Parties of Recruits for harder quests~
+	~Build a Healing Shrine~
+	~The Priest can cure unwanted Conditions~
+
+Trails:
+	Streets:
+		Connect Path from PathNode to PathNode
+Buildings:
+	TownHall 350 Wood, 100 Stone:
+		Exterior:
+			6x4 StoneWalls
+			SouthWestDoor 2x1 [3,0] -> Interior as PathNode in Streets
+			Path 2x1 [3,-1]
+		Interior:
+			12x8 StoneFloor
+			Path 2x1 [4-8,-1] -> Exterior
+			MayorsDesk 2x1 [4-8,5-6]
+	Tavern 150 Wood:
+		Exterior:
+			4x3 WoodWalls
+			SouthWestDoor[2,0] -> Interior as PathNode in Streets
+			Path[2,-1]
+		Interior:
+			8x6 StoneFloor
+			Path [3-5,-1] -> Exterior
+			Bar 3x1 [5,6]

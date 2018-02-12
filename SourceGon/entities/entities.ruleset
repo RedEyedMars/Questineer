@@ -4,7 +4,7 @@ import items/items.ruleset
 import mods/affinities/affinities.ruleset
 import mods/conditions/conditions.ruleset
 import mods/traits/traits.ruleset
-import behaviours/activities/activities.ruleset
+import behaviours/activities/activities.cgon
 import behaviours/quests/quests.ruleset
 import behaviours/skills/skills.ruleset
 
@@ -19,7 +19,7 @@ stat_range
 	state_range_element  (("+" as PLUS|"*" as MULTIPLY|"/" as DIVIDE|"-" as MINUS) as operator stat_range)?
 state_range_element silent
 	braced_statement hero_stat?
-	number as left (("-"|"..") number as right)? "%" as percent? hero_stat? 
+	number as left "d" as left_DAYS? (("-"|"..") number as right "d" as right_DAYS?)? "%" as percent? hero_stat? 
 
 entity_definition_body Braced { } , silent = entity_definition*
 entity_declaration

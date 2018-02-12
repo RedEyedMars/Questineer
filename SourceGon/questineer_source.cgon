@@ -1,4 +1,4 @@
-base silent = ( comments | import_any | "\n" )*
+base silent = ( comments | import_any | "load" std_body as loadBody | "\n" )*
 
 ignore:[ ][\t]
 

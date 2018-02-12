@@ -5,26 +5,30 @@ class 'packageName'.entities.behaviours.quests  Quest Object Usable {
     class Success / Events->Success->Listener / {
       Quest host = null;
       Integer nextIndex = -1;
-      void listen(Events->\Success event){
+      Boolean listen(Events->\Success event){
         host.advanceTo(nextIndex);
+        return true;
       }
     }
     class Fail / Events->Fail->Listener / {
       Quest host = null;
-      void listen(Events->\Fail event){
+      Boolean listen(Events->\Fail event){
         host.on( "(Events.Fail)event" );
+        return true;
       }
     }
     class Collect / Events->Collect->Listener / {
       Quest host = null;
-      void listen(Events->\Collect event){
+      Boolean listen(Events->\Collect event){
         host.on( event );
+        return true;
       }
     }
     class Die / Events->Die->Listener / {
       Quest host = null;
-      void listen(Events->\Die event){
+      Boolean listen(Events->\Die event){
         host.on( event );
+        return true;
       }
     }
   }
@@ -86,11 +90,14 @@ class 'packageName'.entities.behaviours.quests  Quest Object Usable {
       status = Quest->Status.SUCCESS;
     }
   }
-  void on(Events->\Idle idle){
+  Boolean on(Events->\Idle idle){
+    return false;
   }
-  void on(Events->\Collect idle){
+  Boolean on(Events->\Collect idle){
+    return false;
   }
-  void on(Events->\Die idle){
+  Boolean on(Events->\Die idle){
+    return false;
   }
 }
 class 'packageName'.entities.behaviours.quests Quests {

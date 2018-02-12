@@ -1,0 +1,21 @@
+towns_people 8x1 = male_walker.png 
+	male {
+	  none		        : Stationary    1 0
+	  mayor {
+	    idle		        : Stationary    1 0
+	    walk {
+	      right|left  : CycleBoundedX (1,0)  [1|-1]  (0,0 2,0)
+	    }
+	  }  
+	  bar_tender {
+	    idle		        : Stationary    1 0
+	    walk {
+	      right|left  : CycleBoundedX (1,0)  [1|-1]  (0,0 2,0)
+	    }
+	  }
+	}
+town 8x4 = town.png
+	stone_floor       : Stationary 0 0
+	stone_walls       : Stationary 1-3 0-1
+	mayors_desk       : Stationary 4-5 0
+	bar               : Stationary 4-5 0

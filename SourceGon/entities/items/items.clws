@@ -97,12 +97,15 @@ class 'packageName'.entities.items Item \Object Source {
     hp \-= amount;
   }
   
-  void on(Events->\Equip "event"){
+  Boolean on(Events->\Equip "event"){
   	equipper = "event".getHost();
+  	return true;
   }
-  void on(Events->\Unequip "event"){
+  Boolean on(Events->\Unequip "event"){
     equipper = null;
+    return true;
   }
-  void on(Events->\ChangeItem "event"){
+  Boolean on(Events->\ChangeItem "event"){
+    return true;
   }
 }
