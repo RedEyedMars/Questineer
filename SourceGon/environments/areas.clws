@@ -111,7 +111,7 @@ class 'packageName'.environments Area Environment->Position EntryPointJoinable {
       }
       acceptorClass.addVariable(@int[][] startIndex = new int(`startIndices`)[][];);#
     }
-    String addTerrainTile(String mapName, String tileName, %T patchGoto){
+    String addTerrainTile(String mapName, String generatorName, String tileName, %T patchGoto){
       String tileVariableName = tileName.toLowerCase();
       if patchGoto != null {
         String roomName;
@@ -121,10 +121,10 @@ class 'packageName'.environments Area Environment->Position EntryPointJoinable {
           roomVariableName = roomName;
           String tileVariableNameValue = tileVariableName\+roomVariableName;
           if tilesAdded.add(tileVariableNameValue){
-            acceptorClass.addVariable(
+            acceptorClass->'generatorName'.addVariable(
               ~EntryPoints->'mapName'->'tileName'->\JoinGenerator 'tileVariableNameValue' = null;);            
-            acceptorClass.getMethod("setupChoices").appendToBody({
-              'tileVariableNameValue' =  new EntryPoints->'mapName'->'tileName'->\JoinGenerator('roomName'); 
+            acceptorClass->'generatorName'.getMethod("setupChoices").appendToBody({
+              'tileVariableNameValue' =  new EntryPoints->'mapName'->'tileName'->\JoinGenerator('roomName.toLowerCase()'); 
             });
           }
           return tileVariableNameValue;
@@ -185,7 +185,7 @@ class 'packageName'.environments Area Environment->Position EntryPointJoinable {
         ~ArrayList<Area\>FloorChoice> generationPoints = null;
 	  acceptorClass->'generatorName'+=
           void generateAt(int startX, int startY, Area newArea){
-            generationPoints = new ArrayList<FloorChoice>(`\getGenerationPointArraySize()`);
+            generationPoints = new ArrayList<Area\>FloorChoice>(`\getGenerationPointArraySize()`);
 	        for int index < 'layoutSize' {
 	          generationPoints.add(new Area->FloorChoice(\floorGenerator,startX\+index%'width',startY\+index/'height'));
 	        }
@@ -348,7 +348,7 @@ class 'packageName'.environments Area Environment->Position EntryPointJoinable {
 	      \getPatchElement(element,mapName,Areas->'mapName'->'areaClassName'->Generators,'generatorName'));
 	  }
 	  Areas->'mapName'->'areaClassName'->Generators->'generatorName'->*"generateAt".appendToBody(|
-	      "newArea" = "generationPoints".stream().reduce("newArea","FloorChoice::generate",("A,B")->"A");|);
+	      "newArea" = "generationPoints".stream().reduce("newArea","Area.FloorChoice::generate",("A,B")->"A");|);
 	  generatorValues.finish();
     }
     Body floorSwitchBody = new Body ();
@@ -501,7 +501,7 @@ class 'packageName'.environments Area Environment->Position EntryPointJoinable {
 		  'generatorVariableName'.generate("newArea");
 		  "break"; }|);
 		caseBody.add(|
-	      \generationPoints = new ArrayList<FloorChoice>();
+	      \generationPoints = new ArrayList<Area\>FloorChoice>();
 	      for Integer index < `floorIndexMaximum` {
 	        \generationPoints.add(new Area->FloorChoice(\floorGenerator,\startX\+index%'zoneUpperBoundX',\startY\+index/'zoneUpperBoundX'));
 	      }
@@ -562,7 +562,7 @@ class 'packageName'.environments Area Environment->Position EntryPointJoinable {
         generatorIndices.get(mapName).put(areaClassName,generatorIndex);
 	    caseBody.add(|Integer terrainsGenerated = 0;|);
 		\makeTerrainBodies(decTok,mapName,areaClassName,generatorName,caseBody,generatorValues,floorIndex,floorIndex);
-		caseBody.add(|"newArea" = "generationPoints".stream().reduce("newArea","FloorChoice::generate",("A,B")->"A");|);
+		caseBody.add(|"newArea" = "generationPoints".stream().reduce("newArea","Area.FloorChoice::generate",("A,B")->"A");|);
 		
         zoneIndex \+= 1;
 	  }
@@ -672,7 +672,7 @@ class 'packageName'.environments Area Environment->Position EntryPointJoinable {
         segmentation\+=1;
       }
       String terrainTileName = ^quark->"tile_names";
-      String terrainTileNameValue = generatorValues.addTerrainTile('mapName','terrainTileName', quark->"patch_goto");
+      String terrainTileNameValue = generatorValues.addTerrainTile('mapName','generatorName','terrainTileName', quark->"patch_goto");
       ArrayList<Integer> startXs = new ArrayList<Integer>();
       ArrayList<Integer> startYs = new ArrayList<Integer>();
       ArrayList<Integer> endXs = new ArrayList<Integer>();
@@ -755,7 +755,7 @@ class 'packageName'.environments Area Environment->Position EntryPointJoinable {
             generatorValues.getAcceptorClass().getSubClass(generatorName).getSubClass(subGeneratorName).getMethod("generateAt").appendToBody(innerSwitchBody);
           }
           generatorValues.getAcceptorClass().getSubClass(generatorName).getSubClass(subGeneratorName).getMethod("generateAt").appendToBody(|
-	        "newArea" = "generationPoints".stream().reduce("newArea","FloorChoice::generate",("A,B")->"A");|);
+	        "newArea" = "generationPoints".stream().reduce("newArea","Area.FloorChoice::generate",("A,B")->"A");|);
 	      for Integer i < startXs.size() {
 	        \addFillMethod(
                generatorValues.getAcceptorClass().getSubClass(generatorName).getSubClass(subGeneratorName),

@@ -6,6 +6,11 @@ Grass              Free;     foliage->grass;
 Path               1FD;      foliage->path;
 StoneFloor		   1S;       town->stone_floor;
 
+**Edge**
+:WoodDoor:   2W;				      town->stone_walls;
+:StoneWall:  2S;                    town->stone_walls;
+:WoodWall:   2W;                    town->stone_walls;
+
 **Terrain**
 Grass::Tree             Seed | TreeSeed | 2FD; foliage->tree;
 StoneFloor::SouthWestDoor 2W;				   town->stone_walls;

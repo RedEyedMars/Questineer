@@ -14,6 +14,6 @@ structure_names global list with NAME
 structures_declaration
 	"Buildings" ":" ( "\n\t" structure_declaration )*
 structure_declaration
-	NAME as buildingName in structure_names structure_payment? ":" ( "\n\t\t" NAME as roomName in room_names ":" ("\n\t\t\t" patch_element)* ) as structure_definition*
+	NAME as buildingName in structure_names structure_payment? ":" ( "\n\t\t" NAME as roomName in room_names (tile_names) as defaultTileName patch_dimension as defaultSize patch_rimcals* ":" ("\n\t\t\t" patch_element)* ) as structure_definition*
 structure_payment silent
 	INTEGER as amount (payment_long_type_names|payment_short_type_names) as paymentType ( "," INTEGER as amount (payment_long_type_names|payment_short_type_names) as paymentType )* 

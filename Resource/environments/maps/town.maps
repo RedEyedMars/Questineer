@@ -20,20 +20,16 @@ Trails:
 		Connect Path from PathNode to PathNode
 Buildings:
 	TownHall 350 Wood, 100 Stone:
-		Exterior:
-			6x4 StoneWalls
-			SouthWestDoor 2x1 [3,0] -> Interior as PathNode in Streets
+		Exterior None 6x4 Sides:StoneWall:
+			StoneFloor 2x1 [3,0] South:WoodDoor -> Interior as PathNode in Streets
 			Path 2x1 [3,-1]
-		Interior:
-			12x8 StoneFloor
+		Interior StoneFloor 12x8 :
 			Path 2x1 [4-8,-1] -> Exterior
 			MayorsDesk 2x1 [4-8,5-6]
-	Tavern 150 Wood:
-		Exterior:
-			4x3 WoodWalls
-			SouthWestDoor[2,0] -> Interior as PathNode in Streets
+	Tavern 150 Wood :
+		Exterior None 4x3 Sides:StoneWall:
+			StoneFloor [2,0] South:WoodDoor -> Interior as PathNode in Streets
 			Path[2,-1]
-		Interior:
-			8x6 StoneFloor
+		Interior StoneFloor 8x6:
 			Path [3-5,-1] -> Exterior
 			Bar 3x1 [5,6]

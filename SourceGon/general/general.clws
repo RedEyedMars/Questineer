@@ -516,7 +516,7 @@ class 'packageName'.misc Criteria<TypeName> Object Predicate<'"TypeName"'> {
 	  }
 	  : map_selector {
 	    if element->"tile_id_choice"->"index" != null {
-	      ret.add(|Gui.game."get"+'element->"map_names"'().getAreas().get('element->"tile_id_choice"->"index"')|);
+	      ret.add(|Gui.game.getEnvironments()."get"+'element->"map_names"'().getAreas().get('element->"tile_id_choice"->"index"')|);
 	    }
 	    else {
 	      ret.add(Tiles.getSelector('element->"map_names"',element->"tile_id_choice"));

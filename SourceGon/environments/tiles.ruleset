@@ -1,5 +1,7 @@
 #TILES#
+siding_names global list with NAME
 tile_names global list with NAME
+	"None"
 tile_symbols global list with NAME
 
 
@@ -8,6 +10,7 @@ import_tile Imports "../tiles/" FILE_NAME ".tile"  = ">" FILE_NAME ".tile" "\n"
 
 tile_declaration
 	( "*"+ "Floor"   "*"+ "\n"* edge_definition* "\n"* tile_definition* ) as floor_declaration
+	( "*"+ "Edge"    "*"+ ( "\n"* siding_definition) * ) as siding_declaration
 	( "*"+ "Terrain" "*"+ "\n"* tile_definition* ) as terrain_declaration
 	( "*"+ "Dens"    "*"+ "\n"* tile_definition* ) as dens_declaration
 	( "*"+ "Chests"  "*"+ "\n"* tile_definition* ) as chests_declaration
@@ -21,7 +24,8 @@ edge_definition
 	"/" NAME as edgeTileName ( "|" NAME as edgeTileName )* direction_name ("|" direction_name)* ( "\n" edge_if )*
 edge_if
 	( "if" "Neighbour" ("in" "Direction" | INTEGER INTEGER ) edge_if_operator ( "null" ) ) as neighbourIf
-
+siding_definition
+	":"+ NAME as sidingName in siding_names ":"+ tile_definition_element*
 tile_definition
 	( ((tile_names) as floorParentName ("," (tile_names) as floorParentName)*) "::" )? NAME as tileName in tile_names tile_definition_element* tile_element*
 tile_definition_element silent

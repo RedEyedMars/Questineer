@@ -20,12 +20,13 @@ patch_probability silent
 probability_element silent
 	( INTEGER as amount ("," INTEGER as amount)* ":" INTEGER as percent "%" ) as probability
 patch_element
-	( patch_dimension tile_names ) as simpleTileSpread
-	tile_names ( patch_dimension ( "|" patch_dimension )* )? patch_relative_position? patch_goto? ( "as" NAME as nodeName "in" trail_names )?
+	tile_names ( patch_dimension ( "|" patch_dimension )* )? patch_relative_position? patch_rimcals* patch_goto? ( "as" NAME as nodeName "in" trail_names )?
 patch_goto
 	"->" (room_names| map_names ) as destination
-patch_relative_position Braced [ ] = ( "OffSide" as offside | patch_range "," patch_range )
+patch_relative_position Braced [ ] = ( "OffSide" as offside | patch_range as patchWidth "," patch_range as patchHeight )
 patch_dimension silent
 	patch_range as patchWidth [[xX]] patch_range as patchHeight
 patch_range silent
 	INTEGER as lowerBound? ( "-" INTEGER as upperBound)?
+patch_rimcals
+	( direction_name | "Sides" ) ":" siding_names
