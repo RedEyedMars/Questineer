@@ -1,6 +1,0 @@
-
-import animation_types.ruleset
-import images.ruleset
-import drawables.ruleset
-import colours.ruleset
-import layers.ruleset

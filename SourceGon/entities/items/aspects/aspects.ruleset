@@ -1,7 +1,0 @@
-#ASPECTS#
-aspect_names global list with NAME
-import_aspect Imports "aspects/" FILE_NAME ".asps" = ">" FILE_NAME ".asps" "\n"
-	( "\n" | comments | aspect_declaration )*
-
-aspect_declaration
-	NAME as aspectName in aspect_names "\n"* DESCRIPTION ( "\n"* event_statement)*

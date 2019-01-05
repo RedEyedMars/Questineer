@@ -1,0 +1,4 @@
+package com.rem.gen;
+public class Indexable {
+	public static com.rem.lang.helpers.output.OutputClass OUTPUT = new com.rem.lang.helpers.output.OutputClass()._package(new com.rem.lang.helpers.output.OutputCall().add(new com.rem.lang.helpers.output.OutputExact(QuestineerSource.packageName),null).add(new com.rem.lang.helpers.output.OutputExact().set("misc"),null).add(new com.rem.lang.helpers.output.OutputExact().set("interfaces"),null)).isInterface().name(new com.rem.lang.helpers.output.OutputExact().set("Indexable")).extendType(null).method(new com.rem.lang.helpers.output.OutputMethod().access("public ").set(new com.rem.lang.helpers.output.OutputType().add(new com.rem.lang.helpers.output.OutputExact().set("int")),new com.rem.lang.helpers.output.OutputExact().set("getIndex")).parameters(new com.rem.lang.helpers.output.OutputParameters()).body(new com.rem.lang.helpers.output.OutputBody())).mark();
+}

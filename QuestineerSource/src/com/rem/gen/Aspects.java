@@ -1,0 +1,27 @@
+package com.rem.gen;
+import java.util.HashMap;
+import com.rem.gen.Events;
+public class Aspects {
+	public static com.rem.lang.helpers.output.OutputClass OUTPUT = new com.rem.lang.helpers.output.OutputClass()._package(new com.rem.lang.helpers.output.OutputCall().add(new com.rem.lang.helpers.output.OutputExact(QuestineerSource.packageName),null).add(new com.rem.lang.helpers.output.OutputExact().set("entities"),null).add(new com.rem.lang.helpers.output.OutputExact().set("items"),null).add(new com.rem.lang.helpers.output.OutputExact().set("aspects"),null)).name(new com.rem.lang.helpers.output.OutputExact().set("Aspects")).extendType(null).method(new com.rem.lang.helpers.output.OutputMethod().access("public ").isStatic().set(new com.rem.lang.helpers.output.OutputType().add(new com.rem.lang.helpers.output.OutputExact().set("Aspect")),new com.rem.lang.helpers.output.OutputExact().set("create")).parameters(new com.rem.lang.helpers.output.OutputParameters().add(new com.rem.lang.helpers.output.OutputVariable().set(new com.rem.lang.helpers.output.OutputType().add(new com.rem.lang.helpers.output.OutputExact().set("String")),new com.rem.lang.helpers.output.OutputExact().set("aspectName")))).body(new com.rem.lang.helpers.output.OutputBody().add(new com.rem.lang.helpers.output.OutputStatement().prefix("return ").set(new com.rem.lang.helpers.output.OutputExact().set("null"))))).mark();
+	public static void setup(com.rem.gen.parser.Parser.Result.Pass data){
+		Events.addEventMethods(com.rem.lang.helpers.output.OutputClassStructure.getClass("Aspect"),new HashMap<String, com.rem.lang.helpers.output.OutputBody>());
+	}
+	public static com.rem.lang.helpers.output.Output getId(String name){
+		return new com.rem.lang.helpers.output.OutputStaticCall().set(new com.rem.lang.helpers.output.OutputType().add(new com.rem.lang.helpers.output.OutputExact().set("Aspects")),new com.rem.lang.helpers.output.OutputCall().add(new com.rem.lang.helpers.output.OutputExact().set("name"),null).add(new com.rem.lang.helpers.output.OutputExact().set("id"),null));
+	}
+	public static void declaration(com.rem.gen.parser.Token declarationToken){
+		String aspectName = com.rem.lang.helpers.output.OutputHelper.camelize((declarationToken.get(com.rem.gen.parser.Token.Id._aspectName)).toString());
+		String aspectDescription = (declarationToken.get(com.rem.gen.parser.Token.Id._DESCRIPTION)).toString();
+		com.rem.lang.helpers.output.OutputClassStructure.getClass("Aspects").encloseClass(new com.rem.lang.helpers.output.OutputClass()._package(new com.rem.lang.helpers.output.OutputCall()).name(new com.rem.lang.helpers.output.OutputExact(aspectName)).extendType(new com.rem.lang.helpers.output.OutputType().add(new com.rem.lang.helpers.output.OutputExact().set("Aspect"))).implement(new com.rem.lang.helpers.output.OutputType().add(new com.rem.lang.helpers.output.OutputExact().set("Source"))).variable(new com.rem.lang.helpers.output.OutputVariable().isPublic().isStatic().set(new com.rem.lang.helpers.output.OutputType().add(new com.rem.lang.helpers.output.OutputExact().set("Aspect")).add(new com.rem.lang.helpers.output.OutputExact().set("Id")),new com.rem.lang.helpers.output.OutputExact().set("id")).assign(new com.rem.lang.helpers.output.OutputNewObject().set(new com.rem.lang.helpers.output.OutputType().add(new com.rem.lang.helpers.output.OutputExact().set("Aspect")).add(new com.rem.lang.helpers.output.OutputExact().set("Id")),new com.rem.lang.helpers.output.OutputArguments()))));
+		for(com.rem.gen.parser.Token element:declarationToken.getAllSafely(com.rem.gen.parser.Token.Id._event_statement)){
+			String eventName = com.rem.lang.helpers.output.OutputHelper.camelize(element.get(com.rem.gen.parser.Token.Id._event_names));
+			com.rem.lang.helpers.output.OutputContext eventContext = Events.addToEventMethod((element.get(com.rem.gen.parser.Token.Id._event_names)).toString(),com.rem.lang.helpers.output.OutputClassStructure.getClass("Aspect"),new com.rem.lang.helpers.output.OutputBody());
+			com.rem.lang.helpers.output.OutputBody eventBody = new com.rem.lang.helpers.output.OutputBody();
+			for(com.rem.gen.parser.Token atom:element.getAllSafely(com.rem.gen.parser.Token.Id._body_element)){
+				eventBody.add(QuestineerSource.getBodyElement(atom,eventContext));
+			}
+			Events.addToEventMethod((element.get(com.rem.gen.parser.Token.Id._event_names)).toString(),com.rem.lang.helpers.output.OutputClassStructure.getClass("Aspect"),eventBody);
+		}
+		com.rem.lang.helpers.output.OutputClassStructure.getClass("Aspects").getMethod("create(String)").prepend(new com.rem.lang.helpers.output.OutputBody().add(new com.rem.lang.helpers.output.OutputConditional().init("if").body(new com.rem.lang.helpers.output.OutputBody().add(new com.rem.lang.helpers.output.OutputStatement().prefix("return ").set(new com.rem.lang.helpers.output.OutputNewObject().set(new com.rem.lang.helpers.output.OutputType().add(new com.rem.lang.helpers.output.OutputExact().set("Aspects")).add(aspectName),new com.rem.lang.helpers.output.OutputArguments())))).header(new com.rem.lang.helpers.output.OutputConditionalHeader().declare(null).call(new com.rem.lang.helpers.output.OutputCall().add(new com.rem.lang.helpers.output.OutputQuote().set((aspectName).toString()),null).add(new com.rem.lang.helpers.output.OutputExact().set("equals"),new com.rem.lang.helpers.output.OutputArguments().add(new com.rem.lang.helpers.output.OutputQuote().set(aspectName)))))));
+	}
+}

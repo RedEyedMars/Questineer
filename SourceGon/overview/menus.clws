@@ -1,6 +1,0 @@
-
-class 'packageName'.menus Menu {
-  interface Placable // {
-    void place(Area area, Integer x, Integer y){}
-  }
-}

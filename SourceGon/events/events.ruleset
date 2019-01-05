@@ -1,9 +1,0 @@
-
-#EVENTS#
-event_names global list with NAME 
-import_event Imports "events/" FILE_NAME ".evts" = ">" FILE_NAME ".evts" "\n"
-	( "\n" | comments | event_declaration )*
-event_declaration
-	NAME as eventName in event_names (comments|("\n\t" type_name NAME) as parameter|"\n")*
-event_statement
-	( event_names animation? std_body )

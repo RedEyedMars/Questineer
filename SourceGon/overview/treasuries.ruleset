@@ -1,9 +1,0 @@
-#TREASURY#
-payment_long_type_names  global list with NAME
-payment_short_type_names global list with NAME
-
-import_payment_type Imports "overview/treasuries/" FILE_NAME ".payment" = ">" FILE_NAME ".payment" "\n"
-	( "\n" | comments | payment_type_declaration )* 
-payment_type_declaration
-	NAME as typeName ":" NAME as shortForm in payment_short_type_names "-" NAME as longForm in payment_long_type_names
-	NAME as shortForm in payment_short_type_names "-" NAME as longForm in payment_long_type_names
