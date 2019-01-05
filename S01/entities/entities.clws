@@ -1,0 +1,674 @@
+
+import behaviours/activities/activities
+import behaviours/skills/skills
+import behaviours/quests/quests
+import items/items
+import mods/affinities/affinities
+import mods/conditions/conditions
+import mods/traits/traits
+import relations/relations
+
+class 'packageName'.misc.Int {
+  int value = 0;
+  Int(){}
+  Int(int value){
+    this.value = value;
+  }
+  void increase(int amount){
+    value += amount;
+  }
+}
+class 'packageName'.entities.Entities {
+  @Entity createEntity(String entityName){
+    return null;
+  }
+  class Hero Entity {
+    Gui.Image.States imageStates = null;
+    Gui.Drawable drawable = null;
+    Hero (Gui.Statable image){
+      imageStates = image.asStates();
+    }
+    
+    Entity.Id getId(){
+      return Entity.Id.Hero;
+    }
+    boolean getIsPlayerAffiliated(){
+      return true;
+    }
+    Gui.Drawable getDrawable(){
+      if drawable == null {
+        drawable = Drawables.square.image(imageStates);
+        drawable.setVisualWidth(2/13f);
+        drawable.setVisualHeight(2/13f);
+      }
+      return drawable;
+    }
+    void changeState(ImageStates newState){
+      imageStates.changeState(newState);
+    }
+    Boolean isIdle(){
+      return imageStates.getId() == ImageStates.idle;
+    }
+    Gui.Image.States changeTo(){
+      return imageStates;
+    }
+  }
+> %Class declaration(%T declarationToken){
+    StringBuilder entityNameBuilder = new StringBuilder();
+	declarationToken : element : entityName {
+	  entityNameBuilder.append('element');
+	}
+	String entityName = %Helper.camelize(entityNameBuilder.toString());
+	
+    Entity.Id += void 'entityName';
+    Entities += class 'entityName' Entity {
+      @Entity.Id id = Entity.Id.'entityName'; 
+      Gui.Drawable drawable = null;
+      'entityName'(){}
+      Entity.Id getId(){
+        return Entity.Id.'entityName';
+      }
+    }
+    Entities.'entityName' += class Factory < Entity.Factory {
+        Entity create(){
+          return new Entities.'entityName'();
+        }
+      }
+    if declarationToken->imageName != null {
+      String imageName = 'declarationToken->imageName';
+      String imageClassName = %Helper.camelize(imageName);  
+      StringBuilder newState = new StringBuilder();
+      String underscore = "";
+      declarationToken : element : imageId {
+        newState.append(underscore);
+        newState.append('element');
+        underscore = "_";
+      }
+      if declarationToken->width != null {
+        newState.append("_0");
+      }
+      Entities.'entityName' += Images.'imageClassName'.States imageStates = Images.'imageName'.asStates();
+      Entities.'entityName' += Gui.Drawable getDrawable(){
+          if \drawable == null {
+            \drawable = Drawables.square.image(imageStates);
+            \drawable.setVisualWidth(2/13f);
+            \drawable.setVisualHeight(2/13f);
+          }
+          return \drawable;
+        }
+      Entities.'entityName' += void changeState(ImageStates newState){
+          imageStates.changeState(newState);
+        }
+      Entities.'entityName' += Boolean isIdle(){
+          return imageStates.getId() == ImageStates.idle;
+        }
+      Entities.'entityName' += Gui.Image.States changeTo(){
+          return imageStates;
+        }
+      Entities.'entityName'::*() += |\imageStates.'newState'();| 
+    }
+    declarationToken : element : entity_definition {
+      element : atom : affinity_names {
+    	Entities.'entityName'::*() += | this.gain(new Affinities.'%Helper.camelize(atom.toString())'(), this); |
+      }
+      element : atom : event_statement {
+        %Context eventContext = Events.addToEventMethod('atom->event_names', Entities.'entityName', {});
+        %Body eventBody = %Body ();
+        atom : quark : body_element {
+          eventBody.add(getBodyElement(quark,eventContext));
+        }
+        Events.addToEventMethod('atom->event_names', Entities.'entityName', eventBody);
+      }
+      element : atom : skill {
+        %A arguments = %A ();
+        atom : quark : statement {
+          arguments.add(getStatement(quark,Entity));
+        }
+        String subSkillName = %Helper.camelize(atom->skill_names);
+    	Entities.'entityName'::*() += | this.gain(new Skills.'subSkillName'(`arguments`), this); |
+      }
+      element : atom : stat_range {
+        String heroStatName = 'atom->hero_stat'.toLowerCase();
+        String leftBound = 'atom->left';
+        String rightBound;
+        if atom->right != null {
+          rightBound = 'atom->left';
+        }
+        else {
+          rightBound = leftBound; 
+        }
+    	Entities.'entityName'::*() += | this.'heroStatName'.setValue(Range.getIntegerBetween('leftBound','rightBound')); |
+      }
+    }
+    return Entities.'entityName'.Factory;
+  }
+}
+class 'packageName'.entities.Entity < Source Loaddable Tickable {
+  enum Id {
+    void Hero;
+    class EntityMap {}
+  }
+  interface Factory {
+    Entity create()?
+  }
+  interface  Stat {
+    Integer getValue()?
+    Integer getValue(Entity user)?
+	void setValue(Integer newValue)?
+	Boolean impose(Integer amount, Source source)?
+	void release(Source source)?
+	String getName()?
+  }
+  class Event {
+    class Id {}
+    Entity.Event.Id getId(){
+      return null;
+    }
+    class MovedToNewArea Entity.Event {
+      @Entity.Event.Id id = new Entity.Event.Id();
+      Entity.Event.Id getId(){
+        return id;
+      }
+      Area oldArea = null;
+      Area newArea = null;
+      MovedToNewArea(Area oldArea, Area newArea){
+        this.oldArea = oldArea;
+        this.newArea = newArea;
+      }
+    }
+    class FailedToMove Entity.Event {
+      class Id Entity.Event.Id {}
+      @Entity.Event.FailedToMove.Id id = new Entity.Event.FailedToMove.Id();
+      Entity.Event.Id getId(){
+        return id;
+      }
+      Tile causalTile = null;
+      FailedToMove(Tile causalTile){
+        this.causalTile = causalTile;
+      }
+      class TileHasOccupant Entity.Event.FailedToMove {
+        @Entity.Event.FailedToMove.Id id = new Entity.Event.FailedToMove.Id();
+        Entity.Event.Id getId(){
+          return id;
+        }
+        Entity causalOccupant = null;
+        TileHasOccupant(Tile causalTile, Entity causalOccupant){
+          super(causalTile);
+          this.causalOccupant = causalOccupant;
+        }
+      }
+      class TerrainImpassable Entity.Event.FailedToMove {
+        @Entity.Event.FailedToMove.Id id = new Entity.Event.FailedToMove.Id();
+        Entity.Event.Id getId(){
+          return id;
+        }
+        Terrain causalTerrain = null;
+        TerrainImpassable(Tile causalTile, Terrain causalTerrain){
+          super(causalTile);
+          this.causalTerrain = causalTerrain;
+        }
+      }
+    }
+  }
+  class Comparators {
+    class Distance {
+      class Ascending < Comparator<Entity> {
+        Environment.Position origin = null;
+        Ascending(Environment.Position origin){this.origin = origin;}
+        int compare(Entity entity1, Entity entity2){
+          return (int)((double)origin.getDistanceTo(entity1.location) - (double)origin.getDistanceTo(entity2.location));
+        }
+      }
+      class Descending < Comparator<Entity> {
+        Environment.Position origin = null;
+        Descending(Environment.Position origin){this.origin = origin;}
+        int compare(Entity entity1, Entity entity2){
+          return (int)((double)origin.getDistanceTo(entity2.location) - (double)origin.getDistanceTo(entity1.location));
+        }
+      }
+    }
+  }
+  interface Criteria Predicate<Entity> {
+    class True : Entity.Criteria {
+      boolean test(Entity candidate){
+        return true;
+      }
+    }
+    class Free : Predicate<Tile> {
+      boolean test(Tile candidate){
+        return true;
+      }
+    }
+    class AngleTo : Predicate<Entity> {
+      Environment.Position to = null;
+      Double angleLeft = 0.0;
+      Double angleRight = 0.0;
+      boolean test(Entity candidate){
+        double direction = candidate.getLocation().getDirectionTo(to);
+        return direction <= angleLeft & direction >= angleRight ;
+      }
+    }
+  }
+  @Integer ALIVE = 0;
+  @Integer DEAD  = 1;
+  String name = null;
+  Integer status = ALIVE;
+  Float weightHeld = 0f;
+  Integer walkingSpeed = 20;
+  Tile spawn = null;
+  List<Item> equippedItems = Collections.synchronizedList(new ArrayList<Item>());
+  Skill focusSkill = null;
+  Environment.Location location = new Environment.Location(this);
+  Relationship.EntityMap relationships = new Relationship.EntityMap();
+  LinkedList<Activity> activityList = new LinkedList<Activity>();
+  LinkedList<Entity.Event> events = new LinkedList<Entity.Event>();
+  
+  Entity.Id getId(){
+    return null;
+  }
+  void display(){
+    getDrawable().display(Renderer.topLayer);
+  }
+  void undisplay(){
+    getDrawable().undisplay(Renderer.topLayer);
+  }
+  Gui.Drawable getDrawable(){
+    return null;
+  }
+  Gui.Image.States changeTo(){
+    return null;
+  }
+  boolean getIsPlayerAffiliated(){
+    return false;
+  }
+  Float getItemDamage(){
+	return Streamer.sum(equippedItems,(S,item)=>item.getDmg(Entity.this));
+  }
+  Float getItemDefense(){
+    return Streamer.sum(equippedItems,(S,item)=>item.getDef(Entity.this));
+  }
+  Boolean canEquip(Item item){
+    return this.\str.getValue() > weightHeld + item.getWeight();
+  }
+  void equip(Item item){
+    equippedItems.add(item);
+	weightHeld = weightHeld + item.getWeight();
+	item.on(new Events.Equip(this,item));
+  }
+  void unequip(Item item){
+    equippedItems.remove(item);
+	weightHeld = weightHeld - item.getWeight();
+	item.on(new Events.Unequip(this,item));
+  }
+  void addEvent(Entity.Event event){
+    events.push(event);
+  }
+  void exploreEntryPoint(Tile point){
+    if activityList.isEmpty() == false {
+      activityList.getFirst().rememberEntryPoint(point);
+    }
+  }
+  void explore(Area newArea){
+    if activityList.isEmpty() == false {
+      activityList.getFirst().explore(newArea);
+    }
+  }
+  Boolean hasExplored(Area area){
+    if activityList.isEmpty() == false {
+      return activityList.getFirst().hasExplored(area);
+    } 
+    else {
+      return false;
+    }
+  }
+  Boolean isIdle(){
+    return true;
+  }
+  void changeState(ImageStates newState){
+  }
+  Boolean load(){
+    on(new Events.Load(this));
+    return true;
+  }
+  Boolean tick(Double millisSinceLastFrame){
+    
+    if events.isEmpty() == false {
+      if activityList.isEmpty() == false {
+        while events.isEmpty() == false {
+          activityList.getFirst().listen(this,events.pollFirst());
+        }
+        activityList.getFirst().on(new Events.Tick(this));
+      }
+      else {
+        while events.isEmpty() == false {
+          \listen(events.pollFirst());
+        }
+      }
+    }
+    else {
+      if activityList.isEmpty() == false {
+	    activityList.getFirst().on(new Events.Tick(this));
+	  }
+	}
+    on(new Events.Tick(this));
+    return true;
+  }
+  Boolean spawnAt(Tile toSpawn){
+    if toSpawn == null {
+      throw new RuntimeException(''"Failed to spawn"'');
+    }
+    spawn = toSpawn;
+    changeState(ImageStates.idle);
+    toSpawn.accept(this);
+    if location.getArea() == null {
+      location.setArea(toSpawn.getArea());
+    }
+    return load(); 
+  }
+  void listen(Entity.Event event){
+    if event.getId() == Entity.Event.FailedToMove.id {
+    }
+  }
+  void join(Entity recruiter, Association newAssociation){
+    newAssociation.add(this);
+    gain(newAssociation,recruiter);
+    on(new Events.Joined(recruiter, this));
+    newAssociation.on(new Events.Joined(recruiter, this));
+  }
+  Boolean isFriendlyWith(Entity otherEntity){
+    Relationship privateRelationship = relationships.get(otherEntity);
+    if privateRelationship != null {
+      return privateRelationship.getInfluence() >= 0;
+    }
+    else {
+      return Streamer.has(\associations.getCompleteList(), otherEntity);
+    }
+  }
+  Activity start(Activity newActivity){
+    newActivity.setHost(this);
+    newActivity.on(new Events.Load(this));
+    activityList.add(0,newActivity);
+    return newActivity;
+  }
+  void stop(Activity oldActivity){
+    activityList.remove(oldActivity);
+  }
+  void takeDamage(Source attacker, int damageToTake){
+    if \getRandomStat().impose(-damageToTake, attacker) == false {
+	  \die(attacker);
+    }
+  }
+  void die(Source killer){
+    undisplay();
+    status = DEAD;
+    location.getTile().setOccupant(null);
+    if hasCorpse() {
+      location.getTile().setTerrain(\getCorpse());
+    }
+    on(new Events.Die(killer,this));
+  }
+  Boolean hasCorpse(){
+    return false;
+  }
+  Terrain.Corpse getCorpse(){
+    return null;
+  }
+  void influence(Entity otherEntity, Relationship.Reason reason, Integer amount){
+    \relationships.get(otherEntity, new Relationship.Factory()).influence(reason,amount);
+  }
+>@ %Body motivationForSwitchBody = %Body ();
+>@ %Body motivationSwapSwitchBody1 = %Body ();
+>@ %Body motivationSwapSwitchBody2 = %Body ();
+>@ %Body motivationSwapSwitchBody3 = %Body ();
+>@ %Body motivationSwapSwitchBody4 = %Body ();
+  int motivationFor(ActivityType.Id findId){
+    switch findId `motivationForSwitchBody`
+    return -1;
+  }
+  boolean swapMotivations(ActivityType.Id decreaseId, ActivityType.Id increaseId){
+    switch decreaseId `motivationSwapSwitchBody1`
+    switch increaseId `motivationSwapSwitchBody2`
+    switch decreaseId `motivationSwapSwitchBody3`
+    switch increaseId `motivationSwapSwitchBody4`
+    return false;
+  }
+> void setup(%Pass data){
+	List<String> namesToAdd = new ArrayList<String>();
+	namesToAdd.add("hit");
+	Map<String, %Body > bodiesToAdd = new HashMap<String, %Body >();
+	bodiesToAdd.put("hit", {
+      Float eventDamage = event.getDamage().getTotal();
+	  if eventDamage < 0.1f && eventDamage > -0.1 {
+		return false;
+	  }
+	  Float preciseDamage = eventDamage - this.con.getValue() - this.getItemDefense();
+	  Integer damageToTake = (int)(float)preciseDamage;
+	  Float eventModifier = event.getDamage().getModifier();
+	  event.getAttacker().getEquippedItems().parallelStream().forEach(item=>
+		item.decreaseHp(Entity.this,(int)(item.getDef(Entity.this) * eventModifier / eventDamage)) );
+	  if damageToTake < 1 {
+		damageToTake = 1;
+	  }
+	  IntStream.range(0,damageToTake).parallel().forEach(I=>takeDamage(event.getAttacker(),1));
+	});
+    Events.addEventMethods(Entity,bodiesToAdd);
+    
+    Entity.addGainLoss(Condition,Entity);
+    Entity.addGainLoss(Trait,Entity);
+    Entity.addGainLoss(Affinity,Entity);
+    Entity.addGainLoss(Association,Entity);
+    Entity.addGainLoss(Skill,Entity);
+    Entity.addGainLoss(Attack,Entity);
+    Entity.addGainLoss(Support,Entity);
+    Entity.addGainLoss(Quest,Entity);
+    Entity.addGainLoss(Activity,Entity);
+    
+    createListMap(Source, Int);
+    createIdMap(Entity, |\getOther()|, Relationship);
+    
+    Set<String> statNames = data.getHeroStat();
+    %Arguments allStatList = %Arguments ();
+    %Body randomStatBody = {};
+    for String statName : statNames {
+      String vName = statName.toLowerCase();
+      Entity += class 'statName' < Entity.Stat {
+        Integer value = 0;
+        ListMaps.Sources.Int history = new ListMaps.Sources.Int();
+        Integer getValue(Entity user){
+          return user.'vName'.getValue();
+        }
+        void setValue(Integer newValue){
+          value = newValue;
+        }
+        Boolean impose(Integer amount, Source source){
+          synchronized this {
+            history.add(source,new Int(amount));
+          }
+          value += amount;
+          return value > 0;
+        }
+		void release(Source source){
+		  synchronized this {
+			history.removeLast(source);
+		  }
+		}
+		String getName(){
+		  return ''statName'';
+		}
+      }
+      Entity += Entity.'statName' 'vName' = new Entity.'statName'();
+      (Entity::' %Helper.asGetMethod(vName)'() ).setOnCallEndsWith(|getValue()|);
+      randomStatBody.add(|case 'allStatList.size()' {return 'vName';}|);
+      allStatList.add(|'vName'|);
+      #Entity.'statName'.getContext().setEnder(|\getValue()|);#
+    }
+    
+    Entity += Entity.Stat getRandomStat(){
+      switch Range.getRandom(0, 'allStatList.size()' ) `randomStatBody`
+      return null;
+    }
+  }
+  Boolean isDead(){
+    return status == DEAD;
+  }
+> %Output getStatRange(%T range, String variableName, %Context context){
+    return |`getStatRange(range, context, variableName, %Operator())`|;
+  }
+> %Output getStatRange(%T range, %Context context){
+    return |E=>`getStatRange(range, context, "E", %Operator())`|;
+  }
+> %Operator getStatRange(%T range, %Context context, String variableName, %Operator result){
+    if range->statement != null {
+      result.add(|`getStatement(range->statement,context)`.getValue('variableName')|);
+    }
+    else {
+      Boolean isPercent = range->percent != null;
+      
+      Float leftValue;
+      if isPercent {
+        leftValue = Float.parseFloat('range->left')/100f;
+      }
+      else {
+        leftValue = Float.parseFloat('range->left');
+      }
+      if range->right != null {
+        Float rightValue;
+        if isPercent {
+          String heroStat = 'range->hero_stat';
+          rightValue = Float.parseFloat('range->right')/100f;
+          result.add(|Range.getRandom('leftValue+"f"','rightValue+"f"')*'variableName'.' %Helper.asGetMethod(heroStat.toLowerCase())'().getValue()|);
+        }
+        else { 
+          rightValue = Float.parseFloat('range->right');
+		  result.add(|Range.getRandom('leftValue+"f"','rightValue+"f"')|);
+        }
+      }
+      else {
+        if isPercent {
+          String heroStat = 'range->hero_stat';
+          result.add(|'leftValue+"f"'*'variableName'.' %Helper.asGetMethod(heroStat.toLowerCase())'().getValue()|);
+        }
+        else {
+          result.add(|'leftValue+"f"'|);
+        }
+      }
+    }
+    %Output left = result;
+    if range->stat_range != null {
+      range->operator : operator 
+        : PLUS {
+          result.operator("+");
+          return getStatRange(range->stat_range,context,variableName,result);
+        }
+        : MINUS {
+          result.operator("-");
+          return getStatRange(range->stat_range,context,variableName,result);
+        }
+        : DIVIDE {
+          result.operator("/");
+          return getStatRange(range->stat_range,context,variableName,result);
+        }
+        : MULTIPLY {
+          result.operator("*");
+          return getStatRange(range->stat_range,context,variableName,result);
+        }
+        return null;
+    }
+    else {
+      return result;
+    }
+  }
+> %Lineable getImposition(%T impositionToken, Boolean forGainBody, %Output subject){
+    Boolean useImpose = false;
+    %T operator = impositionToken->operator;
+    if forGainBody && operator->impose == null {
+      useImpose = true;
+    }
+    else if operator->impose != null &&! forGainBody{
+      useImpose = true;
+    }
+    String impositionStat = 'impositionToken->hero_stat'.toLowerCase();
+    if useImpose {
+      Integer count = 0;
+      impositionToken : element : PLUS { count = count + 1; }
+      impositionToken : element : MINUS { count = count - 1; }
+      impositionToken : element : amount { count = count + Integer.parseInt('element'); }
+      Integer realCount = count;
+      return | `subject`.'%Helper.asGetMethod(impositionStat)'().impose('realCount',this); |;
+    }
+    else {
+      return | `subject`.'%Helper.asGetMethod(impositionStat)'().release(this); |;
+    }
+  }
+> %Lineable getInfluence(%T influenceToken, %Output subject, %Context currentContext ){
+    if influenceToken->reason_names !=null {
+      String reasonClassName = %Helper.camelize('influenceToken->reason_names');
+      %Arguments arguments = %Arguments ();
+      influenceToken : method_arguments : method_arguments {
+        method_arguments : statement : statement {
+          arguments.add(getStatement(statement,currentContext));
+        }
+      }
+      return |`subject`.influence(`getVariableCall(influenceToken->variable_call,currentContext)`,new Relationship.Reasons.'reasonClassName'(`arguments`),'influenceToken->amount');|;
+    }
+    else {
+      return |`subject`.influence(`getVariableCall(influenceToken->variable_call,currentContext)`,null,'influenceToken->amount');|;
+    }
+  }
+> %Output getSelector(%T entityIdChoice){
+    %Operator options = %Operator ().operator("||").operatorlessIfSingle();
+    entityIdChoice : complete : entityName {
+      StringBuilder entityName = new StringBuilder();
+      boolean isFirst = true;
+      complete : part : namePart {
+        entityName.append(part);
+        isFirst = false;
+      }
+      options.add(|\candidate.getId() == Entities.'entityName'.id|);
+    }
+    return |candidate=>`options`|;
+  }
+> void addGainLoss(%Class inputClass, %Class outputClass){
+    String asVariable = inputClass.getName().evaluate().toLowerCase();
+    String asList = asVariable + "s";
+    %Output getIdStatement;
+    if inputClass == Attack {
+      getIdStatement = | 'asVariable'.getAttackId() |;
+    }
+    else if inputClass == Support {
+      getIdStatement = | 'asVariable'.getSupportId() |;
+    }
+    else {
+      getIdStatement = | 'asVariable'.getId() |;
+    }
+	outputClass +=
+	  Boolean has('inputClass'.Id findId){
+	    return Streamer.has('asList'.getAll(), ('asVariable')=>`getIdStatement`, findId);
+	  }
+	outputClass +=
+	  'inputClass' get('inputClass'.Id findId){
+	    return Streamer.get('asList'.getAll(), ('asVariable')=>`getIdStatement`, findId);
+	  }
+	outputClass +=
+	  void gain('inputClass' 'asVariable', Source source){
+	    'asList'.add(source, 'asVariable');
+	  }
+	outputClass +=
+	  void gain('inputClass' 'asVariable'){
+	    'asList'.add(this, 'asVariable');
+	  }
+	outputClass +=
+	  void lose('inputClass'.Id removeId, Source source){
+	    'inputClass' toRemove = Streamer.get('asList'.getFrom(source), ('asVariable')=>`getIdStatement`, removeId);
+	    if toRemove == null {
+	      throw new RuntimeException('' inputClass.getName() '' + ''":"''+removeId+''"  not found!" '');
+	    }
+	    else {
+	      'asList'.remove(source,toRemove);
+	    }
+	  }
+	createListMap(Source, inputClass);
+	String inputName = inputClass.getName().evaluate();
+	outputClass += ListMaps.Sources.'inputName' 'asList' = new ListMaps.Sources.'inputName'();
+  }
+}

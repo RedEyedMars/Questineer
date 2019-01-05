@@ -1,0 +1,872 @@
+class 'packageName'.environments.tiles.Terrain  {
+  class Id    Tile.Id {
+  }
+  Terrain.Id getId(){
+    return null;
+  }
+  Tile floorTile = null;
+  Terrain(Tile newFloorTile){
+    super();
+    setFloorTile(newFloorTile);
+  }
+  boolean isPassable(int x, int y){
+    return false;
+  }
+  Entity.Event accept(Entity newOccupant){
+    return floorTile.accept(newOccupant);
+  }
+  Gui.Drawable getDrawable(){
+    return null;
+  }
+  Boolean load(){
+    return true;
+  }
+  Boolean tick(Double milliseconds){
+    return true;
+  }
+  void display(){
+  }
+  void undisplay(){
+  }
+  int getWidth(){
+    return 1;
+  }
+  int getHeight(){
+    return 1;
+  }
+  interface Factory {
+    Terrain create()?
+  }
+  interface Criteria Predicate<Terrain> {
+  }
+  class Corpse Terrain {
+  }
+  class MonsterDen Terrain     {
+    class Id       Terrain.Id {
+    }
+    int hp = 100;
+    int maxHp = hp;
+    MonsterDen(){
+      super();
+    }
+    boolean isDead(){
+      return hp <= 0;
+    }
+  }
+  class Chest Terrain     {
+    class Id  Terrain.Id {
+    }
+    Chest(){
+      super();
+    }
+  }
+}
+class 'packageName'.environments.tiles.Terrains  {
+  @Terrain create(String tileName){
+    return null;
+  }
+  class MonsterDens {
+    @Terrain.MonsterDen create(String tileName){
+      return null;
+    }
+  }
+  class Chests {
+    @Terrain.Chest create(String tileName){
+      return null;
+    }
+  }
+}
+
+
+class 'packageName'.environments.tiles.EntryPoint {
+  Tile tile = null;
+  Tile destination = null;
+  Function<Entity, Entity.Event> onAccept = null;
+  EntryPoint(Tile tile, Area.Generator generator){
+    this.tile = tile;
+    this.onAccept = ((newOccupant)=>{
+      Area newArea = generator.generate();
+      newArea.load();
+      newArea.getParent().add(newArea);
+      destination = newArea.getUnassignedEntryPoint();
+      addSisterTile(tile,destination);
+      addSisterTile(destination,tile);
+      return tile.getPortal().getOnAccept().apply(newOccupant);
+    });
+  }
+  Area getArea(){
+    return tile.getArea();
+  }
+  Area getDestinationArea(){
+    if destination == null {
+      return null;
+    }
+    else {
+      return destination.getArea();
+    }
+  }
+  boolean hasExplored(Entity explorer){
+    return destination == null?false:explorer.hasExplored(destination.getArea());
+  }
+  @void addSisterTile(Tile tile, Tile destination){
+    Entity.Event event = new Entity.Event.MovedToNewArea(tile.getArea(), destination.getArea());
+    tile.setHasOccupant(()=>tile.getOccupant() != null || destination.getOccupant() != null);
+    tile.setHasOccupantWhoIs(candidate=>tile.getOccupant() == candidate || destination.getOccupant() == candidate);
+    tile.getPortal().setOnAccept(E=>{
+      destination.take(E);
+      E.getLocation().setArea(destination.getArea());
+      return event;});
+    tile.getPortal().destination = destination;
+  }
+}
+class 'packageName'.environments.tiles.Tiles {
+  enum Predefined {
+    class FloorFactory {}
+  }
+  Drawables dwbs = null;
+  @Tile create(String tileName){
+    return null;
+  }
+> Map<String, Map<String, List< %Braced>>> selectorMap = new HashMap<String, Map<String, List< %Braced>>>();  
+> int costIndex = 0;
+> void declaration(%T declarationToken, String mapName, List<String> floorTiles){
+    if declarationToken->floor_declaration != null {
+      declarationToken->floor_declaration : element : tile_definition {
+        floorTiles.add(definition(element,mapName,Tile,Tiles));
+      }
+    }
+    else if declarationToken->terrain_declaration != null {
+      declarationToken->terrain_declaration : element : tile_definition {
+        definition(element,mapName,Terrain,Terrains);
+      }
+    }
+    else if declarationToken->dens_declaration != null {
+      declarationToken->dens_declaration : element : tile_definition {
+        definition(element,mapName,Terrain.MonsterDen,Terrains.MonsterDens);
+      }
+    }
+    else if declarationToken->chests_declaration != null {
+      declarationToken->chests_declaration : element : tile_definition {
+        definition(element,mapName,Terrain.Chest,Terrains.Chests);
+      }
+    }
+  }
+> %Output getSelector(String mapName, String areaName, %T tileIdChoice){
+    %AnonymousInstance selector = %AnonymousInstance ().set(%Type().add("Tile").add("Criteria"),%A());
+    %Operator options = %Operator ("||");
+    
+    StringBuilder tileName = new StringBuilder();
+    tileIdChoice : complete : tileName {
+      complete : part : namePart {
+        tileName.append('part');
+      }
+      if 'tileName'.equals("Entry") {
+        options.add(|\candidate.getPortal() != null && \candidate.getPortal().getDestinationArea() != null && \candidate.getPortal().getDestinationArea().getParent() == `Environments.getId(mapName)`|);
+      }
+      else {
+        %Braced tileCall = %Braced();
+        options.add(|`tileCall`|);
+        if !Tiles.selectorMap.containsKey('mapName') {
+          Tiles.selectorMap.put('mapName', new HashMap<String, List< %Braced>>());
+        }
+        if !Tiles.selectorMap.get('mapName').containsKey('tileName') {
+          Tiles.selectorMap.get('mapName').put('tileName',new ArrayList< %Braced>());
+        }
+        Tiles.selectorMap.get('mapName').get('tileName').add(tileCall);
+      }
+    }
+    selector.method(
+      boolean test(Tile candidate){
+    	return `options.operatorlessIfSingle()`;
+      });
+    return selector;
+  }
+> String definition(%T declarationToken, String mapName, %Class tileExtendsClass, %Class collectionClass){
+    String tileName = %Helper.camelize('declarationToken->tileName');
+    collectionClass.'mapName' += class 'tileName' `tileExtendsClass.getFullName()` {
+        @`tileExtendsClass.getFullName()`.Id id = new `tileExtendsClass`.Id();
+        'tileName'(){
+          super();
+        }
+        `tileExtendsClass.getFullName()`.Id getId(){
+          return id;
+        }
+        List<Treasury.Cost> getCosts(){
+          List<Treasury.Cost> costs = new ArrayList<Treasury.Cost>();
+        }
+        void generate(){
+        }
+        Boolean load(){
+          super.load();
+        }
+        Boolean tick(Double millisSinceLastFrame){
+          super.tick(millisSinceLastFrame);
+        }
+      }
+    if tileExtendsClass == Tile {
+      collectionClass.'mapName'.'tileName' += 'tileName'(int x, int y, Environment parent){
+          super(x,y,parent);
+        }
+      if declarationToken->IMPASSABLE != null {
+        collectionClass.'mapName'.'tileName' += boolean isPassable(int directionX, int directionY){
+          if \terrain != null {
+            return \terrain.isPassable(directionX,directionY);
+          }
+          else {
+            return false;
+          }
+        }
+      }
+    }
+    else {
+      if declarationToken->PASSABLE != null {
+        collectionClass.'mapName'.'tileName' += boolean isPassable(int directionX, int directionY){
+          return true;
+        }
+      }
+    }
+    if declarationToken->imageId != null {
+      collectionClass.'mapName'.'tileName' += Gui.Drawable drawable = null;
+      %Body stateChangeBody = %Body ();
+      String imageName = 'declarationToken->imageName';
+      String imageClassName = %Helper.camelize(imageName);  
+      StringBuilder newState = new StringBuilder();
+      String underscore = "";
+      declarationToken : element : imageId {
+        newState.append(underscore);
+        newState.append('element');
+        underscore = "_";
+      }
+      if declarationToken->width != null {
+        newState.append("_0");
+      }
+      String drawableSuperType;
+      if tileExtendsClass == Tile {
+        drawableSuperType = "isosquare";
+      }
+      else {
+        drawableSuperType = "square";
+      }
+      if Gui.Image.multiElementImages.containsKey(imageClassName) && Gui.Image.multiElementImages.get(imageClassName).contains('newState') {
+        stateChangeBody.add(
+          |\drawable = Images.'imageName'..'"getAs"+ %Helper.camelize(newState)'(Drawables.'drawableSuperType');|);
+      }
+      else { 
+      	stateChangeBody.add({
+      		Images.'imageClassName'.States imageStates = Images.'imageName'.asStates();
+        	imageStates.'newState'();
+            \drawable = Drawables.'drawableSuperType'.image(imageStates);});
+          
+      }
+      float factor = 6f;
+      float xFactor = factor*1.85f;
+      float yFactor = factor*3.85f;
+      if tileExtendsClass == Tile {
+        stateChangeBody.add(|
+          \drawable.setVisualX((float)(getX()+getY())/'xFactor+"f"');
+          \drawable.setVisualY((float)(getY()-getX())/'yFactor+"f"');|);
+        collectionClass.'mapName'.'tileName' += void display(){
+		    getDrawable().display(Renderer.botLayer);
+		    if \terrain != null {
+		      \terrain.display();
+		    }
+		    if \occupant != null {
+		      \occupant.display();
+		    }
+		  }
+		collectionClass.'mapName'.'tileName' += void undisplay(){
+		    getDrawable().undisplay(Renderer.botLayer);
+		    if \terrain != null {
+		      \terrain.undisplay();
+		    }
+		    if \occupant != null {
+		      \occupant.undisplay();
+		    }
+		  }
+      }
+      else {
+        stateChangeBody.add(|
+          if \floorTile != null {
+            drawable.setVisualX(\floorTile.getDrawable().getVisualX());
+            drawable.setVisualY(\floorTile.getDrawable().getVisualY()+0.025f);
+          }
+          #else {
+            \drawable.setVisualX((float)(getX()+getY())/'xFactor+"f"');
+            \drawable.setVisualY((float)(getY()-getX())/'yFactor+"f"');
+          }#|);
+        collectionClass.'mapName'.'tileName' += void setFloorTile(Tile newFloorTile){
+            if \drawable!=null {
+			  drawable.setVisualX(newFloorTile.getDrawable().getVisualX());
+			  drawable.setVisualY(newFloorTile.getDrawable().getVisualY());
+	        }
+		    super.setFloorTile(newFloorTile);
+          }
+        collectionClass.'mapName'.'tileName' += void display(){
+		    getDrawable().display(Renderer.midLayer);
+		  }
+		collectionClass.'mapName'.'tileName' += void undisplay(){
+		    getDrawable().undisplay(Renderer.midLayer);
+		  }
+      }
+      stateChangeBody.add(|\drawable.setVisualWidth((float)getWidth()/'factor+"f"');
+                           \drawable.setVisualHeight((float)getHeight()/'factor+"f"');|);
+      collectionClass.'mapName'.'tileName' += Gui.Drawable getDrawable(){
+          if \drawable ==  null `stateChangeBody`
+          return \drawable;
+        }
+    }
+    `collectionClass`::create(String) -= {
+        if \tileName.equals('' 'tileName' '') {
+          return new `collectionClass.getFullName()`.'mapName'.'tileName'(); 
+        }
+      }
+    if tileExtendsClass == Tile {
+      collectionClass.'mapName'.'tileName' += 
+        @Tile create(Environment.Position position){
+          return new 'collectionClass'.'mapName'.'tileName'(position.getX(),position.getY(),position.getParent());
+        }
+    }
+    else {
+      collectionClass.'mapName'.'tileName' += 
+        @'collectionClass'.'mapName'.'tileName' create(Environment.Position position){
+          return new 'collectionClass'.'mapName'.'tileName'();
+        }
+      Integer parentCount = 0;
+      %Body parentSwitchBodyOne = %Body ();
+      declarationToken : floorParent : floorParentName{
+        parentSwitchBodyOne.add(|case 'parentCount' { return new Tiles.'mapName'.'floorParent'(\position.getX(),\position.getY(),\position.getParent()); }|);
+        ++parentCount;
+      }
+      if parentCount > 1 {
+        int parentCountValue = parentCount;
+        collectionClass.'mapName'.'tileName' += 
+          @Tile createFloor(Environment.Position position){
+              switch Range.getRandom(0,'parentCountValue') `parentSwitchBodyOne`
+              return null;
+            }
+      }
+      else {
+        declarationToken : floorParent : floorParentName {
+          collectionClass.'mapName'.'tileName' += 
+            @Tile createFloor(Environment.Position position){
+              return new Tiles.'mapName'.'floorParent'(position.getX(),position.getY(),position.getParent());
+            }
+        }
+      }
+    }
+    if tileExtendsClass == Tile {
+      collectionClass.'mapName'.'tileName' += class Placer < Menu.Placable {
+        Placer(){
+        }
+        void place(Area area, int placeX, int placeY){
+          area.add(new 'collectionClass'.'mapName'.'tileName'(placeX,placeY,area.getParent()));
+        }
+      }
+    }
+    else {
+      collectionClass.'mapName'.'tileName' += class Placer < Menu.Placable {
+        Placer(){
+        }
+        void place(Area area, int placeX, int placeY){
+          Tile floor = area.getTile(placeX, placeY);
+          if floor == null {
+            floor = `collectionClass.getFullName()`.'mapName'.'tileName'.createFloor(new Environment.Position(placeX, placeY, 
+                        `Environments.getId(mapName)`));
+            area.add(floor);
+          }
+          floor.setTerrain(new 'collectionClass'.'mapName'.'tileName'());
+        }
+      }
+    }
+	declarationToken : element : tile_rate {
+	  element : atom : tile_cost {
+	    collectionClass.'mapName'.'tileName'::getCosts() += {\costs.add(`getTileCost(atom,collectionClass,mapName,tileName)`);}
+	  }
+    }
+	collectionClass.'mapName'.'tileName'::getCosts() += {return \costs;}
+    if declarationToken->entity != null {
+	  int entityPlusNumber = 0;
+      %Body switchBody = %Body ();
+      collectionClass.'mapName'.'tileName' += int numberOfMonsters = 0;
+      collectionClass.'mapName'.'tileName' += int maxNumberOfMonsters = 0;
+      declarationToken : element : entity {
+        element : quanta : PLUS {
+          ++entityPlusNumber;
+        }
+      }
+      int plusNumber = entityPlusNumber;
+      int numberOfMonsters = 0;
+      declarationToken : element : entity {
+        ++numberOfMonsters; 
+      }
+      collectionClass.'mapName'.'tileName'::load() += {
+          \maxNumberOfMonsters = Range.getRandom(0,'plusNumber');
+        }
+      collectionClass.'mapName'.'tileName'::tick(Double) -= {
+          while \numberOfMonsters < \maxNumberOfMonsters {
+            generateMonster();
+          }}
+      int numberOfMonstersValue = numberOfMonsters;
+      collectionClass.'mapName'.'tileName' += void generateMonster(){
+        switch  Range.getRandom(0,'numberOfMonstersValue') `switchBody`
+        ++numberOfMonsters;}
+      
+      int monsterInc = 0;
+      declarationToken : element : entity {            
+        %Class entityFactory = Entities.declaration(element->entity_declaration);
+        String newEntityName = "newEntity"+'element->entity_declaration->entityName';
+        
+        if element->MINUS != null {
+          collectionClass.'mapName'.'tileName'::load() -= |
+            if 'newEntityName'.getLocation().moveToAround(getFloorTile()) {
+              'newEntityName'.setSpawn(getFloorTile());
+              'newEntityName'.add(new Tile.Listener.Die(getFloorTile()));
+            }|
+          collectionClass.'mapName'.'tileName'::load() -= |
+            Entity 'newEntityName' = new 'entityFactory'().create();|
+        }
+        else {
+          int monsterId = monsterInc;
+          collectionClass.'mapName'.'tileName' += Entity.Factory 'element->entity_declaration->entityName+"Factory"' = new 'entityFactory'();
+          switchBody.add(|
+            case 'monsterId' {
+              Entity 'newEntityName' = 'element->entity_declaration->entityName+"Factory"'.create();
+              if 'newEntityName'.getLocation().moveToAround(getFloorTile()) {
+                'newEntityName'.setSpawn(getFloorTile());
+                'newEntityName'.add(new Tile.Listener.Die(getFloorTile()));
+              }
+            }|);
+        }
+        ++monsterInc;
+      } 
+    }
+    collectionClass.'mapName'.'tileName'::load() += |return true;|
+    collectionClass.'mapName'.'tileName'::tick(Double) += |return true;|
+    return tileName;
+  }
+
+> %Output getTileCost(%T tileCostToken,%Class collectionClass, String mapName, String tileName){
+    String costName = "Cost" + costIndex;
+    ++costIndex;
+    if tileCostToken->FREE != null {
+      collectionClass.'mapName'.'tileName' += class 'costName' Treasury.Cost {
+        Treasury.Reward getReward() {
+          return new 'collectionClass'.'mapName'.'tileName'.'costName'.Reward(); 
+        }
+        Boolean isFree(){
+          return true;
+        }
+      }
+      collectionClass.'mapName'.'tileName'.'costName' += class Reward Treasury.Reward {
+        Boolean isPlacable(){
+          return true;
+        }
+        Menu.Placable getPlacable(){
+          return new 'collectionClass'.'mapName'.'tileName'.Placer();
+        }
+      }
+      return |new 'collectionClass'.'mapName'.'tileName'.'costName'()|;
+    }
+    else {
+      String paymentType = Treasury.getTypeName(tileCostToken->tile_payment_type);
+      if tileCostToken->payment != null {
+        collectionClass.'mapName'.'tileName' += class 'costName' Treasury.Cost {
+          int getAmount(){
+            return 'tileCostToken->payment';
+          }
+          Treasury.PaymentType.Id getType(){
+            return Treasury.PaymentTypes.'paymentType'.id;
+          }
+          Treasury.Reward getReward() {
+            return new 'collectionClass'.'mapName'.'tileName'.'costName'.Reward(); 
+          }
+        }
+      }
+      else {
+        collectionClass.'mapName'.'tileName' += class 'costName' Treasury.Cost {
+          Treasury.PaymentType.Id getType(){
+            return Treasury.PaymentTypes.'paymentType'.id;
+          }
+          Treasury.Reward getReward() {
+            return new 'collectionClass'.'mapName'.'tileName'.'costName'.Reward(); 
+          }
+        }
+      }
+      collectionClass.'mapName'.'tileName'.'costName' += class Reward Treasury.Reward {
+        Boolean isPlacable(){
+          return true;
+        }
+        Menu.Placable getPlacable(){
+          return new 'collectionClass'.'mapName'.'tileName'.Placer();
+        }
+      }
+      return |new 'collectionClass'.'mapName'.'tileName'.'costName'()|;
+    }
+  }
+
+}
+class 'packageName'.environments.tiles.Tile? Environment.Position  : Loaddable Tickable Environment.Areaable  {
+  class Id  {
+  }
+  class Comparators  {
+    class Distance  {
+      class Ascending < Comparator<Tile> {
+        Environment.Position origin = null;
+        Ascending(Environment.Position origin){this.origin = origin;}
+        int compare(Tile tile1, Tile tile2){
+          double distance1 = origin.getDistanceTo(tile1);
+          double distance2 = origin.getDistanceTo(tile2);
+          if distance1 == distance2 {
+            if tile1 == tile2 {
+              return 0;
+            }
+            else {
+              return -1;
+            }
+          }
+          else {
+            if distance1 > distance2 {
+              return 1;
+            }
+            else {
+              return -1;
+            }
+          }
+        }
+        class Complex < Comparator<Tile> {
+          Environment.Position origin = null;
+          Complex(Environment.Position origin){this.origin = origin;}
+          int compare(Tile tile1, Tile tile2){
+            int distance1 = 0;
+            int distance2 = 0;
+            Area originArea = null;
+            if origin instanceof Environment.Areaable {
+              originArea = ((Environment.Areaable)origin).getArea();
+            }
+            if originArea!= null && originArea != tile1.getArea() {
+              distance1 = (int)(double) tile1.getArea().getSisterAreas().get(originArea).getDistanceTo(tile1);
+            }
+            else {
+              distance1 = (int)(double) origin.getDistanceTo(tile1);
+            }
+            if originArea != null && originArea != tile2.getArea() {
+              distance1 = (int)(double) tile2.getArea().getSisterAreas().get(originArea).getDistanceTo(tile2);
+            }
+            else {
+              distance2 = (int)(double) origin.getDistanceTo(tile2);
+            }
+            if distance1 == distance2 {
+              if tile1 == tile2 {
+                return 0;
+              }
+              else {
+                return -1;
+              }
+            }
+            else {
+              return distance1 - distance2;
+            }
+          }
+        }
+      }
+      class Descending < Comparator<Tile> {
+        Environment.Position origin = null;
+        Descending(Environment.Position origin){this.origin = origin;}
+        int compare(Tile tile1, Tile tile2){
+          return (int)(float)(origin.getDistanceTo(tile2) - origin.getDistanceTo(tile1));
+        }
+      }
+    }
+  }
+  interface Factory  {
+    Tile create()?
+  }
+  class Listener  {
+    class Die  Events.Die.Listener {
+      Tile host = null;
+      Die(Tile host){
+        this.host = host;
+      }
+      Boolean listen(Events.Die event){
+        return true;
+      }
+    }
+  }
+  interface Criteria Predicate<Tile> {
+    class Free < Tile.Criteria {
+      boolean test(Tile candidate){
+        return true;
+      }
+    }
+  }
+  int getWidth(){ return 1; }
+  int getHeight(){ return 1; }
+  
+  Map<Direction, Tile> neighbours = new HashMap<Direction, Tile>();
+  EntryPoint portal = null;
+  Terrain terrain = null;
+  Entity occupant = null;
+  Area area = null;
+  
+  Supplier<Boolean> hasOccupant = ()=>occupant!=null;
+  Function<Entity,Boolean> hasOccupantWhoIs = (candidate)=>occupant==candidate;
+  
+  Tile(){
+    super();
+  }
+  Tile(int x, int y, Environment parent){
+    super(x,y,parent);
+  }
+  Tile.Id getId()?
+  void resetNeighbour(Tile oldTile){
+    neighbours.keySet().stream().filter(D=>neighbours.get(D)==oldTile).findAny().ifPresent(N=>neighbours.remove(N));
+  }
+  List<Tile> getNeighbours(){
+    return Arrays.stream(Direction.all).map(D=>neighbours.get(D)).filter(N=>N!=null).collect(Collectors.toList());
+  }
+  Tile getNeighbour(Direction direction){
+    if \area == null {
+      return null;
+    }
+    return neighbours.get(direction);
+  }
+  boolean isWithin(Environment.Position otherPosition){
+    return super.isWithin(otherPosition, getWidth(), getHeight());
+  }
+  Gui.Drawable getDrawable(){
+    return null;
+  }
+  Boolean load(){
+    Arrays.stream(Direction.all).forEach(D=>neighbours.put(D,\area.getTile(getX()+D.getX(),getY()+D.getY())) );
+    if portal != null {
+      area.addEntryPoint(this);
+    }
+    if terrain != null {
+      terrain.load();
+    }
+    if occupant != null {
+      occupant.load();
+    }
+    return true;
+  }
+  Boolean tick(Double millisSinceLastFrame){
+    if terrain != null  { terrain. tick(millisSinceLastFrame); }
+    if occupant != null { occupant.tick(millisSinceLastFrame); }
+    return true;
+  }
+  void display(){
+  }
+  void undisplay(){
+  }
+  Entity.Event accept(Entity newOccupant){
+    if portal != null {
+      return portal.getOnAccept().apply(newOccupant);
+    }
+    else {
+      take(newOccupant);
+      return null;
+    }
+  }
+  void take(Entity newOccupant){
+    Environment.Location location = newOccupant.getLocation();
+    location.setX(getX());
+    location.setY(getY());
+    location.setTile(this);
+    occupant = newOccupant;
+  }
+  Association get(Association.Id id, Association.Factory factory){
+    return \associations.get(id,factory);
+  }
+  String toString(){
+	return '' "(" '' + getX() + '' "," '' +  getY() + '' ")" '';
+  }
+  void setTerrain(Terrain newTerrain){
+    terrain = newTerrain;
+    if terrain != null {
+      terrain.setFloorTile(this);
+    }
+  }
+  void setTerrain(Function<Environment.Position,Terrain> factory){
+    setTerrain(factory.apply(this));
+  }
+  boolean hasOccupant(){
+    return hasOccupant.get();
+  }
+  boolean hasOccupant(Entity otherEntity){
+   return hasOccupantWhoIs.apply(otherEntity);
+  }
+  boolean hasObstruction(){
+    return occupant != null || ( terrain != null &&! terrain.isPassable(0,0));
+  }
+  boolean isPassable(int directionX, int directionY){
+    if occupant != null {
+      return false;
+    }
+    else if terrain != null && !terrain.isPassable(directionX, directionY) {
+      return false;
+    }
+    else {
+      return true;
+    }
+  }
+  boolean isPassable(Environment.Position position){
+    return isPassable(position.getX()-getX(),position.getY()-getY());
+  }
+  Tile setPortal(Area.Generator generator){
+    this.portal = new EntryPoint(this,generator);
+    return this;
+  }
+  int getDistanceToUnexploredPaths(Entity explorer){
+    return getDistanceToUnexploredPaths(explorer, Collections.synchronizedSet(new HashSet<Tile>()),0);
+  }
+  int getDistanceToUnexploredPaths(Entity explorer,Set<Tile> investigated, int distance){
+    if investigated.add(this) {
+      if explorer.hasExplored(\area) {
+        return getPortal().getArea().getEntryPoints().parallelStream().reduce(
+          Integer.MAX_VALUE,
+          (Previous,Entry)=>Entry.getDistanceToUnexploredPaths(explorer,investigated,distance+1),
+          (Min,New)=>New<Min?New:Min);
+      }
+      else {
+        return distance;
+      }
+    }
+    else {
+      return Integer.MAX_VALUE;
+    }
+  }
+  class Way  {
+    int currentIndex = 1;
+    List<Tile> path = null;
+    Way(List<Tile> path){this.path = path;}
+    boolean step(Entity host){
+      if currentIndex < path.size() {
+        host.getLocation().stepUsingWay(host.getWalkingSpeed(), host.getLocation().getDirectionOf(path.get(++currentIndex-1)),this);
+        return true;
+      }
+      else {
+        return false;
+      }
+    }
+    void fail(){
+      --currentIndex;
+    }
+  }
+  class Path < Comparable<Path> {
+    int distanceToDestination = 0;
+    Tile tile = null;
+    Tile.Path parent = null;
+    Path (Path parentPath, Tile nextTile, Tile destination){
+      distanceToDestination = Math.abs(destination.getX()-nextTile.getX())+Math.abs(destination.getY()-nextTile.getY());
+      if parentPath != null {
+        parent = parentPath;
+        if nextTile.isPassable(parentPath.tile) == false {
+          distanceToDestination += 5000;
+          if nextTile.hasObstruction() == false {
+            distanceToDestination += 5000;
+          }
+        }
+      }
+      tile = nextTile;
+    }
+    List<Tile> collect(){
+      List<Tile> result = \parent!=null?parent.collect():new ArrayList<Tile>();
+      result.add(tile);
+      return result;
+    }
+    List<Tile> collectReverse(){
+      List<Tile> result = new ArrayList<Tile>();
+      collectReverse(result);
+      return result;
+    }
+    void collectReverse(List<Tile> result){
+      result.add(tile);
+      if parent!= null {
+        parent.collectReverse(result);
+      }
+    }
+    boolean equals(Object otherObject){
+      Path otherPath = (Path)otherObject;
+      return otherPath.distanceToDestination == distanceToDestination && otherPath.parent == parent && otherPath.tile == tile ? parent!=null ? parent.equals(otherPath.parent) : true : false;
+    }
+    int compareTo(Path otherPath) {
+      if distanceToDestination==otherPath.distanceToDestination {
+		if tile.getX()==otherPath.tile.getX()&&tile.getY()==otherPath.tile.getY() {
+		  return 0;
+		}
+		  else if(tile.getX()==otherPath.tile.getX()){
+		  return tile.getY()-otherPath.tile.getY();
+		}
+		else {
+		  return tile.getX()-otherPath.tile.getX();
+		}
+	  }
+	  else {
+		return distanceToDestination-otherPath.distanceToDestination;
+	  }
+    }
+    String toString(){
+	  StringBuilder builder = new StringBuilder();
+	  builder.append('' "*******\\n" '');
+	  toString(builder);
+	  return builder.toString();
+    }
+    void toString(StringBuilder builder){
+	  builder.append('' "[" '');
+	  builder.append(tile.getX());
+      builder.append('' "," '');
+	  builder.append(tile.getY());
+	  builder.append('' "]" '');
+	  if parent!= null {
+		parent.toString(builder);
+	  }
+    }
+    class Ways TreeSet<Path> {
+      Tile endTile;
+      Ways(){this.endTile = null;}
+      Ways(Tile endTile){this.endTile = endTile;}
+      void extend(Tile.Path toExtend, Tile toAdd){
+        add(new Tile.Path(toExtend,toAdd,endTile));
+      }
+      
+    }
+  }
+  
+> void setup(%Pass data){
+    createIdMap(Association.Id,Association);
+    createIdMap(Tile.Id, Tile);
+    createIdMap(Tile.Id, Tile);
+    createIdMap(Terrain.Id, Terrain);
+    Tile += Association.IdMap associations;
+  }
+> void output(){
+    adjustSelectors();
+  }
+> void adjustSelectors(){
+    Tiles.selectorMap.keySet().stream().forEach(mapName=>Tiles.selectorMap.get(mapName).keySet().stream().forEach(tileName=>Tiles.selectorMap.get(mapName).get(tileName).forEach(tileResult=>{
+    									 %Operator tileCall = null;
+                                         if Tiles.'mapName'.'tileName' != null {
+                                           tileCall = %Operator();
+                                           tileCall.left(|\candidate.getId()|).operator("==");
+                                           tileCall.right( %StaticCall().set(%Type().add("Tiles").add('mapName').add('tileName')).add(%E("id")));
+                                         }
+                                         else {
+                                           tileCall = %Operator().add(|\candidate.getTerrain()!=null && \candidate.getTerrain().getId()|).operator("==");
+                                           if Terrains.'mapName'.'tileName' != null{
+                                             tileCall.right( %StaticCall().set(%Type().add("Terrains").add('mapName').add('tileName')).add(%E("id")));
+                                           }
+                                           else if Terrains.Chests.'mapName'.'tileName' != null{
+                                             tileCall.right( %StaticCall().set(%Type().add("Terrains").add("Chests").add('mapName').add('tileName')).add(%E("id")));
+                                           }
+                                           else if Terrains.MonsterDens.'mapName'.'tileName' != null{
+                                             tileCall.right( %StaticCall().set(%Type().add("Terrains").add("MonsterDens").add('mapName').add('tileName')).add(%E("id")));
+                                           }
+                                         }
+                                         tileResult.set(tileCall);
+                                       })));
+  }
+}
+
+interface 'packageName'.environment.interfaces.EntryPointJoinable {
+  Tile join(Tile entryPoint){}
+}

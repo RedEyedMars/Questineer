@@ -215,13 +215,13 @@ class 'packageName'.entities  Entity  Object  Source Loaddable Tickable {
   @Integer DEAD  = 1;
   String name = null;
   ~Integer status = ALIVE;
-  ~Float "weightHeld" = 0f;
-  ~Integer "walkingSpeed" = 20;
-  ~Tile "spawn" = null;
-  ~Item->List "equippedItems" = new Item->List();
+  ~Float weightHeld = 0f;
+  ~Integer walkingSpeed = 20;
+  ~Tile spawn = null;
+  ~List<Item> equippedItems = Collections.synchronizedList(new ArrayList<Item>());
   ~Skill focusSkill = null;
   ~Environment->Location location = new Environment->Location(this);
-  ~\EntityMap->\_Relationship relationships = new \EntityMap->\_Relationship();
+  ~Relationship->\EntityMap relationships = new Relationship->\EntityMap();
   ~LinkedList<Activity> activityList = new LinkedList<Activity>();
   ~LinkedList<Entity\>Event> events = new LinkedList<Entity\>Event>();
   
@@ -244,18 +244,10 @@ class 'packageName'.entities  Entity  Object  Source Loaddable Tickable {
     return false;
   }
   Float getItemDamage(){
-    Float "sum" = 0f;
-	for Item "item" : "equippedItems" {
-	  "sum" \+= "item".getDmg().getValue(this);
-	}
-	return "sum";
+	return Streamer.sum(equippedItems,("S,item")->"item".getDmg().getValue(Entity.this));
   }
   Float getItemDefense(){
-    Float "sum" = 0f;
-	for Item "item" : "equippedItems" {
-	  "sum" \+= "item".getDef().getValue(this);
-	}
-	return "sum";
+    return Streamer.sum(equippedItems,("S,item")->"item".getDef().getValue(Entity.this));
   }
   Boolean canEquip(Item "item"){
     return this."str".getValue() > "weightHeld" \+ "item".getWeight();
@@ -346,15 +338,13 @@ class 'packageName'.entities  Entity  Object  Source Loaddable Tickable {
     newAssociation.on(new Events->\Joined(recruiter, this));
   }
   Boolean isFriendlyWith(Entity otherEntity){
-    if relationships.containsKey(otherEntity) {
-      return relationships.get(otherEntity).getInfluence() >= 0;
+    Relationship privateRelationship = relationships.get(otherEntity);
+    if privateRelationship != null {
+      return privateRelationship.getInfluence() >= 0;
     }
-    for Association association: \associations.getCompleteList() {
-      if association.contains(otherEntity) {
-        return true;
-      }
+    else {
+      return Streamer.has(\associations.getCompleteList(), otherEntity);
     }
-    return false;
   }
   Activity start(Activity newActivity){
     newActivity.setHost(this);
@@ -421,18 +411,15 @@ class 'packageName'.entities  Entity  Object  Source Loaddable Tickable {
     Entity.addGainLoss(Quest,Entity);
     Entity.addGainLoss(Activity,Entity);
     
-    \createList(Item);
-    \createList(Usable);
-    \createList(Activity);
     \createListMap(Source, Int);
-    \createMap(Entity, Relationship);
+    \createIdMap(Entity, |\getOther()|, Relationship);
     
     Set<String> statNames = data.getHeroStat();
     Parameters allStatList = new Parameters ();
     Body randomStatBody = {};
     for String statName : statNames {
       String vName = statName.toLowerCase();
-      Entity += class statName /Object/ Entity->Stat {
+      Entity += class statName // Entity->Stat {
         Integer value = 0;
         ~ListMaps->\Sources->\_Int history = new ListMaps->\Sources->\_Int();
         Integer getValue(Entity user){
@@ -481,25 +468,12 @@ class 'packageName'.entities  Entity  Object  Source Loaddable Tickable {
 	  Float "preciseDamage" = "eventDamage" - this.con.getValue() - this.getItemDefense();
 	  Integer "damageToTake" = "(int)(float)preciseDamage";
 	  Float "eventModifier" = "event".getDamage().getModifier();
-	  for Item "item" : "event".getAttacker().getEquippedItems() {
-		"item".decreaseHp((int)("item".getDef().getValue(this) * "eventModifier" / "eventDamage") );
-		"item".on(new Events->\ChangeItem(this,"item"));
-	  }
+	  "event".getAttacker().getEquippedItems().parallelStream().forEach(("item")->
+		"item".decreaseHp(Entity.this,(int)("item".getDef().getValue(Entity.this) * "eventModifier" / "eventDamage")) );
 	  if "damageToTake" < 1 {
 		"damageToTake" = 1;
 	  }
-	  while "damageToTake" > 13 {
-		"damageToTake" -= 3;
-		\takeDamage("event".getAttacker(),3);
-	  }
-	  while "damageToTake" > 5{
-		"damageToTake" -= 2;
-		\takeDamage("event".getAttacker(),2);
-	  }
-	  while "damageToTake" > 0{
-		"damageToTake" -= 1;
-		\takeDamage("event".getAttacker(),1);
-	  }
+	  IntStream.range(0,"damageToTake").parallel().forEach(("I")->\takeDamage("event".getAttacker(),1));
 	};
   }
 > Statement getStatRange(%T range, Context context){
@@ -667,21 +641,11 @@ class 'packageName'.entities  Entity  Object  Source Loaddable Tickable {
     }
 	outputClass +=
 	  Boolean has(inputClass->Id "findId"){
-	    for inputClass 'asVariable' : 'asList'.getAll() {
-		  if `getIdStatement` == "findId" {
-			return true;
-		  }
-		}
-		return false;
+	    return Streamer.has('asList'.getAll(), ('asVariable')->`getIdStatement`, "findId");
 	  }
 	outputClass +=
 	  inputClass get(inputClass->Id "findId"){
-	    for inputClass 'asVariable' : 'asList'.getAll() {
-		  if `getIdStatement` == "findId" {
-			return 'asVariable';
-		  }
-		}
-		return null;
+	    return Streamer.get('asList'.getAll(), ('asVariable')->`getIdStatement`, "findId");
 	  }
 	outputClass +=
 	  void gain(inputClass 'asVariable', Source "source"){
@@ -693,12 +657,7 @@ class 'packageName'.entities  Entity  Object  Source Loaddable Tickable {
 	  }
 	outputClass +=
 	  void lose(inputClass->Id "removeId", Source "source"){
-	    ~inputClass "toRemove" = null;
-	    for inputClass 'asVariable' : 'asList'.getFrom("source") {
-	      if `getIdStatement` == "removeId" {
-	        "toRemove" = 'asVariable'; 
-	      }
-	    }
+	    ~inputClass "toRemove" = Streamer.get('asList'.getFrom("source"), ('asVariable')->`getIdStatement`, "removeId");
 	    if "toRemove" == null {
 	      throw '' 'inputClass.getName()' + ":"''\+removeId\+''"  not found!" '';
 	    }

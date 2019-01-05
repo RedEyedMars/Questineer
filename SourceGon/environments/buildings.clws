@@ -1,20 +1,26 @@
 
 ?class 'packageName'.environments.buildings Building Object Area->TileGenerator {
+  enum Imports //{Treasury->Cost costs=null;}
   enum Type //{ void NONE; }
   Building->Type getId(){
     return Type.NONE;
   }
-  Treasury->Cost->List getCosts(){
+  List<Treasury\>Cost> getCosts(){
     return null;
   }
   ?void generateAt(int x, int y, Area newArea){}
   void place(Area area, int x, int y){
     \generateAt(x,y,area);
   }
+  
+  interface Factory // {
+     Building create(){}
+  }
 }
 class 'packageName'.environments.buildings Buildings {
   enum Imports //{
     Area area = null;
+    Area->TerrainChoice choice = null;
   }
 > void declaration(%T declaration, String mapName){
     String buildingName = 'declaration->"buildingName"';
@@ -35,18 +41,29 @@ class 'packageName'.environments.buildings Buildings {
         Integer floorHeight = Integer.parseInt('element->"defaultSize"->"patchHeight"');
         Integer floorSize = floorWidth\*floorHeight;
         Area.GeneratorMapValues generatorValues = Area.addGeneratorClass(Buildings->'mapName',buildingName,floorWidth,floorHeight,floorSize);
-        Buildings->'mapName'->'buildingName' += class FloorGenerator //Area->TileGenerator {
+        Buildings->'mapName'->'buildingName' += ~class FloorGenerator //Area->TileGenerator {
 	      void generateAt(int x, int y, Area newArea){
 	        \setupChoices(newArea);
-            newArea.add(new Tiles->'mapName'->'element->"defaultTileName"'(x,y,newArea.getParent()));
           }
+          
+          void setInnerFloor(Area->FloorChoice choice){}
+          void setLeftSideFloor(Area->FloorChoice choice){}
+          void setUpSideFloor(Area->FloorChoice choice){}
+          void setRightSideFloor(Area->FloorChoice choice){}
+          void setDownSideFloor(Area->FloorChoice choice){}
+          void setRelativeFloor(Area->FloorChoice choice, int index, int startX, int startY){}
 	    }
+	    if element->"defaultTileName" != null && 'element->"defaultTileName"'.equals("None") == false {
+	      Buildings->'mapName'->'buildingName'->FloorGenerator->*"generateAt".appendToBody(|
+            "newArea".add(new Tiles->'mapName'->'element->"defaultTileName"'("x","y","newArea".getParent()));|);  
+        }
         generatorValues.addDefaultVariablesAndMethods(buildingName,Buildings->'mapName'->'buildingName'->FloorGenerator);
         Buildings->'mapName'->'buildingName'->*"generateAt".appendToBody({"newArea".add(this);});
         element : atom : patch_element {
           Buildings->'mapName'->'buildingName'->*"generateAt".appendToBody(
             Area.getPatchElement(atom,mapName,Buildings->'mapName',buildingName));
         }
+        generatorValues.finish();
       }
       else {
         String roomVariableName = 'element->"roomName"'.toLowerCase();

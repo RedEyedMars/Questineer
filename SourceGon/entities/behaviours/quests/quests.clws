@@ -49,7 +49,7 @@ class 'packageName'.entities.behaviours.quests  Quest Object Usable {
   ~Quest->Status    status             = Quest->Status.UNSTARTED;
   ~Activity currentActivity      = null;
   ~Integer currentActivityIndex  = -1;
-  ~Activity->List activities      = new Activity->List();
+  ~List<Activity> activities     = new ArrayList<Activity>();
   Quest->Id getId(){ return null; }
   Boolean canChase(){
     return false;

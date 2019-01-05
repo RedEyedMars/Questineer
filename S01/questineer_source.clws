@@ -1,0 +1,177 @@
+imports questineer
+import headers
+
+
+
+import general/general
+import overview/games
+import overview/menus
+import overview/treasuries
+import entities/entities
+import environments/environments
+import events/events
+import gui/loaders
+
+
+> void setup(%Pass data){
+  }
+> void generate(%Pass data){
+	%Helper.setupRootDirectory("../Questineer.");
+	%T root = data.getRoot();
+	root : imports : import_any {
+		imports : import_events : import_event {
+			import_events : element : event_declaration { 
+				Events.declaration(element);
+			}
+		}
+	}
+	\setupGui();
+	Conditions.setup(data);
+	Aspects.setup(data);
+	Items.setup(data);
+	Entity.setup(data);
+	Skills.setup(data);
+	Activities.setup(data);
+	Relationship.setup(data);
+	Quests.setup(data);
+	Treasury.setup(data);
+	Environment.setup(data);
+	Tile.setup(data);
+	Area.setup(data);
+	
+	root : imports : import_any {
+		Gui.importAny(imports);
+	}
+	root : imports : import_any {
+		\importAny(imports);
+	}
+	Affinities.output();
+	Traits.output();
+	Skills.output();
+	Tile.output();
+	Game.loadDeclaration(root->loadBody);
+	Game.output();
+}
+> void importAny(%T import_any){
+    import_any : import_payment_types : import_payment_type {
+		import_payment_types : element : payment_type_declaration {
+			Treasury.paymentTypeDec(element);
+		}
+	}
+	#
+	import_any : import_events : import_event {
+		import_events : element : event_declaration {
+			Events.declaration(element);
+		}
+	}
+	#
+	import_any : import_items : import_item {
+		import_items : element : import_any {
+			\importAny(element);
+		}
+		import_items : element : item_declaration {
+			Items.declaration(element);
+		}
+	}
+	import_any : import_reason : import_reason {
+		import_reason : element : reason_declaration {
+			Relationship.declaration(element);
+		}
+	}
+	import_any : import_aspects : import_aspect {
+		import_aspects : element : aspect_declaration {
+			Aspects.declaration(element);
+		}
+	}
+	import_any : import_affinities : import_affinity {
+		import_affinities : element : affinity_declaration {
+			Affinities.declaration(element);
+		}
+	}
+	import_any : import_traits : import_trait {
+		import_traits : element : trait_declaration {
+			Traits.declaration(element);
+		}
+	}
+	import_any : import_conditions : import_condition {
+		import_conditions : element : condition_declaration {
+			Conditions.declaration(element);
+		}
+	}
+	
+	import_any : import_skills : import_skill {
+		import_skills : element : skill_declaration{
+			Skills.declaration(element);
+		}
+	}
+	import_any : import_activities : import_activity {
+		import_activities : element 
+		  : activity_type_declaration{
+			ActivityTypes.declaration(element);
+		  }
+		  : activity_declaration{
+			Activities.declaration(element);
+		  }
+	}
+	import_any : import_attacks : import_attack {
+		import_attacks : element : attack_declaration{
+			Attacks.declaration(element);
+		}
+	}
+	import_any : import_supports : import_support {
+		import_supports : element : support_declaration{
+			Supports.declaration(element);
+		}
+	}
+	import_any : import_association : import_association {
+		import_association : element : association_declaration {
+			Associations.declaration(element);
+		}
+	}
+	import_any : import_map : import_map {
+		Environment.declaration(import_map);
+	}
+	import_any : import_quests : import_quest {
+		import_quests : element : quest_type_declaration {
+			Quests.typeDeclaration(element);
+		}
+	}
+ }
+> %Type getTypeName(%T nameToken){
+    if nameToken->mapDeclaration != null {
+      %Type type = %Type("HashMap");
+      nameToken->mapDeclaration : subType : type_name {
+        type.template(getTypeName(subType));
+      }
+      return type;
+    }
+	if nameToken->findType != null {
+	  %Class fullName = %Structure.findClass(%Helper.camelize('nameToken->typeName')); 
+	  if fullName!=null {
+		return fullName.getFullName();
+	  }
+	  throw new RuntimeException("Could not find "+ %Helper.camelize('nameToken->typeName')+" class!");
+	}
+	else {
+      %Type type = %Type();
+	  nameToken : element : typeName {
+		type.add(%E( %Helper.camelize('element')));
+	  }
+	  if type.getAsClass() != null {
+	    if nameToken->isListToken != null {
+	      return %Type().set(%E("List")).template(type);
+	    }
+	    else {
+	      return type;
+	    }
+	  }
+	  else {
+	    %Class fullName = %Structure.findClass(type.evaluate()); 
+	    if fullName!=null {
+          return fullName.getFullName();
+	    }
+	    throw new RuntimeException("Could not find "+type.evaluate()+" class!");
+	  }
+	}
+	
+ }

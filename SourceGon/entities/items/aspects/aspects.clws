@@ -34,12 +34,8 @@ class 'packageName'.entities.items.aspects  Aspects {
 	  Events.addToEventMethod('element->"event_names"', Aspect, eventBody);
 	}
 	Aspects.getMethod("create").prependToBody(
-	  | if ''aspectName''.equals("aspectName") {
+	  | if '' 'aspectName' ''.equals("aspectName") {
 			return new Aspects->'aspectName'();
 		} |);
   }
 }
-
-	
-	
-	

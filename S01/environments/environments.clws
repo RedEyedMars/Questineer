@@ -1,0 +1,632 @@
+import tiles
+import areas
+import buildings
+
+class 'packageName'.environments.Environment : Loaddable Tickable{
+  interface Movable  {
+    Entity.Event moveX(Integer x)?
+    Entity.Event moveY(Integer y)?
+  }
+  interface Areaable  {
+    Area getArea()?
+  }
+  String name = null;
+  Area startArea = null;
+  Area.Generator areaGenerator = null;
+  List<Function<Environment.Position,Tile>> floorTiles = new ArrayList<Function<Environment.Position,Tile>>(); 
+  List<Area> areas = new ArrayList<Area>();
+  Map<Area,Integer> activeAreas = new HashMap<Area,Integer>();
+  Tile.IdMap tiles = new Tile.IdMap();
+  Area.IdMap areaMap = new Area.IdMap();
+  void add(Area newArea){
+    areas.parallelStream().forEach( A => {
+                                            A.findDistance(newArea);
+                                            A.getEntryPointToward(newArea); });
+    areas.add(newArea);
+    areaMap.add(newArea);
+    newArea.setParent(this);
+  }
+  void addActiveArea(Area area){
+    if activeAreas.containsKey(area){
+      activeAreas.put(area,activeAreas.get(area)+1);
+    }
+    else {
+      activeAreas.put(area,1);
+    }
+  }
+  void removeActiveArea(Area area){
+    if activeAreas.containsKey(area) {
+      Integer currentAmount = activeAreas.get(area);
+      if currentAmount <= 1 {
+        activeAreas.remove(area);
+      }
+      else {
+        activeAreas.put(area,currentAmount-1);
+      }
+    }
+  }
+  Area getArea(Integer index){
+    return areas.get(index);
+  }
+  List<Area> get(Area.Id id){
+    return areaMap.getAll(id);
+  }
+  Tile getTile(int x, int y){
+    Area found = areas.parallelStream().filter( A => A.getTile(x,y)!=null).findAny().orElse(null);
+    if found == null {
+      return null;
+    }
+    return found.getTile(x,y);
+  }
+  List<Tile> collectTiles(Tile.Id tileId,Predicate<Tile> predicate){
+    if tiles.has(tileId) == false {
+      return new ArrayList<Tile>();
+    }
+    else {
+      return tiles.getAll(tileId).stream().filter(predicate).collect(Collectors.toList());
+    }
+  }
+  List<Tile> getTilesWithin(Environment.Position position, Float range, Tile.Id tileId){
+    return collectTiles((tileId),(tile)=>position.getDistanceTo(tile) <= range);
+  }
+  void add(Entity newEntity){
+    startArea.add(newEntity);
+  }
+  void add(Tile newTile){
+    tiles.add(newTile);
+  }
+  class Position {
+    Integer x = Integer.MIN_VALUE;
+    Integer y = Integer.MIN_VALUE;
+    Environment parent = null;
+    Position(){
+    }
+    Position(int x, int y){
+      this.x = x;
+      this.y = y;
+    }
+    Position(int x, int y, Environment parent){
+      this.x = x;
+      this.y = y;
+      this.parent = parent;
+    }
+    Position(Position otherPosition){
+      this.x = otherPosition.x;
+      this.y = otherPosition.y;
+      this.parent = otherPosition.parent;
+    }
+    Double getDistanceTo(Position otherPosition){
+      int xDirection = otherPosition.getX() - getX() ;
+      int yDirection = otherPosition.getY() - getY();
+      return Math.sqrt(xDirection * xDirection + yDirection * yDirection);
+    }
+    Double getDirectionTo(Position otherPosition){
+      Integer xDirection = otherPosition.getX() - getX() ;
+      Integer yDirection = otherPosition.getX() - getY();
+      if xDirection == 0 {
+        if yDirection > 0 {
+          return Math.PI / 2.0;
+        }
+        else if yDirection < 0 {
+          return Math.PI * 3.0 / 2.0;
+        }
+        else {
+          return 0.0;
+        }
+      }
+      else {
+        return Math.atan2(yDirection,xDirection);
+      }
+    }
+    Direction getDirectionOf(Position otherPosition){
+      Integer xDirection = otherPosition.getX() - getX() ;
+      if xDirection > 0 {
+        return Direction.right;
+      }
+      else if xDirection < 0{
+        return Direction.left;
+      }
+      Integer yDirection = otherPosition.getY() - getY();
+      if yDirection > 0 {
+        return Direction.up;
+      }
+      else if yDirection < 0 {
+        return Direction.down;
+      }
+      else {
+        return null;
+      }
+    }
+    Direction[] getDirectionsOf(Position otherPosition){
+      Integer xDirection = otherPosition.getX() - getX() ;
+      Integer yDirection = otherPosition.getY() - getY();
+      if xDirection > 0 {
+        if yDirection > 0 {
+          return Direction.rightUp;
+        }
+        else if yDirection < 0 {
+          return Direction.rightDown;
+        }
+        else {
+          return new Direction(Direction.right)[];
+        }
+      }
+      else if xDirection < 0{
+        if yDirection > 0 {
+          return Direction.leftUp;
+        }
+        else if yDirection < 0 {
+          return Direction.leftDown;
+        }
+        else {
+          return new Direction(Direction.left)[];
+        }
+      }
+      else if yDirection > 0 {
+        return new Direction(Direction.up)[];
+      }
+      else if yDirection < 0 {
+        return new Direction(Direction.down)[];
+      }
+      else {
+        return new Direction()[];
+      }
+    }
+    
+    Boolean isWithin(Environment.Position otherPosition, Integer width, Integer height){
+      Integer dX = otherPosition.getX() - x;
+      Integer dY = otherPosition.getY() - y;
+      return dX >= 0 && dX <= width && dY >= 0 && dY <= height;
+    }
+    Boolean isWithin(Environment.Position otherPosition, Float range, Double angleLeft, Double angleRight){
+      Integer xDirection = getX() - otherPosition.getX() ;
+      Integer yDirection = getY() - otherPosition.getY();
+      Double radius = Math.sqrt(Math.pow(xDirection,2.0)+Math.pow(yDirection,2.0));
+      if xDirection == 0 {
+        if yDirection < 0 {
+          return radius <= range && angleLeft >= Math.PI * 3.0 / 2.0 && angleRight <= Math.PI * 3.0 / 2.0;
+        } 
+        else if yDirection > 0 {
+          return radius <= range && angleLeft >= Math.PI / 2.0 && angleRight <= Math.PI / 2.0;
+        }
+        else {
+          return true;
+        }
+      }
+      else {
+        Double angle = Math.atan2(yDirection , xDirection);
+        return radius <= range && angleLeft >= angle && angleRight <= angle;
+      }
+    }
+  }
+  class Location Environment.Position : Environment.Movable Environment.Areaable {
+    > float gridFactor = 6f;
+    > float gridXFactor = gridFactor*1.85f;
+    > float gridYFactor = gridFactor*3.85f;
+    Location(Environment.Position position){
+      super(position);
+    }
+    Location(Entity entity){
+      this.host = entity;
+    }
+    class Event  {
+      class Move < Area.Event.Tick {
+        Environment.Location actor = null;
+        Direction direction = null;
+        Move(Environment.Location actor, Direction direction){this.actor = actor; this.direction = direction;}
+        void tick(Double millisSinceLastFrame){
+          Entity.Event event = direction.move(actor);
+          actor.getHost().changeState(ImageStates.idle);
+          if event!=null {
+            actor.getHost().addEvent(event);
+          }
+        }
+      }
+      class MoveByWay < Area.Event.Tick {
+        Environment.Location actor = null;
+        Direction direction = null;
+        Tile.Way way = null;
+        MoveByWay(Environment.Location actor, Direction direction, Tile.Way way){this.actor = actor; this.direction = direction; this.way = way;}
+        void tick(Double millisSinceLastFrame){
+          Entity.Event event = direction.move(actor);
+          actor.getHost().changeState(ImageStates.idle);
+          if event!=null {
+            if event instanceof Entity.Event.FailedToMove {
+              way.fail();
+            }
+            actor.getHost().addEvent(event);
+          }
+        }
+      }
+    }
+    Entity host = null;
+    Float radius = 0.5f;
+    Float facing = 0f;
+    Area area = null;
+    Tile tile = null;
+    void setX(Integer newX) {
+      super.setX(newX);
+      if host != null {
+        host.getDrawable().setVisualX(((float)newX + getY())/'gridXFactor+"f"');
+        host.getDrawable().setVisualY(((float)getY()-newX)/'gridYFactor+"f"'+0.05f);
+      }
+    }
+    void setY(Integer newY) {
+      super.setY(newY);
+      if host != null {
+        host.getDrawable().setVisualX(((float)getX()+newY)/'gridXFactor+"f"');
+        host.getDrawable().setVisualY(((float)newY - getX())/'gridYFactor+"f"'+0.05f);
+      }
+    }
+    void setArea(Area newArea){
+      if host != null {
+        if area != null {
+          area.remove(host);
+        }
+        newArea.add(host);
+      }
+      area = newArea;
+    }
+    Boolean isWithin(Environment.Location otherLocation, Float range, Double angleLeft, Double angleRight){
+      Float tFacing = otherLocation.getFacing();
+      return super.isWithin(otherLocation, range, angleLeft + tFacing, angleRight + tFacing);
+    }
+    Boolean isWithin(Environment.Position otherPosition){
+      return super.isWithin(otherPosition, radius, Math.PI * 2.0, 0.0);
+    }
+    List<Entity> getEntitiesWithin(Float within){
+      return area.getEntitiesWithin(this,within);
+    }
+    List<Entity> getEntitiesWithin(Float within, Predicate<Entity> targetCriteria){
+      return area.getEntitiesWithin(this,within,targetCriteria);
+    }
+    Entity getClosestEntity(Predicate<Entity> criteria){
+      return area.getClosestEntity(this,criteria);
+    }
+    Tile getClosestTile(Predicate<Tile> criteria){
+      return area.getClosestTile(this,criteria);
+    }
+    List<Area> getAreasWith(Predicate<Tile> criteria,Comparator<Area> comparator, Float range){
+      return \parent.getAreas().parallelStream().filter(A=>A.getDistanceTo(area)< range)
+               .filter(A=>A.has(criteria))
+               .sorted(comparator).collect(Collectors.toList()); 
+    }
+    List<Area> getAreasWithTile(Tile.Id tileId, Float range){
+      return \parent.getAreas().parallelStream().filter(A=>A.getDistanceTo(area) < range)
+                .filter(A=>A.getTileMap().has(tileId))
+                .collect(Collectors.toList());
+    }
+    List<Tile> getTilesWithin(Float range, Tile.Id id){
+      if area.getTileMap().has(id) == false {
+        return new ArrayList<Tile>();
+      }
+      return area.getTileMap().getAll(id).parallelStream().filter(T=>getDistanceTo(T) <= range)
+                .collect(Collectors.toList());
+    }
+    Tile getUnexploredPoint(){
+      return area.getUnexploredPoint(host);
+    }
+    void step(Integer speed, Environment.Position otherPosition){
+      step(speed,getDirectionOf(otherPosition));
+    }
+    void step(Integer speed, Direction direction){
+      if direction != null {
+        facing = direction.getFloatValue();
+        host.changeState(ImageStates.walk);
+        host.changeState(direction.getStateId());
+        area.addEvent(speed, new Environment.Location.Event.Move(this,direction));
+      }
+    }
+    void stepUsingWay(Integer speed, Direction direction, Tile.Way way){
+      if direction != null {
+        facing = direction.getFloatValue();
+        host.changeState(ImageStates.walk);
+        host.changeState(direction.getStateId());
+        area.addEvent(speed, new Environment.Location.Event.MoveByWay(this,direction,way));
+      }
+    }
+    Boolean isCloseAsPossibleTo(Tile tile){
+      if tile.isPassable(0,0) {
+        return isWithin(tile);
+      }
+      else {
+        return Arrays.stream(getDirectionsOf(tile)).anyMatch(
+                 direction => isCloseAsPossibleTo(tile.getNeighbour(direction)));
+      }
+    }
+    void move(Integer xDirection, Integer yDirection){
+      x += xDirection;
+      y += yDirection;
+    }
+    Entity.Event moveX(Integer xDirection){
+      Tile nextTile = area.getTile(x + xDirection, y);
+      if nextTile == null {
+        return new Entity.Event.FailedToMove(nextTile);
+      }
+      else if nextTile.isPassable(-xDirection,0) {
+        return nextTile.accept(host);
+      }
+      else if nextTile.hasOccupant() {
+        return new Entity.Event.FailedToMove.TileHasOccupant(nextTile,nextTile.getOccupant());
+      }
+      else if nextTile.getTerrain()!=null && nextTile.getTerrain().isPassable(-xDirection,0) == false {
+        return new Entity.Event.FailedToMove.TerrainImpassable(nextTile,nextTile.getTerrain());
+      }
+      else {
+        return new Entity.Event.FailedToMove(nextTile);
+      }
+    }
+    Entity.Event moveY(Integer yDirection){
+      Tile nextTile = area.getTile(x,y + yDirection);
+      if nextTile == null {
+        return new Entity.Event.FailedToMove(nextTile);
+      }
+      else if nextTile.isPassable(0,-yDirection) {
+        return nextTile.accept(host);
+      }
+      else if nextTile.hasOccupant() {
+        return new Entity.Event.FailedToMove.TileHasOccupant(nextTile,nextTile.getOccupant());
+      }
+      else if nextTile.getTerrain()!=null && nextTile.getTerrain().isPassable(0,-yDirection) == false {
+        return new Entity.Event.FailedToMove.TerrainImpassable(nextTile,nextTile.getTerrain());
+      }
+      else {
+        return new Entity.Event.FailedToMove(nextTile);
+      }
+    }
+    void moveTo(Environment.Position otherPosition){
+      x = otherPosition.x;
+      y = otherPosition.y;
+      \parent = otherPosition.getParent();
+    }
+    void moveTo(Tile otherTile){
+     x = otherTile.x;
+     y = otherTile.y;
+     \parent = otherTile.getParent();
+      area = otherTile.getArea();
+      tile = otherTile;
+      otherTile.accept(host);
+    }
+    boolean moveToAround(Tile otherTile){
+      Tile moveToTile = otherTile;
+      if otherTile.hasOccupant() {
+        moveToTile = otherTile.getArea().getTiles().parallelStream()
+            .filter(T=>!T.hasOccupant())
+            .sorted(new Tile.Comparators.Distance.Ascending(otherTile))
+            .findFirst().orElse(null);
+        
+      }
+      if moveToTile != null {
+        moveTo(moveToTile);
+        return true;
+      }
+      else {
+        return false;
+      }
+    }
+    
+    Tile.Way getWay(Tile endTile){
+      Tile.Path path = new Tile.Path(null,tile,endTile);
+      Tile.Path.Ways ways = new Tile.Path.Ways();
+      ways.add(path);
+      Set<Tile> investigated = new HashSet<Tile>();
+      investigated.add(null);
+      investigated.add(tile);
+      List<Tile.Path> tried = new ArrayList<Tile.Path>(); 
+      while path.getTile() != endTile && ways.isEmpty() == false {
+        path = ways.pollFirst();
+        tried.add(path);
+        for Tile neighbour: path.getTile().getNeighbours() {
+          if investigated.add(neighbour)&& (neighbour.isPassable(path.getTile()) || neighbour.hasObstruction()) {
+            ways.add(new Tile.Path(path,neighbour,endTile));
+          }
+        }
+      }
+      if path.getTile() == endTile {
+        return new Tile.Way(path.collect());
+      }
+      else {
+        System.err.println('' "Could not make path!" '');
+        for Tile.Path trie: tried {
+          System.out.println(path);
+        }
+        return null;
+      }
+    }
+  }
+  interface FactoryHelper {
+    void populate(Environment client, Float x, Float y)?
+  }
+  interface Factory {
+    Environment create()?
+  }
+  Boolean load(){
+    Area newArea = areaGenerator.generate();
+    if startArea == null {
+      startArea = newArea;
+    }
+    if newArea != null {
+      newArea.load();
+      add(newArea);
+    }
+    return true;
+  }
+  Boolean tick(Double millisSinceLastFrame){
+    List<Area> currentlyActive = new ArrayList<Area>();
+    currentlyActive.addAll(activeAreas.keySet());
+    currentlyActive.parallelStream().forEach( A => A.tick(millisSinceLastFrame));
+    return true;
+  }
+  # boolean join(Tile yourEntryPoint){
+    Environment self = this;EntryPoint myEntryPoint = areas.stream().filter(A=>A!=yourEntryPoint.getArea()).flatMap(A=>A.getEntryPoints().stream()).filter(E=>E.getSister()==null).findAny().orElse(null);
+      if myEntryPoint != null { myEntryPoint.setSister(yourEntryPoint); yourEntryPoint.setSister(myEntryPoint);  areas.stream().forEach(A=>A.findDistance(yourEntryPoint.getArea())); yourEntryPoint.getArea().getParent().areas.stream().forEach(A=>A.findDistance(myEntryPoint.getArea())); return true; }  else {}   
+    yourEntryPoint.setSisterGenerator(this.areaGenerator);
+    return true;
+  } #
+  boolean join(Environment otherEnvironment){
+    Tile myEntryPoint = areas.stream()
+      .flatMap(A=>A.getEntryPoints().stream())
+      .filter(E=>E.getPortal().getDestinationArea()==null)
+      .findAny().orElse(null);
+    Tile yourEntryPoint = otherEnvironment.areas.stream()
+      .flatMap(A=>A.getEntryPoints().stream())
+      .filter(E=>E.getPortal().getDestinationArea()==null)
+      .findAny().orElse(null);
+    if myEntryPoint != null && yourEntryPoint != null {
+      EntryPoint.addSisterTile(myEntryPoint,yourEntryPoint);
+      EntryPoint.addSisterTile(yourEntryPoint,myEntryPoint);
+      areas.stream()
+        .forEach(A=>A.findDistance(yourEntryPoint.getArea()));
+      otherEnvironment.areas.stream()
+        .forEach(A=>A.findDistance(myEntryPoint.getArea()));
+      return true;
+    }
+    else {
+      return false;
+    }
+    
+  }
+> void setup(%Pass data){
+  }
+> void declaration(%T declarationToken){
+    String mapName = 'declarationToken->map_header->mapName';
+    
+    Game.EnvironmentList.add(mapName);
+    Environments += class 'mapName' Environment {
+      'mapName'(){}
+      Boolean load(){
+        return super.load();
+      }
+    }
+    Environments.'mapName' += class Factory < Environment.Factory {
+        Environment create(){
+          return new Environments.'mapName'();
+        }
+      }
+    Environments::create(String) -= |
+      if \environmentName.equals(''mapName'') {
+        return new Environments.'mapName'();
+      }|
+    List<String> underneathTiles = new ArrayList<String>();
+    List<String> nodeTiles = new ArrayList<String>();
+    List<String> backgroundTiles = new ArrayList<String>();
+    
+    Tiles += class 'mapName'  {}
+    Terrains += class 'mapName'  {}
+    Terrains.MonsterDens += class 'mapName'  {}
+    Terrains.Chests += class 'mapName'  {}
+    
+    declarationToken : element : map_header {
+      element : atom : import_tile {
+        atom : quark : tile_declaration {
+          Tiles.declaration(quark, mapName,underneathTiles);
+        }
+      }
+    }
+    for String tileName: underneathTiles {
+      Environments.'mapName'::*() -= |floorTiles.add(Tiles.'mapName'.'tileName'::create);|
+    }
+    Areas += class 'mapName' {}
+    boolean isFirst = true;
+    declarationToken : area : area_declaration {
+      String areaClassName = Area.declaration(area,mapName, underneathTiles);
+      String areaName = areaClassName.toLowerCase();
+      if isFirst { Environments.'mapName'::*() -= |areaGenerator = Areas.'mapName'.'areaName';| }
+      Environments.'mapName'::*() -= |Areas.'mapName'.'areaName'.setup();|
+      Environments.'mapName'::*() -= |Areas.'mapName'.'areaName' = new Areas.'mapName'.'areaClassName'.Generator(this);|
+      isFirst = false;
+    }
+    Environments.'mapName'::*() -= {if name == null { name = ''mapName''; }}
+    
+    if declarationToken->structures_declaration != null {
+      Buildings += class 'mapName' {}
+    }
+    declarationToken : buildings : structures_declaration {
+      buildings : building : structure_declaration {
+        Buildings.declaration(building,mapName);
+      }
+    }
+  }
+}
+class 'packageName'.environments.Environments {
+  @Environment create(String environmentName){
+    return null;
+  }
+> %Output getId(String name){
+    return |Gui.game.getEnvironments().'%Helper.asGetMethod(name)'()|;
+  }
+}
+class 'packageName'.environments.Direction {
+  Entity.Event move(Environment.Movable movable){
+    return null;
+  }
+  int getX(){ return 0; }
+  int getY(){ return 0; }
+  Float getFloatValue(){
+    return null;
+  }
+  ImageStates getStateId(){
+    return null;
+  }
+  @Direction.Right right = new Direction.Right();
+  class Right Direction {
+    Entity.Event move(Environment.Movable movable){
+      return movable.moveX(1);
+    }
+    int getX(){ return 1; }
+    int getY(){ return 0; }
+    Float getFloatValue(){
+      return 0f;
+    }
+    ImageStates getStateId(){
+      return ImageStates.right;
+    }
+  }
+  @Direction.Left left = new Direction.Left();
+  class Left Direction {
+    Entity.Event move(Environment.Movable movable){
+      return movable.moveX(-1);
+    }
+    int getX(){ return -1; }
+    int getY(){ return 0; }
+    Float getFloatValue(){
+      return (float)Math.PI;
+    }
+    ImageStates getStateId(){
+      return ImageStates.left;
+    }
+  }
+  @Direction.Up up = new Direction.Up();
+  class Up Direction {
+    Entity.Event move(Environment.Movable movable){
+      return movable.moveY(1);
+    }
+    int getX(){ return 0; }
+    int getY(){ return 1; }
+    Float getFloatValue(){
+      return (float)(Math.PI/2.0);
+    }
+    ImageStates getStateId(){
+      return ImageStates.right;
+    }
+  }
+  @Direction.Down down = new Direction.Down();
+  class Down Direction {
+    Entity.Event move(Environment.Movable movable){
+      return movable.moveY(-1);
+    }
+    int getX(){ return 0; }
+    int getY(){ return -1; }
+    Float getFloatValue(){
+      return (float)(Math.PI*1.5);
+    }
+    ImageStates getStateId(){
+      return ImageStates.left;
+    }
+  }
+  @Direction[] leftDown = new Direction(left,down)[];
+  @Direction[] leftUp = new Direction(left,up)[];
+  @Direction[] rightDown = new Direction(right,down)[];
+  @Direction[] rightUp = new Direction(right,up)[];
+  @Direction[] all = new Direction(down,left,right,up)[];
+}

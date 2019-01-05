@@ -10,7 +10,7 @@ type Wolf_Pelt_Hunt
 	    event->quest << findAndGo Town[Entry]
 	    event->quest << findAndGo Forest[Entry]
 	  }
-	  event->quest << hunt Entity[Wolf | Dire Wolf] , Forest[Lone Rock] , 6.0 , new Quest.Listeners.Die(event->quest) , new Quest.QuestCriteria.Success(event->quest)
+	  event->quest << hunt Entity[Wolf | Dire Wolf] , Forest[Lone Rock] , 6.0 , new Quest.Listeners.Die(event->quest) , new Quest.Criteria.Success(event->quest)
 	}
 	idle {
 	  event->host start Exploring(200)

@@ -1,0 +1,16 @@
+
+import headers
+import gui/loaders
+< Game : \com.\rem.\qstnr.game ;
+> void setup(%Pass data){
+  }
+> void generate(Pass data){
+	\setup("../Questineer/src");
+	%T root = data.getRoot();
+	\setupGui();
+	root : imports : import_any {
+		Gui.importAny(imports);
+	}
+	\output(data);
+  }
+ 

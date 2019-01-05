@@ -66,10 +66,8 @@ class 'packageName'.entities.behaviours.skills  Skill \Object Source Usable {
       return false;
     }
     else {
-	  for Entity potential : user.getLocation().getEntitiesWithin(\getRange(user),targetCriteria) {
-	    \use(user,potential);
-	    return true;
-	  }
+      user.getLocation().getEntitiesWithin(\getRange(user),targetCriteria).stream()
+        .findFirst().ifPresent(("P")->\use(user,"P"));
 	}
 	return false;
   }
@@ -107,7 +105,6 @@ class 'packageName'.entities.behaviours.skills Skills {
         return direction <= angleLeft & direction >= angleRight ;
       }
     }
-    \createList(Entity);
     Entity->*"gain[Skill,Source]".appendToBody({"skill".load();});
   }
 > void declaration(%T declarationToken){

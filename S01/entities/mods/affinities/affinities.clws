@@ -1,0 +1,67 @@
+class 'packageName'.entities.mods.affinities.Affinity < Source {
+  class Id {
+  }
+  Affinity.Id getId(){
+    return null;
+  }
+  String name;
+  Double modify(Entity defender, Double damage){
+    return 0.0;
+  }
+}
+class 'packageName'.entities.mods.affinities.Affinities {
+> @%Argument affinitiesAsParameter = %Argument ();
+  @Affinity[] affinities = new Affinity(`affinitiesAsParameter`)[];
+  @Affinity create(String affinityName){
+    return null;
+  }
+> void output(){
+    $Affinities.removeVariable("affinities");
+    Affinities += @Affinity[] affinities = new Affinity(`affinitiesAsParameter`)[];
+  }
+> void declaration(%T declarationToken){
+    String affinityName = 'declarationToken->affinityName';
+    String affinityClassName = %Helper.camelize(affinityName);
+    %Operator weaknesses = %Operator();
+    weaknesses.operator("||").operatorlessIfSingle();
+    %Operator strengths = %Operator();
+    strengths.operator("||").operatorlessIfSingle();
+    declarationToken : element : strength_name {
+      strengths.add(hasAffinity(%Helper.camelize(element)));
+    }
+    declarationToken : element : weakness_name {
+      weaknesses.add(hasAffinity(%Helper.camelize(element)));
+    }
+    Affinities += @Affinities.'affinityClassName' 'affinityName' = new Affinities.'affinityClassName'();
+    affinitiesAsParameter.add(|'affinityName'|);
+    Affinities += class 'affinityClassName' Affinity {
+	  @Affinity.Id id = new Affinity.Id();
+      String getName(){
+        return '' affinityName '';
+      }
+      Double modify(Entity defender, Double damage){
+        
+		return damage;
+      }
+    }
+    if weaknesses.hasContents() {
+      Affinities.'affinityClassName'::modify(Entity,Double) -= {
+		if `weaknesses` {
+		  \damage /= 2.0;
+		}}
+    }
+    if strengths.hasContents() {
+      Affinities.'affinityClassName'::modify(Entity,Double) -= {
+        if `strengths` {
+		  \damage *= 2.0;
+		}}
+    }
+    Affinities::create(String) -= |if ''affinityClassName''.equals("affinityName"){ return new Affinities.'affinityClassName'();} |
+  }
+> %Callable hasAffinity(String affinityName){
+    return |\defender.has(Affinities.'affinityName'.id)|;
+  }
+> %Callable getId(String name){
+    return |Affinities.'name'.id|;
+  }
+}

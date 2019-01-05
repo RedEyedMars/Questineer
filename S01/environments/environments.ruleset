@@ -1,0 +1,34 @@
+import buildings.cgon
+
+#MAP#
+map_names global list with NAME
+area_names global list with NAME
+import_map Imports "environments/maps/" FILE_NAME ".maps" = ">" FILE_NAME ".maps" "\n"
+	( "\n" | comments | map_header | hints | trails_declaration | structures_declaration |area_declaration)*
+area_shape_name
+	"Rectangle"
+
+
+map_header
+	NAME as mapName in map_names import_tile
+area_declaration
+	NAME as areaName in area_names ":" "\n\t"? patch_options (("\n\t"|","|"&") patch_options)*
+patch_options
+	patch_element ("|" patch_element)*
+patch_element
+	patch_probability? "-" (area_names) as sub_generator
+	patch_probability? patch_position? tile_names patch_goto?
+patch_probability
+	INTEGER as probability "%" ("+" INTEGER as probability "%")*
+patch_goto
+	"->" (map_names ("." area_names)* | room_names) as destination  ( "as" NAME as nodeName "in" trail_names )?
+patch_position
+	"OffSide" as offside
+	patch_rimcals
+	patch_dimension ( "/" patch_dimension )*
+patch_dimension
+	patch_range as patchWidth [[xX]] patch_range as patchHeight
+patch_range silent
+	INTEGER as lowerBound? ( "-" INTEGER as upperBound)?
+patch_rimcals
+	( direction_name | "Sides" ) ":" siding_names

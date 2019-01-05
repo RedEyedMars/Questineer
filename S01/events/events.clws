@@ -1,0 +1,112 @@
+
+class 'packageName'.events.Events {
+> enum 'packageName'.events.Predefined {
+	class Sources {}
+	
+	class StartQuest {}
+	class Idle {}
+	class Fail {}
+	class Success {}
+	
+	class PreAttack {}
+	class Hit {}
+	class Miss {}
+	class PostAttack {}
+	
+	class Joined {}
+	
+	class ChangeItem {}
+	class Equip {}
+	class Unequip {}
+	
+	class Load {}
+	class Tick {}
+	class Equip {}
+	class Unequip{}
+	class Die {}
+	
+	class Collect {}
+  }
+> Map<String,List<%Output>> variableDefs = new HashMap<String, List<%Output>>();
+> Set<String>			  eventNameSet = new HashSet<String>();
+> void declaration(%T declaration){
+	String eventName = 'declaration->eventName';
+	eventNameSet.add(eventName);
+	String cev = %Helper.camelize(eventName);
+    Events += class  'cev' Event {
+        @Event.Id id = Event.Id.'eventName'; 
+      }
+    Events.'cev' += class Listener < Listenable<Events.'cev'> {
+      Boolean listen(Events.'cev' event){ return true; }
+    }
+    Event.Id += void 'eventName';
+    List<%Variable> variables = new ArrayList<%Variable>();
+    declaration : element : parameter {
+	  element : atom : type_name {
+	    %Variable variable = `getTypeName(atom)` 'element->NAME';;
+	    variables.add(variable);
+		($Events.'cev').addVariable(variable);
+      }
+	}
+	($Events.'cev').addDefaultConstructor(variables);
+  }
+> void addParameter(String eventName, %Method method){
+   	method.parameter('eventName' event;);
+  }
+> %Context getEventContext(String eName, %Class inputClass){
+    String eventClassName = %Helper.camelize(eName);
+	%Method newMethod = Boolean on(Events.'eventClassName' event) { return true; };
+	String newMethodName = newMethod.getSignature();
+	if inputClass.getMethod(newMethodName) == null {
+	  inputClass += Boolean on(Events.'eventClassName' event) {}
+	  inputClass += Boolean add(Events.'eventClassName'.Listener newListener) {
+	    if 'eName+"Listeners"' == null {
+	      'eName+"Listeners"' = new ArrayList<Listenable<Events.'eventClassName'>>();
+	    }
+		return 'eName+"Listeners"'.add(newListener);
+	  }
+	  inputClass += List<Listenable<Events.'eventClassName'>> 'eName+"Listeners"' = null;
+	}
+	return inputClass.getMethod(newMethodName);
+  }
+> %Context addToEventMethod(String eName, %Class inputClass, %Body body){
+
+    String eventClassName = %Helper.camelize(eName);
+	%Method newMethod = Boolean on(Events.'eventClassName' event) {};
+	String newMethodName = newMethod.getSignature();
+	if inputClass.getMethod(newMethodName) == null {
+	  inputClass += Boolean on(Events.'eventClassName' event) {}
+	  inputClass += Boolean add(Events.'eventClassName'.Listener newListener) {
+	    if 'eName+"Listeners"' == null {
+	      'eName+"Listeners"' = new ArrayList<Listenable<Events.'eventClassName'>>();
+	    }
+		return 'eName+"Listeners"'.add(newListener);
+	  }
+	  inputClass += List<Listenable<Events.'eventClassName'>> 'eName+"Listeners"' = null;
+	}
+	%Method establishedMethod = inputClass.getMethod(newMethodName);
+	establishedMethod.add(body);
+	establishedMethod.setEndWith(|return true;|);
+	return establishedMethod;
+  }
+> void addEventMethods(%Class inputClass, Map<String, %Body > bodiesToAdd){
+	for String name : eventNameSet {
+	  if bodiesToAdd.containsKey(name) {
+		addToEventMethod(name, inputClass, bodiesToAdd.get(name));
+	  }
+	  else {
+	    addToEventMethod(name, inputClass, {});
+	  }
+	}
+  }
+> void addEventMethodsExclusive(%Class inputClass, Map<String, %Body > bodiesToAdd){
+	for String name : eventNameSet {
+	  if bodiesToAdd.containsKey(name) {
+		addToEventMethod(name, inputClass, bodiesToAdd.get(name));
+	  }
+	}
+  }
+}
+class 'packageName'.events.Event {
+  enum Id {}
+}

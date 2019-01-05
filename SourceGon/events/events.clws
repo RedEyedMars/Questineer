@@ -32,12 +32,11 @@ class 'packageName'.events Events {
 	    }
 	  inputClass += Boolean add(Events->'eventClassName'->Listener newListener) {
 	    if 'eName'+"Listeners" == null {
-	      'eName'+"Listeners" = new Listenable->List();
+	      'eName'+"Listeners" = new ArrayList<Listenable>();
 	    }
 		return 'eName'+"Listeners".add("newListener");
 	  }
-	  \createList(Listenable);
-	  inputClass += ~Listenable->List 'eName'+"Listeners" = null;
+	  inputClass += ~List<Listenable> 'eName'+"Listeners" = null;
 	}
 	return inputClass.getMethod(newMethodName).getContext();
   }
@@ -50,12 +49,11 @@ class 'packageName'.events Events {
 	  inputClass += Boolean on(Events->'eventClassName' event) {}
 	  inputClass += Boolean add(Events->'eventClassName'->Listener newListener) {
 	    if 'eName'+"Listeners" == null {
-	      'eName'+"Listeners" = new Listenable->List();
+	      'eName'+"Listeners" = new ArrayList<Listenable>();
 	    }
 		return 'eName'+"Listeners".add("newListener");
 	  }
-	  \createList(Listenable);
-	  inputClass += ~Listenable->List 'eName'+"Listeners" = null;
+	  inputClass += ~List<Listenable> 'eName'+"Listeners" = null;
 	}
 	Method establishedMethod = inputClass.getMethod(newMethodName);
 	establishedMethod.appendToBody(body);

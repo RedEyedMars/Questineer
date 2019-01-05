@@ -1,0 +1,10 @@
+
+
+class Test {
+        >BufferedImage bimg = ImageIO.read(new File(""));
+> void dec(){
+    try {
+        BufferedImage bimg = ImageIO.read(new File(""));
+    }
+  }
+}

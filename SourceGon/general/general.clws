@@ -1,10 +1,64 @@
 
 < Random : java.util;
+< EnumMap : java.util;
+< BiFunction : java.util.function;
+< IntStream : java.util.stream;
+< Stream : java.util.stream;
 
 > Set<String> declaredCritSet = new HashSet<String>();
 > Set<String> declaredListSet = new HashSet<String>();
 > Set<String> declaredMapSet = new HashSet<String>();
-> String TT = "<T>T";
+> String TT = "<T> T";
+> String TFloat = "<T> Float";
+> String TBoolean = "<T> Boolean";
+> String TUBoolean = "<T,U> Boolean";
+> String TUT = "<T,U> T";
+> String TUU = "<T,U> U";
+> String TUU = "<T,U,V> U";
+> String TListT = "<T> List<T>";
+> String TStreamT = "<T> Stream<T>";
+class 'packageName'.misc.streams Streamer {
+    @'TFloat' sum(List<\T> list, BiFunction<Float, \T, Float> function){
+	  return list.parallelStream().reduce(0f,function,("S,V")->"S+V");
+	}
+	@'TBoolean' has(List<'"? extends T"'> list, \T obj){
+	  return list.parallelStream().map(("O")->"O".equals(obj)).filter(("B")->"B").findAny().orElse(false);
+	}
+	@'TUBoolean' has(List<'"? extends T"'> list, Function<\T,\U> func, \U obj){
+	  return list.parallelStream().map(("O")->func.apply("O").equals(obj)).filter(("B")->"B").findAny().orElse(false);
+	}
+	@'TUBoolean' has(List<'"? extends T"'> list, Function<\T,Boolean> func){
+	  return list.parallelStream().filter(("O")->func.apply("O")).findAny().orElse(null)!=null;
+	}
+	@'TT' get(List<'"? extends T"'> list, Function<\T,Boolean> func){
+	  return list.parallelStream().map("O->func.apply(O)?O:null").filter(("B")->"B"!=null).findAny().orElse(null);
+	}
+	@'TUT' get(List<'"? extends T"'> list, Function<\T,\U> func, \U obj){
+	  return list.parallelStream().map("O->func.apply(O).equals(obj)?O:null").filter(("B")->"B"!=null).findAny().orElse(null);
+	}
+	@'TListT' collect(List<'"? extends T"'> list, Function<\T,Boolean> func){
+	  return list.parallelStream().filter(("O")->func.apply("O")).collect(Collectors.toList());
+	}
+	@'TUT' race(List<'"? extends T"'> list, Predicate<\T> objectTest, \U start, Function<\T,\U> distance, BiFunction<\U,\U,Boolean> standingTest) {
+	  if list.isEmpty() {
+	    return null;
+	  } 
+	  return (\T) list.parallelStream().filter(objectTest).reduce(new Object(start,null)[],("Other,Racer")->"standingTest.apply((U)Other[0],distance.apply(Racer))?Other:new Object[]{distance.apply(Racer),Racer}",("Previous,Current")->"standingTest.apply((U)Previous[0],(U)Current[0])?Previous:Current")[1];
+	}
+	@'TStreamT' performOnce(int index, Stream<\T> stream, Function<\T,\T> function) {
+	  return stream.map("O->((Indexable)O).getIndex()==index?function.apply(O):O");
+	}
+	@'TStreamT' perform(Function<Integer,Boolean> indexTest, Stream<\T> stream, Function<\T,\T> function) {
+	  return stream.map("O->indexTest.apply(((Indexable)O).getIndex())?function.apply(O):O");
+	} 
+	enum Imports //{
+	  Stream stream = null;
+	  Indexable indexer = null;
+	}
+}
+interface 'packageName'.misc.interfaces Indexable {
+  int getIndex(){}
+}
 interface 'packageName'.misc.interfaces Listenable <TypeName> {
   Boolean listen('"TypeName"' "event"){}
 }
@@ -781,23 +835,6 @@ class 'packageName'.misc Criteria<TypeName> Object Predicate<'"TypeName"'> {
     Double value = Double.parseDouble('chanceToken') / 100.0;
     return |Range.chance('value') |;
   }
-> void createList(Class listClass) {
-	String listName = listClass.getFullName()+ "List";
-	if declaredListSet.add(listName) {
-	  listClass += class List / ArrayList<listClass> / {
-	    @List create( listClass... "elements" ){
-	      List newList = new List();
-	      newList.addAll(Arrays.asList("elements"));
-	      return newList;
-	    }
-	    @List create( '"java.util.List<"+listClass.getFullName()+">"' subList ){
-	      List newList = new List();
-	      newList.addAll(subList);
-	      return newList;
-	    }
-	  }
-	}
-  }
 > void createCriteria(Class critClass) {
 	String critName = critClass.getName()+"Criteria";
 	if declaredCritSet.add(critName) {
@@ -854,26 +891,81 @@ class 'packageName'.misc Criteria<TypeName> Object Predicate<'"TypeName"'> {
 	    }
 	  }
   }
-> void createMap(Class keyClass, Class valueClass) {
-    String keyName  = keyClass.getName()+"Map";
-	String valueName = "_"+valueClass.getName();
-	String fullName  = "Maps."+keyName+"."+valueName;
+> void createIdMap(Class idClass, Class parentClass) {
+    \createIdMap(idClass, |\getId()|, parentClass);
+  }
+> void createIdMap(Class idClass,Statement getIdStatement, Class parentClass) {
+    String idName  = idClass.getName()+"Map";
+	String fullName  = idClass.getName()+"Maps."+idName+"."+parentClass.getName();
+	String parentClassList = "java.util.List<"+parentClass.getName()+">";
 	if declaredMapSet.add(fullName) {
-	  ~class 'packageName'."misc"."maps" keyName {
-	  }
-	  \keyNameClass += class 'packageName'."misc"."maps" valueName HashMap<keyClass, valueClass> {
-	    valueClass get(keyClass "key", valueClass->Factory "factory"){
-	      valueClass "result" = \get("key");
-	      if "result" == null {
-	        "result" = "factory".create();
-	        \put("key", "result");
-	        return "result";
+	  parentClass += class idName // {
+	    Map<idClass, 'parentClassList' > map = new HashMap<idClass, 'parentClassList' >();
+	    
+	    boolean add(parentClass addObject){
+	      synchronized this {
+	        if map.containsKey((idClass)addObject.`getIdStatement`) == false {
+	          map.put((idClass)addObject.`getIdStatement`, new ArrayList<parentClass>());
+	        }
+	        return map.get((idClass)addObject.`getIdStatement`).add(addObject);
 	      }
-	      else {
-	        return "result";
+	    }
+	    parentClass get(idClass id, parentClass->Factory factory){
+	      synchronized this {
+	        List<parentClass> result = map.get(id);
+	        if result == null {
+	          result = new ArrayList<parentClass>();
+	          map.put(id, result);
+	          parentClass newObject = factory.create();
+	          result.add(newObject);
+	          return newObject;
+	        }
+	        else {
+	          if(result.isEmpty()){
+	            parentClass newObject = factory.create();
+	            result.add(newObject);
+	            return newObject;
+	          }
+	          else {
+	            return result.get(0);
+	          }
+	        }
+	      }
+	    }
+	    parentClass get(idClass findId){
+	      synchronized this {
+	        List<parentClass> result = map.get(findId);
+	        if result != null && result.isEmpty() == false{
+	          return result.get(0);
+	        }
+	        else {
+	          return null;
+	        }
+	      }
+	    }
+	    List<parentClass> getAll(idClass findId){
+	      synchronized this {
+	        return map.get(findId);
+	      }
+	    }
+	    boolean has(idClass findId){
+	      synchronized this {
+	        return map.containsKey(findId) && map.get(findId).isEmpty()==false;
+	      }
+	    }
+	    boolean remove(parentClass addObject){
+	      synchronized this {
+	        if map.containsKey((idClass)addObject.`getIdStatement`) {
+	          return map.get((idClass)addObject.`getIdStatement`).remove(addObject);
+	        }
+	        else {
+	          return false;
+	        }
 	      }
 	    }
 	  }
+	  #parentClass.getSubClass("IdMap").setDisplayConstructors(false);
+	  parentClass->'"IdMap"' += IdMap '""'(){super(idClass.class);}#
 	}
   }
 > String percentify(String input){

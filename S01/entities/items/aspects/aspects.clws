@@ -1,0 +1,38 @@
+class 'packageName'.entities.items.aspects.Aspect < Source {
+  class Id {
+  }
+  String name;
+  String description;
+  Aspect.Id getId(){
+    return null;
+  }
+}
+class 'packageName'.entities.items.aspects.Aspects {
+  
+  @Aspect create(String aspectName){
+    return null;
+  }
+  > void setup(%Pass data){
+    Events.addEventMethods(Aspect, new HashMap<String,%Body >());
+  }
+  > %Output getId(String name){
+    return |Aspects.name.id|;
+  }
+  > void declaration(%T declarationToken){
+	String aspectName = %Helper.camelize('declarationToken->aspectName');
+	String aspectDescription = 'declarationToken->DESCRIPTION';
+	Aspects += class 'aspectName' Aspect : Source {
+	  @Aspect.Id id = new Aspect.Id();
+	}
+	declarationToken : element : event_statement {
+	  String eventName = %Helper.camelize(element->event_names);
+	  %Context eventContext = Events.addToEventMethod('element->event_names', Aspect, {});
+	  %Body eventBody = %Body ();
+	  element : atom : body_element {
+		eventBody.add(getBodyElement(atom,eventContext));
+	  }
+	  Events.addToEventMethod('element->event_names', Aspect, eventBody);
+	}
+	Aspects::create(String) -= | if '' 'aspectName' ''.equals("aspectName") { return new Aspects.'aspectName'(); }|
+  }
+}

@@ -36,6 +36,7 @@ import gui/loaders.clws
 	Treasury.setup(data);
 	Environment.setup(data);
 	Tile.setup(data);
+	Area.setup(data);
 	
 	root : imports : import_any {
 		Gui.importAny(imports);
@@ -169,7 +170,11 @@ import gui/loaders.clws
 	  }
 	}
 	if ExternalClassEntry.classMap.containsKey('nameBuilder') {
-	  return 'nameBuilder';
+	  ~String result = 'nameBuilder';
+	  nameToken : isListToken : isListToken {
+	  	result = "List<"+result+">";
+	  }
+	  return result;
 	}
 	else {
 	  String fullName = ExternalClassEntry.getFullNameFromSimpleName('nameBuilder'); 

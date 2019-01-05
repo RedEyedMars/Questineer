@@ -50,7 +50,7 @@ class 'packageName'.entities.behaviours.activities  Activity Object Source{
   Boolean hasFailed(Entity host){
     return failed;
   }
-  Usable->List getUsables(){
+  List<Usable> getUsables(){
     return null;
   }
   Usable pick(){
@@ -94,89 +94,38 @@ class 'packageName'.entities.behaviours.activities  Activity Object Source{
   }
   Boolean step(Entity host){
     if host.getFocusSkill()==null || \getUsables().contains(host.getFocusSkill()) == false || host.getFocusSkill().use(host,this) == false {
-      for Usable usable : \getUsables() {
-        if usable!=host.getFocusSkill() && usable.use(host,this) {
-          return true;
-        }
-      }
+      return Streamer.has(\getUsables(), ("usable")->"usable"!=host.getFocusSkill() && "usable".use(host,Activity.this));
     }
 	return false;
   }
   Boolean on(Events->\Idle event){
-    Entity->List entitiesToTarget = event.getHost().getLocation().getEntitiesWithin(20f);
-	for Entity candidate : entitiesToTarget {
-	  for Usable usable : \getUsables() {
-	    if usable.getTargetCriteria().test(candidate) {
-	      event.getHost().start( new Activities->\ChasingEntity(25, candidate, usable.getRange(event.getHost())) );
-	      return true;
-	    }
-	  }
-	}
-	failed = true;
+    List<Entity> entitiesToTarget = event.getHost().getLocation().getEntitiesWithin(20f);
+    failed = true;
+    entitiesToTarget
+      .parallelStream().map(("E")->new Object("E",Streamer.get(\getUsables(),("usable")->"usable".getTargetCriteria().test("E")))[])
+      .filter(("P")->"P"[1]!=null).findAny().ifPresent(
+        ("P")->"{failed = false;event.getHost().start(new Activities.ChasingEntity(25, (Entity)P[0], ((Usable)P[1]).getRange(event.getHost()))); }" )
+        ;
   }
-  Usable->List getInRangeUsables(Entity host, Entity toTarget){
-    Usable->List result = new Usable->List();
+  List<Usable> getInRangeUsables(Entity host, Entity toTarget){
     Double distanceToTarget = host.getLocation().getDistanceTo(toTarget.getLocation());
-    for Usable usable : \getUsables() {
-	  Float potentialRange = usable.getRange(host);
-	  if potentialRange <= distanceToTarget && usable.getTargetCriteria().test(toTarget) {
-	    result.add(usable);
-	  }
-	}
-	return result;
+    return Streamer.collect(\getUsables(),("usable")->"usable".getRange(host) <= distanceToTarget && "usable".getTargetCriteria().test(toTarget));
   }
-  Usable->List getAvailableUsables(Entity host, Entity toTarget){
-    Usable->List result = new Usable->List();
-    for Usable usable : \getUsables() {
-	  if usable.getTargetCriteria().test(toTarget) {
-	    result.add(usable);
-	  }
-	}
-	return result;
+  List<Usable> getAvailableUsables(Entity host, Entity toTarget){
+	return Streamer.collect(\getUsables(),("usable")->"usable".getTargetCriteria().test(toTarget));
   }
   Usable getFurthestAvailableUsable(Entity host, Entity toTarget){
-    Usable result = null;
-    Float longestRange = -1f;
-    for Usable usable : \getUsables() {
-	  Float potentialRange = usable.getRange(host);
-	  if potentialRange > longestRange && usable.getTargetCriteria().test(toTarget) {
-	    longestRange = potentialRange;
-	    result = usable;
-	  }
-	}
-	return result;
+    return Streamer.race(\getUsables(), ("usable")->"usable".getTargetCriteria().test(toTarget), 0f, ("usable")->"usable".getRange(host),("left,right")->"left">"right");
   }
-  Usable->List getInRangeUsables(Entity host, Tile toTarget){
-    Usable->List result = new Usable->List();
+  List<Usable> getInRangeUsables(Entity host, Tile toTarget){
     Double distanceToTarget = host.getLocation().getDistanceTo(toTarget);
-    for Usable usable : \getUsables() {
-	  Float potentialRange = usable.getRange(host);
-	  if potentialRange <= distanceToTarget && usable.getDestinationCriteria().test(toTarget) {
-	    result.add(usable);
-	  }
-	}
-	return result;
+    return Streamer.collect(\getUsables(),("usable")->"usable".getRange(host) <= distanceToTarget && "usable".getDestinationCriteria().test(toTarget));
   }
-  Usable->List getAvailableUsables(Entity host, Tile toTarget){
-    Usable->List result = new Usable->List();
-    for Usable usable : \getUsables() {
-	  if usable.getDestinationCriteria().test(toTarget) {
-	    result.add(usable);
-	  }
-	}
-	return result;
+  List<Usable> getAvailableUsables(Entity host, Tile toTarget){
+    return Streamer.collect(\getUsables(),("usable")->"usable".getDestinationCriteria().test(toTarget));
   }
   Usable getFurthestAvailableUsable(Entity host, Tile toTarget){
-    Usable result = null;
-    Float longestRange = -1f;
-    for Usable usable : \getUsables() {
-	  Float potentialRange = usable.getRange(host);
-	  if potentialRange > longestRange && usable.getDestinationCriteria().test(toTarget) {
-	    longestRange = potentialRange;
-	    result = usable;
-	  }
-	}
-	return result;
+    return Streamer.race(\getUsables(), ("usable")->"usable".getDestinationCriteria().test(toTarget), -1f, ("usable")->"usable".getRange(host),("left,right")->"left">"right");
   }
   Activity->Id getId(){
     return null;
@@ -200,7 +149,7 @@ class 'packageName'.entities.behaviours.activities  Activities {
     String declaredTypeName = ActivityTypes.currentlyDeclaredTypeName;
     Activities += class activityName / Activity / {
       @Activity->Id id = new Activity->Id();
-      @Usable->List allUsables = new Usable->List();
+      @List<Usable> allUsables = new ArrayList<Usable>();
       ~Entity host = null;
       String getName(){
         return '' 'activityName' '';
@@ -211,7 +160,7 @@ class 'packageName'.entities.behaviours.activities  Activities {
       ActivityType getType(){
         return ActivityTypes.'declaredTypeName';
       }
-      Usable->List getUsables(){
+      List<Usable> getUsables(){
         return allUsables;
       }
       Boolean hasSucceeded(Entity host){

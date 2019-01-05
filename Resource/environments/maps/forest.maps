@@ -1,12 +1,15 @@
 Forest > forest.tile
-#
-Room 100%:
-	rect_10x10.png
-		Entry Path 1-3 Exits 
-		Patches  1:10%  2:70%  3,4:10%
-			Long_Grass 1-2x1-2,	Lone_Rock,	Bear_Den
-	#
-Entrance 100%:
-	4x4 Grass
-	Path [OffSide] -> Forest
-	Path [OffSide] -> Forest
+Entrance: 4x4 Grass, OffSide Path -> Forest.Room_Beginner
+Room_Beginner:
+	 3-8x3-8 Grass
+	20% - Stream
+	- Beginner_Monsters
+	- Entry_Points
+Entry_Points:
+	OffSide Path -> Forest.Room_Beginner
+	70% OffSide Path -> Forest.Room_Beginner
+	10% OffSide Path -> Forest.Room_Beginner
+Beginner_Monsters: - Beginner_Grasses, - Beginner_Dens
+Beginner_Grasses: 25%+5% 1-2x1-2 Long_Grass
+Beginner_Dens:	20% Lone_Rock |	15% Bear_Den
+Stream:	1x1-8/1-8x1 Water

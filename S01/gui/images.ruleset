@@ -1,0 +1,17 @@
+
+#IMAGES#
+image_names global list with NAME
+import_image Imports "gui/images/" FILE_NAME ".imgs" = ">" FILE_NAME ".imgs" "\n"
+	( "\n" | comments | image_declaration )*
+image_type = ".png"
+animation_substates Braced { } , silent , Ignore [ ] = ( "\n"+ animation_state | "\n" )*
+
+image_declaration
+	NAME as imageName in image_names ( INTEGER as frameWidth [[xX]] INTEGER as frameHeight? ) "=" FILE_NAME as imageFile image_type ( "\n\t" animation_state )*
+animation_state
+	"\n"* ( NAME as animationId animation_substates  ) as parentState
+	"\n"* ( NAME as animationId ("|" NAME as flipAnimationId)? ":" NAME as animationTypeName animation_variable_value* ) as finalState
+image_id
+	image_names ( INTEGER as frameWidth ("," INTEGER as frameHeight)? )?
+animation
+	image_id ( "-" INTEGER as frames? "<" ( image_names| INTEGER as left ("," INTEGER as right)?)) as delta*

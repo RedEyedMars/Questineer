@@ -1,0 +1,226 @@
+import attacks/attacks
+import supports/supports
+class 'packageName'.entities.behaviours.skills.Skill < Source Usable {
+  class Id Usable.Id{
+  }
+  class Imports {
+    Tile tile = null;
+  }
+  Integer experience = 0;
+  Integer cooldown = -1; 
+  Function<Entity,Float> range = null;
+  Function<Entity,Float> cost = null;
+  Boolean hasEntityFocus = null;
+  Predicate<Entity> targetCriteria = T=>true;
+  Predicate<Tile> destinationCriteria = new Tile.Criteria.Free();
+  Predicate<Terrain> terrainCriteria = T=>false;
+  
+  String getName(){ return null; }
+  String getDescription(){ return null; }
+  void setFocus(Boolean newFocus){
+	hasEntityFocus = newFocus;
+  }
+  Integer getCost(Entity entity){
+    return (int)(float)cost.apply(entity);
+  }
+  Boolean canChase(){
+    return true;
+  }
+  Float getRange(Entity entity){
+	return range.apply(entity);
+  }
+  Boolean isOffCooldown(){
+    return cooldown == 0;
+  }
+  void on(Events.Tick event){
+	if cooldown > 0 {
+	  ++cooldown;
+	}
+  }
+  void setFocus(Boolean newFocus){
+    hasEntityFocus = newFocus;
+  }
+  Integer compareTo(Skill otherSkill){
+	if cooldown == otherSkill.cooldown {
+	  if hasEntityFocus {
+	    return otherSkill.experience - experience;
+	  }
+	  else {
+		return experience - otherSkill.experience;
+	  }
+	}
+	else {
+	  return otherSkill.cooldown - cooldown;
+	} 
+  }
+  void load(){
+  }
+  Boolean use(Entity user, Activity activity){
+    if \isOffCooldown() {
+      return false;
+    }
+    if targetCriteria == null || activity.hasTarget() {
+      if targetCriteria == null || targetCriteria.test(activity.getTargetEntity()) {
+        \use(user, activity.getTargetEntity());
+	    return true;
+      }
+      return false;
+    }
+    else {
+      user.getLocation().getEntitiesWithin(\getRange(user),targetCriteria).stream()
+        .findFirst().ifPresent(P=>use(user,P));
+	}
+	return false;
+  }
+  Skill copy(){ return null; }
+  void use(Entity user, Entity victim){}
+  String getName(){ return null; }
+  String getDescription(){ return null; }
+  Skill.Id getId(){
+    return null;
+  }
+}
+class 'packageName'.entities.behaviours.skills.Skills {
+> @%Arguments skillsAsParameter = %Arguments ();
+  @Skill[] skills = new Skill(`skillsAsParameter`)[];
+  @Skill create(String skillName){
+    return null;
+  }
+> void output(){
+    $Skills.removeVariable("skills");
+    Skills += @Skill[] skills = new Skill(`skillsAsParameter`)[];
+  }
+> void setup(%Pass data){
+    
+    Entity::gain(Skill,Source) += {\skill.load();}
+  }
+> void declaration(%T declarationToken){
+    String skillName = %Helper.camelize(declarationToken->skillName);
+    %Operator description = %Operator().operator("+").operatorlessIfSingle();
+    declarationToken : element : DESCRIPTION {
+	  description.add(|'' 'element' ''|);
+	}
+    Skills += class 'skillName' Skill {
+      @Skill.Id id = new Skill.Id();
+      Skill.Id getId(){
+        return id;
+      }
+      'skillName' (){
+      }
+	  String getName(){
+	    return '' 'skillName' '';
+	  }
+	  String getDescription(){
+	    return `description`;
+	  }
+	  void use(Entity user, Entity victim){
+      }
+      void load(){
+      }
+      Skill copy(){
+        return new Skills.'skillName'();
+      }
+    }
+    Skills.'skillName' += @class TargetCriteria < Predicate<Entity> {
+          boolean test(Entity user){
+            return true;
+          }}
+    Skills.'skillName' += @class DestinationCriteria < Predicate<Tile> {
+          boolean test(Tile user){
+            return true;
+          }}
+    Skills.'skillName'::*() += {
+        \targetCriteria = new TargetCriteria();
+      }
+    %Context useContext = Skills.'skillName'::use(Entity,Entity);
+    Boolean isFirst = true;
+    List<%Variable> variables = new ArrayList<%Variable>();
+    declarationToken : element
+      : variable_declaration {
+        %Variable variable = addVariableHeader(element->variable_header, Skills.'skillName');
+        variables.add(variable);
+        if element->statement != null {
+          variable.assign(getStatement(element->statement,Skills.'skillName'));
+        }
+        else if(element->variable_header->type_name->mapDeclaration!=null){
+          variable.assign(|new 'getTypeName(element->variable_header->type_name)'()|);
+          %Type keyType = null;
+          %Type entryType = null;
+          element->variable_header->type_name->mapDeclaration : typeName : type_name {
+            if keyType == null {
+              keyType = getTypeName(typeName);
+            }
+            else {
+              entryType = getTypeName(typeName);
+            }
+          }
+          Skills.'skillName' += `entryType` get(`keyType` key){
+              return 'element->variable_header->variableName'.get(key);
+            }
+        }
+      }
+      : method_parameters {
+        element : atom : variable_header {
+          variables.add(addVariableHeader(atom,Skills.'skillName'));
+        }
+      }
+      : require {
+        element : atom : boolean_statement {
+          %Context canUseContext = Skills.'skillName'.TargetCriteria::test(Entity);
+          Skills.'skillName'.TargetCriteria::test(Entity) -= {
+            if `getBooleanStatement(atom,true,canUseContext)` {
+              return false;
+            }}
+        }
+      } 
+      : cooldown {
+        Skills.'skillName'::*() += | \cost = `Entity.getStatRange(element->stat_range,useContext)`; |
+      }
+      : range {
+        Skills.'skillName'::*() += | \range = `Entity.getStatRange(element->stat_range,useContext)`; |
+      }
+      : use {
+        element : atom 
+          : body_element {
+            Skills.'skillName'::use(Entity,Entity) += |`getBodyElement(atom,useContext)`|
+          }
+      }
+      : load {
+        element : atom 
+          : body_element {
+            Skills.'skillName'::load() += |`getBodyElement(atom,useContext)`|
+          }
+      }
+      : miss {
+        element : atom : option {
+          %Output chance = | `getChance(atom->has_chance)` |;
+          if atom->boolean_statement != null {
+            %Output bool = | `getBooleanStatement(atom->boolean_statement, useContext)` |;
+            if isFirst {
+              Skills.'skillName'::use(Entity,Entity) -= | if `bool` { if `chance` { return void; } } |
+              isFirst = false;
+            }
+            else {
+              Skills.'skillName'::use(Entity,Entity) -= | if `bool` { else if `chance` { return void; } } |
+            }
+          }
+          else {
+            if isFirst {
+              Skills.'skillName'::use(Entity,Entity) -= | if `chance` { return void;} |
+              isFirst = false;
+            }
+            else {
+              Skills.'skillName'::use(Entity,Entity) -= | else if `chance` { return void;} |
+            }
+          }
+        }
+      }
+    
+	Skills::create(String) -= | if '' 'skillName' ''.equals(\skillName){
+                                  return new Skills.'skillName'(); }|
+    ($Skills.'skillName').addDefaultConstructor(variables);
+  }
+ > %Output getId(String name){
+    return |Skills.'name'.id|;
+  }
+}

@@ -1,0 +1,86 @@
+
+import associations/associations
+
+class 'packageName'.entities.relations.Relationship {
+  enum Predefined {
+    class Reasons {}
+  }
+  Entity self;
+  Entity other;
+  Integer influence = 0;
+  void influence(Relationship.Reason reason, Integer amount){
+    \influences.add(reason,new Int(amount));
+    \influence += amount;
+  }
+  class Factory  {
+    Relationship create(){
+      return new Relationship();
+    }
+  }
+> void setup(%Pass data){
+    createListMap(Relationship.Reason, Int);
+    Relationship += ListMaps.Reasons.Int influences;
+  }
+  class Reason  {
+    String name = null;
+    String description = null;
+    boolean equals(Object otherReason){
+      return otherReason != null && ((Reason)otherReason).name.equals(name);
+    }
+    int hashCode(){
+      return name.hashCode();
+    }
+    class Factory {
+      Relationship.Reason create(){
+        return null;
+      }
+    }
+  }
+> void declaration(%T declarationToken){
+	String reasonName = 'declarationToken->reasonName';
+    String reasonClassName = reasonName.replace(" ","");
+    Relationship.Reasons += class 'reasonClassName' Relationship.Reason {
+      'reasonClassName'(){}
+      String getDescription(){
+        StringBuilder builder = new StringBuilder();
+      }
+    }
+    Relationship.Reasons.'reasonClassName' += class Factory Relationship.Reason.Factory{
+        Relationship.Reason create(){
+          return new Relationship.Reasons.'reasonClassName'();
+        }
+      }
+    StringBuilder descriptionBuilder = new StringBuilder();
+    List< %Variable> variables = new ArrayList< %Variable>(); 
+    declarationToken : element
+      : variableIndex {
+        String variableName = "_" + 'element';
+        Relationship.Reasons.'reasonClassName' += Object 'variableName';
+        Relationship.Reasons.'reasonClassName'::getDescription() += {
+            \builder.append('variableName'.toString());
+          }
+        variables.add((Relationship.Reasons.'reasonClassName').getVariable('variableName'));
+      }
+      : description {
+        Relationship.Reasons.'reasonClassName'::getDescription() += {
+            \builder.append('' 'element' '');
+          }
+      }
+    Relationship.Reasons.'reasonClassName'::*() -= {
+        if \name == null {
+          \name = '' 'reasonName' '';
+        }
+      }
+    Relationship.Reasons.'reasonClassName'::getDescription() += {return \builder.toString();}
+    (Relationship.Reasons.'reasonClassName').addDefaultConstructor(variables);
+    Relationship.Reasons::create(String) -= {
+      if '' 'reasonName' ''.equals(\reasonName) || '' 'reasonName' ''.replace(''" "'',''""'').equals('' 'reasonClassName' ''){
+        return new Relationship.Reasons.'reasonClassName'(); 
+      }}
+  }
+  class Reasons  {
+    @Relationship.Reason create(String reasonName){
+      return null;
+    }
+  }
+}

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="build_all" name="Create Runnable Jar for Project OTLPc">
+    <!--this file was created by Eclipse Runnable JAR Export Wizard-->
+    <!--ANT 1.7 is required                                        -->
+    <!--define folder properties-->
+    <property name="dir.buildfile" value="../"/>
+    <property name="dir.workspace" value="${dir.buildfile}/../"/>
+    <property name="dir.jarfile" value="${dir.buildfile}/../"/>    
+  	<property name="dir.srcs" value="${dir.buildfile}/S01/"/>
+    <target name="make_main_ruleset">
+        <java jar="../parser_compiler.jar" fork="true">
+            <arg line="${dir.srcs}/questineer_source.cgon" />
+        </java>
+    </target>
+    <target name="make_main_gen">
+        <java jar="../class_compiler.jar" fork="true">
+            <arg line="${dir.srcs}/questineer_source.clws" />
+        </java>
+    </target> 
+    <target name="make_main">
+       <antcall target="make_main_ruleset"/>
+       <antcall target="make_main_gen"/>
+    </target>
+    <target name="import_jars">
+        <jar destfile="${dir.buildfile}/parser_compiler.jar" filesetmanifest="mergewithoutmain">
+           	<manifest>
+               	<attribute name="Main-Class" value="com.rem.gen.MainFlow"/>
+               	<attribute name="Class-Path" value="."/>
+           	</manifest>
+           	<fileset dir="../../RemLang/GeneratedCargon/bin"/>
+           	<zipfileset excludes="META-INF/*.SF" src="../../RemLang/engraver.jar"/>
+        </jar>
+        <jar destfile="${dir.buildfile}/class_compiler.jar" filesetmanifest="mergewithoutmain">
+           	<manifest>
+               	<attribute name="Main-Class" value="com.rem.gen.Classwise3"/>
+               	<attribute name="Class-Path" value="."/>
+           	</manifest>
+           	<fileset dir="../../RemLang/Classwise3/bin"/>
+           	<zipfileset excludes="META-INF/*.SF" src="../../RemLang/output_helpers.jar"/>
+        </jar>
+    </target>
+  	<target name="retro_replace_base">    	
+        <delete dir="${dir.base}/src/base" failonerror="true"/>
+        <copy todir="${dir.base}/src/base">  
+             <fileset dir="${dir.genBase}/src/base" includes="**"/>
+        </copy>
+  	</target>
+    <target name="build_all">
+        <antcall target="import_jars"/>
+    </target>
+</project>

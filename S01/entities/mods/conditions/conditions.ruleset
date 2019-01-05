@@ -1,0 +1,17 @@
+
+#CONDITION#
+condition_names global list with NAME
+import_condition Imports "entities/mods/conditions/" FILE_NAME ".cnds" = ">" FILE_NAME ".cnds" "\n"
+	( comments | condition_declaration | "\n" )*
+condition_declaration
+	NAME as conditionName in condition_names "\n"* DESCRIPTION? condition_element*
+#chance pair-> conditionalChance#
+condition_element silent , Ignore [ ][\t]
+	"\n"
+	comments
+	"?" requirement
+	( "loss" conditional_chance as chance_pair ( "\n" conditional_chance as chance_pair)* ) as to_lose
+	( ("*"|"accumulate") (imposition|acquisition)) as accumulation
+	imposition
+	acquisition
+	event_statement

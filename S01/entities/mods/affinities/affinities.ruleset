@@ -1,0 +1,11 @@
+#AFFINITY#
+affinity_names global list with NAME
+import_affinity Imports "entities/mods/affinities/" FILE_NAME ".afts" = ">" FILE_NAME ".afts" "\n"
+	( "\n" | comments | affinity_declaration )*
+affinity_declaration
+	NAME as affinityName in affinity_names "\n"* DESCRIPTION? affinity_element*
+affinity_element silent
+	comments
+	"+" (affinity_names) as strength_name
+	"-" (affinity_names) as weakness_name 
+	"\n"

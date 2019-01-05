@@ -1,0 +1,69 @@
+
+class 'packageName'.environments.buildings.Building? < Area.Generator {
+  enum Imports {Treasury.Cost costs;}
+  enum Type { void NONE; }
+  Building.Type getId(){
+    return Type.NONE;
+  }
+  List<Treasury.Cost> getCosts(){
+    return null;
+  }
+  void generateAt(int x, int y, Area newArea)?
+  void place(Area area, int x, int y){
+    generateAt(x,y,area);
+  }
+  
+  interface Factory  {
+     Building create()?
+  }
+  
+> %Output getId(String name){
+    return |'name'|;
+  }
+}
+class 'packageName'.environments.buildings.Buildings {
+  enum Imports {
+    Area area;
+  }
+> void declaration(%T declaration, String mapName){
+    String buildingName = 'declaration->buildingName';
+    Building.Type += void 'buildingName';
+    Buildings.'mapName' += class 'buildingName' Building {
+        'buildingName'(){}
+        Area exterior; 
+        Building.Type getId(){
+          return Building.Type.'buildingName';
+        }
+        void setupChoices(Area newArea){
+          exterior = newArea;
+        }
+      }
+    declaration : element :structure_definition {
+      Area.GeneratorMapValues generatorValues = Area.addGeneratorClass(Buildings.'mapName'.'buildingName'.Generator);
+      Buildings.'mapName'.'buildingName' += @class Generator < Area {
+	    List<Consumer<Area.Generator.Instance>> generationPoints = new ArrayList<Consumer<Area.Generator.Instance>>();
+        Generator(int x, int y, Environment parent){
+          super(x,y,parent);
+          setup();
+        }
+        void generate(Area newArea){
+	      newArea.setGenerator(this);
+	      generate(new Area.Generator.Instance(0,0,newArea));
+	    }
+	    void generate(Area.Generator.Instance instance){
+	      generationPoints.forEach(P=>P.accept(instance));
+	    }
+        void setup(){
+        }
+	  }
+      element : atom : patch_element {
+        Area.addSetupPatchElements(atom,mapName,generatorValues);
+      }
+    }
+    Buildings.'mapName'.'buildingName' += class Placer < Menu.Placable {
+        void place(Area area, int x, int y){
+          new Buildings.'mapName'.'buildingName'().place(area, x, y);
+        }
+      }
+  }
+}

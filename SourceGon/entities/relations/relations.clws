@@ -2,6 +2,8 @@
 import associations/associations.clws
 
 class 'packageName'.entities.relations Relationship {
+  Entity self;
+  Entity other;
   ~Integer influence = 0;
   void influence(Relationship->Reason reason, Integer amount){
     "influences".add(reason,new Int(amount));
@@ -14,7 +16,7 @@ class 'packageName'.entities.relations Relationship {
   }
 > void setup(%Pass data){
     \createListMap(Relationship->Reason, Int);
-    Relationship += ~ListMaps->\Reasons->\_Int "influences";
+    Relationship += ListMaps->\Reasons->\_Int "influences";
   }
   class Reason // {
     ~String name = null;

@@ -1,0 +1,83 @@
+
+class 'packageName'.entities.behaviours.skills.supports.Support Skill {
+  class Id {
+  }
+  void on(Events.Tick event){
+	if \cooldown > 0 {
+	   \cooldown -= 1;
+	}
+  }
+  Support.Id getSupportId(){
+    return null;
+  }
+}
+class 'packageName'.entities.behaviours.skills.supports.Supports {
+  @Support create(String supportName){
+    return null;
+  }
+> %Output getId(String name){
+    return |Supports.'name'.id|;
+  }
+> void declaration(%T declarationToken){
+    String supportName = %Helper.camelize('declarationToken->supportName');
+    %Operator description = %Operator("+");
+    declarationToken : element : DESCRIPTION {
+	  description.add(|''element''|);
+	}
+    Supports += class supportName Support {
+      @Support.Id id = new Support.Id();
+      @Skill.Id skillId = new Skill.Id();
+      Support.Id getSupportId(){
+        return id;
+      }
+      Skill.Id getId(){
+        return skillId;
+      }
+	  String getName(){
+	    return '' 'supportName' '';
+	  }
+	  String getDescription(){
+	    return `description`;
+	  }
+	  void use(Entity user, Entity victim){
+	  }
+    }
+    boolean isFirst = true;
+    %Context useContext = Supports.'supportName'::use(Entity,Entity);
+    declarationToken : element 
+      : cooldown {
+        Supports.'supportName'::*() += | \cost = `Entity.getStatRange(element->stat_range,useContext)`; |
+      }
+      : range {
+        Supports.'supportName'::*() += | \range = `Entity.getStatRange(element->stat_range,useContext)`; |
+      }
+      : miss {
+        %Output setMiss = | return void; |;
+        element : atom : option {
+          %Output chance = | `getChance(atom->has_chance)` |;
+          if atom->boolean_statement != null {
+            %Output bool = | `getBooleanStatement(atom->boolean_statement, useContext)` |;
+            if isFirst {
+              Supports.'supportName'::use(Entity,Entity) += | if `bool` { if `chance` {`setMiss`;} } |
+              isFirst = false;
+            }
+            else {
+              Supports.'supportName'::use(Entity,Entity) += | else if `bool` { if `chance` {`setMiss`;} } |
+            }
+          }
+          else {
+            if isFirst {
+              Supports.'supportName'::use(Entity,Entity) += | if `chance` {`setMiss`;} |
+              isFirst = false;
+            }
+            else {
+              Supports.'supportName'::use(Entity,Entity) += | else if `chance` {`setMiss`;} |
+            }
+          }
+        }
+      }
+    
+	Supports::create(String) -= | if '' 'supportName' ''.equals(\supportName){
+      return new Supports.'supportName'(); }|
+  }
+}

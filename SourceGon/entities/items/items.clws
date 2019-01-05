@@ -8,7 +8,6 @@ class 'packageName'.entities.items  Items {
   	return null;
   }
 > void setup(%Pass data){
-	\createList(Aspect);
 	Entity.addGainLoss(Aspect, Item);
   }
 > void declaration(%T itemToken){
@@ -93,8 +92,9 @@ class 'packageName'.entities.items Item \Object Source {
   Integer value = null;
   Integer weight = null;
   
-  void decreaseHp(int amount){
+  void decreaseHp(Entity host, int amount){
     hp \-= amount;
+    \on(new Events->\ChangeItem(host, this));
   }
   
   Boolean on(Events->\Equip "event"){

@@ -1,0 +1,18 @@
+#DRAWABLES#
+import_drawable Imports "gui/" FILE_NAME ".dwbs" = ">" FILE_NAME ".dwbs" "\n"
+	( "\n" | comments | multiple_drawable_declaration | drawable_declaration )*
+multiple_drawable_declaration
+	"*"+ NAME as multipleName "*"+ drawable_multiple_element+
+drawable_declaration
+	NAME as drawableName "\n"+ drawable_grid_element+
+multiple_drawable_points Braced [ ] = INTEGER as point ( "," INTEGER as point )*
+drawable_dimensions Braced ( ) = ( drawable_multiple_value ( drawable_arthmetic_operator drawable_multiple_value )* ) as leftParameter "," ( drawable_multiple_value ( drawable_arthmetic_operator drawable_multiple_value )* ) as rightParameter
+drawable_grid_element
+	multiple_drawable_points
+	INTEGER as point
+	"\n" as endLine
+	"." as space
+drawable_multiple_element
+	"\n\t" NAME as drawableName ( "*" as defaultState | ( "->" NAME as newStateName )+ ) ( drawable_dimensions ( drawable_arthmetic_operator drawable_multiple_value ) as supplementary* ) as position ( drawable_dimensions ( drawable_arthmetic_operator drawable_multiple_value ) as supplementary* ) as dimensions "&"  ( drawable_dimensions ( drawable_arthmetic_operator drawable_multiple_value ) as supplementary* ) as rotation? "&" ( drawable_multiple_value  ( drawable_arthmetic_operator drawable_multiple_value )* ) as angle
+drawable_arthmetic_operator = "+" as plus | "-" as minus | "/" as divide | "*" as multiply
+drawable_multiple_value = "X" as x | "Y" as y | "Width" as width | "Height" as height | FLOAT | INTEGER

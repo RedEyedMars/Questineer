@@ -1,5 +1,5 @@
 ***Learning***
-TeachTrait (Entity pupil, Skill skill)
+TeachSkill (Entity pupil, Skill skill)
 	~Teaching an skill~
 	succeed if pupil.has(skill->id)
 	load {

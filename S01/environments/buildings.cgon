@@ -1,0 +1,19 @@
+hints
+	"Hints" ":" ( "\n\t" DESCRIPTION )*
+
+room_names list with NAME
+trail_names global list with NAME
+trails_declaration
+	"Trails" ":" ( "\n\t" trail_declaration )*
+trail_declaration
+	NAME as trailName in trail_names ":" ( "\n\t\t" connection_declaration )*
+connection_declaration
+	"Connect" tile_names "from" NAME as startNodeName "to" NAME as endNodeName
+
+structure_names global list with NAME
+structures_declaration
+	"Buildings" ":" ( "\n\t" structure_declaration )*
+structure_declaration
+	NAME as buildingName in structure_names structure_payment? ":" ( "\n\t\t" NAME as roomName in room_names (tile_names) as defaultTileName patch_dimension as defaultSize patch_rimcals* ":" ("\n\t\t\t" patch_element)* ) as structure_definition*
+structure_payment silent
+	INTEGER as amount (payment_long_type_names|payment_short_type_names) as paymentType ( "," INTEGER as amount (payment_long_type_names|payment_short_type_names) as paymentType )* 

@@ -1,5 +1,5 @@
 class 'packageName'.entities.relations.associations Association Object Source {
-  class Id // {
+  enum Id // {
   }
   interface Factory // {
     Association create(){}
@@ -41,13 +41,14 @@ class 'packageName'.entities.relations.associations  Associations {
 	}
     String associationName = 'nameBuilder';
     Associations += class associationName /Association/ {
-      @Association->Id "id" = new Association->Id();
+      @Association->Id "id" = Association->Id.'associationName';
       @~Integer productNumber = 0;
       Association->Id getId(){
         return id;
       }
       
     }
+    Association->Id += void 'associationName' = null;
     Associations->'associationName' += class Factory /Object/ Association->Factory {
         Association create(){
           return new Associations->'associationName'();

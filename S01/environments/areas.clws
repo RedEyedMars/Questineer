@@ -1,0 +1,792 @@
+import area_regions
+class 'packageName'.environments.Areas {
+}
+class 'packageName'.environments.AreaSet HashSet<Area> {
+  AreaSet (){
+    super();
+  }
+  AreaSet (Area initialArea){
+    super();
+    add(initialArea);
+  }
+}
+class 'packageName'.environments.Area Environment.Position : EntryPointJoinable {
+  enum Predefined {
+    class JoinGenerator {}
+  }
+> int tickEventArrayLength = 256;
+  enum Id {
+    void None;
+  }
+  enum Imports {
+    enum IdMap {}
+    enum TypeMap {}
+  }
+  interface EntryPointListener {
+    Boolean listen(Tile newEntryPoint)?
+  }
+  Area.Id getId(){
+    return null;
+  }
+  List<Tile> tiles = Collections.synchronizedList(new ArrayList<Tile>());
+  Map<Integer, Map<Integer, Tile>> layout = new HashMap<Integer, Map<Integer, Tile>>();
+  List<Tile> entryPoints = new ArrayList<Tile>();
+  List<EntryPointListener> entryPointsListeners = new ArrayList<EntryPointListener>();
+  Tile.IdMap tileMap = new Tile.IdMap();
+  List<Terrain> terrains = Collections.synchronizedList(new ArrayList<Terrain>());
+  Terrain.IdMap terrainMap = new Terrain.IdMap();
+  Map<Integer,Set<Integer>> openSides = new HashMap<Integer,Set<Integer>>();
+  
+  Map<Integer, Map<Integer, List<Tile>>> entryToEntryPaths = new HashMap<Integer, Map<Integer, List<Tile>>>();
+  Map<Area, Tile> sisterAreas = new HashMap<Area, Tile>();
+  ArrayList<Set<Area>> areaDistances = new ArrayList<Set<Area>>(32);
+  int furthestDistanceToArea = 0;
+  
+  Building.TypeMap buildings = new Building.TypeMap();
+  
+  List<Entity> entities = Collections.synchronizedList(new ArrayList<Entity>());
+  Integer width = 0;
+  Integer height = 0;
+  Integer currentTickPosition = 0;
+  
+  Area.Event.Tick.Listener[] tickEvents = new Area.Event.Tick.Listener['tickEventArrayLength'];
+  Area.Generator generator = null;  
+  
+  class Event {
+    interface Tick {
+      void tick(Double millisSinceLastFrame)?
+      class Listener ArrayList<Area.Event.Tick> {
+        void tick(Double millisSinceLastFrame){
+          this.stream().forEach(T=>T.tick(millisSinceLastFrame));
+          clear();
+        }
+      }
+    }
+  }
+  interface Generator {
+    Area generate()?
+    void generate(Area.Generator.Instance instance)?
+    class Instance {
+      int x;
+      int y;
+      Area area;
+      Instance(int x, int y, Area area){
+        this.x = x;
+        this.y = y;
+        this.area = area;
+      }
+      Instance offset(int x, int y){
+        this.x = x;
+        this.y = y;
+        return this;
+      }
+      Instance clone(){
+        return new Instance(x,y,area);
+      }
+      Tile getAnyUnoccupiedTile(){
+        return area.getRandomTile(F=> !F.hasOccupant());
+      }
+      Tile getTile(Function<Environment.Position,Tile> factory){
+        Tile result = area.getTile(x, y);
+        if result == null {
+          result = factory.apply(new Environment.Position(x,y,area.getParent()));
+          area.add(result);
+        }
+        return result;
+      }
+    }
+  }
+  class Comparators {
+    class Distance {
+      class Ascending < Comparator<Area> {
+        Environment.Position origin = null;
+        Ascending(Environment.Position origin){this.origin = origin;}
+        int compare(Area area1, Area area2){
+          return (int)((double)origin.getDistanceTo(area1) - (double)origin.getDistanceTo(area2));
+        }
+      }
+      class Descending < Comparator<Area> {
+        Environment.Position origin = null;
+        Descending(Environment.Position origin){this.origin = origin;}
+        int compare(Area area1, Area area2){
+          return (int)((double)origin.getDistanceTo(area2) - (double)origin.getDistanceTo(area1));
+        }
+      }
+    }
+  }
+  interface Factory {
+    Area create()?
+    Area create(int x, int y, Environment parent)?
+  }
+  Area(int x, int y, Environment parent){
+    super(x,y,parent);
+  }
+  Area(){
+    super();
+  }
+> void setup(%Pass data){
+    createIdMap(Building.Type, Building);
+    createIdMap(Area.Id, Area);
+  }
+> class GeneratorMapValues {
+    %Class acceptorClass = null;
+    Set<String> tilesAdded = new HashSet<String>();
+    Set<String> acceptorTilesAdded = new HashSet<String>();
+    Map<Integer, Set<Integer>> mappedDimensions = new HashMap<Integer, Set<Integer>>();
+    int subGenerators = 0;
+    %Call generationPointArraySize = %Call ();
+    void set(%Class newAcceptorClass){
+      acceptorClass = newAcceptorClass;
+      #acceptorTilesAdded = Area.tilesAdded.get(acceptorClass);#
+    }
+    String addTerrainTile(String mapName, String tileName){
+      if acceptorTilesAdded.add(tileName){
+        tilesAdded.add(tileName);
+        %Class tileClass = findTileTypeClass(mapName,tileName);
+        
+        if tileClass == Tiles {
+           $`acceptorClass` += @void '"create"+ tileName'(Area.Generator.Instance Generator){ 
+              Generator.getTile(Tiles.'mapName'.'tileName'::create);
+           }
+        }
+        else {
+           $`acceptorClass` += @void '"create"+ tileName'(Area.Generator.Instance Generator){ 
+              Generator.getTile(`tileClass`.'mapName'.'tileName'::createFloor)
+                       .setTerrain  (`tileClass`.'mapName'.'tileName'::create);
+           }
+         }
+      }
+      return tileName.toLowerCase();
+    }
+    String getRoomGenerator(String roomName){
+      String roomGenerator = roomName+"RoomGenerator";
+      return roomGenerator;
+    }
+    void addDefaultVariablesAndMethods(String generatorName){
+    }
+    void finish() {
+    }
+  }
+> %Class findTileTypeClass(String mapName, String tileName){
+    if Tiles.'mapName'.'tileName' != null { return Tiles; }
+    else if Terrains.'mapName'.'tileName' != null { return Terrains; }
+    else if Terrains.MonsterDens.'mapName'.'tileName' != null { return Terrains.MonsterDens; }
+    else if Terrains.Chests.'mapName'.'tileName' != null { return Terrains.Chests; }
+    return null;
+  }
+> Map<%Class , GeneratorMapValues > generatorMapValues = new HashMap<%Class , GeneratorMapValues>();
+> Map<%Class, Set<String> > tilesAdded = new HashMap<%Class, Set<String>>();
+> Map<String, Map<String, Integer>> generatorIndices = new HashMap<String,Map<String,Integer>>();
+
+> GeneratorMapValues addGeneratorClass(%Class acceptorClass){
+	if generatorMapValues.containsKey(acceptorClass) {
+	  return generatorMapValues.get(acceptorClass);
+	}
+	else {
+      GeneratorMapValues result = new GeneratorMapValues();
+      result.set(acceptorClass);
+      generatorMapValues.put(acceptorClass,result);
+      return result;
+    }
+  }
+> String declaration(%T declarationToken, String mapName, List<String> tiles){
+    String areaClassName = %Helper.camelize(declarationToken->areaName);
+    String areaName = areaClassName.toLowerCase();
+    Areas.'mapName' += class 'areaClassName' Area {}
+    Areas.'mapName'.'areaClassName' += class Generator < Area.Generator {
+        List<Consumer<Area.Generator.Instance>> generationPoints = new ArrayList<Consumer<Area.Generator.Instance>>();
+        Environments.'mapName' parent = null;
+        Generator(Environments.'mapName' initialParent){
+          parent = initialParent;
+        }
+        Areas.'mapName'.'areaClassName' generate(){
+          Areas.'mapName'.'areaClassName' newArea = new Areas.'mapName'.'areaClassName'(0,0,parent);
+          this.generate(newArea);
+          return newArea;
+        }
+        void generate(Area newArea){
+	      newArea.setGenerator(this);
+	      this.generate(new Area.Generator.Instance(0,0,newArea));
+	      
+	    }
+	    void generate(Area.Generator.Instance instance){
+	      generationPoints.forEach(P=>P.accept(instance));
+	    }
+        void setup(){
+        }
+      }
+    Areas.'mapName'.'areaClassName'.Generator += class Fillers {}
+    Areas.'mapName' += @'areaClassName'.Generator 'areaName' = null;
+    GeneratorMapValues values = addGeneratorClass(Areas.'mapName'.'areaClassName'.Generator);
+	declarationToken : element : patch_options {
+	  addSetupPatchElements(element,mapName,values);
+	}
+	#generatorValues.finish();#
+	return areaClassName;
+  }
+> void addSetupPatchElements(%T patchOptions, String mapName, GeneratorMapValues generatorsValues){
+	addTerrainBody(patchOptions,mapName,generatorsValues);
+  }
+> void addTerrainBody(%T patchOptions,String mapName, GeneratorMapValues generatorValues){
+    List<%Output> outputs = new ArrayList<%Output>();
+    patchOptions : quark : patch_element {  
+      if quark->sub_generator != null {
+        outputs.add(|\Areas.'mapName'.'%Helper.camelize(quark->sub_generator->area_names).toLowerCase()'.generate(\Generator);|);
+      }
+      else {
+      String tileClassName = %Helper.camelize(quark->tile_names);
+      String tileName = generatorValues.addTerrainTile('mapName',tileClassName);
+      String tileCreateName = "create"+ tileClassName;
+      if quark->patch_position!=null && quark->patch_position->offside != null {
+        %Callable tileCreation = |\Generator.getArea().getOffsideTile(`findTileTypeClass(mapName,tileClassName)`.'mapName'.'tileClassName'::create)|;
+        outputs.add(|`joinifyTile(quark->patch_goto,tileCreation,mapName)`;|);
+      }
+      else if quark->patch_position == null {
+        outputs.add(|`joinifyTile(quark->patch_goto,getAnyOneTerrain(generatorValues,mapName,tileClassName),mapName)`;|);
+      }
+      else {
+        ArrayList<Integer> startXs = new ArrayList<Integer>();
+        ArrayList<Integer> startYs = new ArrayList<Integer>();
+        ArrayList<Integer> endXs = new ArrayList<Integer>();
+        ArrayList<Integer> endYs = new ArrayList<Integer>();
+        quark->patch_position->patch_dimension : width : patchWidth {
+          startXs.add(getPatchDimension(width,false));
+          endXs.add(getPatchDimension(width,true));
+        }
+        quark->patch_position->patch_dimension : height : patchHeight {
+          startYs.add(getPatchDimension(height,false));
+          endYs.add(getPatchDimension(height,true));
+        }
+        if startXs.size() > 1 {
+          %Body switchBody = %Body();
+          for Integer i < startXs.size() {
+            switchBody.add(|
+              case 'i' {
+                `getTerrainPatch(generatorValues,mapName,tileClassName,startXs.get(i),endXs.get(i),startYs.get(i),endYs.get(i))`;
+                break;
+              }|);
+          }
+          outputs.add(|switch Range.getRandom(0,'startXs.size()') `switchBody`|);
+        }
+        else {
+          outputs.add(|`getTerrainPatch(generatorValues,mapName,tileClassName,startXs.get(0),endXs.get(0),startYs.get(0),endYs.get(0))`;|);
+        }
+      }
+      }
+    }
+    if outputs.size() > 1 {
+      %Body switchBody = %Body();
+      for Integer i < outputs.size() {
+        switchBody.add(|
+              case 'i' {
+                `outputs.get(i)`
+                break;
+              }|);
+      }
+      $`generatorValues.getAcceptorClass()`::setup() += {
+          \generationPoints.add(Generator=>{switch Range.getRandom(0,'outputs.size()') `switchBody`});
+        }
+    }
+    else {
+      $`generatorValues.getAcceptorClass()`::setup() += {
+          \generationPoints.add(Generator=>{`outputs.get(0)`;});
+        }
+    }
+  }
+> %Callable joinifyTile(%T patch_goto, %Callable tileCreation, String mapName){
+    if patch_goto != null {
+      if patch_goto->destination->room_names != null {
+        return tileCreation.add(%E("setPortal"),%A().add(|Buildings.'mapName'.`Building.getId('patch_goto->destination->room_names')`|));
+      }
+      else if patch_goto->destination->map_names != null {
+        if patch_goto->destination->area_names != null {
+          return tileCreation.add(%E("setPortal"),%A().add(|Areas.'patch_goto->destination->map_names'.'%Helper.camelize(^patch_goto->destination->area_names^).toLowerCase()'|));
+        }
+        else {
+          return tileCreation.add(%E("setPortal"),%A().add(|`Environments.getId('patch_goto->destination->map_names')`|));
+        }
+      }
+      return tileCreation;
+    }
+    else {
+      return tileCreation;
+    }
+  }
+> Integer getPatchDimension(%T dimension, boolean isUpper){
+    if isUpper {
+      if dimension->upperBound != null {
+        return Integer.parseInt('dimension->upperBound');
+      }
+      else {
+        return Integer.parseInt('dimension');
+      }
+    }
+    else {
+      if dimension->lowerBound != null {
+        return Integer.parseInt('dimension->lowerBound');
+      }
+      else {
+        return Integer.parseInt('dimension');
+      }
+    }
+  }
+> %Callable getAnyOneTerrain(GeneratorMapValues values, String mapName, String tileClassName){
+    return |\Generator.getAnyUnoccupiedTile().setTerrain(`findTileTypeClass(mapName,tileClassName)`.'mapName'.'tileClassName'::create)|;
+  }
+> %Body getTerrainPatch(GeneratorMapValues values, String mapName, String tileClassName, Integer startX, Integer endX, Integer startY, Integer endY){
+    if endX == 1 && endY == 1 {
+      return |`getAnyOneTerrain(values,mapName, tileClassName)`;|;
+    }
+    else { 
+      String fillMethodName = addFillMethod(values,tileClassName,endX,endY);
+      if startX == endX {
+        if startY == endY {
+          return |$`values.getAcceptorClass()`.\Fillers.'fillMethodName'('endX','endY',\Generator);|;
+        }
+        else {
+          return |$`values.getAcceptorClass()`.\Fillers.'fillMethodName'('endX',Range.getRandom('new Integer(startY-1)','endY'),\Generator);|;
+        }
+      }
+      else {
+        if startY == endY {
+          return |$`values.getAcceptorClass()`.\Fillers.'fillMethodName'(Range.getRandom('new Integer(startX-1)','endX','endY'),\Generator);|;
+        }
+        else {
+          return |$`values.getAcceptorClass()`.\Fillers.'fillMethodName'(Range.getRandom('new Integer(startX-1)','endX'),Range.getRandom('new Integer(startY-1)','endY'),\Generator);|;
+        }
+      }
+    }
+  }
+> String addFillMethod(GeneratorMapValues values, String tileClassName, int width, int height){
+    if width == 1 && height == 1 {
+      return null;
+    }
+    String methodName = "fill"+width+"x"+height+"With"+tileClassName;
+    if `values.getAcceptorClass()`.Fillers::'methodName'(int,int,Area.Generator.Instance) == null {
+      String tileCreateName = "create"+ tileClassName;
+      $`values.getAcceptorClass()`.Fillers += @void 'methodName'(int fillWidth, int fillHeight, Area.Generator.Instance instance){
+      	  Area.Generator.Instance delver = instance.clone();
+      	  int startX = Range.getRandom(delver.getX(),instance.getArea().getWidth() - 'new Integer(width+1)' -  delver.getX());
+          int startY = Range.getRandom(delver.getY(),instance.getArea().getWidth() -'new Integer(height+1)' - delver.getY());
+          IntStream.range(startX,startX + fillWidth).forEach(X=>
+              IntStream.range(startY,startY + fillHeight).forEach(Y=>
+                `values.getAcceptorClass().getFullName()`.'tileCreateName'(delver.offset(X,Y))
+            ));
+        }
+      
+    }
+    return methodName;
+  }
+  void display(){
+    tiles.parallelStream().forEach(T=>T.display());
+  }
+  void undisplay(){
+    tiles.parallelStream().forEach(T=>T.undisplay());
+  }
+  Tile getTile(Integer x, Integer y){
+    if layout.containsKey(x) {
+      return layout.get(x).get(y);
+    }
+    else {
+      return null;
+    }
+  }
+  List<Tile> getTiles(Predicate<Tile> test){
+    return tiles.parallelStream().filter(test).collect(Collectors.toList());
+  }
+  Tile getRandomTile(Predicate<Tile> test){
+    List<Tile> result = tiles.parallelStream().filter(test).collect(Collectors.toList());
+    return result.get(Range.getRandom(0,result.size()));
+  }
+  Tile getUnassignedEntryPoint(){
+    return entryPoints.stream().filter(E=>E.getPortal().getDestination()==null).findAny().orElse(null);
+  }
+  Tile getTile(Integer x, Integer y){
+    if layout.containsKey(x) {
+      return layout.get(x).get(y);
+    }
+    else {
+      return null;
+    }
+  }
+  <TileType extends Tile> TileType getOffsideTile(Function<Environment.Position,TileType> factory){
+    int x = Range.select(openSides.keySet());
+    int y = Range.select(openSides.get(x));
+    TileType newTile = factory.apply(new Environment.Position(x,y,parent));
+    add(newTile);
+    return newTile;
+  }
+  Terrain.MonsterDen getMonsterDen(Terrain.Id findId){
+    if terrainMap.has(findId) == false {
+      return null;
+    }
+    else {
+      return (Terrain.MonsterDen)Range.select(terrainMap.getAll(findId));
+    }
+  }
+  
+  Terrain.MonsterDen getMonsterDen(Predicate<Terrain> findCriteria){
+    return (Terrain.MonsterDen)terrains.parallelStream().filter(findCriteria).findAny().orElse(null);
+  }
+  int getDistanceToArea(Area area){
+    if this == area {
+      return 0;
+    }
+    return IntStream.range(1,furthestDistanceToArea).parallel()
+      .filter(I=>areaDistances.get(I).contains(area)).findFirst().orElse(-1);
+  }
+  void findDistance(Area findArea){
+    IntStream.range(0,furthestDistanceToArea).filter(I=>areaDistances.get(I).parallelStream()
+        .anyMatch(area=>area.entryPoints.stream()
+          .anyMatch(entryPoint=>entryPoint.getPortal().getDestinationArea() == findArea)))
+      .findFirst().ifPresent(I=>setDistanceToArea(I+1,findArea));
+  }
+  void setDistanceToArea(int distance, Area area){
+    if distance > furthestDistanceToArea {
+      furthestDistanceToArea = distance;
+    }
+    areaDistances.get(distance).add(area);
+  }
+  boolean containsEntryPoint(Tile entryPoint){
+    return entryPoints.contains(entryPoint);
+  }
+  Tile getEntryPoint(Integer index){
+    return entryPoints.get(index);
+  }
+  Tile getTile(Tile.Id findId){
+    if tileMap.has(findId) == false {
+      return null;
+    }
+    else {
+      return Range.select(tileMap.getAll(findId));
+    }
+  }
+  Tile get(Tile.Id findId){
+    if tileMap.has(findId) == false {
+      return null;
+    }
+    else {
+      return Range.select(tileMap.getAll(findId));
+    }
+  }
+  Terrain get(Terrain.Id findId){
+    if terrainMap.has(findId) == false {
+      return null;
+    }
+    else {
+      return Range.select(terrainMap.getAll(findId));
+    }
+  }
+  Boolean load(){
+    IntStream.range(0,32).forEach(A=>areaDistances.add(new HashSet<Area>()));
+    areaDistances.get(0).add(this);
+    IntStream.range(0,'tickEventArrayLength').parallel().forEach(C=>tickEvents[C] = new Area.Event.Tick.Listener());
+    tiles.stream().forEach(T=>T.load());
+    return true;
+  }
+  Boolean tick(Double millisSinceLastFrame){
+    tiles.stream().forEach(T=>T.tick(millisSinceLastFrame));
+    tickEvents[currentTickPosition].tick(millisSinceLastFrame);
+    if currentTickPosition >= 'tickEventArrayLength-1' {
+      currentTickPosition = 0;
+    }
+    else {
+     ++currentTickPosition;
+    }
+    return true;
+  }
+  Tile join(Tile yourEntryPoint){
+    Tile myEntryPoint = entryPoints.stream()
+      .filter(E=>E.getPortal().getDestination()==null)
+      .findAny().orElse(null);
+    if myEntryPoint != null {
+      getParent().getAreas().stream()
+        .forEach(A=>A.findDistance(yourEntryPoint.getArea()));
+      yourEntryPoint.getArea().getParent().getAreas().stream()
+        .forEach(A=>A.findDistance(myEntryPoint.getArea()));
+      return myEntryPoint ;
+    }
+    else {
+      #entryPointsListeners.add(newEntryPoint=>{
+        newEntryPoint.setSister(yourEntryPoint);
+        yourEntryPoint.setSister(newEntryPoint);
+        newEntryPoint.getArea().getParent().getAreas().stream().forEach(
+          A=>A.findDistance(yourEntryPoint.getArea()));
+          yourEntryPoint.getArea().getParent().getAreas().stream().forEach(
+          A=>A.findDistance(newEntryPoint.getArea()));return false;
+        });#
+      return null;
+    }
+  }
+  void addEvent(Integer offset, Area.Event.Tick event) {
+    tickEvents[(currentTickPosition+offset)%%'tickEventArrayLength'].add(event);
+  }
+  Boolean add(Entity entity){
+    if getParent() != null && entity.getIsPlayerAffiliated() {
+      getParent().addActiveArea(this);
+    }
+    return entities.add(entity);
+  }
+  Boolean remove(Entity entity){
+    if getParent() != null && entity.getIsPlayerAffiliated() {
+      getParent().removeActiveArea(this);
+    }
+    return entities.remove(entity);
+  }
+  void replace(Tile toRemove, Tile toAdd){
+    remove(toRemove);
+    add(toAdd);
+  }
+  Boolean add(Tile newTile){
+    newTile.setArea(this);
+    if newTile.getX() + newTile.getWidth() > width {
+      width = newTile.getX() + newTile.getWidth();
+    }
+    if newTile.getY() + newTile.getHeight() > height {
+      height = newTile.getY() + newTile.getHeight();
+    }
+    synchronized layout {
+      tiles.add(newTile);
+      if layout.containsKey(newTile.getX()) == false {
+        layout.put(newTile.getX(), new HashMap<Integer,Tile>());
+      }
+      layout.get(newTile.getX()).put(newTile.getY(),newTile);
+      
+      if openSides.containsKey(newTile.getX()) {
+        openSides.get(newTile.getX()).remove(newTile.getY());
+      }
+      openSide(newTile.getX()+1,newTile.getY());
+      openSide(newTile.getX()-1,newTile.getY());
+      openSide(newTile.getX(),newTile.getY()+1);
+      openSide(newTile.getX(),newTile.getY()-1);
+    }
+    if \parent != null {
+      \parent.add(newTile);
+    }
+    tileMap.add(newTile);
+    return tiles.add(newTile);
+  }
+  Boolean add(Terrain newTile) {
+  
+    terrainMap.add(newTile);
+    return terrains.add(newTile);
+  }
+  void addEntryPoint(Tile newTile){
+    synchronized entryPoints {
+      if entryPointsListeners.isEmpty() == false {
+        boolean canContinue = true;
+        while canContinue && entryPointsListeners.isEmpty() == false {
+          canContinue = entryPointsListeners.remove(0).listen(newTile);
+        }
+      }
+      entryPoints.add(newTile);
+    }
+  }
+  void openSide(Integer x, Integer y){
+    if !layout.containsKey(x) || !layout.get(x).containsKey(y) {
+      if !openSides.containsKey(x) {
+        openSides.put(x, new HashSet<Integer>());
+      }
+      openSides.get(x).add(y);
+    }
+  }
+  void swapFloor(Integer oldX, Integer oldY, Integer newX, Integer newY){
+    if layout.containsKey(newX) == false {
+      layout.put(newX,new HashMap<Integer, Tile>());
+    }
+    layout.get(newX).put(newY, layout.get(oldX).remove(oldY));
+  }
+  void swapTerrain(Terrain oldTile, Terrain newTile){
+    if oldTile != null {
+      terrainMap.remove(oldTile);
+    }
+    if newTile != null {
+      terrainMap.add(newTile);
+    }
+  }
+  Boolean remove(Entity entity){
+    return entities.remove(entity);
+  }
+  Boolean remove(Tile oldTile){
+  	oldTile.getNeighbours().stream().forEach(N=>N.resetNeighbour(oldTile));
+    oldTile.setArea(null);
+    tileMap.remove(oldTile);
+    if oldTile.getPortal() != null{
+      synchronized entryPoints {
+        entryPoints.remove(oldTile);
+      }
+    }
+    tileMap.remove((Tile)oldTile);
+    if layout.containsKey(oldTile.getX()) {
+      layout.get(oldTile.getX()).remove(oldTile.getY());
+    }
+    return tiles.remove(oldTile);
+  }
+  Boolean remove(Terrain oldTerrain){
+    return terrains.remove(terrainMap.remove(oldTerrain));
+  }
+  boolean has(Predicate<Tile> criteria){
+    return tiles.parallelStream().anyMatch(criteria);
+  }
+  Tile getUnexploredPoint(Entity explorer){
+    return entryPoints.stream()
+      .filter(tile=>!tile.getPortal().hasExplored(explorer))
+      .filter(tile=>!tile.hasOccupant(explorer))
+      .findAny().orElse(null);
+  }
+  List<Entity> collectEntities(Predicate<Entity> predicate){
+    return entities.parallelStream().filter(predicate).collect(Collectors.toList()); 
+  }
+  List<Entity> getEntitiesWithin(Environment.Position position, Float range){
+    return collectEntities(entity=>entity.getLocation().getDistanceTo(position) <= range);
+  }
+  List<Entity> getEntitiesWithin(Environment.Position position, Float range, Predicate<Entity> criteria){
+    return entities.parallelStream().filter(criteria).filter(entity=>entity.getLocation().getDistanceTo(position) <= range)
+             .collect(Collectors.toList());
+  }
+  Entity getClosestEntity(Environment.Position position, Predicate<Entity> criteria){
+    return entities.stream().filter(criteria).sorted(new Entity.Comparators.Distance.Ascending(position)).findFirst().orElse(null);
+  }
+  Tile getClosestEntryPoint(Environment.Position position){
+    return entryPoints.stream().sorted(new Tile.Comparators.Distance.Ascending(position)).findFirst().orElse(null);
+  }
+  Terrain getClosestTile(Environment.Position position, Terrain.Id terrainId){
+    if terrainMap.has(terrainId) == false {
+      return null;
+    }
+    Tile result = terrainMap.getAll(terrainId).stream().map(T=>T.getFloorTile()).sorted(new Tile.Comparators.Distance.Ascending(position)).findFirst().orElse(null);
+    return result!=null?result.getTerrain():null;
+  }
+  Tile getClosestTile(Environment.Position position, Tile.Id tileId){
+    if tileMap.has(tileId) == false {
+      return null;
+    }
+    return tileMap.getAll(tileId).stream().sorted(new Tile.Comparators.Distance.Ascending(position)).findFirst().orElse(null);
+  }
+  Tile getClosestTile(Environment.Position position, Predicate<Tile> criteria){
+    return IntStream.range(0,furthestDistanceToArea).parallel().boxed()
+      .flatMap(I=>getAllTilesAsStream(I))
+      .filter(criteria)
+      .sorted(new Tile.Comparators.Distance.Ascending.Complex(position)).findFirst().orElse(null);
+  }
+  void getAllTiles(int distance,ArrayList<Tile> collector){
+    areaDistances.get(distance).stream().forEach(A=>collector.addAll(A.tiles));
+  }
+  List<Tile> getAllTiles(int distance){
+    return areaDistances.get(distance).parallelStream().flatMap(A=>A.tiles.parallelStream()).collect(Collectors.toList());
+  }
+  Stream<Tile> getAllTilesAsStream(int distance){
+    return areaDistances.get(distance).parallelStream().flatMap(A=>A.tiles.parallelStream());
+  }
+  void add(Building building) {
+    buildings.add(building);
+  }
+  
+  Boolean isWithin(Environment.Position otherPosition){
+    return otherPosition.getX() >= 0 && otherPosition.getX() < width && otherPosition.getY() >= 0 && otherPosition.getY() < height;
+  }
+  Tile getEntryPointToward(Area area){
+    if sisterAreas.containsKey(area) {
+      return sisterAreas.get(area);
+    }
+    else {
+      Tile found = entryPoints.parallelStream().filter(E=>E.getPortal().getDestinationArea() == area)
+        .findAny().orElseGet(
+          ()=>
+          entryPoints.parallelStream()
+            .filter(E=>E.getPortal().getDestinationArea()!=null)
+            .filter(E=>E.getPortal().getDestinationArea()
+              .canGetToAreaFrom(
+                area,E.getPortal().getDestination(),
+                Collections.synchronizedSet(new AreaSet(Area.this)))).findFirst().orElse(null)
+                 
+        );
+      if found!=null{
+        sisterAreas.put(area,found);
+      }
+      return found;
+    }
+  }
+  Boolean canGetToAreaFrom(Area findArea,Tile previousEntryPoint, Set<Area> investigated){
+    if this == findArea {
+      return true;
+    }
+    if investigated.add(this) {
+      return entryPoints.parallelStream()
+        .filter(entryPoint=>entryPoint!=previousEntryPoint&&
+                            entryPoint.getPortal().getDestinationArea()!=null)
+        .anyMatch(
+          entryPoint=>entryPoint.getPortal().getDestinationArea()
+                        .canGetToAreaFrom(findArea,
+                                          entryPoint.getPortal().getDestination(),
+                                          investigated));
+    }
+    else {
+      return false;
+    }
+  }
+  List<Tile> getAbsolutePathBetweenEntryPoints(Integer startPoint, Integer endPoint){
+    synchronized entryToEntryPaths {
+      if entryToEntryPaths.containsKey(startPoint) {
+        if entryToEntryPaths.get(startPoint).containsKey(endPoint) {
+          return entryToEntryPaths.get(startPoint).get(endPoint);
+        }
+      }
+      else {
+        entryToEntryPaths.put(startPoint, new HashMap<Integer, List<Tile>>());
+      }
+      if !entryToEntryPaths.containsKey(endPoint) {
+        entryToEntryPaths.put(endPoint, new HashMap<Integer, List<Tile>>());
+      }
+    }
+    Tile endTile = entryPoints.get(endPoint);
+    Tile tile = entryPoints.get(startPoint);
+    List<Tile.Path> tried = new ArrayList<Tile.Path>();
+    Tile.Path.Ways ways = new Tile.Path.Ways(endTile);
+    Set<Tile> investigated = new HashSet<Tile>();
+    investigated.add(null);
+    Iterator<Tile.Path> paths = new Streamer.Iterator<Tile.Path>(
+        new Tile.Path(null,tile,endTile),
+        P => {
+          P.getTile().getNeighbours().stream()
+            .filter ( N => investigated.add(N))
+            .forEach( N => ways.extend(P,N));
+          return ways.pollFirst();
+          });
+    Tile.Path path = paths.next();
+    tried.add(path);
+    while path.getTile() != endTile && paths.hasNext() {
+      path = paths.next();
+      tried.add(path);
+    }
+    
+    if path.getTile() == endTile {
+      List<Tile> pathAsList = path.collect();
+      List<Tile> reverseList = path.collectReverse();
+      synchronized entryToEntryPaths {
+        entryToEntryPaths.get(startPoint).put(endPoint, pathAsList);
+        entryToEntryPaths.get(endPoint).put(startPoint, reverseList);
+      }
+      return pathAsList;
+    }
+    else {
+      System.err.println('' "Could not make path!" '' + entryPoints.get(startPoint) + '' " to " '' + endTile);
+      tried.stream().forEach(System.'"err"'::println());
+      return null;
+    }
+  }
+  void clearAbsolutePathBetweenEntryPoints(Integer startPoint, Integer endPoint){
+    synchronized entryToEntryPaths {
+      if entryToEntryPaths.containsKey(startPoint) {
+        if entryToEntryPaths.get(startPoint).containsKey(endPoint) {
+          entryToEntryPaths.get(startPoint).remove(endPoint);
+        } 
+      }
+      if entryToEntryPaths.containsKey(endPoint) {
+        if entryToEntryPaths.get(startPoint).containsKey(startPoint) {
+          entryToEntryPaths.get(endPoint).remove(startPoint);
+        } 
+      }
+    }
+  }
+}

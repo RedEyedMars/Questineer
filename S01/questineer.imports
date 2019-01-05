@@ -1,0 +1,26 @@
+
+< java.awt.image
+	BufferedImage
+	PixelGrabber
+< javax.imageio
+	ImageIO
+< java.nio
+	ByteOrder
+	ByteBuffer
+	FloatBuffer
+	IntBuffer
+
+< org.lwjgl
+	Sys
+< org.lwjgl.opengl
+	GL11
+	GL12
+	DisplayMode
+	Display
+	PixelFormat
+< org.lwjgl.input
+	Keyboard
+	Mouse
+	Cursor
+< org.lwjgl.util.glu
+	GLU

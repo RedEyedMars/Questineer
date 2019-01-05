@@ -1,0 +1,42 @@
+#TILES#
+siding_names global list with NAME
+tile_names global list with NAME
+	"None"
+tile_symbols global list with NAME
+
+
+import_tile Imports "../tiles/" FILE_NAME ".tile"  = ">" FILE_NAME ".tile" "\n"
+	( "\n" | comments | tile_declaration )*
+
+tile_declaration
+	( "*"+ "Floor"   "*"+ "\n"* edge_definition* "\n"* tile_definition* ) as floor_declaration
+	( "*"+ "Edge"    "*"+ ( "\n"* siding_definition) * ) as siding_declaration
+	( "*"+ "Terrain" "*"+ "\n"* tile_definition* ) as terrain_declaration
+	( "*"+ "Dens"    "*"+ "\n"* tile_definition* ) as dens_declaration
+	( "*"+ "Chests"  "*"+ "\n"* tile_definition* ) as chests_declaration
+
+tile_dimensions Braced [ ] = INTEGER as width "," INTEGER as height
+shape_type = "Circle" | "Court" | "Square"
+direction_name = "North" | "East" | "South" | "West"
+edge_if_operator =  "==" | "!=" 
+
+edge_definition
+	"/" NAME as edgeTileName ( "|" NAME as edgeTileName )* direction_name ("|" direction_name)* ( "\n" edge_if )*
+edge_if
+	( "if" "Neighbour" ("in" "Direction" | INTEGER INTEGER ) edge_if_operator ( "null" ) ) as neighbourIf
+siding_definition
+	":"+ NAME as sidingName in siding_names ":"+ tile_definition_element*
+tile_definition
+	( ((tile_names) as floorParentName ("," (tile_names) as floorParentName)*) "::" )? NAME as tileName in tile_names tile_definition_element* tile_element*
+tile_definition_element silent
+	tile_dimensions
+	( "Impassable" as IMPASSABLE | "Passable" as PASSABLE )  ";"
+	( tile_cost ( "|" tile_cost)* ) as tile_rate ";"
+	NAME as imageName ("->" NAME as imageId)* ";" 
+tile_element silent
+	comments
+	"\n\t" edge_definition
+	"\n\t" ( ("+" as PLUS |"-" as MINUS)+ entity_declaration ) as entity
+	"\n"
+tile_cost = "Free" as FREE | INTEGER as payment? tile_payment_type ( "&" tile_cost )?
+tile_payment_type = payment_long_type_names | payment_short_type_names | item_names

@@ -1,0 +1,106 @@
+class 'packageName'.overview.treasuries.Treasury {
+  class PaymentType {
+    class Id {
+    }
+    String shortForm;
+    String longForm;
+  }
+  class PaymentTypes {
+  }
+> Map<String,String>  longForms = new HashMap<String,String>();
+> Map<String,String> shortForms = new HashMap<String,String>();
+  Map<Treasury.PaymentType.Id,Int> idMap = new HashMap<Treasury.PaymentType.Id,Int>();
+  
+  Integer get(Treasury.PaymentType.Id id){
+    if idMap.containsKey(id) == false {
+      idMap.put(id, new Int(0));
+    }
+    return idMap.get(id).getValue();
+  }
+  void increase(Treasury.PaymentType.Id id){
+    if idMap.containsKey(id) == false {
+      idMap.put(id, new Int(0));
+    }
+    idMap.get(id).setValue(idMap.get(id).getValue() + 1);
+  }
+  void increase(Treasury.PaymentType.Id id, Integer amount){
+    if idMap.containsKey(id) == false {
+      idMap.put(id, new Int(0));
+    }
+    idMap.get(id).setValue(idMap.get(id).getValue() + amount);
+  }
+> void setup(%Pass data){
+  }
+> void paymentTypeDec(%T typeToken){
+    if typeToken->typeName != null {
+      paymentTypeDec(%Helper.camelize('typeToken->typeName'),
+                     %Helper.camelize('typeToken->shortForm'),
+                     %Helper.camelize('typeToken->longForm'));
+    }
+    else {
+      paymentTypeDec('typeToken->longForm',
+                     %Helper.camelize('typeToken->shortForm'),
+                     %Helper.camelize('typeToken->longForm'));
+    }  
+  }
+> void paymentTypeDec(String typeName, String shortForm, String longForm){
+    Treasury.PaymentTypes += class 'typeName' {
+      @Treasury.PaymentType.Id id = new Treasury.PaymentType.Id();
+      String getShortForm(){
+        return ''shortForm'';
+      }
+      String getLongForm(){
+        return ''longForm'';
+      }
+    }
+    longForms.put(longForm,typeName);
+    shortForms.put(shortForm,typeName);
+  }
+> String getTypeName(%T typeNameToken){
+    if typeNameToken->item_names != null{
+      return %Helper.camelize('typeNameToken->item_names');
+    }
+    else if typeNameToken->payment_long_type_names != null{
+      return longForms.get(%Helper.camelize('typeNameToken->payment_long_type_names'));
+    }
+    else if typeNameToken->payment_short_type_names != null{
+      return shortForms.get(%Helper.camelize('typeNameToken->payment_short_type_names'));
+    }
+    else {
+      return null;
+    }
+  }
+
+  
+  class Reward {
+    Boolean isPlacable(){
+      return false;
+    }
+    Menu.Placable getPlacable(){
+      return null;
+    }
+  }
+  
+  class Cost {
+    Boolean canPay(Treasury treasury){
+      if \isFree() {
+        return true;
+      }
+      else {
+        return treasury.get(\getType()) >= \getAmount();
+      }
+    }
+    Treasury.Reward getReward() {
+      return null; 
+    }
+    Boolean isFree(){
+      return false;
+    }
+    int getAmount(){
+      return 1;
+    }
+    Treasury.PaymentType.Id getType(){
+      return null;
+    }
+  }
+}

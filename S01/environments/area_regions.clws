@@ -1,0 +1,285 @@
+
+> class RegionPoint  {
+    Integer x = 0;
+	Integer y = 0;
+	Integer pixel = 0;
+	RegionPoint (int ix, int iy, int ip){
+	  x = ix;
+	  y = iy;
+	  pixel = ip;
+	}
+  }
+> class RegionZone : Iterable<RegionPoint> {
+	Map<Integer, Map<Integer, RegionPoint>> map = new HashMap<Integer, Map<Integer,RegionPoint>>();
+	Map<Integer, List<RegionEdge>> ups = new HashMap<Integer, List<RegionEdge>>();
+	Map<Integer, List<RegionEdge>> downs = new HashMap<Integer, List<RegionEdge>>();
+	Map<Integer, List<RegionEdge>> rights = new HashMap<Integer, List<RegionEdge>>();
+	Map<Integer, List<RegionEdge>> lefts = new HashMap<Integer, List<RegionEdge>>();
+    Integer lowerBoundX = Integer.MAX_VALUE;
+    Integer lowerBoundY = Integer.MAX_VALUE;
+    Integer upperBoundX = 0;
+    Integer upperBoundY = 0;
+    RegionPoint previousEdgePoint = null;
+    void add(RegionPoint newPoint){
+      if newPoint.getX() < lowerBoundX {
+        lowerBoundX = newPoint.getX();
+      }
+      if newPoint.getY() < lowerBoundY {
+        lowerBoundY = newPoint.getY();
+      }
+      if newPoint.getX() > upperBoundX {
+        upperBoundX = newPoint.getX();
+      }
+      if newPoint.getY() > upperBoundY {
+        upperBoundY = newPoint.getY();
+      }
+      if map.containsKey(newPoint.getX()) == false{
+        map.put(newPoint.getX(),new HashMap<Integer, RegionPoint>());
+      }
+      map.get(newPoint.getX()).put(newPoint.getY(),newPoint);
+    }
+    void addEdgePoint(RegionPoint edge){
+      if previousEdgePoint != null {
+        if edge.getX() > previousEdgePoint.getX() {
+          if rights.containsKey(previousEdgePoint.getY()) == false {
+            rights.put(previousEdgePoint.getY(), new ArrayList<RegionEdge>());
+          }
+          rights.get(previousEdgePoint.getY()).add(new RegionEdge(previousEdgePoint.getX(),edge.getX()));
+        }
+        else if edge.getX() < previousEdgePoint.getX() {
+          if lefts.containsKey(edge.getY()) == false {
+            lefts.put(edge.getY(), new ArrayList<RegionEdge>());
+          }
+          lefts.get(edge.getY()).add(new RegionEdge(edge.getX(),previousEdgePoint.getX()));
+        }
+        else if edge.getY() > previousEdgePoint.getY() {
+          if ups.containsKey(previousEdgePoint.getX()) == false {
+            ups.put(previousEdgePoint.getX(), new ArrayList<RegionEdge>());
+          }
+          ups.get(previousEdgePoint.getX()).add(new RegionEdge(previousEdgePoint.getY(),edge.getY()));
+        }
+        else if edge.getY() < previousEdgePoint.getY() {
+          if downs.containsKey(edge.getX()) == false {
+            downs.put(edge.getX(), new ArrayList<RegionEdge>());
+          }
+          downs.get(edge.getX()).add(new RegionEdge(edge.getY(),previousEdgePoint.getY() ));
+        }
+      }
+      previousEdgePoint = edge;
+    }
+    Iterator<RegionPoint> iterator(){
+      return new RegionZoneIterator(this);
+    }
+  }
+> class RegionEdge  {
+    Integer startEdge = 0;
+    Integer endEdge = 0;
+    RegionEdge (Integer initialStart, Integer initialEnd){
+      startEdge = initialStart;
+      endEdge = initialEnd;
+    }
+    Integer getStart(){
+      return startEdge;
+    }
+    Integer getEnd(){
+      return endEdge;
+    }
+  }
+> class RegionZoneIterator : Iterator<RegionPoint>  {
+    RegionZone toIterate = null;
+    Integer x = 0;
+    Integer y = 0;
+    Map<Integer, Map<Integer, RegionPoint>> map = null;
+    RegionZoneIterator (RegionZone iIterable){
+      toIterate = iIterable;
+      x = toIterate.getLowerBoundX();
+      y = toIterate.getLowerBoundY();
+      map = toIterate.getMap();
+    }
+    boolean hasNext(){
+      return x <= toIterate.getUpperBoundX() && y <= toIterate.getUpperBoundY();
+    }
+    void advanceIndex(){
+      if x == toIterate.getUpperBoundX() {
+        x = toIterate.getLowerBoundX();
+        ++y;
+      }
+      else {
+        ++x;
+      }
+    }
+    RegionPoint next(){
+      if map.containsKey(x) {
+        if map.get(x).containsKey(y) {
+          RegionPoint point = map.get(x).get(y);
+          advanceIndex();
+          return point;
+        }
+        else {
+          advanceIndex();
+          return null;
+        }
+      }
+      else {
+        advanceIndex();
+        return null;
+      }
+    }
+    
+    void remove(){
+    }
+  }
+> class Region  {
+	@int PIXEL_ZERO = -16777216;
+	@int PIXEL_GREEN = -11731200;
+	@int PIXEL_RED = -65536;
+	@int PIXEL_CYAN = -16711681;
+	@int PIXEL_PURPLE = -65316;
+	@int PIXEL_YELLOW = -10240;
+    Integer x = 0;
+	Integer y = 0;
+	Integer pixel = 0;
+	Map<Integer, Set<RegionPoint>> pixelMap = new HashMap<Integer, Set<RegionPoint>>();
+	Map<Integer, Set<RegionPoint>> horizontals = new HashMap<Integer,Set<RegionPoint>>();
+	Region (int ix, int iy, int ipixel){
+	  x = ix;
+	  y = iy;
+	  pixel = ipixel;
+	  pixelMap.put(pixel, new HashSet<RegionPoint>());
+	  pixelMap.get(pixel).add(new RegionPoint(x,y,pixel));
+	  horizontals.put(y, new HashSet<RegionPoint>());
+	  horizontals.get(y).add(new RegionPoint(x,y,pixel));
+	}
+	void add(Region otherRegion){
+	  for Integer p : otherRegion.pixelMap.keySet() {
+	    if pixelMap.containsKey(p) == false {
+	      pixelMap.put(p, new HashSet<RegionPoint>());
+	    }
+	    pixelMap.get(p).addAll(otherRegion.pixelMap.get(p));
+	  }
+	  for Integer y : otherRegion.horizontals.keySet() {
+		 if horizontals.containsKey(y) == false {
+		   horizontals.put(y, new HashSet<RegionPoint>());
+		 }
+		 horizontals.get(y).addAll(otherRegion.horizontals.get(y));
+	  }
+	}
+	List<RegionZone> getPoints(List<List<RegionPoint>> zones){
+		List<RegionZone> points = new ArrayList<RegionZone>();
+		for List<RegionPoint> zone: zones {
+		  RegionZone zonePoints = new RegionZone();
+		  points.add(zonePoints);
+		  Integer i = 1;
+		  while i<zone.size()-1 {
+			if zone.get(i).getPixel()==PIXEL_CYAN && zone.get(i+1).getPixel()==PIXEL_RED {
+				int baseX = zone.get(i).getX();
+				int endX = zone.get(i+1).getX();
+				int y = zone.get(i).getY();
+				while y>=zone.get(i-1).getY() {
+				  for RegionPoint point: horizontals.get(y) {
+				    if point.getX() >= baseX && point.getX() <= endX {
+				    	zonePoints.add(point);
+				    }
+				  }
+				  --y;
+				}
+			}
+		    ++i;
+		  }
+		  for RegionPoint point: zone {
+		    zonePoints.addEdgePoint(point);
+		  }
+		}
+		return points;
+	}
+	List<List<RegionPoint>> getZones(){
+	  List<List<RegionPoint>> results = new ArrayList<List<RegionPoint>>();
+	  if pixelMap.containsKey(PIXEL_YELLOW) {
+	    for RegionPoint yellowPoint : pixelMap.get(PIXEL_YELLOW) {
+	      List<RegionPoint> zone = new ArrayList<RegionPoint>();
+	      zone.add(yellowPoint);
+	      makeZone(results,zone,getCounterPoints(yellowPoint), yellowPoint);
+	    }
+	  }
+	  return results;
+	}
+	void makeZone(List<List<RegionPoint>> zones, List<RegionPoint> zone, List<RegionPoint> counters, RegionPoint startPoint){
+	  for RegionPoint point: counters {
+	    if point.getPixel() == PIXEL_YELLOW {
+	      if point == startPoint {
+	        zones.add(zone);
+	      }
+	    }
+	    else {
+	      List<RegionPoint> newZone = new ArrayList<RegionPoint>();
+	      newZone.addAll(zone);
+	      newZone.add(point);
+	      makeZone(zones,newZone,getCounterPoints(point),startPoint);
+	    }
+	  }
+	}
+	List<RegionPoint> getCounterPoints(RegionPoint point){
+	  List<RegionPoint> result = new ArrayList<RegionPoint>();
+	  if point.getPixel() == PIXEL_YELLOW || point.getPixel() == PIXEL_RED || point.getPixel() == PIXEL_GREEN {
+	    if pixelMap.containsKey(PIXEL_CYAN) {
+	      for RegionPoint otherPoint: pixelMap.get(PIXEL_CYAN)  {
+	        if point.getX() == otherPoint.getX() {
+	          result.add(otherPoint);
+	        }
+	      }
+	    }
+	  }
+	  else if point.getPixel() == PIXEL_CYAN {
+	    if pixelMap.containsKey(PIXEL_YELLOW) {
+	      for RegionPoint otherPoint: pixelMap.get(PIXEL_YELLOW) {
+	        if point.getY() == otherPoint.getY() {
+	          result.add(otherPoint);
+	        }
+	      }
+	    }
+	    if pixelMap.containsKey(PIXEL_RED) {
+	      for RegionPoint otherPoint: pixelMap.get(PIXEL_RED) {
+	        if point.getY() == otherPoint.getY() {
+	          result.add(otherPoint);
+	        }
+	      }
+	    }
+	  }
+	  return result;
+	}
+	Boolean isBlack(){
+	  return pixel == PIXEL_ZERO;
+	}
+	Boolean isWhite(){
+	  return pixel == -1;
+	}
+	Boolean isCompatible(Region other){
+	  if pixel == PIXEL_ZERO {
+	    if other.pixel == PIXEL_ZERO {
+		  return true;
+		}
+		else {
+		  return false;
+		}
+	  }
+	  else if pixel == -1 {
+		if other.pixel == -1 {
+		  return true;
+		}
+		else {
+		  return false;
+		}
+	  }
+	  else {
+		if other.pixel == PIXEL_ZERO {
+		  return false;
+		}
+		else if other.pixel == -1 {
+		  return false;
+		}
+		else {
+		  return true;
+		}
+	  }
+	}
+  }

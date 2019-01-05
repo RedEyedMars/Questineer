@@ -1,0 +1,329 @@
+class 'packageName'.entities.behaviours.activities.Activity < Source{
+  enum Predefined {
+    class ActivityCriteria {}
+    class ChasingEntity {}
+  }
+  interface Criteria Predicate<Activity> {
+  }
+  class Id {
+  }
+  interface Factory {
+    Activity create()?
+  }
+  class Listeners {
+    class Fail Events.Fail.Listener {
+      Activity host = null;
+      Boolean listen(Events.Fail event){
+        host.on(event);
+        return true;
+      }
+    }
+  }
+  String name = null;
+  String description = null;
+  Set<Tile> exploredPoints = new HashSet<Tile>();
+  Set<Area> exploredAreas = new HashSet<Area>();
+  Entity targetEntity = null;
+  Terrain.MonsterDen targetDen = null;
+  Terrain targetTerrain = null;
+  Boolean failed = false;
+  ActivityType getType(){
+    return null;
+  }
+  void setHost(Entity newHost){
+  }
+  Boolean hasTarget() {
+    return targetEntity != null || targetDen != null || targetTerrain != null;
+  }
+  void rememberEntryPoint(Tile point){
+    exploredPoints.add(point);
+  }
+  void explore(Area newArea){
+    exploredAreas.add(newArea);
+  }
+  Boolean hasExplored(Area area){
+    return exploredAreas.contains(area);
+  }
+  Entity getTarget(Entity host, Entity.Criteria targetCriteria){
+    return host.getLocation().getClosestEntity(targetCriteria);
+  }
+  Tile getDestination(Entity host){
+    return null;
+  }
+  Boolean hasSucceeded(Entity host){
+    return false;
+  }
+  Boolean hasFailed(Entity host){
+    return failed;
+  }
+  List<Usable> getUsables(){
+    return null;
+  }
+  Usable pick(){
+    if getUsables().isEmpty() == false {
+	  return Range.select(getUsables());
+	}
+	else {
+	  failed = true;
+	  return null;
+	}
+  }
+  void add(Usable newUsable){
+  }
+  void remove(Usable newUsable){
+  }
+  void listen(Entity host, Entity.Event event){
+  }
+  Boolean on(Events.Tick event){
+  	Entity host = event.getHost();
+    if hasSucceeded(host){
+      on(new Events.Success(host,this));
+      host.stop(this);
+      return true;
+    }
+    else if hasFailed(host){
+      on(new Events.Fail(host,this));
+      host.stop(this);
+      return true;
+    }
+    else if host.isIdle() {
+      if failed == false && step(host)==false {
+        return on(new Events.Idle(host,this));
+      }
+      else {
+        return true;
+      }
+    }
+    else {
+      return true;
+    }
+  }
+  Boolean step(Entity host){
+    if host.getFocusSkill()==null || getUsables().contains(host.getFocusSkill()) == false || host.getFocusSkill().use(host,this) == false {
+      return Streamer.has(getUsables(), usable=>usable!=host.getFocusSkill() && usable.use(host,Activity.this));
+    }
+	return false;
+  }
+  Boolean on(Events.Idle event){
+    List<Entity> entitiesToTarget = event.getHost().getLocation().getEntitiesWithin(20f);
+    failed = true;
+    entitiesToTarget
+      .parallelStream().map(E=>new Object(E,Streamer.get(getUsables(),usable=>usable.getTargetCriteria().test(E)))[])
+      .filter(P=>P[1]!=null).findAny().ifPresent(
+        P=>{
+          failed = false;
+          event.getHost().start(new Activities.ChasingEntity(25, (Entity)P[0], ((Usable)P[1]).getRange(event.getHost())));
+        });
+  }
+  List<Usable> getInRangeUsables(Entity host, Entity toTarget){
+    Double distanceToTarget = host.getLocation().getDistanceTo(toTarget.getLocation());
+    return Streamer.collect(getUsables(),usable=>usable.getRange(host) <= distanceToTarget && usable.getTargetCriteria().test(toTarget));
+  }
+  List<Usable> getAvailableUsables(Entity host, Entity toTarget){
+	return Streamer.collect(getUsables(),usable=>usable.getTargetCriteria().test(toTarget));
+  }
+  Usable getFurthestAvailableUsable(Entity host, Entity toTarget){
+    return Streamer.race(getUsables(), usable=>usable.getTargetCriteria().test(toTarget), 0f, usable=>usable.getRange(host),(left,right)=>left>right);
+  }
+  List<Usable> getInRangeUsables(Entity host, Tile toTarget){
+    Double distanceToTarget = host.getLocation().getDistanceTo(toTarget);
+    return Streamer.collect(getUsables(),usable=>usable.getRange(host) <= distanceToTarget && usable.getDestinationCriteria().test(toTarget));
+  }
+  List<Usable> getAvailableUsables(Entity host, Tile toTarget){
+    return Streamer.collect(getUsables(),usable=>usable.getDestinationCriteria().test(toTarget));
+  }
+  Usable getFurthestAvailableUsable(Entity host, Tile toTarget){
+    return Streamer.race(getUsables(), usable=>usable.getDestinationCriteria().test(toTarget), -1f, usable=>usable.getRange(host),(left,right)=>left>right);
+  }
+  List<Usable> getInRangeUsables(Entity host, Terrain toTarget){
+    Double distanceToTarget = host.getLocation().getDistanceTo(toTarget.getFloorTile());
+    return Streamer.collect(getUsables(),usable=>usable.getRange(host) <= distanceToTarget && usable.getTerrainCriteria().test(toTarget));
+  }
+  List<Usable> getAvailableUsables(Entity host, Terrain toTarget){
+    return Streamer.collect(getUsables(),usable=>usable.getTerrainCriteria().test(toTarget));
+  }
+  Usable getFurthestAvailableUsable(Entity host, Terrain toTarget){
+    return Streamer.race(getUsables(), usable=>usable.getTerrainCriteria().test(toTarget), -1f, usable=>usable.getRange(host),(left,right)=>left>right);
+  }
+  Activity.Id getId(){
+    return null;
+  }
+}
+class 'packageName'.entities.behaviours.activities.Activities {
+  @Activity create(String activityName){
+    return null;
+  }
+> void setup(%Pass data){
+    Events.addToEventMethod("load",Activity,{});
+    Events.addToEventMethod("idle",Activity,{});
+    Events.addToEventMethod("success",Activity,{});
+    Events.addToEventMethod("fail",Activity,{});
+  }
+> void declaration(%T declarationToken){
+    String activityName = %Helper.camelize('declarationToken->activityName');
+    
+    String declaredTypeName = ActivityTypes.currentlyDeclaredTypeName;
+    Activities += class 'activityName' Activity {
+      @Activity.Id id = new Activity.Id();
+      @List<Usable> allUsables = new ArrayList<Usable>();
+      Entity host = null;
+      'activityName'(){
+      }
+      String getName(){
+        return '' 'activityName' '';
+      }
+      String getDescription(){
+        return '' 'declarationToken->DESCRIPTION' '';
+      }
+      ActivityType getType(){
+        return ActivityTypes.'declaredTypeName';
+      }
+      List<Usable> getUsables(){
+        return allUsables;
+      }
+      Boolean hasSucceeded(Entity host){
+      }
+      Boolean hasFailed(Entity host){
+      }
+      Activity.Id getId(){
+        return id;
+      }
+    }
+    if declarationToken->method_parameters != null {
+      List<%Variable> variables = new ArrayList<%Variable>();
+      declarationToken->method_parameters : element : variable_header {
+        variables.add(addVariableHeader(element, Activities.'activityName'));
+      }
+      (Activities.'activityName').addDefaultConstructor(variables);
+    }
+    declarationToken : element : variable_declaration {
+      %Variable variable = addVariableHeader(element->variable_header, Activities.'activityName');
+      if element->statement != null {
+        variable.assign(getStatement(element->statement,Activities.'activityName'));
+      }
+    }
+    Activities::create(String) -= {
+        if \activityName.equals('' 'activityName' '') {
+          return new Activities.'activityName'(); 
+        }}
+    declarationToken : element : className {
+      Entity::gain('element',Source) += {
+          Activities.'activityName'.allUsables.add(^'element'.toLowerCase()^);
+        }
+    }
+    %Context hasSucceededContext = Activities.'activityName'::hasSucceeded(Entity); 
+    %Context hasFailedContext = Activities.'activityName'::hasFailed(Entity); 
+    declarationToken : element : endState {
+      if element->SUCCEED != null {
+        Activities.'activityName'::hasSucceeded(Entity) += {
+            if `getBooleanStatement(element->boolean_statement,hasSucceededContext)` {
+              return true;
+            }
+          }
+      }
+      else {
+        Activities.'activityName'::hasFailed(Entity) += {
+          if `getBooleanStatement(element->boolean_statement,hasFailedContext)` {
+            return true;
+          }}
+      }
+    }
+    if declarationToken->getTarget != null {
+      Activities.'activityName' += Entity getTarget(Entity host, Entity.Criteria targetCriteria){}
+      %Context getTargetContext = Activities.'activityName'::getTarget(Entity,Entity.Criteria);
+      declarationToken : element : getTarget {
+        element : atom : body_element {
+          Activities.'activityName'::getTarget(Entity,Entity.Criteria) += `getBodyElement(atom,getTargetContext)`
+        }
+      }
+    }
+    if declarationToken->getDestination != null {
+      Activities.'activityName' += Entity getDestination(Entity host){}
+      %Context getTargetContext = Activities.'activityName'::getDestination(Entity);
+      declarationToken : element : getDestination {
+        element : atom : body_element {
+          Activities.'activityName'::getDestination(Entity) += `getBodyElement(atom,getTargetContext)`
+        }
+      }
+    }
+    if declarationToken->step != null {
+      declarationToken : element : step {
+        Activities.'activityName' += Boolean step(Entity host){}
+        Activities.'activityName'::step(Entity) += `getBodyElements(element,
+                                                                   Activities.'activityName'::step(Entity))`
+      }
+    }
+    if declarationToken->listen != null {
+      Activities.'activityName' += void listen(Entity host,Entity.Event event){}
+      Activities.'activityName'::listen(Entity,Entity.Event) +=
+        `getBodyElements(declarationToken->listen,Activities.'activityName'::listen(Entity, Entity.Event))`
+    }
+    declarationToken : element : event_statement {
+      Events.addToEventMethod(
+        'element->event_names',
+        Activities.'activityName',
+        getBodyElements(
+          element,
+          Events.getEventContext('element->event_names',Activities.'activityName')));
+    }
+    
+    Activities.'activityName'::hasSucceeded(Entity) += {return false;}
+    Activities.'activityName'::hasFailed(Entity)    += {return false;}
+  }
+> %Output getId(String name){
+    return |Activities.'name'.id|;
+  }
+}
+class 'packageName'.entities.behaviours.activities.ActivityType {
+  enum Id {void None;}
+  String name;
+  ActivityType.Id id;
+  ActivityType(String name, ActivityType.Id id){this.name = name; this.id = id;}
+}
+class 'packageName'.entities.behaviours.activities.ActivityTypes {
+  @ActivityType None = new ActivityType(''"None"'',ActivityType.Id.None);
+>@ %Body createSwitchBody = %Body ();
+  @ActivityType from(ActivityType.Id id) {
+    switch id `createSwitchBody`
+    return null;
+  }
+> Set<String> allActivityNames = new HashSet<String>();
+>@String currentlyDeclaredTypeName = "None";
+> void declaration(%T input) {
+    String activityTypeName = %Helper.camelize('input->activityTypeName');
+    currentlyDeclaredTypeName = activityTypeName;
+    if allActivityNames.add(activityTypeName){
+      ActivityType.Id += void 'activityTypeName';
+      ActivityTypes += @ActivityType 'activityTypeName' = new ActivityType(
+            '' 'activityTypeName' '',
+            ActivityType.Id.'activityTypeName');
+      createSwitchBody.add(|case 'activityTypeName' { return ActivityTypes.'activityTypeName';}|);
+      String variableName = activityTypeName.substring(0,1).toLowerCase()+activityTypeName.substring(1)+"Motivation";
+      Entity.motivationForSwitchBody.add(|case 'activityTypeName' {return 'variableName';}|);
+      Entity.motivationSwapSwitchBody1.add(|case 'activityTypeName' {
+          if 'variableName' == 0 {
+            return false;
+          }
+          break;
+        }|);
+      Entity.motivationSwapSwitchBody2.add(|case 'activityTypeName' {
+          if 'variableName' == 10 {
+            return false;
+          }
+          break;
+        }|);
+      Entity.motivationSwapSwitchBody3.add(|case 'activityTypeName' {
+          --'variableName';
+          break;
+        }|);
+      Entity.motivationSwapSwitchBody4.add(|case 'activityTypeName' {
+          ++'variableName';
+          break;
+        }|);
+      Entity += int 'variableName' = 5;
+    }
+  }
+> %Output getId(String name){
+    return |ActivityType.Id.'name'|;
+  }
+}

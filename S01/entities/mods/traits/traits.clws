@@ -1,0 +1,57 @@
+class 'packageName'.entities.mods.traits.Trait < Source {
+  enum Id {
+  }
+  Trait.Id getId(){
+    return null;
+  }
+  boolean hasRequirements(Entity candidate){
+    return false;
+  }
+  String name;
+  String description;
+}
+class 'packageName'.entities.mods.traits.Traits {
+> @%Arguments traitsAsParameter = %Arguments ();
+  @Trait[] traits = new Trait(`traitsAsParameter`)[];
+  @Trait create(String traitName){
+    return null;
+  }
+> void output(){
+    $Traits.removeVariable("traits");
+    Traits += @Trait[] traits = new Trait(`traitsAsParameter`)[];
+  }
+> %Callable getId(String name){
+    return |Trait.Id.'name'|;
+  }
+> void declaration(%T declarationToken){
+    String traitName = 'declarationToken->traitName';
+    String traitClassName = %Helper.camelize(traitName);
+	%Body gainBody = %Body ();
+	%Body lossBody = %Body ();
+	%Body requirementsBody = %Body ();
+	%Output eventHost = |\event.getHost()|;
+	%Callable candidate = %Call().add(|\candidate|);
+	declarationToken : element : impose {
+	   gainBody.add(Entity.getImposition(element,true,eventHost));
+	   lossBody.add(Entity.getImposition(element,false,eventHost));
+	}
+	Traits += class 'traitClassName' Trait {
+	  @Trait.Id id = Trait.Id.'traitClassName';
+	  String getName(){
+	    return '' 'traitClassName' '';
+	  }
+	  boolean hasRequirements(Entity candidate){ return true; }
+	}
+	Traits += @'traitClassName' 'traitName' = new 'traitClassName'();
+	Trait.Id += void 'traitName';
+	traitsAsParameter.add(|'traitName'|);
+	Map<String, %Body > eventBodies = new HashMap<String, %Body >();
+	eventBodies.put("gain", gainBody);
+	eventBodies.put("loss", lossBody);
+	Events.addEventMethodsExclusive(Traits.'traitClassName',eventBodies);
+	declarationToken : element : requirement {
+	   Traits.'traitClassName'::hasRequirements(Entity) -= | if `getRequirement(element, candidate, false)` { return false; }|
+	}
+	Traits::create(String) -= | if '' 'traitClassName' ''.equals(\traitName){ return new Traits.'traitClassName'(); }|
+  }
+}

@@ -1,0 +1,14 @@
+#ATTACK#
+attack_names global list with NAME
+import_attack Imports "entities/behaviours/skills/attacks/" FILE_NAME ".atks" = ">" FILE_NAME ".atks" "\n"
+	( "\n" | "comments" | attack_declaration)*
+
+attack_declaration
+	NAME as attackName in attack_names "\n"* DESCRIPTION attack_element*
+attack_element silent
+	comments
+	("range" stat_range) as range
+	("cd" stat_range)as cooldown
+	(("body"|"mind") as dmg_type? "damage" ( stat_range as by_stat | std_body)) as damage
+	("miss" ("\n"* conditional_chance) as option* ) as miss
+	"\n"

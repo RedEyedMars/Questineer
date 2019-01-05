@@ -1,0 +1,135 @@
+class 'packageName'.entities.behaviours.skills.attacks.Attack Skill {
+  class Id {
+  }
+  class Damage {
+    Float value    = 0f;
+    Float modifier = 1f;
+    Boolean hit    = true;
+    
+	Float getTotal(){
+	  return value * modifier;
+	}
+  }
+  Float getRange(Entity entity){
+	return \range.apply(entity);
+  }
+  Integer getCost(Entity entity){
+	return (int)(float)\cost.apply(entity);
+  }
+  Integer getCooldown(){
+	return \cooldown;
+  }	
+  Boolean isOffCooldown(){
+	return \cooldown == 0;
+  }
+  void on(Events.Tick event){
+	if \cooldown > 0 {
+	   \cooldown -= 1;
+	}
+  }
+  void use(Entity offender, Entity victim){
+    attack(offender,victim);
+  }
+  void attack(Entity attacker, Entity defender){
+    \cooldown = getCost(attacker);
+	Attack.Damage damage = getDamage(attacker,defender);
+	attacker.on(new Events.PreAttack(attacker,defender,damage));
+	if damage.getHit() {
+	  defender.on(new Events.Hit(attacker,defender,damage));
+	  \experience += 3;
+	}
+	else {
+	  defender.on(new Events.Miss(attacker,defender,damage));
+	  ++\experience;
+	}
+	attacker.on(new Events.PostAttack(attacker,defender,damage));
+  }
+  Attack.Damage getDamage(Entity attacker, Entity defender){
+    return null;
+  }
+  Attack.Id getAttackId(){
+    return null;
+  }
+}
+class 'packageName'.entities.behaviours.skills.attacks.Attacks {
+  @Attack create(String attackName){
+    return null;
+  }
+> %Output getId(String name){
+    return |Attacks->'name'.id|;
+  }
+> void declaration(%T declarationToken){
+    String attackName = %Helper.camelize('declarationToken->attackName');
+    %Operator description = %Operator ().operator("+").operatorlessIfSingle();
+    declarationToken : element : DESCRIPTION {
+	  description.add(|''element''|);
+	}
+    Attacks += class 'attackName' Attack {
+      @Attack.Id id = new Attack.Id();
+      @Skill.Id skillId = new Skill.Id();
+      'attackName'(){}
+      Attack.Id getAttackId(){
+        return id;
+      }
+      Skill.Id getId(){
+        return skillId;
+      }
+	  String getName(){
+	    return '' 'attackName' '';
+	  }
+	  String getDescription(){
+	    return `description`;
+	  }
+	  Attack.Damage getDamage(Entity attacker, Entity defender){
+        Attack.Damage damage = new Attack.Damage();
+      }
+    }
+    %Context damageContext = Attacks.'attackName'::getDamage(Entity,Entity);
+    Boolean isFirst = true;
+    declarationToken : element 
+      : cooldown {
+        Attacks.'attackName'::*() += | \cost = `Entity.getStatRange(element->stat_range,damageContext)`; |
+      }
+      : range {
+        Attacks.'attackName'::*() += | \range = `Entity.getStatRange(element->stat_range,damageContext)`; |
+      }
+      : damage {
+        element : atom 
+          : by_stat {
+            Attacks.'attackName'::getDamage(Entity,Entity) += | \damage.setValue((`Entity.getStatRange(atom->stat_range,"attacker",damageContext)`) * \attacker.getItemDamage()); |
+          }
+          : body_element {
+            Attacks.'attackName'::getDamage(Entity,Entity) += |`getBodyElement(element,damageContext)`|
+          }
+      }
+      : miss {
+        %Output setMiss = | \damage.setHit(false) |;
+        element : atom : option {
+          %Output chance = | `getChance(atom->has_chance)` |;
+          if atom->boolean_statement != null {
+            %Output bool = | `getBooleanStatement(atom->boolean_statement, damageContext)` |;
+            if isFirst {
+              Attacks.'attackName'::getDamage(Entity,Entity) += | if `bool` { if `chance` {`setMiss`;} } |
+              isFirst = false;
+            }
+            else {
+              Attacks.'attackName'::getDamage(Entity,Entity) += | else if `bool` { if `chance` {`setMiss`;} } |
+            }
+          }
+          else {
+            if isFirst {
+              Attacks.'attackName'::getDamage(Entity,Entity) += | if `chance` {`setMiss`;} |
+              isFirst = false;
+            }
+            else {
+              Attacks.'attackName'::getDamage(Entity,Entity) += | else if `chance` {`setMiss`;} |
+            }
+          }
+        }
+      }
+    Attacks.'attackName'::getDamage(Entity,Entity) += | return \damage; |
+    
+	Attacks::create(String) -= | if '' 'attackName' ''.equals("attackName"){
+      return new Attacks.'attackName'(); }|
+  }
+}

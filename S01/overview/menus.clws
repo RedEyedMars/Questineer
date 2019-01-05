@@ -1,0 +1,6 @@
+
+class 'packageName'.menus.Menu {
+  interface Placable {
+    void place(Area area, int x, int y)?
+  }
+}

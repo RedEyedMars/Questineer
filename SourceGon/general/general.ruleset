@@ -140,4 +140,4 @@ method
 
 type_name
 	( "Map" type_name type_name ) as mapDeclaration
-	("*" "." as findType)? NAME as typeName ( "." NAME as typeName )*
+	("*" "." as findType)? NAME as typeName ( "." NAME as typeName )* "[]" as isListToken*

@@ -21,14 +21,14 @@ questing Quest
 	  
 	}
 ***Tracking***
-hunt(Criteria.Target criteriaToTarget, Criteria.Destination huntingGrounds, Float range, Events.Die.Listener deathListener, ActivityCriteria toSucceed) Attack
+hunt(Entity.Criteria criteriaToTarget, Tile.Criteria huntingGrounds, Float range, Events.Die.Listener deathListener, Activity.Criteria toSucceed) Attack
 	~Hunt monsters until told otherwise.~
-	+ Area.List toHuntLocations
-	+ Area.List huntedLocations
-	+ Area      toHunt
+	+ Area[] toHuntLocations
+	+ Area[] huntedLocations
+	+ Area   toHunt
 	succeed if toSucceed.test(this)
 	load {
-	  Area.List toAdd = event->host->location.getAreasWith(huntingGrounds,new Area.Comparators.Distance.Ascending(event->host->location), range)
+	  Area[] toAdd = event->host->location.getAreasWith(huntingGrounds,new Area.Comparators.Distance.Ascending(event->host->location), range)
 	  toHuntLocations.addAll(toAdd)
 	  if !toHuntLocations.isEmpty() {
 	    toHunt = toHuntLocations.remove(0)
@@ -39,13 +39,14 @@ hunt(Criteria.Target criteriaToTarget, Criteria.Destination huntingGrounds, Floa
 	    host start gotoArea toHunt
 	  }
 	  else {
-	    Entity.List entitiesToTarget = host->location.getEntitiesWithin(50.0,criteriaToTarget)
+	  
+	    Entity[] entitiesToTarget = host->location.getEntitiesWithin(50.0,criteriaToTarget)
 	    if !entitiesToTarget.isEmpty() {
 	      entitiesToTarget.sort(new Entity.Comparators.Distance.Ascending(host->location))
 	      host start kill entitiesToTarget.get(0)
 	    }
 	    else {
-	      Tiles.MonsterDen tileToKill = toHunt.getMonsterDen(huntingGrounds)
+	      Terrain.MonsterDen tileToKill = Terrain.MonsterDen<-toHunt.getRandomTile(huntingGrounds)->terrain
 	      if tileToKill != null {
 	        host start killDen tileToKill
 	      }
@@ -54,7 +55,7 @@ hunt(Criteria.Target criteriaToTarget, Criteria.Destination huntingGrounds, Floa
   	        toHunt = toHuntLocations.remove(0)
 	      }
 	      else {
-	        Area.List toAdd = host->location.getAreasWith(huntingGrounds,new Area.Comparators.Distance.Ascending(host->location), range)
+	        Area[] toAdd = host->location.getAreasWith(huntingGrounds,new Area.Comparators.Distance.Ascending(host->location), range)
 	        toAdd.removeAll(huntedLocations)
 	        if !toAdd.isEmpty() {
 	          toHuntLocations.addAll(toAdd)
@@ -89,7 +90,7 @@ kill(Entity toKill) Attack
 	    chaseActivity = host: start chasingEntity (25, toKill, furthestUsable.getRange(host))
 	  }
 	}
-killDen(Tiles.MonsterDen toKill) Attack
+killDen(Terrain.MonsterDen toKill) Attack
 	~Go kill one particular monster den.~
 	+ Activity chaseActivity = null
 	succeed if toKill.isDead()
@@ -99,13 +100,13 @@ killDen(Tiles.MonsterDen toKill) Attack
 	idle {
 	  Usable furthestUsable = getFurthestAvailableUsable(event->host,toKill)
 	  if furthestUsable != null {
-	    chaseActivity = event->host start chasingTile (25, toKill, furthestUsable.getRange(event->host))
+	    chaseActivity = event->host start chasingTile (25, toKill->floorTile, furthestUsable.getRange(event->host))
 	  }
 	}
-removeTerrain(Tiles.Terrain toKill) Attack
+removeTerrain(Terrain toKill) Attack
 	~Go kill one particular monster den.~
 	+ Activity chaseActivity = null
-	+ Floor floor = null
+	+ Tile floor = null
 	succeed if floor->terrain != toKill
 	load {
 	  floor = toKill->floorTile
@@ -114,7 +115,7 @@ removeTerrain(Tiles.Terrain toKill) Attack
 	idle {
 	  Usable furthestUsable = getFurthestAvailableUsable(event->host,toKill)
 	  if furthestUsable != null {
-	    chaseActivity = event->host start chasingTile (25, toKill, furthestUsable.getRange(event->host))
+	    chaseActivity = event->host start chasingTile (25, toKill->floorTile, furthestUsable.getRange(event->host))
 	  }
 	}
 ***Tracking***
@@ -136,14 +137,14 @@ chasingTile(Integer ticks, Tile toChase, Float successRange)
 	  host->location.step(host->walkingSpeed,toChase)
 	  return true
 	}
-findAndGo(Criteria.Destination target)
+findAndGo(Tile.Criteria target)
 	~Find a particular tile, follow path to get to it.~
 	succeed if host->location.isCloseAsPossibleTo(destination)
 	+ Area destinationArea = null
-	+ Tiles.Floor.Way way = null
-	+ Tiles.Floor destination
+	+ Tile.Way way = null
+	+ Tile destination
 	load {
-	  destination = Tiles.Floor<-host->location.getClosestTile(target)
+	  destination = Tile<-host->location.getClosestTile(target)
 	  if destination != null {
 	    destinationArea = destination->area
 	  }
@@ -163,11 +164,11 @@ findAndGo(Criteria.Destination target)
 	  }
 	  return true
 	}
-goto(Tiles.Floor destination)
+goto(Tile destination)
 	~Find a particular tile, follow path to get to it.~
 	succeed if host->location.isCloseAsPossibleTo(destination)
 	+ Area destinationArea = null
-	+ Tiles.Floor.Way way = null
+	+ Tile.Way way = null
 	load {
 	  destinationArea = destination->area
 	}
@@ -194,8 +195,8 @@ gotoArea(Area destination)
 	}
 Exploring(Integer ticks)
 	~Go to unexplored parts of the map.~
-	+ Tiles.Floor destination = null
-	+ Tiles.Floor.Way way = null
+	+ Tile destination = null
+	+ Tile.Way way = null
 	succeed if ticks <=0
 	load {
 	  destination = event->host->location.getUnexploredPoint()

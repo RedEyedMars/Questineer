@@ -1,8 +1,8 @@
 Town > town.tile
-StartTown 100%:
+StartTown:
 	5x5 Grass
-	Path 3x3
-	Path [OffSide] -> Forest as PathNode in Streets
+	3x3 Path
+	OffSide Path -> Forest.Entrance as PathNode in Streets
 Hints:
 	~Build a Town Hall~
 	~Build a Beginners Tavern~
@@ -18,7 +18,7 @@ Hints:
 Trails:
 	Streets:
 		Connect Path from PathNode to PathNode
-Buildings:
+#Buildings:
 	TownHall 350 Wood, 100 Stone:
 		Exterior None 6x4 Sides:StoneWall:
 			StoneFloor 2x1 [3,0] South:WoodDoor -> Interior as PathNode in Streets
@@ -33,3 +33,4 @@ Buildings:
 		Interior StoneFloor 8x6:
 			Path [3-5,-1] -> Exterior
 			Bar 3x1 [5,6]
+#

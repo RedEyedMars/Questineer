@@ -11,6 +11,7 @@ class 'packageName'.environments Tiles {
     }
     interface Factory / Tile->Factory / {
       Tiles->Floor create(Integer x, Integer y, Environment parent){}
+      Tiles->Floor create(){}
     }
     ~Tiles->Terrain terrain = null;
     ~Entity occupant = null;
@@ -81,31 +82,42 @@ class 'packageName'.environments Tiles {
         "--currentIndex";
       }
     }
-    class Path / ArrayList<Tiles\>Floor> / Comparable<Path> {
+    class Path // Comparable<Path> {
       ~int distanceToDestination = 0;
       ~Tiles->Floor tile = null;
+      ~Tiles->Floor parent = null;
       Path *(Path parentPath, Tiles->Floor nextTile, Tiles->Floor destination){
         distanceToDestination = Math.abs(destination.getX()\-nextTile.getX())\+Math.abs(destination.getY()\-nextTile.getY());
         if parentPath != null {
+          parent = parentPath;
           if nextTile.isPassable(parentPath.tile) == false {
             distanceToDestination \+= 5000;
             if nextTile.hasObstruction() == false {
               distanceToDestination \+= 5000;
             }
           }
-          \addAll(parentPath);
         }
-        \add(nextTile);
         tile = nextTile;
       }
-      ArrayList<Tiles\>Floor> reverse(){
-        ArrayList<Tiles\>Floor> reversedPath = new ArrayList<Tiles\>Floor>();
-        Integer i = \size()-1;
-        while i >= 0 {
-          reversedPath.add(\get(i));
-          i \-= 1;
+      List<Tiles\>Floor> collect(){
+        List<Tiles\>Floor> result = "parent!=null?parent.collect():new ArrayList<Tiles.Floor>()";
+        result.add(tile);
+        return result;
+      }
+      List<Tiles\>Floor> collectReverse(){
+        List<Tiles\>Floor> result = new ArrayList<Tiles\>Floor>();
+        \collectReverse(result);
+        return result;
+      }
+      void collectReverse(List<Tiles\>Floor> result){
+        result.add(tile);
+        if parent!= null {
+          parent.collectReverse(result);
         }
-        return reversedPath;
+      }
+      boolean equals(Object otherObject){
+        Path otherPath = (Path)otherObject;
+        return "otherPath.distanceToDestination == distanceToDestination && otherPath.parent == parent && otherPath.tile == tile ? parent!=null ? parent.equals(otherObject.parent) : true : false";
       }
       int compareTo(Path otherPath) {
         if distanceToDestination==otherPath.distanceToDestination {
@@ -126,22 +138,24 @@ class 'packageName'.environments Tiles {
       String toString(){
 	    StringBuilder builder = new StringBuilder();
 	    builder.append('' "*******\\n" '');
-	    for Integer i < \size() {
-  	      Integer j = 0;
-	      while j<4&&i < \size() {
-		    builder.append('' "[" '');
-		    builder.append(\get(i).getX());
-		    builder.append('' "," '');
-		    builder.append(\get(i).getY());
-		    builder.append('' "]" '');
-		    i\+=1;
-            j\+=1;
-		  }
-		  i\-=1;
-	    }
+	    \toString(builder);
 	    return builder.toString();
       }
+      void toString(StringBuilder builder){
+	    builder.append('' "[" '');
+		builder.append(tile.getX());
+		builder.append('' "," '');
+		builder.append(tile.getY());
+		builder.append('' "]" '');
+		if parent!= null {
+		  \toString(builder);
+		}
+      }
       class Ways / TreeSet<Path> / {
+        Tiles->Floor endTile;
+        void extends(Tiles->Floor->Path toExtend, Tiles->Floor toAdd){
+          \add(new Tiles->Floor->Path(toExtend,toAdd,endTile));
+        }
       }
     }
   }
@@ -150,6 +164,7 @@ class 'packageName'.environments Tiles {
     }
     interface Factory / Tile->Factory /  {
       Tiles->Terrain create(Tiles->Floor parentFloor){}
+      Tiles->Terrain create(){}
     }
     ~Tiles->Floor floorTile = null;
     void setFloorTile(Tiles->Floor newFloorTile){
@@ -250,7 +265,6 @@ class 'packageName'.environments Tiles {
   }
 > ~Integer costIndex = 0;
 > void declaration(%T declarationToken, String mapName, List<String> floorTiles){
-    \createList(Treasury->Cost);
     if declarationToken->"floor_declaration" != null {
       declarationToken->"floor_declaration" : element : tile_definition {
         floorTiles.add(\definition(element,mapName,Tiles->Floor,Tiles));
@@ -299,8 +313,8 @@ class 'packageName'.environments Tiles {
         Tile->Id getId(){
           return id;
         }
-        Treasury->Cost->List getCosts(){
-          Treasury->Cost->List costs = new Treasury->Cost->List();
+        List<Treasury\>Cost> getCosts(){
+          List<Treasury\>Cost> costs = new ArrayList<Treasury\>Cost>();
         }
         void generate(){
         }
@@ -428,7 +442,7 @@ class 'packageName'.environments Tiles {
         Tiles->Floor create(Integer x, Integer y, Environment parent){
           return new collectionClass->'mapName'->'tileName'(x,y,parent);
         }
-        Tile create(){
+        Tiles->Floor create(){
           return new collectionClass->'mapName'->'tileName'();
         }
       }
@@ -442,6 +456,12 @@ class 'packageName'.environments Tiles {
               toJoin.join(newEntryPoint);
             }
           }
+          void setInnerFloor(Area->FloorChoice choice){}
+          void setLeftSideFloor(Area->FloorChoice choice){}
+          void setUpSideFloor(Area->FloorChoice choice){}
+          void setRightSideFloor(Area->FloorChoice choice){}
+          void setDownSideFloor(Area->FloorChoice choice){}
+          void setRelativeFloor(Area->FloorChoice choice, int index, int startX, int startY){}
         }
       }
     }
@@ -452,7 +472,7 @@ class 'packageName'.environments Tiles {
           newTile.setFloorTile(parentTile);
           return newTile;
         }
-        Tile create(){
+        Tiles->Terrain create(){
           return new collectionClass->'mapName'->'tileName'();
         }
       }
@@ -472,7 +492,7 @@ class 'packageName'.environments Tiles {
             switch Range.getRandom(0,'parentCountValue') `parentSwitchBodyOne`
             return null;
           }
-          Tile create(){
+          Tiles->Floor create(){
             switch Range.getRandom(0,'parentCountValue') `parentSwitchBodyTwo`
             return null;
           }
@@ -484,7 +504,7 @@ class 'packageName'.environments Tiles {
             Tiles->Floor create(Integer x, Integer y, Environment parent){
               return new Tiles->'mapName'->'floorParent'(x,y,parent);
             }
-            Tile create(){
+            Tiles->Floor create(){
               return new Tiles->'mapName'->'floorParent'();
             }
           }
@@ -815,9 +835,11 @@ class 'packageName'.environments  Tile   Environment->Position   Loaddable Ticka
 	return '' "(" '' \+ \getX() \+ '' "," '' \+ \ getY() \+ '' ")" '';
   }
 > void setup(%Pass data){
-    \createList(Entity->Factory);
-    \createMap(Association->Id,Association);
-    Tile += ~\IdMap->\_Association "associations";
+    \createIdMap(Association->Id,Association);
+    \createIdMap(Tile->Id, Tile);
+    \createIdMap(Tiles->Floor->Id, Tiles->Floor);
+    \createIdMap(Tiles->Terrain->Id, Tiles->Terrain);
+    Tile += ~'"com.rem.qstnr.misc.maps.IdMap"'->\_Association associations;
   }
 }
 interface 'packageName'.interfaces EntryPointJoinable {
