@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import com.rem.qstnr.entities.items.aspects.Aspect;
 import com.rem.qstnr.misc.Range;
-import com.rem.qstnr.entities.mods.conditions.Conditions;
 import com.rem.qstnr.misc.interfaces.Source;
+import com.rem.qstnr.entities.mods.conditions.Conditions;
 import com.rem.qstnr.misc.interfaces.Listenable;
 public class Aspect implements Source {
 	protected String name;

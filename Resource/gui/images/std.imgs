@@ -41,3 +41,10 @@ chests 8x4 = chests.png
 	major			  : Stationary 1 0
 	treasure		  : Stationary 2 0
 	legendary		  : Stationary 3 0
+chests_2 4x8 = BaseClawment2.png
+	minor			  : Stationary 0 0
+	major			  : Stationary 1 0
+	treasure		  : Stationary 2 0
+	legendary		  : Stationary 3 0
+chests_3 1x4 = BlueSky.png
+	minor			  : Stationary 0 0

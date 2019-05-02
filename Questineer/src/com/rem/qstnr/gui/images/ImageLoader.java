@@ -20,6 +20,8 @@ public class ImageLoader {
 	protected Map<Integer, Map<Integer, FloatBuffer[][]>> textureBuffers = new HashMap<Integer, Map<Integer, FloatBuffer[][]>>();
 	protected Thread loadTextureBuffer8x1Loader = new ImageLoader.TextureBuffer8x1Loader();
 	protected Thread loadTextureBuffer8x4Loader = new ImageLoader.TextureBuffer8x4Loader();
+	protected Thread loadTextureBuffer4x8Loader = new ImageLoader.TextureBuffer4x8Loader();
+	protected Thread loadTextureBuffer1x4Loader = new ImageLoader.TextureBuffer1x4Loader();
 	public FloatBuffer getPlaceHolder(){
 		return placeHolder;
 	}
@@ -32,6 +34,12 @@ public class ImageLoader {
 		Drawables.square.load();
 		ImageData256x256Loader ___Resource_gui_images_townDataLoader = new ImageData256x256Loader("../Resource/gui/images/town.png");
 		___Resource_gui_images_townDataLoader.start();
+		ImageData1024x1024Loader ___Resource_gui_images_BlueSkyDataLoader = new ImageData1024x1024Loader("../Resource/gui/images/BlueSky.png");
+		___Resource_gui_images_BlueSkyDataLoader.start();
+		loadTextureBuffer1x4Loader.start();
+		ImageData256x512Loader ___Resource_gui_images_BaseClawment2DataLoader = new ImageData256x512Loader("../Resource/gui/images/BaseClawment2.png");
+		___Resource_gui_images_BaseClawment2DataLoader.start();
+		loadTextureBuffer4x8Loader.start();
 		ImageData256x128Loader ___Resource_gui_images_chestsDataLoader = new ImageData256x128Loader("../Resource/gui/images/chests.png");
 		___Resource_gui_images_chestsDataLoader.start();
 		ImageData256x128Loader ___Resource_gui_images_outsideDataLoader = new ImageData256x128Loader("../Resource/gui/images/outside.png");
@@ -64,6 +72,20 @@ public class ImageLoader {
 		___Resource_gui_images_forestDataLoader.attachTextures(Images.forest,Images.Flipped.forest);
 		___Resource_gui_images_outsideDataLoader.attachTextures(Images.outside,Images.Flipped.outside);
 		___Resource_gui_images_chestsDataLoader.attachTextures(Images.chests,Images.Flipped.chests);
+		try{
+			loadTextureBuffer4x8Loader.join();
+		}
+		catch(InterruptedException e0){
+			e0.printStackTrace();
+		}
+		___Resource_gui_images_BaseClawment2DataLoader.attachTextures(Images.chests_2,Images.Flipped.chests_2);
+		try{
+			loadTextureBuffer1x4Loader.join();
+		}
+		catch(InterruptedException e0){
+			e0.printStackTrace();
+		}
+		___Resource_gui_images_BlueSkyDataLoader.attachTextures(Images.chests_3,Images.Flipped.chests_3);
 		___Resource_gui_images_male_walkerDataLoader.attachTextures(Images.towns_people,Images.Flipped.towns_people);
 		___Resource_gui_images_townDataLoader.attachTextures(Images.town,Images.Flipped.town);
 	}
@@ -85,12 +107,26 @@ public class ImageLoader {
 	public void setLoadTextureBuffer8X4Loader(Thread newLoadTextureBuffer8X4Loader){
 		loadTextureBuffer8x4Loader=newLoadTextureBuffer8X4Loader;
 	}
-	public ImageLoader (FloatBuffer placeHolder,Map<Integer, Map<Integer, FloatBuffer[][]>> textureBuffers,Thread loadTextureBuffer8x1Loader,Thread loadTextureBuffer8x4Loader){
+	public Thread getLoadTextureBuffer4X8Loader(){
+		return loadTextureBuffer4x8Loader;
+	}
+	public void setLoadTextureBuffer4X8Loader(Thread newLoadTextureBuffer4X8Loader){
+		loadTextureBuffer4x8Loader=newLoadTextureBuffer4X8Loader;
+	}
+	public Thread getLoadTextureBuffer1X4Loader(){
+		return loadTextureBuffer1x4Loader;
+	}
+	public void setLoadTextureBuffer1X4Loader(Thread newLoadTextureBuffer1X4Loader){
+		loadTextureBuffer1x4Loader=newLoadTextureBuffer1X4Loader;
+	}
+	public ImageLoader (FloatBuffer placeHolder,Map<Integer, Map<Integer, FloatBuffer[][]>> textureBuffers,Thread loadTextureBuffer8x1Loader,Thread loadTextureBuffer8x4Loader,Thread loadTextureBuffer4x8Loader,Thread loadTextureBuffer1x4Loader){
 		super();
 		this.placeHolder=placeHolder;
 		this.textureBuffers=textureBuffers;
 		this.loadTextureBuffer8x1Loader=loadTextureBuffer8x1Loader;
 		this.loadTextureBuffer8x4Loader=loadTextureBuffer8x4Loader;
+		this.loadTextureBuffer4x8Loader=loadTextureBuffer4x8Loader;
+		this.loadTextureBuffer1x4Loader=loadTextureBuffer1x4Loader;
 	}
 	public ImageLoader (){
 		super();
@@ -600,6 +636,482 @@ public class ImageLoader {
 			this.failed=failed;
 		}
 		public ImageData256x128Loader (){
+			super();
+		}
+	}
+	public class TextureBuffer4x8Loader extends Thread {
+		public void run(){
+			FloatBuffer[][] textureBuffer = new FloatBuffer[4][8];
+			ByteBuffer byteBuffer = null;
+			byteBuffer=ByteBuffer.allocateDirect(2*4*4);
+			byteBuffer.order(ByteOrder.nativeOrder());
+			textureBuffer[0][0]=byteBuffer.asFloatBuffer();
+			textureBuffer[0][0].put(new float[]{0.0f,0.125f,0.0f,0.0f,0.25f,0.125f,0.25f,0.0f});
+			textureBuffer[0][0].position(0);
+			byteBuffer=ByteBuffer.allocateDirect(2*4*4);
+			byteBuffer.order(ByteOrder.nativeOrder());
+			textureBuffer[0][1]=byteBuffer.asFloatBuffer();
+			textureBuffer[0][1].put(new float[]{0.0f,0.25f,0.0f,0.125f,0.25f,0.25f,0.25f,0.125f});
+			textureBuffer[0][1].position(0);
+			byteBuffer=ByteBuffer.allocateDirect(2*4*4);
+			byteBuffer.order(ByteOrder.nativeOrder());
+			textureBuffer[0][2]=byteBuffer.asFloatBuffer();
+			textureBuffer[0][2].put(new float[]{0.0f,0.375f,0.0f,0.25f,0.25f,0.375f,0.25f,0.25f});
+			textureBuffer[0][2].position(0);
+			byteBuffer=ByteBuffer.allocateDirect(2*4*4);
+			byteBuffer.order(ByteOrder.nativeOrder());
+			textureBuffer[0][3]=byteBuffer.asFloatBuffer();
+			textureBuffer[0][3].put(new float[]{0.0f,0.5f,0.0f,0.375f,0.25f,0.5f,0.25f,0.375f});
+			textureBuffer[0][3].position(0);
+			byteBuffer=ByteBuffer.allocateDirect(2*4*4);
+			byteBuffer.order(ByteOrder.nativeOrder());
+			textureBuffer[0][4]=byteBuffer.asFloatBuffer();
+			textureBuffer[0][4].put(new float[]{0.0f,0.625f,0.0f,0.5f,0.25f,0.625f,0.25f,0.5f});
+			textureBuffer[0][4].position(0);
+			byteBuffer=ByteBuffer.allocateDirect(2*4*4);
+			byteBuffer.order(ByteOrder.nativeOrder());
+			textureBuffer[0][5]=byteBuffer.asFloatBuffer();
+			textureBuffer[0][5].put(new float[]{0.0f,0.75f,0.0f,0.625f,0.25f,0.75f,0.25f,0.625f});
+			textureBuffer[0][5].position(0);
+			byteBuffer=ByteBuffer.allocateDirect(2*4*4);
+			byteBuffer.order(ByteOrder.nativeOrder());
+			textureBuffer[0][6]=byteBuffer.asFloatBuffer();
+			textureBuffer[0][6].put(new float[]{0.0f,0.875f,0.0f,0.75f,0.25f,0.875f,0.25f,0.75f});
+			textureBuffer[0][6].position(0);
+			byteBuffer=ByteBuffer.allocateDirect(2*4*4);
+			byteBuffer.order(ByteOrder.nativeOrder());
+			textureBuffer[0][7]=byteBuffer.asFloatBuffer();
+			textureBuffer[0][7].put(new float[]{0.0f,1.0f,0.0f,0.875f,0.25f,1.0f,0.25f,0.875f});
+			textureBuffer[0][7].position(0);
+			byteBuffer=ByteBuffer.allocateDirect(2*4*4);
+			byteBuffer.order(ByteOrder.nativeOrder());
+			textureBuffer[1][0]=byteBuffer.asFloatBuffer();
+			textureBuffer[1][0].put(new float[]{0.25f,0.125f,0.25f,0.0f,0.5f,0.125f,0.5f,0.0f});
+			textureBuffer[1][0].position(0);
+			byteBuffer=ByteBuffer.allocateDirect(2*4*4);
+			byteBuffer.order(ByteOrder.nativeOrder());
+			textureBuffer[1][1]=byteBuffer.asFloatBuffer();
+			textureBuffer[1][1].put(new float[]{0.25f,0.25f,0.25f,0.125f,0.5f,0.25f,0.5f,0.125f});
+			textureBuffer[1][1].position(0);
+			byteBuffer=ByteBuffer.allocateDirect(2*4*4);
+			byteBuffer.order(ByteOrder.nativeOrder());
+			textureBuffer[1][2]=byteBuffer.asFloatBuffer();
+			textureBuffer[1][2].put(new float[]{0.25f,0.375f,0.25f,0.25f,0.5f,0.375f,0.5f,0.25f});
+			textureBuffer[1][2].position(0);
+			byteBuffer=ByteBuffer.allocateDirect(2*4*4);
+			byteBuffer.order(ByteOrder.nativeOrder());
+			textureBuffer[1][3]=byteBuffer.asFloatBuffer();
+			textureBuffer[1][3].put(new float[]{0.25f,0.5f,0.25f,0.375f,0.5f,0.5f,0.5f,0.375f});
+			textureBuffer[1][3].position(0);
+			byteBuffer=ByteBuffer.allocateDirect(2*4*4);
+			byteBuffer.order(ByteOrder.nativeOrder());
+			textureBuffer[1][4]=byteBuffer.asFloatBuffer();
+			textureBuffer[1][4].put(new float[]{0.25f,0.625f,0.25f,0.5f,0.5f,0.625f,0.5f,0.5f});
+			textureBuffer[1][4].position(0);
+			byteBuffer=ByteBuffer.allocateDirect(2*4*4);
+			byteBuffer.order(ByteOrder.nativeOrder());
+			textureBuffer[1][5]=byteBuffer.asFloatBuffer();
+			textureBuffer[1][5].put(new float[]{0.25f,0.75f,0.25f,0.625f,0.5f,0.75f,0.5f,0.625f});
+			textureBuffer[1][5].position(0);
+			byteBuffer=ByteBuffer.allocateDirect(2*4*4);
+			byteBuffer.order(ByteOrder.nativeOrder());
+			textureBuffer[1][6]=byteBuffer.asFloatBuffer();
+			textureBuffer[1][6].put(new float[]{0.25f,0.875f,0.25f,0.75f,0.5f,0.875f,0.5f,0.75f});
+			textureBuffer[1][6].position(0);
+			byteBuffer=ByteBuffer.allocateDirect(2*4*4);
+			byteBuffer.order(ByteOrder.nativeOrder());
+			textureBuffer[1][7]=byteBuffer.asFloatBuffer();
+			textureBuffer[1][7].put(new float[]{0.25f,1.0f,0.25f,0.875f,0.5f,1.0f,0.5f,0.875f});
+			textureBuffer[1][7].position(0);
+			byteBuffer=ByteBuffer.allocateDirect(2*4*4);
+			byteBuffer.order(ByteOrder.nativeOrder());
+			textureBuffer[2][0]=byteBuffer.asFloatBuffer();
+			textureBuffer[2][0].put(new float[]{0.5f,0.125f,0.5f,0.0f,0.75f,0.125f,0.75f,0.0f});
+			textureBuffer[2][0].position(0);
+			byteBuffer=ByteBuffer.allocateDirect(2*4*4);
+			byteBuffer.order(ByteOrder.nativeOrder());
+			textureBuffer[2][1]=byteBuffer.asFloatBuffer();
+			textureBuffer[2][1].put(new float[]{0.5f,0.25f,0.5f,0.125f,0.75f,0.25f,0.75f,0.125f});
+			textureBuffer[2][1].position(0);
+			byteBuffer=ByteBuffer.allocateDirect(2*4*4);
+			byteBuffer.order(ByteOrder.nativeOrder());
+			textureBuffer[2][2]=byteBuffer.asFloatBuffer();
+			textureBuffer[2][2].put(new float[]{0.5f,0.375f,0.5f,0.25f,0.75f,0.375f,0.75f,0.25f});
+			textureBuffer[2][2].position(0);
+			byteBuffer=ByteBuffer.allocateDirect(2*4*4);
+			byteBuffer.order(ByteOrder.nativeOrder());
+			textureBuffer[2][3]=byteBuffer.asFloatBuffer();
+			textureBuffer[2][3].put(new float[]{0.5f,0.5f,0.5f,0.375f,0.75f,0.5f,0.75f,0.375f});
+			textureBuffer[2][3].position(0);
+			byteBuffer=ByteBuffer.allocateDirect(2*4*4);
+			byteBuffer.order(ByteOrder.nativeOrder());
+			textureBuffer[2][4]=byteBuffer.asFloatBuffer();
+			textureBuffer[2][4].put(new float[]{0.5f,0.625f,0.5f,0.5f,0.75f,0.625f,0.75f,0.5f});
+			textureBuffer[2][4].position(0);
+			byteBuffer=ByteBuffer.allocateDirect(2*4*4);
+			byteBuffer.order(ByteOrder.nativeOrder());
+			textureBuffer[2][5]=byteBuffer.asFloatBuffer();
+			textureBuffer[2][5].put(new float[]{0.5f,0.75f,0.5f,0.625f,0.75f,0.75f,0.75f,0.625f});
+			textureBuffer[2][5].position(0);
+			byteBuffer=ByteBuffer.allocateDirect(2*4*4);
+			byteBuffer.order(ByteOrder.nativeOrder());
+			textureBuffer[2][6]=byteBuffer.asFloatBuffer();
+			textureBuffer[2][6].put(new float[]{0.5f,0.875f,0.5f,0.75f,0.75f,0.875f,0.75f,0.75f});
+			textureBuffer[2][6].position(0);
+			byteBuffer=ByteBuffer.allocateDirect(2*4*4);
+			byteBuffer.order(ByteOrder.nativeOrder());
+			textureBuffer[2][7]=byteBuffer.asFloatBuffer();
+			textureBuffer[2][7].put(new float[]{0.5f,1.0f,0.5f,0.875f,0.75f,1.0f,0.75f,0.875f});
+			textureBuffer[2][7].position(0);
+			byteBuffer=ByteBuffer.allocateDirect(2*4*4);
+			byteBuffer.order(ByteOrder.nativeOrder());
+			textureBuffer[3][0]=byteBuffer.asFloatBuffer();
+			textureBuffer[3][0].put(new float[]{0.75f,0.125f,0.75f,0.0f,1.0f,0.125f,1.0f,0.0f});
+			textureBuffer[3][0].position(0);
+			byteBuffer=ByteBuffer.allocateDirect(2*4*4);
+			byteBuffer.order(ByteOrder.nativeOrder());
+			textureBuffer[3][1]=byteBuffer.asFloatBuffer();
+			textureBuffer[3][1].put(new float[]{0.75f,0.25f,0.75f,0.125f,1.0f,0.25f,1.0f,0.125f});
+			textureBuffer[3][1].position(0);
+			byteBuffer=ByteBuffer.allocateDirect(2*4*4);
+			byteBuffer.order(ByteOrder.nativeOrder());
+			textureBuffer[3][2]=byteBuffer.asFloatBuffer();
+			textureBuffer[3][2].put(new float[]{0.75f,0.375f,0.75f,0.25f,1.0f,0.375f,1.0f,0.25f});
+			textureBuffer[3][2].position(0);
+			byteBuffer=ByteBuffer.allocateDirect(2*4*4);
+			byteBuffer.order(ByteOrder.nativeOrder());
+			textureBuffer[3][3]=byteBuffer.asFloatBuffer();
+			textureBuffer[3][3].put(new float[]{0.75f,0.5f,0.75f,0.375f,1.0f,0.5f,1.0f,0.375f});
+			textureBuffer[3][3].position(0);
+			byteBuffer=ByteBuffer.allocateDirect(2*4*4);
+			byteBuffer.order(ByteOrder.nativeOrder());
+			textureBuffer[3][4]=byteBuffer.asFloatBuffer();
+			textureBuffer[3][4].put(new float[]{0.75f,0.625f,0.75f,0.5f,1.0f,0.625f,1.0f,0.5f});
+			textureBuffer[3][4].position(0);
+			byteBuffer=ByteBuffer.allocateDirect(2*4*4);
+			byteBuffer.order(ByteOrder.nativeOrder());
+			textureBuffer[3][5]=byteBuffer.asFloatBuffer();
+			textureBuffer[3][5].put(new float[]{0.75f,0.75f,0.75f,0.625f,1.0f,0.75f,1.0f,0.625f});
+			textureBuffer[3][5].position(0);
+			byteBuffer=ByteBuffer.allocateDirect(2*4*4);
+			byteBuffer.order(ByteOrder.nativeOrder());
+			textureBuffer[3][6]=byteBuffer.asFloatBuffer();
+			textureBuffer[3][6].put(new float[]{0.75f,0.875f,0.75f,0.75f,1.0f,0.875f,1.0f,0.75f});
+			textureBuffer[3][6].position(0);
+			byteBuffer=ByteBuffer.allocateDirect(2*4*4);
+			byteBuffer.order(ByteOrder.nativeOrder());
+			textureBuffer[3][7]=byteBuffer.asFloatBuffer();
+			textureBuffer[3][7].put(new float[]{0.75f,1.0f,0.75f,0.875f,1.0f,1.0f,1.0f,0.875f});
+			textureBuffer[3][7].position(0);
+			Images.chests_2.setTextureBuffer(textureBuffer);
+			Images.Flipped.chests_2.setTextureBuffer(textureBuffer);
+		}
+		public TextureBuffer4x8Loader (){
+			super();
+		}
+	}
+	public static class ImageData256x512Loader extends Thread {
+		protected String fileName = null;
+		protected ByteBuffer pixelBuffer = null;
+		protected ByteBuffer flippedPixelBuffer = null;
+		protected Boolean failed = false;
+		public String getFileName(){
+			return fileName;
+		}
+		public void setFileName(String newFileName){
+			fileName=newFileName;
+		}
+		public ByteBuffer getPixelBuffer(){
+			return pixelBuffer;
+		}
+		public void setPixelBuffer(ByteBuffer newPixelBuffer){
+			pixelBuffer=newPixelBuffer;
+		}
+		public ByteBuffer getFlippedPixelBuffer(){
+			return flippedPixelBuffer;
+		}
+		public void setFlippedPixelBuffer(ByteBuffer newFlippedPixelBuffer){
+			flippedPixelBuffer=newFlippedPixelBuffer;
+		}
+		public Boolean getFailed(){
+			return failed;
+		}
+		public void setFailed(Boolean newFailed){
+			failed=newFailed;
+		}
+		public ImageData256x512Loader (String initialFileName){
+			super();
+			this.fileName=initialFileName;
+		}
+		public void run(){
+			BufferedImage bufferedImage = null;
+			try{
+				bufferedImage=ImageIO.read(new File(fileName));
+			}
+			catch(Exception e0){
+				e0.printStackTrace();
+				failed=true;
+				return ;
+			}
+			int[] pixels = new int[131072];
+			PixelGrabber pixelGrabber = new PixelGrabber(bufferedImage,0,0,256,512,pixels,0,256);
+			try{
+				pixelGrabber.grabPixels();
+			}
+			catch(Exception e0){
+				System.err.println("Pixel Grabbing interrupted!");
+				failed=true;
+				return ;
+			}
+			byte[] bytes = new byte[524288];
+			byte[] flippedBytes = new byte[524288];
+			int p = 0;
+			int r = 0;
+			int g = 0;
+			int b = 0;
+			int a = 0;
+			int i = 0;
+			int j = 0;
+			int k = 0;
+			for(int y = 0;y<512;++y){
+				for(int x = 0;x<256;++x){
+					i=(256*y)+x;
+					j=i*4;
+					k=4*(256*(y+1)-x-1);
+					p=pixels[i];
+					a=(p>>24)&0xFF;
+					r=(p>>16)&0xFF;
+					g=(p>>8)&0xFF;
+					b=(p>>0)&0xFF;
+					bytes[j+0]=(byte)r;
+					bytes[j+1]=(byte)g;
+					bytes[j+2]=(byte)b;
+					bytes[j+3]=(byte)a;
+					flippedBytes[k+0]=(byte)r;
+					flippedBytes[k+1]=(byte)g;
+					flippedBytes[k+2]=(byte)b;
+					flippedBytes[k+3]=(byte)a;
+				}
+			}
+			pixelBuffer=ByteBuffer.allocateDirect(524288).order(ByteOrder.nativeOrder());
+			pixelBuffer.put(bytes).flip();
+			flippedPixelBuffer=ByteBuffer.allocateDirect(524288).order(ByteOrder.nativeOrder());
+			flippedPixelBuffer.put(flippedBytes).flip();
+		}
+		public void attachTextures(Gui.Image imageObject,Gui.Image flippedImageObject){
+			try{
+				super.join();
+			}
+			catch(InterruptedException e0){
+				e0.printStackTrace();
+			}
+			if(failed==true){
+				imageObject.setTexture(0);
+				return ;
+			}
+			imageObject.setTexture(getTextureFromPixelBuffer(pixelBuffer));
+			if(flippedImageObject!=null){
+				flippedImageObject.setTexture(getTextureFromPixelBuffer(flippedPixelBuffer));
+			}
+		}
+		public static int getTextureFromPixelBuffer(ByteBuffer pixels){
+			int texture = 0;
+			IntBuffer textureHandle = ByteBuffer.allocateDirect(4).order(ByteOrder.nativeOrder()).asIntBuffer();
+			GL11.glGenTextures(textureHandle);
+			texture=textureHandle.get(0);
+			GL11.glPushAttrib(GL11.GL_TEXTURE_BIT);
+			GL11.glBindTexture(GL11.GL_TEXTURE_2D,texture);
+			GL11.glTexParameteri(GL11.GL_TEXTURE_2D,GL11.GL_TEXTURE_WRAP_S,GL11.GL_REPEAT);
+			GL11.glTexParameteri(GL11.GL_TEXTURE_2D,GL11.GL_TEXTURE_WRAP_T,GL11.GL_REPEAT);
+			GL11.glTexParameteri(GL11.GL_TEXTURE_2D,GL11.GL_TEXTURE_MAG_FILTER,GL11.GL_NEAREST);
+			GL11.glTexParameteri(GL11.GL_TEXTURE_2D,GL11.GL_TEXTURE_MIN_FILTER,GL11.GL_NEAREST);
+			GL11.glTexImage2D(GL11.GL_TEXTURE_2D,0,GL11.GL_RGBA8,256,512,0,GL11.GL_RGBA,GL11.GL_UNSIGNED_BYTE,pixels);
+			GL11.glPopAttrib();
+			GL11.glBindTexture(GL11.GL_TEXTURE_2D,texture);
+			int result = GLU.gluBuild2DMipmaps(GL11.GL_TEXTURE_2D,GL11.GL_RGBA8,256,512,GL11.GL_RGBA,GL11.GL_UNSIGNED_BYTE,pixels);
+			if(result!=0){
+				System.err.println("GLApp.makeTextureMipMap(): Error occured while building mip map, result="+result+" error="+GLU.gluErrorString(result));
+			}
+			GL11.glTexParameteri(GL11.GL_TEXTURE_2D,GL11.GL_TEXTURE_MIN_FILTER,GL11.GL_NEAREST);
+			GL11.glTexEnvf(GL11.GL_TEXTURE_ENV,GL11.GL_TEXTURE_ENV_MODE,GL11.GL_MODULATE);
+			return texture;
+		}
+		public ImageData256x512Loader (String fileName,ByteBuffer pixelBuffer,ByteBuffer flippedPixelBuffer,Boolean failed){
+			super();
+			this.fileName=fileName;
+			this.pixelBuffer=pixelBuffer;
+			this.flippedPixelBuffer=flippedPixelBuffer;
+			this.failed=failed;
+		}
+		public ImageData256x512Loader (){
+			super();
+		}
+	}
+	public class TextureBuffer1x4Loader extends Thread {
+		public void run(){
+			FloatBuffer[][] textureBuffer = new FloatBuffer[1][4];
+			ByteBuffer byteBuffer = null;
+			byteBuffer=ByteBuffer.allocateDirect(2*4*4);
+			byteBuffer.order(ByteOrder.nativeOrder());
+			textureBuffer[0][0]=byteBuffer.asFloatBuffer();
+			textureBuffer[0][0].put(new float[]{0.0f,0.25f,0.0f,0.0f,1.0f,0.25f,1.0f,0.0f});
+			textureBuffer[0][0].position(0);
+			byteBuffer=ByteBuffer.allocateDirect(2*4*4);
+			byteBuffer.order(ByteOrder.nativeOrder());
+			textureBuffer[0][1]=byteBuffer.asFloatBuffer();
+			textureBuffer[0][1].put(new float[]{0.0f,0.5f,0.0f,0.25f,1.0f,0.5f,1.0f,0.25f});
+			textureBuffer[0][1].position(0);
+			byteBuffer=ByteBuffer.allocateDirect(2*4*4);
+			byteBuffer.order(ByteOrder.nativeOrder());
+			textureBuffer[0][2]=byteBuffer.asFloatBuffer();
+			textureBuffer[0][2].put(new float[]{0.0f,0.75f,0.0f,0.5f,1.0f,0.75f,1.0f,0.5f});
+			textureBuffer[0][2].position(0);
+			byteBuffer=ByteBuffer.allocateDirect(2*4*4);
+			byteBuffer.order(ByteOrder.nativeOrder());
+			textureBuffer[0][3]=byteBuffer.asFloatBuffer();
+			textureBuffer[0][3].put(new float[]{0.0f,1.0f,0.0f,0.75f,1.0f,1.0f,1.0f,0.75f});
+			textureBuffer[0][3].position(0);
+			Images.chests_3.setTextureBuffer(textureBuffer);
+			Images.Flipped.chests_3.setTextureBuffer(textureBuffer);
+		}
+		public TextureBuffer1x4Loader (){
+			super();
+		}
+	}
+	public static class ImageData1024x1024Loader extends Thread {
+		protected String fileName = null;
+		protected ByteBuffer pixelBuffer = null;
+		protected ByteBuffer flippedPixelBuffer = null;
+		protected Boolean failed = false;
+		public String getFileName(){
+			return fileName;
+		}
+		public void setFileName(String newFileName){
+			fileName=newFileName;
+		}
+		public ByteBuffer getPixelBuffer(){
+			return pixelBuffer;
+		}
+		public void setPixelBuffer(ByteBuffer newPixelBuffer){
+			pixelBuffer=newPixelBuffer;
+		}
+		public ByteBuffer getFlippedPixelBuffer(){
+			return flippedPixelBuffer;
+		}
+		public void setFlippedPixelBuffer(ByteBuffer newFlippedPixelBuffer){
+			flippedPixelBuffer=newFlippedPixelBuffer;
+		}
+		public Boolean getFailed(){
+			return failed;
+		}
+		public void setFailed(Boolean newFailed){
+			failed=newFailed;
+		}
+		public ImageData1024x1024Loader (String initialFileName){
+			super();
+			this.fileName=initialFileName;
+		}
+		public void run(){
+			BufferedImage bufferedImage = null;
+			try{
+				bufferedImage=ImageIO.read(new File(fileName));
+			}
+			catch(Exception e0){
+				e0.printStackTrace();
+				failed=true;
+				return ;
+			}
+			int[] pixels = new int[1048576];
+			PixelGrabber pixelGrabber = new PixelGrabber(bufferedImage,0,0,1024,1024,pixels,0,1024);
+			try{
+				pixelGrabber.grabPixels();
+			}
+			catch(Exception e0){
+				System.err.println("Pixel Grabbing interrupted!");
+				failed=true;
+				return ;
+			}
+			byte[] bytes = new byte[4194304];
+			byte[] flippedBytes = new byte[4194304];
+			int p = 0;
+			int r = 0;
+			int g = 0;
+			int b = 0;
+			int a = 0;
+			int i = 0;
+			int j = 0;
+			int k = 0;
+			for(int y = 0;y<1024;++y){
+				for(int x = 0;x<1024;++x){
+					i=(1024*y)+x;
+					j=i*4;
+					k=4*(1024*(y+1)-x-1);
+					p=pixels[i];
+					a=(p>>24)&0xFF;
+					r=(p>>16)&0xFF;
+					g=(p>>8)&0xFF;
+					b=(p>>0)&0xFF;
+					bytes[j+0]=(byte)r;
+					bytes[j+1]=(byte)g;
+					bytes[j+2]=(byte)b;
+					bytes[j+3]=(byte)a;
+					flippedBytes[k+0]=(byte)r;
+					flippedBytes[k+1]=(byte)g;
+					flippedBytes[k+2]=(byte)b;
+					flippedBytes[k+3]=(byte)a;
+				}
+			}
+			pixelBuffer=ByteBuffer.allocateDirect(4194304).order(ByteOrder.nativeOrder());
+			pixelBuffer.put(bytes).flip();
+			flippedPixelBuffer=ByteBuffer.allocateDirect(4194304).order(ByteOrder.nativeOrder());
+			flippedPixelBuffer.put(flippedBytes).flip();
+		}
+		public void attachTextures(Gui.Image imageObject,Gui.Image flippedImageObject){
+			try{
+				super.join();
+			}
+			catch(InterruptedException e0){
+				e0.printStackTrace();
+			}
+			if(failed==true){
+				imageObject.setTexture(0);
+				return ;
+			}
+			imageObject.setTexture(getTextureFromPixelBuffer(pixelBuffer));
+			if(flippedImageObject!=null){
+				flippedImageObject.setTexture(getTextureFromPixelBuffer(flippedPixelBuffer));
+			}
+		}
+		public static int getTextureFromPixelBuffer(ByteBuffer pixels){
+			int texture = 0;
+			IntBuffer textureHandle = ByteBuffer.allocateDirect(4).order(ByteOrder.nativeOrder()).asIntBuffer();
+			GL11.glGenTextures(textureHandle);
+			texture=textureHandle.get(0);
+			GL11.glPushAttrib(GL11.GL_TEXTURE_BIT);
+			GL11.glBindTexture(GL11.GL_TEXTURE_2D,texture);
+			GL11.glTexParameteri(GL11.GL_TEXTURE_2D,GL11.GL_TEXTURE_WRAP_S,GL11.GL_REPEAT);
+			GL11.glTexParameteri(GL11.GL_TEXTURE_2D,GL11.GL_TEXTURE_WRAP_T,GL11.GL_REPEAT);
+			GL11.glTexParameteri(GL11.GL_TEXTURE_2D,GL11.GL_TEXTURE_MAG_FILTER,GL11.GL_NEAREST);
+			GL11.glTexParameteri(GL11.GL_TEXTURE_2D,GL11.GL_TEXTURE_MIN_FILTER,GL11.GL_NEAREST);
+			GL11.glTexImage2D(GL11.GL_TEXTURE_2D,0,GL11.GL_RGBA8,1024,1024,0,GL11.GL_RGBA,GL11.GL_UNSIGNED_BYTE,pixels);
+			GL11.glPopAttrib();
+			GL11.glBindTexture(GL11.GL_TEXTURE_2D,texture);
+			int result = GLU.gluBuild2DMipmaps(GL11.GL_TEXTURE_2D,GL11.GL_RGBA8,1024,1024,GL11.GL_RGBA,GL11.GL_UNSIGNED_BYTE,pixels);
+			if(result!=0){
+				System.err.println("GLApp.makeTextureMipMap(): Error occured while building mip map, result="+result+" error="+GLU.gluErrorString(result));
+			}
+			GL11.glTexParameteri(GL11.GL_TEXTURE_2D,GL11.GL_TEXTURE_MIN_FILTER,GL11.GL_NEAREST);
+			GL11.glTexEnvf(GL11.GL_TEXTURE_ENV,GL11.GL_TEXTURE_ENV_MODE,GL11.GL_MODULATE);
+			return texture;
+		}
+		public ImageData1024x1024Loader (String fileName,ByteBuffer pixelBuffer,ByteBuffer flippedPixelBuffer,Boolean failed){
+			super();
+			this.fileName=fileName;
+			this.pixelBuffer=pixelBuffer;
+			this.flippedPixelBuffer=flippedPixelBuffer;
+			this.failed=failed;
+		}
+		public ImageData1024x1024Loader (){
 			super();
 		}
 	}

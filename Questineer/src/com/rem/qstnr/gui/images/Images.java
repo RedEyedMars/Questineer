@@ -10,6 +10,8 @@ public class Images {
 	public static Images.Forest forest = new Images.Forest();
 	public static Images.Outside outside = new Images.Outside();
 	public static Images.Chests chests = new Images.Chests();
+	public static Images.Chests2 chests_2 = new Images.Chests2();
+	public static Images.Chests3 chests_3 = new Images.Chests3();
 	public static Images.TownsPeople towns_people = new Images.TownsPeople();
 	public static Images.Town town = new Images.Town();
 	public Images (){
@@ -21,6 +23,8 @@ public class Images {
 		public static Images.Forest forest = new Images.Forest();
 		public static Images.Outside outside = new Images.Outside();
 		public static Images.Chests chests = new Images.Chests();
+		public static Images.Chests2 chests_2 = new Images.Chests2();
+		public static Images.Chests3 chests_3 = new Images.Chests3();
 		public static Images.TownsPeople towns_people = new Images.TownsPeople();
 		public static Images.Town town = new Images.Town();
 		public Flipped (){
@@ -2013,6 +2017,307 @@ public class Images {
 				this.majorState=majorState;
 				this.treasureState=treasureState;
 				this.legendaryState=legendaryState;
+			}
+			public States (Gui.Renderable current,ImageStates id,ImageStates state){
+				super(current,id,state);
+			}
+		}
+	}
+	public static class Chests2 extends Gui.Image implements Gui.Statable {
+		public Chests2 (){
+			imageFileName="../Resource/gui/images/BaseClawment2.png";
+			pixels=new Gui.Image.Dimensions(256,512);
+			frames=new Gui.Image.Dimensions(4,8);
+		}
+		public Images.Chests2.States asStates(){
+			return new Images.Chests2.States();
+		}
+		public Gui.Drawable asStates(Gui.Drawable drawable){
+			return drawable.image(new Images.Chests2.States());
+		}
+		public Gui.Drawable asDrawable(Gui.Drawable drawable){
+			return drawable.image(this);
+		}
+		public Chests2 (String imageFileName,Gui.Image.Dimensions pixels,Gui.Image.Dimensions frames,int texture,FloatBuffer[][] textureBuffer){
+			super(imageFileName,pixels,frames,texture,textureBuffer);
+		}
+		public static class States extends Gui.Image.States {
+			protected Gui.Renderable minorState = Images.chests_2.createStationary(0,0);
+			protected Gui.Renderable majorState = Images.chests_2.createStationary(1,0);
+			protected Gui.Renderable treasureState = Images.chests_2.createStationary(2,0);
+			protected Gui.Renderable legendaryState = Images.chests_2.createStationary(3,0);
+			public States (){
+				change_to_minor();
+			}
+			public void changeState(ImageStates newState){
+				if(newState==ImageStates.ASCEND){
+					switch(state){
+						case minor :{
+							;
+							return ;
+						}
+						case major :{
+							;
+							return ;
+						}
+						case treasure :{
+							;
+							return ;
+						}
+						case legendary :{
+							;
+							return ;
+						}
+					}
+					return ;
+				}
+				switch(state){
+					case DEFAULT :{
+						switch(newState){
+							case minor :{
+								change_to_minor();
+								return ;
+							}
+							case major :{
+								change_to_major();
+								return ;
+							}
+							case legendary :{
+								change_to_legendary();
+								return ;
+							}
+							case treasure :{
+								change_to_treasure();
+								return ;
+							}
+						}
+						return ;
+					}
+					case minor :{
+						switch(newState){
+							case major :{
+								change_to_major();
+								return ;
+							}
+							case legendary :{
+								change_to_legendary();
+								return ;
+							}
+							case treasure :{
+								change_to_treasure();
+								return ;
+							}
+						}
+						return ;
+					}
+					case major :{
+						switch(newState){
+							case minor :{
+								change_to_minor();
+								return ;
+							}
+							case legendary :{
+								change_to_legendary();
+								return ;
+							}
+							case treasure :{
+								change_to_treasure();
+								return ;
+							}
+						}
+						return ;
+					}
+					case legendary :{
+						switch(newState){
+							case minor :{
+								change_to_minor();
+								return ;
+							}
+							case major :{
+								change_to_major();
+								return ;
+							}
+							case treasure :{
+								change_to_treasure();
+								return ;
+							}
+						}
+						return ;
+					}
+					case treasure :{
+						switch(newState){
+							case minor :{
+								change_to_minor();
+								return ;
+							}
+							case major :{
+								change_to_major();
+								return ;
+							}
+							case legendary :{
+								change_to_legendary();
+								return ;
+							}
+						}
+						return ;
+					}
+				}
+			}
+			public Images.Chests2.States asStates(){
+				Images.Chests2.States result = new Images.Chests2.States();
+				result.setCurrent(current);
+				result.setState(state);
+				return result;
+			}
+			public Gui.Drawable asStates(Gui.Drawable drawable){
+				Images.Chests2.States result = new Images.Chests2.States();
+				result.setCurrent(current);
+				result.setState(state);
+				return drawable.image(result);
+			}
+			public Gui.Renderable getMinorState(){
+				return minorState;
+			}
+			public void setMinorState(Gui.Renderable newMinorState){
+				minorState=newMinorState;
+			}
+			public void change_to_minor(){
+				setCurrent(minorState);
+				id=ImageStates.minor;
+				state=ImageStates.minor;
+			}
+			public Gui.Renderable getMajorState(){
+				return majorState;
+			}
+			public void setMajorState(Gui.Renderable newMajorState){
+				majorState=newMajorState;
+			}
+			public void change_to_major(){
+				setCurrent(majorState);
+				id=ImageStates.major;
+				state=ImageStates.major;
+			}
+			public Gui.Renderable getTreasureState(){
+				return treasureState;
+			}
+			public void setTreasureState(Gui.Renderable newTreasureState){
+				treasureState=newTreasureState;
+			}
+			public void change_to_treasure(){
+				setCurrent(treasureState);
+				id=ImageStates.treasure;
+				state=ImageStates.treasure;
+			}
+			public Gui.Renderable getLegendaryState(){
+				return legendaryState;
+			}
+			public void setLegendaryState(Gui.Renderable newLegendaryState){
+				legendaryState=newLegendaryState;
+			}
+			public void change_to_legendary(){
+				setCurrent(legendaryState);
+				id=ImageStates.legendary;
+				state=ImageStates.legendary;
+			}
+			public States (Gui.Renderable minorState,Gui.Renderable majorState,Gui.Renderable treasureState,Gui.Renderable legendaryState){
+				super();
+				this.minorState=minorState;
+				this.majorState=majorState;
+				this.treasureState=treasureState;
+				this.legendaryState=legendaryState;
+			}
+			public States (Gui.Renderable current,ImageStates id,ImageStates state,Gui.Renderable minorState,Gui.Renderable majorState,Gui.Renderable treasureState,Gui.Renderable legendaryState){
+				super(current,id,state);
+				this.minorState=minorState;
+				this.majorState=majorState;
+				this.treasureState=treasureState;
+				this.legendaryState=legendaryState;
+			}
+			public States (Gui.Renderable current,ImageStates id,ImageStates state){
+				super(current,id,state);
+			}
+		}
+	}
+	public static class Chests3 extends Gui.Image implements Gui.Statable {
+		public Chests3 (){
+			imageFileName="../Resource/gui/images/BlueSky.png";
+			pixels=new Gui.Image.Dimensions(1024,1024);
+			frames=new Gui.Image.Dimensions(1,4);
+		}
+		public Images.Chests3.States asStates(){
+			return new Images.Chests3.States();
+		}
+		public Gui.Drawable asStates(Gui.Drawable drawable){
+			return drawable.image(new Images.Chests3.States());
+		}
+		public Gui.Drawable asDrawable(Gui.Drawable drawable){
+			return drawable.image(this);
+		}
+		public Chests3 (String imageFileName,Gui.Image.Dimensions pixels,Gui.Image.Dimensions frames,int texture,FloatBuffer[][] textureBuffer){
+			super(imageFileName,pixels,frames,texture,textureBuffer);
+		}
+		public static class States extends Gui.Image.States {
+			protected Gui.Renderable minorState = Images.chests_3.createStationary(0,0);
+			public States (){
+				change_to_minor();
+			}
+			public void changeState(ImageStates newState){
+				if(newState==ImageStates.ASCEND){
+					switch(state){
+						case minor :{
+							;
+							return ;
+						}
+					}
+					return ;
+				}
+				switch(state){
+					case DEFAULT :{
+						switch(newState){
+							case minor :{
+								change_to_minor();
+								return ;
+							}
+						}
+						return ;
+					}
+					case minor :{
+						switch(newState){
+						}
+						return ;
+					}
+				}
+			}
+			public Images.Chests3.States asStates(){
+				Images.Chests3.States result = new Images.Chests3.States();
+				result.setCurrent(current);
+				result.setState(state);
+				return result;
+			}
+			public Gui.Drawable asStates(Gui.Drawable drawable){
+				Images.Chests3.States result = new Images.Chests3.States();
+				result.setCurrent(current);
+				result.setState(state);
+				return drawable.image(result);
+			}
+			public Gui.Renderable getMinorState(){
+				return minorState;
+			}
+			public void setMinorState(Gui.Renderable newMinorState){
+				minorState=newMinorState;
+			}
+			public void change_to_minor(){
+				setCurrent(minorState);
+				id=ImageStates.minor;
+				state=ImageStates.minor;
+			}
+			public States (Gui.Renderable minorState){
+				super();
+				this.minorState=minorState;
+			}
+			public States (Gui.Renderable current,ImageStates id,ImageStates state,Gui.Renderable minorState){
+				super(current,id,state);
+				this.minorState=minorState;
 			}
 			public States (Gui.Renderable current,ImageStates id,ImageStates state){
 				super(current,id,state);
